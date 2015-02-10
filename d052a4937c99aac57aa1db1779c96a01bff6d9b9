@@ -1,0 +1,8 @@
+Verified+1: Dan Albert <danalbert@google.com>
+Code-Review+1: Adam Langley <agl@google.com>
+Code-Review+2: Elliott Hughes <enh@google.com>
+Submitted-by: Dan Albert <danalbert@google.com>
+Submitted-at: Tue, 10 Feb 2015 00:24:59 +0000
+Reviewed-on: https://android-review.googlesource.com/130333
+Project: platform/external/boringssl
+Branch: refs/heads/master
