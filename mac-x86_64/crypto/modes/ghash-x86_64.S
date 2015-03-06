@@ -1,6 +1,7 @@
 #if defined(__x86_64__)
 .text	
-
+.extern	_OPENSSL_ia32cap_P
+.hidden _OPENSSL_ia32cap_P
 
 .globl	_gcm_gmult_4bit
 .private_extern _gcm_gmult_4bit

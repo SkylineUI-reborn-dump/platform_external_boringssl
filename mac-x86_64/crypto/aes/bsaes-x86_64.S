@@ -1,8 +1,10 @@
 #if defined(__x86_64__)
 .text	
 
-
-
+.extern	_asm_AES_encrypt
+.hidden _asm_AES_encrypt
+.extern	_asm_AES_decrypt
+.hidden _asm_AES_decrypt
 
 
 .p2align	6
@@ -1063,7 +1065,8 @@ L$key_loop:
 
 	.byte	0xf3,0xc3
 
-
+.extern	_asm_AES_cbc_encrypt
+.hidden _asm_AES_cbc_encrypt
 .globl	_bsaes_cbc_encrypt
 .private_extern _bsaes_cbc_encrypt
 

@@ -1,7 +1,8 @@
 #if defined(__x86_64__)
 .text	
 
-
+.extern	_OPENSSL_ia32cap_P
+.hidden _OPENSSL_ia32cap_P
 
 .globl	_bn_mul_mont_gather5
 .private_extern _bn_mul_mont_gather5

@@ -1,7 +1,8 @@
 #if defined(__x86_64__)
 .text	
 
-
+.extern	_OPENSSL_ia32cap_P
+.hidden _OPENSSL_ia32cap_P
 
 .globl	_rsaz_512_sqr
 .private_extern _rsaz_512_sqr

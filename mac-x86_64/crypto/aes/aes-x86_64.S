@@ -1294,7 +1294,8 @@ L$dec_key_epilogue:
 .globl	_asm_AES_cbc_encrypt
 .private_extern _asm_AES_cbc_encrypt
 
-
+.extern	_OPENSSL_ia32cap_P
+.hidden _OPENSSL_ia32cap_P
 .private_extern	_asm_AES_cbc_encrypt
 _asm_AES_cbc_encrypt:
 	cmpq	$0,%rdx

@@ -1,7 +1,8 @@
 #if defined(__x86_64__)
 .text	
 
-
+.extern	_OPENSSL_ia32cap_P
+.hidden _OPENSSL_ia32cap_P
 
 .globl	_bn_mul_mont
 .private_extern _bn_mul_mont
@@ -610,7 +611,8 @@ L$copy4x:
 L$mul4x_epilogue:
 	.byte	0xf3,0xc3
 
-
+.extern	_bn_sqr8x_internal
+.hidden _bn_sqr8x_internal
 
 
 .p2align	5
