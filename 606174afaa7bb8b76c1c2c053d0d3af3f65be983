@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc296187_ee2f3f8c",
+        "filename": "src/crypto/rsa/padding.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-03-09T22:55:48Z",
+      "side": 1,
+      "message": "The .c file shouldn\u0027t have OPENSSL_EXPORT. Rather that should be added to the prototype in the .h file, if any.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 556,
+        "endChar": 14
+      },
+      "revId": "606174afaa7bb8b76c1c2c053d0d3af3f65be983",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
