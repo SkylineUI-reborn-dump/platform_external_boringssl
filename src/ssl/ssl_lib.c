@@ -2431,6 +2431,7 @@ void ssl_clear_cipher_ctx(SSL *s) {
 }
 
 X509 *SSL_get_certificate(const SSL *s) {
+  fprintf(stderr, "*** SSL_get_certificate s: %p s->cert: %p.\n", s, s->cert);
   if (s->cert != NULL) {
     return s->cert->key->x509;
   }

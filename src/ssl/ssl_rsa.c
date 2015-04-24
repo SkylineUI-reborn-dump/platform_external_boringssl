@@ -78,6 +78,7 @@ int SSL_use_certificate(SSL *ssl, X509 *x) {
     OPENSSL_PUT_ERROR(SSL, SSL_use_certificate, ERR_R_MALLOC_FAILURE);
     return 0;
   }
+  fprintf(stderr, "*** SSL_use_certificate s: %p.\n", ssl);
   return ssl_set_cert(ssl->cert, x);
 }
 
@@ -398,6 +399,7 @@ static int ssl_set_cert(CERT *c, X509 *x) {
     X509_free(c->pkeys[i].x509);
   }
   c->pkeys[i].x509 = X509_up_ref(x);
+  fprintf(stderr, "*** installed cert %p into slot %d.\n", x, i);
   c->key = &(c->pkeys[i]);
 
   return 1;
