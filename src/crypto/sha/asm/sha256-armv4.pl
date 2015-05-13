@@ -615,6 +615,16 @@ sha256_block_data_order_armv8:
 # elif	defined(__thumb2__)
 	adr	$Ktbl,.LARMv8
 	sub	$Ktbl,$Ktbl,#.LARMv8-K256
+# elif	defined(__clang__)
+/* NOP instructions to align the adr instruction such that the distance to
+   K256 can be represented as a suitable value. This is because Clang
+   doesn't support adrl. */
+	nop
+	nop
+	nop
+	nop
+	nop
+	adr	$Ktbl,K256
 # else
 	adrl	$Ktbl,K256
 # endif
