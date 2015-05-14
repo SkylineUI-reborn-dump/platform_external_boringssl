@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0da4fdb8_701910ae",
+        "filename": "rules.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-05-14T00:22:49Z",
+      "side": 1,
+      "message": "This should be the Android Open Source Project",
+      "range": {
+        "startLine": 1,
+        "startChar": 22,
+        "endLine": 1,
+        "endChar": 33
+      },
+      "revId": "d9c6e5216310fa76f915cdd62453f32accc202c2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
