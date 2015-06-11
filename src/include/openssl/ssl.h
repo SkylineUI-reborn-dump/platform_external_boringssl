@@ -1026,20 +1026,6 @@ struct ssl_ctx_st {
    * session space. Only effective on the server side. */
   char retain_only_sha256_of_client_certs;
 
-  /* Next protocol negotiation information */
-  /* (for experimental NPN extension). */
-
-  /* For a server, this contains a callback function by which the set of
-   * advertised protocols can be provided. */
-  int (*next_protos_advertised_cb)(SSL *s, const uint8_t **buf,
-                                   unsigned int *len, void *arg);
-  void *next_protos_advertised_cb_arg;
-  /* For a client, this contains a callback function that selects the
-   * next protocol from the list provided by the server. */
-  int (*next_proto_select_cb)(SSL *s, uint8_t **out, uint8_t *outlen,
-                              const uint8_t *in, unsigned int inlen, void *arg);
-  void *next_proto_select_cb_arg;
-
   /* ALPN information
    * (we are in the process of transitioning from NPN to ALPN.) */
 
@@ -1175,19 +1161,19 @@ OPENSSL_EXPORT void SSL_get0_signed_cert_timestamp_list(const SSL *ssl,
 OPENSSL_EXPORT void SSL_get0_ocsp_response(const SSL *ssl, const uint8_t **out,
                                            size_t *out_len);
 
-OPENSSL_EXPORT void SSL_CTX_set_next_protos_advertised_cb(
-    SSL_CTX *s,
+OPENSSL_EXPORT void SSL_set_npn_protos_advertised_cb(
+    SSL *s,
     int (*cb)(SSL *ssl, const uint8_t **out, unsigned int *outlen, void *arg),
     void *arg);
-OPENSSL_EXPORT void SSL_CTX_set_next_proto_select_cb(
-    SSL_CTX *s, int (*cb)(SSL *ssl, uint8_t **out, uint8_t *outlen,
+OPENSSL_EXPORT void SSL_set_npn_proto_select_cb(
+    SSL *s, int (*cb)(SSL *ssl, uint8_t **out, uint8_t *outlen,
                           const uint8_t *in, unsigned int inlen, void *arg),
     void *arg);
 OPENSSL_EXPORT void SSL_get0_next_proto_negotiated(const SSL *s,
                                                    const uint8_t **data,
                                                    unsigned *len);
 
-OPENSSL_EXPORT int SSL_select_next_proto(uint8_t **out, uint8_t *outlen,
+OPENSSL_EXPORT int SSL_select_npn_or_alpn_proto(uint8_t **out, uint8_t *outlen,
                                          const uint8_t *in, unsigned int inlen,
                                          const uint8_t *client,
                                          unsigned int client_len);
@@ -1482,6 +1468,20 @@ struct ssl_st {
    * don't support. */
   EVP_CIPHER_CTX *enc_read_ctx;
   EVP_MD_CTX *read_hash;
+
+  /* Next protocol negotiation information */
+  /* (for experimental NPN extension). */
+
+  /* For a server, this contains a callback function by which the set of
+   * advertised protocols can be provided. */
+  int (*npn_protos_advertised_cb)(SSL *s, const uint8_t **buf,
+                                   unsigned int *len, void *arg);
+  void *npn_protos_advertised_cb_arg;
+  /* For a client, this contains a callback function that selects the
+   * next protocol from the list provided by the server. */
+  int (*npn_proto_select_cb)(SSL *s, uint8_t **out, uint8_t *outlen,
+                              const uint8_t *in, unsigned int inlen, void *arg);
+  void *npn_proto_select_cb_arg;
 };
 
 /* compatibility */

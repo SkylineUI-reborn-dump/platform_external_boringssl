@@ -312,6 +312,9 @@ SSL *SSL_new(SSL_CTX *ctx) {
   }
   s->next_proto_negotiated = NULL;
 
+  s->npn_protos_advertised_cb = 0;
+  s->npn_proto_select_cb = 0;
+
   if (s->ctx->alpn_client_proto_list) {
     s->alpn_client_proto_list = BUF_memdup(s->ctx->alpn_client_proto_list,
                                            s->ctx->alpn_client_proto_list_len);
@@ -1415,9 +1418,9 @@ void SSL_get0_ocsp_response(const SSL *ssl, const uint8_t **out,
   *out_len = session->ocsp_response_length;
 }
 
-/* SSL_select_next_proto implements the standard protocol selection. It is
+/* SSL_select_npn_or_alpn_proto implements the standard protocol selection. It is
  * expected that this function is called from the callback set by
- * SSL_CTX_set_next_proto_select_cb.
+ * SSL_CTX_set_npn_proto_select_cb or SSL_CTX_set_alpn_proto_select_cb
  *
  * The protocol data is assumed to be a vector of 8-bit, length prefixed byte
  * strings. The length byte itself is not included in the length. A byte
@@ -1425,12 +1428,12 @@ void SSL_get0_ocsp_response(const SSL *ssl, const uint8_t **out,
  *
  * The current, but experimental algorithm for selecting the protocol is:
  *
- * 1) If the server doesn't support NPN then this is indicated to the
+ * 1) If the server doesn't support NPN/ALPN then this is indicated to the
  * callback. In this case, the client application has to abort the connection
  * or have a default application level protocol.
  *
- * 2) If the server supports NPN, but advertises an empty list then the
- * client selects the first protcol in its list, but indicates via the
+ * 2) If the server supports NPN/ALPN, but advertises an empty list then the
+ * client selects the first prootcol in its list, but indicates via the
  * API that this fallback case was enacted.
  *
  * 3) Otherwise, the client finds the first protocol in the server's list
@@ -1445,7 +1448,7 @@ void SSL_get0_ocsp_response(const SSL *ssl, const uint8_t **out,
  * OPENSSL_NPN_NEGOTIATED if a common protocol was found, or
  * OPENSSL_NPN_NO_OVERLAP if the fallback case was reached.
  */
-int SSL_select_next_proto(uint8_t **out, uint8_t *outlen, const uint8_t *server,
+int SSL_select_npn_or_alpn_proto(uint8_t **out, uint8_t *outlen, const uint8_t *server,
                           unsigned int server_len, const uint8_t *client,
                           unsigned int client_len) {
   unsigned int i, j;
@@ -1496,7 +1499,7 @@ void SSL_get0_next_proto_negotiated(const SSL *s, const uint8_t **data,
   }
 }
 
-/* SSL_CTX_set_next_protos_advertised_cb sets a callback that is called when a
+/* SSL_set_next_protos_advertised_cb sets a callback that is called when a
  * TLS server needs a list of supported protocols for Next Protocol
  * Negotiation. The returned list must be in wire format.  The list is returned
  * by setting |out| to point to it and |outlen| to its length. This memory will
@@ -1505,15 +1508,15 @@ void SSL_get0_next_proto_negotiated(const SSL *s, const uint8_t **data,
  *
  * The callback should return SSL_TLSEXT_ERR_OK if it wishes to advertise.
  * Otherwise, no such extension will be included in the ServerHello. */
-void SSL_CTX_set_next_protos_advertised_cb(
-    SSL_CTX *ctx,
+void SSL_set_npn_protos_advertised_cb(
+    SSL *ssl,
     int (*cb)(SSL *ssl, const uint8_t **out, unsigned int *outlen, void *arg),
     void *arg) {
-  ctx->next_protos_advertised_cb = cb;
-  ctx->next_protos_advertised_cb_arg = arg;
+  ssl->npn_protos_advertised_cb = cb;
+  ssl->npn_protos_advertised_cb_arg = arg;
 }
 
-/* SSL_CTX_set_next_proto_select_cb sets a callback that is called when a
+/* SSL_set_npn_proto_select_cb sets a callback that is called when a
  * client needs to select a protocol from the server's provided list. |out|
  * must be set to point to the selected protocol (which may be within |in|).
  * The length of the protocol name must be written into |outlen|. The server's
@@ -1523,12 +1526,12 @@ void SSL_CTX_set_next_protos_advertised_cb(
  * The client must select a protocol. It is fatal to the connection if this
  * callback returns a value other than SSL_TLSEXT_ERR_OK.
  */
-void SSL_CTX_set_next_proto_select_cb(
-    SSL_CTX *ctx, int (*cb)(SSL *s, uint8_t **out, uint8_t *outlen,
+void SSL_set_npn_proto_select_cb(
+    SSL *ssl, int (*cb)(SSL *s, uint8_t **out, uint8_t *outlen,
                             const uint8_t *in, unsigned int inlen, void *arg),
     void *arg) {
-  ctx->next_proto_select_cb = cb;
-  ctx->next_proto_select_cb_arg = arg;
+  ssl->npn_proto_select_cb = cb;
+  ssl->npn_proto_select_cb_arg = arg;
 }
 
 int SSL_CTX_set_alpn_protos(SSL_CTX *ctx, const uint8_t *protos,
@@ -1725,8 +1728,6 @@ SSL_CTX *SSL_CTX_new(const SSL_METHOD *method) {
     ret->options |= SSL_OP_NO_TICKET;
   }
 
-  ret->next_protos_advertised_cb = 0;
-  ret->next_proto_select_cb = 0;
   ret->psk_identity_hint = NULL;
   ret->psk_client_callback = NULL;
   ret->psk_server_callback = NULL;

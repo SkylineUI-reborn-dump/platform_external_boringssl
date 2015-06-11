@@ -959,7 +959,7 @@ uint8_t *ssl_add_clienthello_tlsext(SSL *s, uint8_t *buf, uint8_t *limit,
     s2n(0, ret);
   }
 
-  if (s->ctx->next_proto_select_cb && !s->s3->initial_handshake_complete &&
+  if (s->npn_proto_select_cb && !s->s3->initial_handshake_complete &&
       !SSL_IS_DTLS(s)) {
     /* The client advertises an emtpy extension to indicate its support for
      * Next Protocol Negotiation */
@@ -1252,17 +1252,17 @@ uint8_t *ssl_add_serverhello_tlsext(SSL *s, uint8_t *buf, uint8_t *limit) {
 
   next_proto_neg_seen = s->s3->next_proto_neg_seen;
   s->s3->next_proto_neg_seen = 0;
-  if (next_proto_neg_seen && s->ctx->next_protos_advertised_cb) {
+  if (next_proto_neg_seen && s->npn_protos_advertised_cb) {
     const uint8_t *npa;
     unsigned int npalen;
     int r;
 
-    r = s->ctx->next_protos_advertised_cb(
-        s, &npa, &npalen, s->ctx->next_protos_advertised_cb_arg);
-    if (r == SSL_TLSEXT_ERR_OK) {
+    r = s->npn_protos_advertised_cb(
+        s, &npa, &npalen, s->npn_protos_advertised_cb_arg);
       if ((long)(limit - ret - 4 - npalen) < 0) {
         return NULL;
       }
+    if (r == SSL_TLSEXT_ERR_OK) {
       s2n(TLSEXT_TYPE_next_proto_neg, ret);
       s2n(npalen, ret);
       memcpy(ret, npa, npalen);
@@ -1785,7 +1785,7 @@ static int ssl_scan_serverhello_tlsext(SSL *s, CBS *cbs, int *out_alert) {
       uint8_t selected_len;
 
       /* We must have requested it. */
-      if (s->ctx->next_proto_select_cb == NULL) {
+      if (s->npn_proto_select_cb == NULL) {
         *out_alert = SSL_AD_UNSUPPORTED_EXTENSION;
         return 0;
       }
@@ -1796,10 +1796,10 @@ static int ssl_scan_serverhello_tlsext(SSL *s, CBS *cbs, int *out_alert) {
         return 0;
       }
 
-      if (s->ctx->next_proto_select_cb(
+      if (s->npn_proto_select_cb(
               s, &selected, &selected_len, CBS_data(&extension),
               CBS_len(&extension),
-              s->ctx->next_proto_select_cb_arg) != SSL_TLSEXT_ERR_OK) {
+              s->npn_proto_select_cb_arg) != SSL_TLSEXT_ERR_OK) {
         *out_alert = SSL_AD_INTERNAL_ERROR;
         return 0;
       }

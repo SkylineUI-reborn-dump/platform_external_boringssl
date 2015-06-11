@@ -159,17 +159,6 @@ bool Client(const std::vector<std::string> &args) {
     SSL_CTX_set_min_version(ctx.get(), version);
   }
 
-  if (args_map.count("-select-next-proto") != 0) {
-    const std::string &proto = args_map["-select-next-proto"];
-    if (proto.size() > 255) {
-      fprintf(stderr, "Bad NPN protocol: '%s'\n", proto.c_str());
-      return false;
-    }
-    // |SSL_CTX_set_next_proto_select_cb| is not const-correct.
-    SSL_CTX_set_next_proto_select_cb(ctx.get(), NextProtoSelectCallback,
-                                     const_cast<char *>(proto.c_str()));
-  }
-
   if (args_map.count("-alpn-protos") != 0) {
     const std::string &alpn_protos = args_map["-alpn-protos"];
     std::vector<uint8_t> wire;
@@ -221,6 +210,17 @@ bool Client(const std::vector<std::string> &args) {
 
   ScopedBIO bio(BIO_new_socket(sock, BIO_CLOSE));
   ScopedSSL ssl(SSL_new(ctx.get()));
+
+  if (args_map.count("-select-next-proto") != 0) {
+    const std::string &proto = args_map["-select-next-proto"];
+    if (proto.size() > 255) {
+      fprintf(stderr, "Bad NPN protocol: '%s'\n", proto.c_str());
+      return false;
+    }
+    // |SSL_set_npn_proto_select_cb| is not const-correct.
+    SSL_set_npn_proto_select_cb(ssl.get(), NextProtoSelectCallback,
+                                     const_cast<char *>(proto.c_str()));
+  }
 
   if (args_map.count("-server-name") != 0) {
     SSL_set_tlsext_host_name(ssl.get(), args_map["-server-name"].c_str());
