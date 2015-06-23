@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e149a89_33b6922e",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-06-23T23:19:44Z",
+      "side": 1,
+      "message": "We can\u0027t remove the old functions if this is going to live in BoringSSL. Ditto with removing support from the CTX.",
+      "revId": "648cd4ec0821f29d48f488954ce0869baaecd717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e149a89_53c50e7f",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-06-23T23:19:44Z",
+      "side": 1,
+      "message": "Likewise, we can\u0027t just rename functions unless this is an Android-only change (which costs a lot).",
+      "revId": "648cd4ec0821f29d48f488954ce0869baaecd717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de1a92b3_8308d130",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-06-23T23:19:44Z",
+      "side": 1,
+      "message": "nit: indentation here and below.",
+      "revId": "648cd4ec0821f29d48f488954ce0869baaecd717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e0fe678_ac4b4278",
+        "filename": "src/ssl/ssl_lib.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-06-23T23:19:44Z",
+      "side": 1,
+      "message": "not needed as the structure is zeroed at L259. (There are some existing \"\u003d 0\" and \"\u003d NULL\" left over, I know.)",
+      "revId": "648cd4ec0821f29d48f488954ce0869baaecd717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e149a89_d3e9fef3",
+        "filename": "src/ssl/t1_lib.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-06-23T23:19:44Z",
+      "side": 1,
+      "message": "If the callback doesn\u0027t return success then it might not set its output arguments so I don\u0027t think this reordering can be done.",
+      "revId": "648cd4ec0821f29d48f488954ce0869baaecd717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
