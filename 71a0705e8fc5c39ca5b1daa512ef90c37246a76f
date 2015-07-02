@@ -1,0 +1,8 @@
+Verified+1: Narayan Kamath <narayan@google.com>
+Code-Review+2: Kenny Root <kroot@google.com>
+Code-Review+1: Adam Langley <agl@google.com>
+Submitted-by: Narayan Kamath <narayan@google.com>
+Submitted-at: Thu, 02 Jul 2015 11:24:41 +0000
+Reviewed-on: https://android-review.googlesource.com/156322
+Project: platform/external/boringssl
+Branch: refs/heads/master
