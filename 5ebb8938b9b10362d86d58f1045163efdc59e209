@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e430ad80_8a805b05",
+        "filename": "src/crypto/asn1/a_int.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-08-20T22:38:16Z",
+      "side": 1,
+      "message": "At this point we know that i \u003d sizeof(long), right? Perhaps we can just replace i with that and avoid the cast?",
+      "revId": "5ebb8938b9b10362d86d58f1045163efdc59e209",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84253145_1c8259a4",
+        "filename": "src/crypto/asn1/asn1_lib.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-08-20T22:38:16Z",
+      "side": 1,
+      "message": "maybe if we\u0027re going to rewrite this, a for loop would be clearer.",
+      "revId": "5ebb8938b9b10362d86d58f1045163efdc59e209",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "248c8586_9fecffb6",
+        "filename": "src/crypto/modes/ctr.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-08-20T22:38:16Z",
+      "side": 1,
+      "message": "likewise, should probably be a for loop.",
+      "revId": "5ebb8938b9b10362d86d58f1045163efdc59e209",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4700952_7342b8c6",
+        "filename": "src/crypto/modes/ctr.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-08-20T22:38:16Z",
+      "side": 1,
+      "message": "and here.",
+      "revId": "5ebb8938b9b10362d86d58f1045163efdc59e209",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c42ba915_7ee4a5cb",
+        "filename": "src/crypto/modes/gcm.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-08-20T22:38:16Z",
+      "side": 1,
+      "message": "(and in this file.)",
+      "revId": "5ebb8938b9b10362d86d58f1045163efdc59e209",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
