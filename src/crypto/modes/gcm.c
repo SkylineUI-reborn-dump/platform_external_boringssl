@@ -779,7 +779,8 @@ int CRYPTO_gcm128_encrypt(GCM128_CONTEXT *ctx, const unsigned char *in,
     } else {
       ctx->Yi.d[3] = ctr;
     }
-    while (len--) {
+    while (len) {
+      --len;
       ctx->Xi.c[n] ^= out[n] = in[n] ^ ctx->EKi.c[n];
       ++n;
     }
@@ -944,7 +945,8 @@ int CRYPTO_gcm128_decrypt(GCM128_CONTEXT *ctx, const unsigned char *in,
     } else {
       ctx->Yi.d[3] = ctr;
     }
-    while (len--) {
+    while (len) {
+      --len;
       uint8_t c = in[n];
       ctx->Xi.c[n] ^= c;
       out[n] = c ^ ctx->EKi.c[n];
@@ -1038,7 +1040,8 @@ int CRYPTO_gcm128_encrypt_ctr32(GCM128_CONTEXT *ctx, const uint8_t *in,
     GHASH(ctx, out, i);
     out += i;
 #else
-    while (j--) {
+    while (j) {
+      --j;
       for (i = 0; i < 16; ++i) {
         ctx->Xi.c[i] ^= out[i];
       }
@@ -1055,7 +1058,8 @@ int CRYPTO_gcm128_encrypt_ctr32(GCM128_CONTEXT *ctx, const uint8_t *in,
     } else {
       ctx->Yi.d[3] = ctr;
     }
-    while (len--) {
+    while (len) {
+      --len;
       ctx->Xi.c[n] ^= out[n] = in[n] ^ ctx->EKi.c[n];
       ++n;
     }
@@ -1140,7 +1144,8 @@ int CRYPTO_gcm128_decrypt_ctr32(GCM128_CONTEXT *ctx, const uint8_t *in,
 #if defined(GHASH)
     GHASH(ctx, in, i);
 #else
-    while (j--) {
+    while (j) {
+      --j;
       size_t k;
       for (k = 0; k < 16; ++k) {
         ctx->Xi.c[k] ^= in[k];
@@ -1170,7 +1175,8 @@ int CRYPTO_gcm128_decrypt_ctr32(GCM128_CONTEXT *ctx, const uint8_t *in,
     } else {
       ctx->Yi.d[3] = ctr;
     }
-    while (len--) {
+    while (len) {
+      --len;
       uint8_t c = in[n];
       ctx->Xi.c[n] ^= c;
       out[n] = c ^ ctx->EKi.c[n];

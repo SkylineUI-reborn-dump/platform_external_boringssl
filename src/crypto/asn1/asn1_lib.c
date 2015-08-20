@@ -217,8 +217,9 @@ static int asn1_get_length(const unsigned char **pp, int *inf, long *rl, int max
 			if (i > sizeof(long))
 				return 0;
 			if (max-- == 0) return(0);
-			while (i-- > 0)
+			while (i)
 				{
+				--i;
 				ret<<=8L;
 				ret|= *(p++);
 				if (max-- == 0) return(0);

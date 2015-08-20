@@ -154,7 +154,8 @@ void EVP_tls_cbc_copy_mac(uint8_t *out, unsigned md_size,
   assert(md_size <= EVP_MAX_MD_SIZE);
 
 #if defined(CBC_MAC_ROTATE_IN_PLACE)
-  rotated_mac = rotated_mac_buf + ((0 - (size_t)rotated_mac_buf) & 63);
+  rotated_mac =
+      rotated_mac_buf + ((SIZE_MAX - (size_t)rotated_mac_buf + 1) & 63);
 #endif
 
   /* This information is public so it's safe to branch based on it. */

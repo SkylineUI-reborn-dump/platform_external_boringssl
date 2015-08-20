@@ -151,6 +151,7 @@ void md5_block_data_order(MD5_CTX *md5, const void *p, size_t num);
 #ifdef X
 #undef X
 #endif
+__attribute__((no_sanitize("integer")))
 void md5_block_data_order(MD5_CTX *md5, const void *in_data, size_t num) {
   const uint8_t *data = in_data;
   uint32_t A, B, C, D, l;

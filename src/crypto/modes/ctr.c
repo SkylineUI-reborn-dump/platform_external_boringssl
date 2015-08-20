@@ -133,7 +133,8 @@ void CRYPTO_ctr128_encrypt(const uint8_t *in, uint8_t *out, size_t len,
   if (len) {
     (*block)(ivec, ecount_buf, key);
     ctr128_inc(ivec);
-    while (len--) {
+    while (len) {
+      --len;
       out[n] = in[n] ^ ecount_buf[n];
       ++n;
     }
@@ -149,9 +150,12 @@ static void ctr96_inc(uint8_t *counter) {
   do {
     --n;
     c = counter[n];
-    ++c;
-    counter[n] = c;
-    if (c) {
+    if (c == UINT8_MAX) {
+      // Incrementing leads to overflow
+      counter[n] = 0;
+    } else {
+      // Incrementing does not lead to overflow
+      counter[n] = c + 1;
       return;
     }
   } while (n);
@@ -214,7 +218,8 @@ void CRYPTO_ctr128_encrypt_ctr32(const uint8_t *in, uint8_t *out,
     if (ctr32 == 0) {
       ctr96_inc(ivec);
     }
-    while (len--) {
+    while (len) {
+      --len;
       out[n] = in[n] ^ ecount_buf[n];
       ++n;
     }

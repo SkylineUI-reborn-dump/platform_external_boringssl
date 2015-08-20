@@ -1,0 +1,2 @@
+# BN stuff uses overflow arithmetic in way too many places
+src:external/boringssl/src/crypto/bn/*.c
