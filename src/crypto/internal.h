@@ -215,6 +215,7 @@ static inline unsigned int constant_time_msb(unsigned int a) {
 }
 
 /* constant_time_lt returns 0xff..f if a < b and 0 otherwise. */
+__attribute__((no_sanitize("integer")))
 static inline unsigned int constant_time_lt(unsigned int a, unsigned int b) {
   /* Consider the two cases of the problem:
    *   msb(a) == msb(b): a < b iff the MSB of a - b is set.
@@ -266,6 +267,7 @@ static inline uint8_t constant_time_ge_8(unsigned int a, unsigned int b) {
 }
 
 /* constant_time_is_zero returns 0xff..f if a == 0 and 0 otherwise. */
+__attribute__((no_sanitize("integer")))
 static inline unsigned int constant_time_is_zero(unsigned int a) {
   /* Here is an SMT-LIB verification of this formula:
    *

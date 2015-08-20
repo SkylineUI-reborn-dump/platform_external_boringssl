@@ -367,7 +367,7 @@ int ASN1_INTEGER_set(ASN1_INTEGER *a, long v)
 		d>>=8;
 		}
 	j=0;
-	for (k=i-1; k >=0; k--)
+	for (k=(int)i-1; k >=0; k--)
 		a->data[j++]=buf[k];
 	a->length=j;
 	return(1);

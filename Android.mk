@@ -27,7 +27,21 @@ LOCAL_MODULE := libcrypto
 LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/src/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk $(LOCAL_PATH)/crypto-sources.mk
 LOCAL_CFLAGS += -fvisibility=hidden -DBORINGSSL_SHARED_LIBRARY -DBORINGSSL_IMPLEMENTATION -Wno-unused-parameter
+
+ifeq (,$(TARGET_BUILD_APPS))
+# If we're building the platform (as opposed to unbundled) build, use clang and
+# enable suitable sanitizers.
+LOCAL_CLANG := true
+LOCAL_SANITIZE := safe-stack unsigned-integer-overflow
+LOCAL_CFLAGS += -fsanitize-blacklist=$(LOCAL_PATH)/sanitize-blacklist.txt
+LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/sanitize-blacklist.txt
+else
+# If we're building an unbundled build, don't try to use clang since it's not
+# in the NDK yet. This can be removed when a clang version that is fast enough
+# in the NDK.
 LOCAL_SDK_VERSION := 9
+endif
+
 # sha256-armv4.S does not compile with clang.
 LOCAL_CLANG_ASFLAGS_arm += -no-integrated-as
 LOCAL_CLANG_ASFLAGS_arm64 += -march=armv8-a+crypto
@@ -98,7 +112,21 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/src/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk $(LOCAL_PATH)/ssl-sources.mk
 LOCAL_CFLAGS += -fvisibility=hidden -DBORINGSSL_SHARED_LIBRARY -DBORINGSSL_IMPLEMENTATION -Wno-unused-parameter
 LOCAL_SHARED_LIBRARIES=libcrypto
+
+ifeq (,$(TARGET_BUILD_APPS))
+# If we're building the platform (as opposed to unbundled) build, use clang and
+# enable suitable sanitizers.
+LOCAL_CLANG := true
+LOCAL_SANITIZE := safe-stack unsigned-integer-overflow
+LOCAL_CFLAGS += -fsanitize-blacklist=$(LOCAL_PATH)/sanitize-blacklist.txt
+LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/sanitize-blacklist.txt
+else
+# If we're building an unbundled build, don't try to use clang since it's not
+# in the NDK yet. This can be removed when a clang version that is fast enough
+# in the NDK.
 LOCAL_SDK_VERSION := 9
+endif
+
 include $(LOCAL_PATH)/ssl-sources.mk
 include $(BUILD_SHARED_LIBRARY)
 

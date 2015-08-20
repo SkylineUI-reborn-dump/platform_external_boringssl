@@ -75,6 +75,7 @@
  * Message-ID: <sternCvKL4B.Hyy@netcom.com>
  * Date: Wed, 14 Sep 1994 06:35:31 GMT */
 
+__attribute__((no_sanitize("integer")))
 void RC4(RC4_KEY *key, size_t len, const uint8_t *in, uint8_t *out) {
   uint32_t *d;
   uint32_t x, y, tx, ty;

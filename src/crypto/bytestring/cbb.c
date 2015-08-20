@@ -127,8 +127,8 @@ static int cbb_buffer_add_u(struct cbb_buffer_st *base, uint32_t v,
     return 0;
   }
 
-  for (i = len_len - 1; i < len_len; i--) {
-    buf[i] = v;
+  for (i = len_len; i > 0; i--) {
+    buf[i - 1] = v;
     v >>= 8;
   }
   return 1;
@@ -226,8 +226,8 @@ int CBB_flush(CBB *cbb) {
     cbb->pending_len_len = len_len - 1;
   }
 
-  for (i = cbb->pending_len_len - 1; i < cbb->pending_len_len; i--) {
-    cbb->base->buf[cbb->offset + i] = len;
+  for (i = cbb->pending_len_len; i > 0; i--) {
+    cbb->base->buf[cbb->offset + i - 1] = len;
     len >>= 8;
   }
   if (len != 0) {
