@@ -68,6 +68,30 @@
       "revId": "08656b61d075740bfb24ddcce65223146259fc02",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a47f9520_d9a04bf0",
+        "filename": "crypto-sources.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2015-08-28T22:54:58Z",
+      "side": 1,
+      "message": "It is, unfortunately, since we\u0027ll add both LOCAL_SRC_FILES_linux_x86_64 and LOCAL_SRC_FILES_x86_64 together for the host builds. And the darwin builds would still include linux_x86_64_sources because it\u0027s still x86_64.",
+      "parentUuid": "c42ba915_80dee5d2",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "08656b61d075740bfb24ddcce65223146259fc02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
