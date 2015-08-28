@@ -92,6 +92,30 @@
       "revId": "08656b61d075740bfb24ddcce65223146259fc02",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "046221c0_31f70001",
+        "filename": "crypto-sources.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1003981
+      },
+      "writtenOn": "2015-08-28T23:08:44Z",
+      "side": 1,
+      "message": "Oh, I missed the \"_linux\" in the following two lines...",
+      "parentUuid": "a47f9520_d9a04bf0",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "08656b61d075740bfb24ddcce65223146259fc02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
