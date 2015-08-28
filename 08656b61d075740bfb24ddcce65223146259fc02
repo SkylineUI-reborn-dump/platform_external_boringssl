@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "048f817d_114308ca",
+        "filename": "Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1003981
+      },
+      "writtenOn": "2015-08-28T22:52:19Z",
+      "side": 1,
+      "message": "this isn\u0027t needed.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "08656b61d075740bfb24ddcce65223146259fc02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4700952_a48a01a0",
+        "filename": "Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1003981
+      },
+      "writtenOn": "2015-08-28T22:52:19Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 28
+      },
+      "revId": "08656b61d075740bfb24ddcce65223146259fc02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c42ba915_80dee5d2",
+        "filename": "crypto-sources.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1003981
+      },
+      "writtenOn": "2015-08-28T22:52:19Z",
+      "side": 1,
+      "message": "ah, I see it now.\nIt\u0027s not necessarily needed, right?",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "08656b61d075740bfb24ddcce65223146259fc02",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
