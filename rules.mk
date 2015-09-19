@@ -71,6 +71,12 @@ MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV8_SHA256,$(USE_ARM_V8_SHA2))
 MODULE_CFLAGS += $(MODULE_STATIC_ARMCAP)
 MODULE_ASMFLAGS += $(MODULE_STATIC_ARMCAP)
 
+# Inform assembly files if linker garbage collection is enabled. This allows
+# them to put functions and data into dedicated sections.
+ifeq ($(WITH_LINKER_GC),1)
+MODULE_ASMFLAGS += -DWITH_LINKER_GC
+endif
+
 MODULE_SRCS += $(addprefix $(LOCAL_DIR)/,$(LOCAL_SRC_FILES))
 MODULE_SRCS += $(addprefix $(LOCAL_DIR)/,$(LOCAL_SRC_FILES_$(ARCH)))
 LOCAL_C_INCLUDES := src/crypto src/include
