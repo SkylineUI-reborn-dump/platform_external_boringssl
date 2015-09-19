@@ -58,6 +58,19 @@ LOCAL_SRC_FILES := $(filter-out src/crypto/x509v3/v3_utl.c,$(LOCAL_SRC_FILES))
 # no-op threading functions.
 MODULE_CFLAGS += -DTRUSTY
 
+# Define static armcap based on lk build variables
+MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
+toarmcap = -DOPENSSL_STATIC_ARMCAP_$(1)=$(if $(filter-out 0 false,$(2)),1,0) \
+    -DOPENSSL_STATIC_ARMCAP_$(1)_MASK=$(if $(filter-out 0 false,$(2)),$(1),0)
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV7_NEON,$(USE_ARM_V7_NEON))
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV7_NEON_FUNCTIONAL,$(USE_ARM_V7_NEON))
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV8_AES,$(USE_ARM_V8_AES))
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV8_PMULL,$(USE_ARM_V8_PMULL))
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV8_SHA1,$(USE_ARM_V8_SHA1))
+MODULE_STATIC_ARMCAP += $(call toarmcap,ARMV8_SHA256,$(USE_ARM_V8_SHA2))
+MODULE_CFLAGS += $(MODULE_STATIC_ARMCAP)
+MODULE_ASMFLAGS += $(MODULE_STATIC_ARMCAP)
+
 MODULE_SRCS += $(addprefix $(LOCAL_DIR)/,$(LOCAL_SRC_FILES))
 MODULE_SRCS += $(addprefix $(LOCAL_DIR)/,$(LOCAL_SRC_FILES_$(ARCH)))
 LOCAL_C_INCLUDES := src/crypto src/include
