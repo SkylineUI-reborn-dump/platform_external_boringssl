@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ae5bf53d_21c68236",
+        "filename": "linux-arm/crypto/modes/ghash-armv4.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Sometimes other processors can sneak past the first one :)\n\n(This is caused because the translation script adds an extra #if. Will fix upstream.)",
+      "parentUuid": "2e2e2591_f173a06c",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 20
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee86cdd4_a7114e19",
         "filename": "src/crypto/evp/p_rsa_asn1.c",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2015-09-24T21:12:10Z",
       "side": 1,
       "message": "Is this bad for Android?",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 20
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e5fa128_9e6a2d71",
+        "filename": "src/crypto/evp/p_rsa_asn1.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "It matches OpenSSL\u0027s behaviour for now and avoids some compatibility issues. Really we shouldn\u0027t have this, but it\u0027s a temporary concession to reality.",
+      "parentUuid": "ee86cdd4_a7114e19",
       "range": {
         "startLine": 95,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2e470569_12f4f28d",
+        "filename": "src/include/openssl/ecdsa.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e5fa128_9edead3f",
+      "range": {
+        "startLine": 164,
+        "startChar": 3,
+        "endLine": 164,
+        "endChar": 20
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e470569_77e79859",
         "filename": "src/include/openssl/poly1305.h",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2015-09-24T21:12:10Z",
       "side": 1,
       "message": "CRYPTO_poly1305_init",
+      "range": {
+        "startLine": 27,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e4c398b_98292550",
+        "filename": "src/include/openssl/poly1305.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e470569_77e79859",
       "range": {
         "startLine": 27,
         "startChar": 3,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "2e2e2591_54d02288",
+        "filename": "src/include/openssl/poly1305.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e5fa128_5ea03596",
+      "range": {
+        "startLine": 34,
+        "startChar": 3,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e4c398b_ad80252e",
         "filename": "src/include/openssl/poly1305.h",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2015-09-24T21:12:10Z",
       "side": 1,
       "message": "CRYPTO_...",
+      "range": {
+        "startLine": 40,
+        "startChar": 3,
+        "endLine": 40,
+        "endChar": 18
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e4c398b_785669d0",
+        "filename": "src/include/openssl/poly1305.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e4c398b_ad80252e",
       "range": {
         "startLine": 40,
         "startChar": 3,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "6e4d7d85_99936bd7",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e2e2591_d4ce5244",
+      "range": {
+        "startLine": 843,
+        "startChar": 3,
+        "endLine": 843,
+        "endChar": 31
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e4c398b_38ceb198",
         "filename": "src/include/openssl/ssl.h",
         "patchSetId": 1
@@ -174,6 +342,30 @@
       "writtenOn": "2015-09-24T21:12:10Z",
       "side": 1,
       "message": "SSL_SESSION_set_timeout",
+      "range": {
+        "startLine": 1133,
+        "startChar": 3,
+        "endLine": 1133,
+        "endChar": 23
+      },
+      "revId": "1e4884f615b20946411a74e41eb9c6aa65e2d5f3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ae5bf53d_8181aec9",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-09-24T21:51:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e4c398b_38ceb198",
       "range": {
         "startLine": 1133,
         "startChar": 3,
