@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36204e91_9e891c11",
+        "filename": "src/crypto/evp/pbkdf.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-10-31T16:02:26Z",
+      "side": 1,
+      "message": "Looks like we have a few that do this. We should probably fix those first.",
+      "range": {
+        "startLine": 130,
+        "startChar": 5,
+        "endLine": 131,
+        "endChar": 71
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
