@@ -22,6 +22,30 @@
       "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7643a650_51c6e71d",
+        "filename": "src/crypto/evp/pbkdf.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-11-02T21:27:28Z",
+      "side": 1,
+      "message": "From looking at the uses of this function in AOSP, all the callers appear to either test the return value, or else pass a fixed number of iterations.\n\nSo I don\u0027t think that this specific change will impact them. Where you suggesting that callers should check the return value anyway? (Sounds like a fine cleanup.) Does that extend to other external/ code?",
+      "parentUuid": "36204e91_9e891c11",
+      "range": {
+        "startLine": 130,
+        "startChar": 5,
+        "endLine": 131,
+        "endChar": 71
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
