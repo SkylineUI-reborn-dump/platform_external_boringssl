@@ -70,6 +70,168 @@
       "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d63612de_ed517ee2",
+        "filename": "src/crypto/evp/pbkdf.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "Yes, I think they should check the return code anyway. external/ code will take longer since we\u0027d have to send patches upstream in most cases.",
+      "parentUuid": "7643a650_51c6e71d",
+      "range": {
+        "startLine": 130,
+        "startChar": 5,
+        "endLine": 131,
+        "endChar": 71
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36892e3b_ad379d8a",
+        "filename": "src/crypto/poly1305/poly1305_test.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "This is also wrong.",
+      "range": {
+        "startLine": 1,
+        "startChar": 7,
+        "endLine": 1,
+        "endChar": 9
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96a49abb_33031227",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "SSL_set_fd",
+      "range": {
+        "startLine": 262,
+        "startChar": 3,
+        "endLine": 262,
+        "endChar": 14
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d683721b_8ae80b14",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "SSL_CTX_set_cipher_list_tls10",
+      "range": {
+        "startLine": 1169,
+        "startChar": 3,
+        "endLine": 1169,
+        "endChar": 26
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "96a49abb_b30e2249",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1175,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "SSL_CTX_set_cipher_list_tls11",
+      "range": {
+        "startLine": 1175,
+        "startChar": 3,
+        "endLine": 1175,
+        "endChar": 26
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b686fe2b_e9b4350f",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2796,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "SSL_CTX_set_info_callback",
+      "range": {
+        "startLine": 2796,
+        "startChar": 3,
+        "endLine": 2796,
+        "endChar": 24
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6923665_2baf19c0",
+        "filename": "src/include/openssl/ssl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2015-11-04T21:11:12Z",
+      "side": 1,
+      "message": "missing pipe on end of this reference",
+      "range": {
+        "startLine": 3288,
+        "startChar": 29,
+        "endLine": 3288,
+        "endChar": 45
+      },
+      "revId": "fdeb488e6332a17729db5a04236e48a46a019272",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
