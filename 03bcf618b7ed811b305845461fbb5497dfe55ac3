@@ -22,6 +22,30 @@
       "revId": "03bcf618b7ed811b305845461fbb5497dfe55ac3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1698aa84_29c63a6f",
+        "filename": "src/crypto/cpu-arm.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2015-11-05T21:26:18Z",
+      "side": 1,
+      "message": "That was deliberate and done at their request!",
+      "parentUuid": "568ea242_a3d6c842",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "03bcf618b7ed811b305845461fbb5497dfe55ac3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
