@@ -59,6 +59,8 @@ LOCAL_CXX_STL := none
 # Windows and Macs both have problems with assembly files
 LOCAL_CFLAGS_darwin += -DOPENSSL_NO_ASM
 LOCAL_CFLAGS_windows += -DOPENSSL_NO_ASM
+# This doesn't work currently; disable until we find a fix.
+LOCAL_SANITIZE := never
 include $(LOCAL_PATH)/crypto-sources.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
@@ -113,6 +115,8 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/src/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk $(LOCAL_PATH)/ssl-sources.mk
 LOCAL_CFLAGS += -fvisibility=hidden -DBORINGSSL_SHARED_LIBRARY -DBORINGSSL_IMPLEMENTATION -DOPENSSL_SMALL -Wno-unused-parameter
 LOCAL_CXX_STL := none
+# This doesn't work currently; disable until we find a fix.
+LOCAL_SANITIZE := never
 include $(LOCAL_PATH)/ssl-sources.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
