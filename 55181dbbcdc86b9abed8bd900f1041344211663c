@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27673e34_b17c47c4",
+        "filename": "src/crypto/bn/add.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-01-14T21:02:49Z",
+      "side": 0,
+      "message": "wow, nice cruft",
+      "range": {
+        "startLine": 333,
+        "startChar": 6,
+        "endLine": 333,
+        "endChar": 14
+      },
+      "revId": "55181dbbcdc86b9abed8bd900f1041344211663c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
