@@ -22,6 +22,30 @@
       "revId": "734b62a8e12182ca0ef3714bf537bd29b36d0b0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4277c50e_7a0c818b",
+        "filename": "Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-02-23T16:46:56Z",
+      "side": 1,
+      "message": "Where is it triggering? We\u0027re building with -Wformat\u003d2 these days. Although Android\u0027s BoringSSL is a little behind, so that might be why. (Rolling forward would be nice. There\u0027s some changes I\u0027m waiting to roll in so I can get Conscrypt to stop messing with our private structs.)",
+      "parentUuid": "62a5a9c6_5eb424fe",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "734b62a8e12182ca0ef3714bf537bd29b36d0b0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
