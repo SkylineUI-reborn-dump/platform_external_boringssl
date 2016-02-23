@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62a5a9c6_5eb424fe",
+        "filename": "Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2016-02-23T16:20:50Z",
+      "side": 1,
+      "message": "this one worries me. (especially because that turns off the format\u003dsecurity stuff too, doesn\u0027t it?)\n\nadding no-unknown-pragmas seems fine.",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "734b62a8e12182ca0ef3714bf537bd29b36d0b0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
