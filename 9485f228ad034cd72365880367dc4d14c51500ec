@@ -94,6 +94,30 @@
       "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2927965_80145a29",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-03-02T22:27:43Z",
+      "side": 1,
+      "message": "For context, that #pragma is because Windows system headers do not pass MSVC\u0027s own warnings, so we wrap windows.h #includes in those #pragmas. I\u0027m guessing mingw doesn\u0027t understand this #pragma but I guess is somehow okay with Windows headers, or maybe has its own version of them. Suppressing the warning on mingw is probably reasonable? Otherwise we\u0027d have to write this as\n\n  #if defined(OPENSSL_WINDOWS)\n  #if defined(_MSC_VER)\n  #pragma warning(push, 3)\n  #endif\n  #define \u003cwindows.h\u003e\n  #if defined(_MSC_VER)\n  #pragma warning(pop)\n  #endif\n  #endif\n\nwhich is absurd.",
+      "parentUuid": "a2e32149_1885c6f9",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
