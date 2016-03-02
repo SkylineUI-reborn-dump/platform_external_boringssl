@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4277c50e_d75c6056",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-03-02T20:24:38Z",
+      "side": 0,
+      "message": "I gather from the bug that this warning has been ditched globally? (I suspect our code flags that a lot. Really anything with function pointers or legacy parameters in APIs is liable to.)",
+      "range": {
+        "startLine": 16,
+        "startChar": 106,
+        "endLine": 16,
+        "endChar": 127
+      },
+      "revId": "eac3b69c627af4ffd43b036ea2bcaa4d13cffb60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
