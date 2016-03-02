@@ -46,6 +46,30 @@
       "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "42a26512_31d8ca37",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-03-02T22:21:16Z",
+      "side": 1,
+      "message": "Is this mingw? In that case, this isn\u0027t very surprising. But otherwise, that line shouldn\u0027t exist in anything but Windows.",
+      "parentUuid": "e27a7932_15269896",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

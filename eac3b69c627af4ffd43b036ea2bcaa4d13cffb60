@@ -46,6 +46,30 @@
       "revId": "eac3b69c627af4ffd43b036ea2bcaa4d13cffb60",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02714d1c_9fee7dd7",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-03-02T22:21:16Z",
+      "side": 0,
+      "message": "Nah, I\u0027m referring to -Wno-unused-parameters. (Sorry, the highlight in gerrit might not be visible.)",
+      "parentUuid": "82ea9d1e_55571cd3",
+      "range": {
+        "startLine": 16,
+        "startChar": 106,
+        "endLine": 16,
+        "endChar": 127
+      },
+      "revId": "eac3b69c627af4ffd43b036ea2bcaa4d13cffb60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
