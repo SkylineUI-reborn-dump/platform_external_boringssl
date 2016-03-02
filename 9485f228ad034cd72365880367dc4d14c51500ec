@@ -22,6 +22,30 @@
       "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e27a7932_15269896",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1081159
+      },
+      "writtenOn": "2016-03-02T21:56:30Z",
+      "side": 1,
+      "message": "This is one example:\n\nIn file included from external/boringssl/src/crypto/bio/bio.c:68:0:\nexternal/boringssl/src/crypto/bio/../internal.h:117:0: warning: ignoring #pragma warning  [-Wunknown-pragmas]\n #pragma warning(push, 3)",
+      "parentUuid": "02986d84_5e3413c5",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "9485f228ad034cd72365880367dc4d14c51500ec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }

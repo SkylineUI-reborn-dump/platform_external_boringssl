@@ -22,6 +22,30 @@
       "revId": "eac3b69c627af4ffd43b036ea2bcaa4d13cffb60",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82ea9d1e_55571cd3",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1081159
+      },
+      "writtenOn": "2016-03-02T21:56:30Z",
+      "side": 0,
+      "message": "Are you referring to -fvisibility\u003dhidden?  If so, that is not a warning but a flag to make declarations hidden in the DSO by default.",
+      "parentUuid": "4277c50e_d75c6056",
+      "range": {
+        "startLine": 16,
+        "startChar": 106,
+        "endLine": 16,
+        "endChar": 127
+      },
+      "revId": "eac3b69c627af4ffd43b036ea2bcaa4d13cffb60",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
