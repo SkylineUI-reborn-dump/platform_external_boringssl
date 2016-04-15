@@ -54,59 +54,84 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.] */
 
+#include <openssl/x509.h>
+
 #include <openssl/asn1.h>
+#include <openssl/digest.h>
+#include <openssl/err.h>
+#include <openssl/evp.h>
+#include <openssl/obj.h>
 
-#include <openssl/bio.h>
-#include <openssl/mem.h>
+#include "internal.h"
 
 
-int ASN1_bn_print(BIO *bp, const char *number, const BIGNUM *num,
-			unsigned char *buf, int off)
-	{
-	int n,i;
-	const char *neg;
+int x509_digest_sign_algorithm(EVP_MD_CTX *ctx, X509_ALGOR *algor) {
+  const EVP_MD *digest = EVP_MD_CTX_md(ctx);
+  EVP_PKEY *pkey = EVP_PKEY_CTX_get0_pkey(ctx->pctx);
+  if (digest == NULL || pkey == NULL) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_CONTEXT_NOT_INITIALISED);
+    return 0;
+  }
 
-	if (num == NULL) return(1);
-	neg = (BN_is_negative(num))?"-":"";
-	if(!BIO_indent(bp,off,128))
-		return 0;
-	if (BN_is_zero(num))
-		{
-		if (BIO_printf(bp, "%s 0\n", number) <= 0)
-			return 0;
-		return 1;
-		}
+  if (EVP_PKEY_id(pkey) == EVP_PKEY_RSA) {
+    int pad_mode;
+    if (!EVP_PKEY_CTX_get_rsa_padding(ctx->pctx, &pad_mode)) {
+      return 0;
+    }
+    /* RSA-PSS has special signature algorithm logic. */
+    if (pad_mode == RSA_PKCS1_PSS_PADDING) {
+      return x509_rsa_ctx_to_pss(ctx, algor);
+    }
+  }
 
-	if (BN_num_bytes(num) <= sizeof(long))
-		{
-		if (BIO_printf(bp,"%s %s%lu (%s0x%lx)\n",number,neg,
-			(unsigned long)num->d[0],neg,(unsigned long)num->d[0])
-			<= 0) return(0);
-		}
-	else
-		{
-		buf[0]=0;
-		if (BIO_printf(bp,"%s%s",number,
-			(neg[0] == '-')?" (Negative)":"") <= 0)
-			return(0);
-		n=BN_bn2bin(num,&buf[1]);
-	
-		if (buf[1] & 0x80)
-			n++;
-		else	buf++;
+  /* Default behavior: look up the OID for the algorithm/hash pair and encode
+   * that. */
+  int sign_nid;
+  if (!OBJ_find_sigid_by_algs(&sign_nid, EVP_MD_type(digest),
+                              EVP_PKEY_id(pkey))) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_DIGEST_AND_KEY_TYPE_NOT_SUPPORTED);
+    return 0;
+  }
 
-		for (i=0; i<n; i++)
-			{
-			if ((i%15) == 0)
-				{
-				if(BIO_puts(bp,"\n") <= 0
-				   || !BIO_indent(bp,off+4,128))
-				    return 0;
-				}
-			if (BIO_printf(bp,"%02x%s",buf[i],((i+1) == n)?"":":")
-				<= 0) return(0);
-			}
-		if (BIO_write(bp,"\n",1) <= 0) return(0);
-		}
-	return(1);
-	}
+  /* RSA signature algorithms include an explicit NULL parameter. Others omit
+   * it. */
+  int paramtype =
+      (EVP_PKEY_id(pkey) == EVP_PKEY_RSA) ? V_ASN1_NULL : V_ASN1_UNDEF;
+  X509_ALGOR_set0(algor, OBJ_nid2obj(sign_nid), paramtype, NULL);
+  return 1;
+}
+
+int x509_digest_verify_init(EVP_MD_CTX *ctx, X509_ALGOR *sigalg,
+                            EVP_PKEY *pkey) {
+  /* Convert the signature OID into digest and public key OIDs. */
+  int sigalg_nid = OBJ_obj2nid(sigalg->algorithm);
+  int digest_nid, pkey_nid;
+  if (!OBJ_find_sigid_algs(sigalg_nid, &digest_nid, &pkey_nid)) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNKNOWN_SIGNATURE_ALGORITHM);
+    return 0;
+  }
+
+  /* Check the public key OID matches the public key type. */
+  if (pkey_nid != EVP_PKEY_id(pkey)) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_WRONG_PUBLIC_KEY_TYPE);
+    return 0;
+  }
+
+  /* NID_undef signals that there are custom parameters to set. */
+  if (digest_nid == NID_undef) {
+    if (sigalg_nid != NID_rsassaPss) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNKNOWN_SIGNATURE_ALGORITHM);
+      return 0;
+    }
+    return x509_rsa_pss_to_ctx(ctx, sigalg, pkey);
+  }
+
+  /* Otherwise, initialize with the digest from the OID. */
+  const EVP_MD *digest = EVP_get_digestbynid(digest_nid);
+  if (digest == NULL) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNKNOWN_MESSAGE_DIGEST_ALGORITHM);
+    return 0;
+  }
+
+  return EVP_DigestVerifyInit(ctx, NULL, digest, NULL, pkey);
+}

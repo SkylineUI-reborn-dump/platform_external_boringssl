@@ -110,7 +110,6 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -120,7 +119,7 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 #include <openssl/mem.h>
-#include <openssl/obj.h>
+#include <openssl/nid.h>
 #include <openssl/rand.h>
 #include <openssl/type_check.h>
 
@@ -129,48 +128,6 @@
 
 static int ssl_check_clienthello_tlsext(SSL *ssl);
 static int ssl_check_serverhello_tlsext(SSL *ssl);
-
-const SSL3_ENC_METHOD TLSv1_enc_data = {
-    tls1_prf,
-    tls1_setup_key_block,
-    tls1_generate_master_secret,
-    tls1_change_cipher_state,
-    tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    TLS_MD_CLIENT_FINISH_CONST,TLS_MD_CLIENT_FINISH_CONST_SIZE,
-    TLS_MD_SERVER_FINISH_CONST,TLS_MD_SERVER_FINISH_CONST_SIZE,
-    tls1_alert_code,
-    tls1_export_keying_material,
-    0,
-};
-
-const SSL3_ENC_METHOD TLSv1_1_enc_data = {
-    tls1_prf,
-    tls1_setup_key_block,
-    tls1_generate_master_secret,
-    tls1_change_cipher_state,
-    tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    TLS_MD_CLIENT_FINISH_CONST,TLS_MD_CLIENT_FINISH_CONST_SIZE,
-    TLS_MD_SERVER_FINISH_CONST,TLS_MD_SERVER_FINISH_CONST_SIZE,
-    tls1_alert_code,
-    tls1_export_keying_material,
-    SSL_ENC_FLAG_EXPLICIT_IV,
-};
-
-const SSL3_ENC_METHOD TLSv1_2_enc_data = {
-    tls1_prf,
-    tls1_setup_key_block,
-    tls1_generate_master_secret,
-    tls1_change_cipher_state,
-    tls1_final_finish_mac,
-    tls1_cert_verify_mac,
-    TLS_MD_CLIENT_FINISH_CONST,TLS_MD_CLIENT_FINISH_CONST_SIZE,
-    TLS_MD_SERVER_FINISH_CONST,TLS_MD_SERVER_FINISH_CONST_SIZE,
-    tls1_alert_code,
-    tls1_export_keying_material,
-    SSL_ENC_FLAG_EXPLICIT_IV|SSL_ENC_FLAG_SIGALGS|SSL_ENC_FLAG_SHA256_PRF,
-};
 
 static int compare_uint16_t(const void *p1, const void *p2) {
   uint16_t u1 = *((const uint16_t *)p1);
@@ -211,8 +168,7 @@ static int tls1_check_duplicate_extensions(const CBS *cbs) {
     return 1;
   }
 
-  extension_types =
-      (uint16_t *)OPENSSL_malloc(sizeof(uint16_t) * num_extensions);
+  extension_types = OPENSSL_malloc(sizeof(uint16_t) * num_extensions);
   if (extension_types == NULL) {
     OPENSSL_PUT_ERROR(SSL, ERR_R_MALLOC_FAILURE);
     goto done;
@@ -336,6 +292,7 @@ int SSL_early_callback_ctx_extension_get(
 }
 
 static const uint16_t eccurves_default[] = {
+    SSL_CURVE_X25519,
     SSL_CURVE_SECP256R1,
     SSL_CURVE_SECP384R1,
 #if defined(BORINGSSL_ANDROID_SYSTEM)
@@ -418,7 +375,7 @@ int tls1_set_curves(uint16_t **out_curve_ids, size_t *out_curve_ids_len,
   uint16_t *curve_ids;
   size_t i;
 
-  curve_ids = (uint16_t *)OPENSSL_malloc(ncurves * sizeof(uint16_t));
+  curve_ids = OPENSSL_malloc(ncurves * sizeof(uint16_t));
   if (curve_ids == NULL) {
     return 0;
   }
@@ -551,7 +508,6 @@ static const uint8_t tls12_sigalgs[] = {
     tlsext_sigalg(TLSEXT_hash_sha512)
     tlsext_sigalg(TLSEXT_hash_sha384)
     tlsext_sigalg(TLSEXT_hash_sha256)
-    tlsext_sigalg(TLSEXT_hash_sha224)
     tlsext_sigalg(TLSEXT_hash_sha1)
 };
 
@@ -975,7 +931,7 @@ static int ext_ri_add_serverhello(SSL *ssl, CBB *out) {
 
 /* Extended Master Secret.
  *
- * https://tools.ietf.org/html/draft-ietf-tls-session-hash-05 */
+ * https://tools.ietf.org/html/rfc7627 */
 
 static void ext_ems_init(SSL *ssl) {
   ssl->s3->tmp.extended_master_secret = 0;
@@ -1185,6 +1141,7 @@ static int ext_sigalgs_add_serverhello(SSL *ssl, CBB *out) {
 
 static void ext_ocsp_init(SSL *ssl) {
   ssl->s3->tmp.certificate_status_expected = 0;
+  ssl->tlsext_status_type = -1;
 }
 
 static int ext_ocsp_add_clienthello(SSL *ssl, CBB *out) {
@@ -1202,6 +1159,7 @@ static int ext_ocsp_add_clienthello(SSL *ssl, CBB *out) {
     return 0;
   }
 
+  ssl->tlsext_status_type = TLSEXT_STATUSTYPE_ocsp;
   return 1;
 }
 
@@ -1317,14 +1275,14 @@ static int ext_npn_parse_serverhello(SSL *ssl, uint8_t *out_alert,
     return 0;
   }
 
-  OPENSSL_free(ssl->next_proto_negotiated);
-  ssl->next_proto_negotiated = BUF_memdup(selected, selected_len);
-  if (ssl->next_proto_negotiated == NULL) {
+  OPENSSL_free(ssl->s3->next_proto_negotiated);
+  ssl->s3->next_proto_negotiated = BUF_memdup(selected, selected_len);
+  if (ssl->s3->next_proto_negotiated == NULL) {
     *out_alert = SSL_AD_INTERNAL_ERROR;
     return 0;
   }
 
-  ssl->next_proto_negotiated_len = selected_len;
+  ssl->s3->next_proto_negotiated_len = selected_len;
   ssl->s3->next_proto_neg_seen = 1;
 
   return 1;
@@ -1945,9 +1903,7 @@ static int ext_ec_curves_parse_clienthello(SSL *ssl, uint8_t *out_alert,
     return 0;
   }
 
-  ssl->s3->tmp.peer_ellipticcurvelist =
-      (uint16_t *)OPENSSL_malloc(CBS_len(&elliptic_curve_list));
-
+  ssl->s3->tmp.peer_ellipticcurvelist = OPENSSL_malloc(CBS_len(&elliptic_curve_list));
   if (ssl->s3->tmp.peer_ellipticcurvelist == NULL) {
     *out_alert = SSL_AD_INTERNAL_ERROR;
     return 0;
@@ -2081,6 +2037,9 @@ static const struct tls_extension kExtensions[] = {
     ext_ec_point_parse_clienthello,
     ext_ec_point_add_serverhello,
   },
+  /* The final extension must be non-empty. WebSphere Application Server 7.0 is
+   * intolerant to the last extension being zero-length. See
+   * https://crbug.com/363583. */
   {
     TLSEXT_TYPE_elliptic_curves,
     ext_ec_curves_init,
@@ -2167,9 +2126,10 @@ int ssl_add_clienthello_tlsext(SSL *ssl, CBB *out, size_t header_len) {
        * NB: because this code works out the length of all existing extensions
        * it MUST always appear last. */
       size_t padding_len = 0x200 - header_len;
-      /* Extensions take at least four bytes to encode. Always include least
+      /* Extensions take at least four bytes to encode. Always include at least
        * one byte of data if including the extension. WebSphere Application
-       * Server 7.0 is intolerant to the last extension being zero-length. */
+       * Server 7.0 is intolerant to the last extension being zero-length. See
+       * https://crbug.com/363583. */
       if (padding_len >= 4 + 1) {
         padding_len -= 4;
       } else {
@@ -2411,14 +2371,10 @@ static int ssl_check_clienthello_tlsext(SSL *ssl) {
   int ret = SSL_TLSEXT_ERR_NOACK;
   int al = SSL_AD_UNRECOGNIZED_NAME;
 
-  /* The handling of the ECPointFormats extension is done elsewhere, namely in
-   * ssl3_choose_cipher in s3_lib.c. */
-
-  if (ssl->ctx != NULL && ssl->ctx->tlsext_servername_callback != 0) {
+  if (ssl->ctx->tlsext_servername_callback != 0) {
     ret = ssl->ctx->tlsext_servername_callback(ssl, &al,
-                                             ssl->ctx->tlsext_servername_arg);
-  } else if (ssl->initial_ctx != NULL &&
-             ssl->initial_ctx->tlsext_servername_callback != 0) {
+                                               ssl->ctx->tlsext_servername_arg);
+  } else if (ssl->initial_ctx->tlsext_servername_callback != 0) {
     ret = ssl->initial_ctx->tlsext_servername_callback(
         ssl, &al, ssl->initial_ctx->tlsext_servername_arg);
   }
@@ -2445,11 +2401,10 @@ static int ssl_check_serverhello_tlsext(SSL *ssl) {
   int ret = SSL_TLSEXT_ERR_OK;
   int al = SSL_AD_UNRECOGNIZED_NAME;
 
-  if (ssl->ctx != NULL && ssl->ctx->tlsext_servername_callback != 0) {
+  if (ssl->ctx->tlsext_servername_callback != 0) {
     ret = ssl->ctx->tlsext_servername_callback(ssl, &al,
-                                             ssl->ctx->tlsext_servername_arg);
-  } else if (ssl->initial_ctx != NULL &&
-             ssl->initial_ctx->tlsext_servername_callback != 0) {
+                                               ssl->ctx->tlsext_servername_arg);
+  } else if (ssl->initial_ctx->tlsext_servername_callback != 0) {
     ret = ssl->initial_ctx->tlsext_servername_callback(
         ssl, &al, ssl->initial_ctx->tlsext_servername_arg);
   }
@@ -2484,7 +2439,7 @@ int ssl_parse_serverhello_tlsext(SSL *ssl, CBS *cbs) {
 }
 
 int tls_process_ticket(SSL *ssl, SSL_SESSION **out_session,
-                       int *out_send_ticket, const uint8_t *ticket,
+                       int *out_renew_ticket, const uint8_t *ticket,
                        size_t ticket_len, const uint8_t *session_id,
                        size_t session_id_len) {
   int ret = 1; /* Most errors are non-fatal. */
@@ -2496,16 +2451,10 @@ int tls_process_ticket(SSL *ssl, SSL_SESSION **out_session,
   EVP_CIPHER_CTX cipher_ctx;
   EVP_CIPHER_CTX_init(&cipher_ctx);
 
-  *out_send_ticket = 0;
+  *out_renew_ticket = 0;
   *out_session = NULL;
 
   if (session_id_len > SSL_MAX_SSL_SESSION_ID_LENGTH) {
-    goto done;
-  }
-
-  if (ticket_len == 0) {
-    /* The client will accept a ticket but doesn't currently have one. */
-    *out_send_ticket = 1;
     goto done;
   }
 
@@ -2530,7 +2479,7 @@ int tls_process_ticket(SSL *ssl, SSL_SESSION **out_session,
       goto done;
     }
     if (cb_ret == 2) {
-      *out_send_ticket = 1;
+      *out_renew_ticket = 1;
     }
   } else {
     /* Check the key name matches. */
@@ -2609,12 +2558,12 @@ typedef struct {
   int id;
 } tls12_lookup;
 
-static const tls12_lookup tls12_md[] = {{NID_md5, TLSEXT_hash_md5},
-                                        {NID_sha1, TLSEXT_hash_sha1},
-                                        {NID_sha224, TLSEXT_hash_sha224},
-                                        {NID_sha256, TLSEXT_hash_sha256},
-                                        {NID_sha384, TLSEXT_hash_sha384},
-                                        {NID_sha512, TLSEXT_hash_sha512}};
+static const tls12_lookup tls12_md[] = {
+    {NID_sha1, TLSEXT_hash_sha1},
+    {NID_sha256, TLSEXT_hash_sha256},
+    {NID_sha384, TLSEXT_hash_sha384},
+    {NID_sha512, TLSEXT_hash_sha512},
+};
 
 static const tls12_lookup tls12_sig[] = {{EVP_PKEY_RSA, TLSEXT_signature_rsa},
                                          {EVP_PKEY_EC, TLSEXT_signature_ecdsa}};
@@ -2648,14 +2597,8 @@ int tls12_add_sigandhash(SSL *ssl, CBB *out, const EVP_MD *md) {
 
 const EVP_MD *tls12_get_hash(uint8_t hash_alg) {
   switch (hash_alg) {
-    case TLSEXT_hash_md5:
-      return EVP_md5();
-
     case TLSEXT_hash_sha1:
       return EVP_sha1();
-
-    case TLSEXT_hash_sha224:
-      return EVP_sha224();
 
     case TLSEXT_hash_sha256:
       return EVP_sha256();
@@ -2691,7 +2634,7 @@ OPENSSL_COMPILE_ASSERT(sizeof(TLS_SIGALGS) == 2,
 
 int tls1_parse_peer_sigalgs(SSL *ssl, const CBS *in_sigalgs) {
   /* Extension ignored for inappropriate versions */
-  if (!SSL_USE_SIGALGS(ssl)) {
+  if (ssl3_protocol_version(ssl) < TLS1_2_VERSION) {
     return 1;
   }
 
@@ -2742,7 +2685,7 @@ const EVP_MD *tls1_choose_signing_digest(SSL *ssl) {
   size_t i, j;
 
   static const int kDefaultDigestList[] = {NID_sha256, NID_sha384, NID_sha512,
-                                           NID_sha224, NID_sha1};
+                                           NID_sha1};
 
   const int *digest_nids = kDefaultDigestList;
   size_t num_digest_nids =
