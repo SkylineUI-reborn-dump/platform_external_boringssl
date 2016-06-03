@@ -244,12 +244,12 @@ void RC4_set_key(RC4_KEY *rc4key, unsigned len, const uint8_t *key) {
 
 #define SK_LOOP(d, n)                    \
   {                                      \
-    tmp = d[(n)];                        \
+    tmp = (d)[(n)];                        \
     id2 = (key[id1] + tmp + id2) & 0xff; \
     if (++id1 == len)                    \
       id1 = 0;                           \
-    d[(n)] = d[id2];                     \
-    d[id2] = tmp;                        \
+    (d)[(n)] = (d)[id2];                     \
+    (d)[id2] = tmp;                        \
   }
 
   for (i = 0; i < 256; i++) {

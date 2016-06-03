@@ -642,32 +642,32 @@ void ssl_write_buffer_clear(SSL *ssl);
  * Functions below here haven't been touched up and may be underdocumented. */
 
 #define c2l(c, l)                                                            \
-  (l = ((unsigned long)(*((c)++))), l |= (((unsigned long)(*((c)++))) << 8), \
-   l |= (((unsigned long)(*((c)++))) << 16),                                 \
-   l |= (((unsigned long)(*((c)++))) << 24))
+  ((l) = ((unsigned long)(*((c)++))), (l) |= (((unsigned long)(*((c)++))) << 8), \
+   (l) |= (((unsigned long)(*((c)++))) << 16),                                 \
+   (l) |= (((unsigned long)(*((c)++))) << 24))
 
 /* NOTE - c is not incremented as per c2l */
 #define c2ln(c, l1, l2, n)                       \
   {                                              \
-    c += n;                                      \
-    l1 = l2 = 0;                                 \
+    (c) += (n);                                      \
+    (l1) = (l2) = 0;                                 \
     switch (n) {                                 \
       case 8:                                    \
-        l2 = ((unsigned long)(*(--(c)))) << 24;  \
+        (l2) = ((unsigned long)(*(--(c)))) << 24;  \
       case 7:                                    \
-        l2 |= ((unsigned long)(*(--(c)))) << 16; \
+        (l2) |= ((unsigned long)(*(--(c)))) << 16; \
       case 6:                                    \
-        l2 |= ((unsigned long)(*(--(c)))) << 8;  \
+        (l2) |= ((unsigned long)(*(--(c)))) << 8;  \
       case 5:                                    \
-        l2 |= ((unsigned long)(*(--(c))));       \
+        (l2) |= ((unsigned long)(*(--(c))));       \
       case 4:                                    \
-        l1 = ((unsigned long)(*(--(c)))) << 24;  \
+        (l1) = ((unsigned long)(*(--(c)))) << 24;  \
       case 3:                                    \
-        l1 |= ((unsigned long)(*(--(c)))) << 16; \
+        (l1) |= ((unsigned long)(*(--(c)))) << 16; \
       case 2:                                    \
-        l1 |= ((unsigned long)(*(--(c)))) << 8;  \
+        (l1) |= ((unsigned long)(*(--(c)))) << 8;  \
       case 1:                                    \
-        l1 |= ((unsigned long)(*(--(c))));       \
+        (l1) |= ((unsigned long)(*(--(c))));       \
     }                                            \
   }
 
@@ -678,9 +678,9 @@ void ssl_write_buffer_clear(SSL *ssl);
    *((c)++) = (uint8_t)(((l) >> 24) & 0xff))
 
 #define n2l(c, l)                          \
-  (l = ((unsigned long)(*((c)++))) << 24,  \
-   l |= ((unsigned long)(*((c)++))) << 16, \
-   l |= ((unsigned long)(*((c)++))) << 8, l |= ((unsigned long)(*((c)++))))
+  ((l) = ((unsigned long)(*((c)++))) << 24,  \
+   (l) |= ((unsigned long)(*((c)++))) << 16, \
+   (l) |= ((unsigned long)(*((c)++))) << 8, (l) |= ((unsigned long)(*((c)++))))
 
 #define l2n(l, c)                            \
   (*((c)++) = (uint8_t)(((l) >> 24) & 0xff), \
@@ -701,7 +701,7 @@ void ssl_write_buffer_clear(SSL *ssl);
 /* NOTE - c is not incremented as per l2c */
 #define l2cn(l1, l2, c, n)                               \
   {                                                      \
-    c += n;                                              \
+    (c) += (n);                                              \
     switch (n) {                                         \
       case 8:                                            \
         *(--(c)) = (uint8_t)(((l2) >> 24) & 0xff); \
@@ -723,30 +723,30 @@ void ssl_write_buffer_clear(SSL *ssl);
   }
 
 #define n2s(c, s) \
-  ((s = (((unsigned int)(c[0])) << 8) | (((unsigned int)(c[1])))), c += 2)
+  (((s) = (((unsigned int)((c)[0])) << 8) | (((unsigned int)((c)[1])))), (c) += 2)
 
 #define s2n(s, c)                              \
-  ((c[0] = (uint8_t)(((s) >> 8) & 0xff), \
-    c[1] = (uint8_t)(((s)) & 0xff)),     \
-   c += 2)
+  (((c)[0] = (uint8_t)(((s) >> 8) & 0xff), \
+    (c)[1] = (uint8_t)(((s)) & 0xff)),     \
+   (c) += 2)
 
 #define n2l3(c, l)                                                         \
-  ((l = (((unsigned long)(c[0])) << 16) | (((unsigned long)(c[1])) << 8) | \
-        (((unsigned long)(c[2])))),                                        \
-   c += 3)
+  (((l) = (((unsigned long)((c)[0])) << 16) | (((unsigned long)((c)[1])) << 8) | \
+        (((unsigned long)((c)[2])))),                                        \
+   (c) += 3)
 
 #define l2n3(l, c)                              \
-  ((c[0] = (uint8_t)(((l) >> 16) & 0xff), \
-    c[1] = (uint8_t)(((l) >> 8) & 0xff),  \
-    c[2] = (uint8_t)(((l)) & 0xff)),      \
-   c += 3)
+  (((c)[0] = (uint8_t)(((l) >> 16) & 0xff), \
+    (c)[1] = (uint8_t)(((l) >> 8) & 0xff),  \
+    (c)[2] = (uint8_t)(((l)) & 0xff)),      \
+   (c) += 3)
 
 /* LOCAL STUFF */
 
 #define TLSEXT_CHANNEL_ID_SIZE 128
 
 /* Check if an SSL structure is using DTLS */
-#define SSL_IS_DTLS(ssl) (ssl->method->is_dtls)
+#define SSL_IS_DTLS(ssl) ((ssl)->method->is_dtls)
 
 /* From RFC4492, used in encoding the curve type in ECParameters */
 #define NAMED_CURVE_TYPE 3
@@ -864,7 +864,7 @@ struct ssl3_enc_method {
 
 #define SSL_HM_HEADER_LENGTH(ssl) ssl->method->hhlen
 #define ssl_handshake_start(ssl) \
-  (((uint8_t *)ssl->init_buf->data) + ssl->method->hhlen)
+  (((uint8_t *)(ssl)->init_buf->data) + (ssl)->method->hhlen)
 #define ssl_set_handshake_header(ssl, htype, len) \
   ssl->method->set_handshake_header(ssl, htype, len)
 #define ssl_do_write(ssl) ssl->method->do_write(ssl)
