@@ -141,9 +141,9 @@ extern "C" {
 #if defined(DATA_ORDER_IS_BIG_ENDIAN)
 
 #define HOST_c2l(c, l)                        \
-  (void)(l = (((uint32_t)(*((c)++))) << 24),  \
-         l |= (((uint32_t)(*((c)++))) << 16), \
-         l |= (((uint32_t)(*((c)++))) << 8), l |= (((uint32_t)(*((c)++)))))
+  (void)((l) = (((uint32_t)(*((c)++))) << 24),  \
+         (l) |= (((uint32_t)(*((c)++))) << 16), \
+         (l) |= (((uint32_t)(*((c)++))) << 8), (l) |= (((uint32_t)(*((c)++)))))
 
 #define HOST_l2c(l, c)                             \
   (void)(*((c)++) = (uint8_t)(((l) >> 24) & 0xff), \
@@ -154,9 +154,9 @@ extern "C" {
 #elif defined(DATA_ORDER_IS_LITTLE_ENDIAN)
 
 #define HOST_c2l(c, l)                                                     \
-  (void)(l = (((uint32_t)(*((c)++)))), l |= (((uint32_t)(*((c)++))) << 8), \
-         l |= (((uint32_t)(*((c)++))) << 16),                              \
-         l |= (((uint32_t)(*((c)++))) << 24))
+  (void)((l) = (((uint32_t)(*((c)++)))), (l) |= (((uint32_t)(*((c)++))) << 8), \
+         (l) |= (((uint32_t)(*((c)++))) << 16),                              \
+         (l) |= (((uint32_t)(*((c)++))) << 24))
 
 #define HOST_l2c(l, c)                             \
   (void)(*((c)++) = (uint8_t)(((l)) & 0xff),       \

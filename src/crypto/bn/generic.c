@@ -70,7 +70,7 @@
 #define mul_add(r, a, w, c)             \
   {                                     \
     BN_ULLONG t;                        \
-    t = (BN_ULLONG)w * (a) + (r) + (c); \
+    t = (BN_ULLONG)(w) * (a) + (r) + (c); \
     (r) = Lw(t);                        \
     (c) = Hw(t);                        \
   }
@@ -78,7 +78,7 @@
 #define mul(r, a, w, c)           \
   {                               \
     BN_ULLONG t;                  \
-    t = (BN_ULLONG)w * (a) + (c); \
+    t = (BN_ULLONG)(w) * (a) + (c); \
     (r) = Lw(t);                  \
     (c) = Hw(t);                  \
   }
@@ -369,42 +369,42 @@ BN_ULONG bn_sub_words(BN_ULONG *r, const BN_ULONG *a, const BN_ULONG *b,
   do {                                  \
     BN_ULONG hi;                        \
     BN_ULLONG t = (BN_ULLONG)(a) * (b); \
-    t += c0; /* no carry */             \
-    c0 = (BN_ULONG)Lw(t);               \
+    t += (c0); /* no carry */           \
+    (c0) = (BN_ULONG)Lw(t);             \
     hi = (BN_ULONG)Hw(t);               \
-    c1 = (c1 + hi) & BN_MASK2;          \
-    if (c1 < hi)                        \
-      c2++;                             \
+    (c1) = ((c1) + hi) & BN_MASK2;      \
+    if ((c1) < hi)                      \
+      (c2)++;                           \
   } while (0)
 
 #define mul_add_c2(a, b, c0, c1, c2)      \
   do {                                    \
     BN_ULONG hi;                          \
     BN_ULLONG t = (BN_ULLONG)(a) * (b);   \
-    BN_ULLONG tt = t + c0; /* no carry */ \
-    c0 = (BN_ULONG)Lw(tt);                \
+    BN_ULLONG tt = t + (c0); /* no carry */ \
+    (c0) = (BN_ULONG)Lw(tt);              \
     hi = (BN_ULONG)Hw(tt);                \
-    c1 = (c1 + hi) & BN_MASK2;            \
-    if (c1 < hi)                          \
-      c2++;                               \
-    t += c0; /* no carry */               \
-    c0 = (BN_ULONG)Lw(t);                 \
+    (c1) = ((c1) + hi) & BN_MASK2;        \
+    if ((c1) < hi)                        \
+      (c2)++;                             \
+    t += (c0); /* no carry */             \
+    (c0) = (BN_ULONG)Lw(t);               \
     hi = (BN_ULONG)Hw(t);                 \
-    c1 = (c1 + hi) & BN_MASK2;            \
-    if (c1 < hi)                          \
-      c2++;                               \
+    (c1) = ((c1) + hi) & BN_MASK2;        \
+    if ((c1) < hi)                        \
+      (c2)++;                             \
   } while (0)
 
 #define sqr_add_c(a, i, c0, c1, c2)       \
   do {                                    \
     BN_ULONG hi;                          \
-    BN_ULLONG t = (BN_ULLONG)a[i] * a[i]; \
-    t += c0; /* no carry */               \
-    c0 = (BN_ULONG)Lw(t);                 \
+    BN_ULLONG t = (BN_ULLONG)(a)[i] * (a)[i]; \
+    t += (c0); /* no carry */             \
+    (c0) = (BN_ULONG)Lw(t);               \
     hi = (BN_ULONG)Hw(t);                 \
-    c1 = (c1 + hi) & BN_MASK2;            \
-    if (c1 < hi)                          \
-      c2++;                               \
+    (c1) = ((c1) + hi) & BN_MASK2;        \
+    if ((c1) < hi)                        \
+      (c2)++;                             \
   } while (0)
 
 #define sqr_add_c2(a, i, j, c0, c1, c2) mul_add_c2((a)[i], (a)[j], c0, c1, c2)
