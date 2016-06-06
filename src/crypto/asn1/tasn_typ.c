@@ -60,17 +60,17 @@
 
 /* Declarations for string types */
 
-#define IMPLEMENT_ASN1_STRING_FUNCTIONS(sname) \
-        IMPLEMENT_ASN1_TYPE(sname) \
+#define IMPLEMENT_ASN1_STRING_FUNCTIONS(sname)  \
+        IMPLEMENT_ASN1_TYPE(sname) /* NOLINT */ \
         IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(sname, sname, sname) \
-        sname *sname##_new(void) \
+        sname *sname##_new(void)  /* NOLINT */  \
         { \
                 return ASN1_STRING_type_new(V_##sname); \
         } \
-        void sname##_free(sname *x) \
+        void sname##_free(sname *x) /* NOLINT */ \
         { \
                 ASN1_STRING_free(x); \
-        }
+        } /* NOLINT */
 
 IMPLEMENT_ASN1_STRING_FUNCTIONS(ASN1_OCTET_STRING)
 IMPLEMENT_ASN1_STRING_FUNCTIONS(ASN1_INTEGER)

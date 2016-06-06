@@ -731,7 +731,7 @@ void ssl_write_buffer_clear(SSL *ssl);
 #define TLSEXT_CHANNEL_ID_SIZE 128
 
 /* Check if an SSL structure is using DTLS */
-#define SSL_IS_DTLS(ssl) (ssl->method->is_dtls)
+#define SSL_IS_DTLS(ssl) ((ssl)->method->is_dtls)
 
 /* From RFC4492, used in encoding the curve type in ECParameters */
 #define NAMED_CURVE_TYPE 3
@@ -854,7 +854,7 @@ struct ssl3_enc_method {
 
 #define SSL_HM_HEADER_LENGTH(ssl) ssl->method->hhlen
 #define ssl_handshake_start(ssl) \
-  (((uint8_t *)ssl->init_buf->data) + ssl->method->hhlen)
+  (((uint8_t *)(ssl)->init_buf->data) + (ssl)->method->hhlen)
 #define ssl_set_handshake_header(ssl, htype, len) \
   ssl->method->set_handshake_header(ssl, htype, len)
 #define ssl_do_write(ssl) ssl->method->do_write(ssl)

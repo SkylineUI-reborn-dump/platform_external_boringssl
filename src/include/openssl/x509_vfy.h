@@ -109,7 +109,7 @@ The X509_STORE then calls a function to actually verify the
 certificate chain.
 */
 
-#define X509_LU_RETRY		-1
+#define X509_LU_RETRY		(-1)
 #define X509_LU_FAIL		0
 #define X509_LU_X509		1
 #define X509_LU_CRL		2

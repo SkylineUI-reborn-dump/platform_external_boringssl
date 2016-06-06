@@ -65,8 +65,8 @@ extern "C" {
 
 
 #define c2l(c, l)                                                 \
-  (l = ((uint32_t)(*((c)++))), l |= ((uint32_t)(*((c)++))) << 8L, \
-   l |= ((uint32_t)(*((c)++))) << 16L, l |= ((uint32_t)(*((c)++))) << 24L)
+  ((l) = ((uint32_t)(*((c)++))), (l) |= ((uint32_t)(*((c)++))) << 8L, \
+   (l) |= ((uint32_t)(*((c)++))) << 16L, (l) |= ((uint32_t)(*((c)++))) << 24L)
 
 #define l2c(l, c)                                   \
   (*((c)++) = (unsigned char)(((l)) & 0xff),        \
@@ -75,34 +75,34 @@ extern "C" {
    *((c)++) = (unsigned char)(((l) >> 24L) & 0xff))
 
 /* NOTE - c is not incremented as per c2l */
-#define c2ln(c, l1, l2, n)                   \
-  {                                          \
-    c += n;                                  \
-    l1 = l2 = 0;                             \
-    switch (n) {                             \
-      case 8:                                \
-        l2 = ((uint32_t)(*(--(c)))) << 24L;  \
-      case 7:                                \
-        l2 |= ((uint32_t)(*(--(c)))) << 16L; \
-      case 6:                                \
-        l2 |= ((uint32_t)(*(--(c)))) << 8L;  \
-      case 5:                                \
-        l2 |= ((uint32_t)(*(--(c))));        \
-      case 4:                                \
-        l1 = ((uint32_t)(*(--(c)))) << 24L;  \
-      case 3:                                \
-        l1 |= ((uint32_t)(*(--(c)))) << 16L; \
-      case 2:                                \
-        l1 |= ((uint32_t)(*(--(c)))) << 8L;  \
-      case 1:                                \
-        l1 |= ((uint32_t)(*(--(c))));        \
-    }                                        \
+#define c2ln(c, l1, l2, n)                     \
+  {                                            \
+    (c) += (n);                                \
+    (l1) = (l2) = 0;                           \
+    switch (n) {                               \
+      case 8:                                  \
+        (l2) = ((uint32_t)(*(--(c)))) << 24L;  \
+      case 7:                                  \
+        (l2) |= ((uint32_t)(*(--(c)))) << 16L; \
+      case 6:                                  \
+        (l2) |= ((uint32_t)(*(--(c)))) << 8L;  \
+      case 5:                                  \
+        (l2) |= ((uint32_t)(*(--(c))));        \
+      case 4:                                  \
+        (l1) = ((uint32_t)(*(--(c)))) << 24L;  \
+      case 3:                                  \
+        (l1) |= ((uint32_t)(*(--(c)))) << 16L; \
+      case 2:                                  \
+        (l1) |= ((uint32_t)(*(--(c)))) << 8L;  \
+      case 1:                                  \
+        (l1) |= ((uint32_t)(*(--(c))));        \
+    }                                          \
   }
 
 /* NOTE - c is not incremented as per l2c */
 #define l2cn(l1, l2, c, n)                                \
   {                                                       \
-    c += n;                                               \
+    (c) += (n);                                           \
     switch (n) {                                          \
       case 8:                                             \
         *(--(c)) = (unsigned char)(((l2) >> 24L) & 0xff); \
@@ -184,14 +184,14 @@ how to use xors :-) I got it to its final state.
   }
 
 #define LOAD_DATA(ks, R, S, u, t, E0, E1) \
-  u = R ^ ks->subkeys[S][0];              \
-  t = R ^ ks->subkeys[S][1]
+  u = (R) ^ (ks)->subkeys[S][0];              \
+  (t) = (R) ^ (ks)->subkeys[S][1]
 
 #define D_ENCRYPT(ks, LL, R, S)                                                \
   {                                                                            \
     LOAD_DATA(ks, R, S, u, t, E0, E1);                                         \
     t = ROTATE(t, 4);                                                          \
-    LL ^=                                                                      \
+    (LL) ^=                                                                    \
         DES_SPtrans[0][(u >> 2L) & 0x3f] ^ DES_SPtrans[2][(u >> 10L) & 0x3f] ^ \
         DES_SPtrans[4][(u >> 18L) & 0x3f] ^                                    \
         DES_SPtrans[6][(u >> 26L) & 0x3f] ^ DES_SPtrans[1][(t >> 2L) & 0x3f] ^ \
