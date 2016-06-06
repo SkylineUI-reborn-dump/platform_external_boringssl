@@ -74,7 +74,7 @@ extern "C" {
 
 /* CHECKED_PTR_OF casts a given pointer to void* and statically checks that it
  * was a pointer to |type|. */
-#define CHECKED_PTR_OF(type, p) CHECKED_CAST(void*, type*, (p))
+#define CHECKED_PTR_OF(type, p) CHECKED_CAST(void*, type*, (p))  /* NOLINT */
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
 #define OPENSSL_COMPILE_ASSERT(cond, msg) _Static_assert(cond, #msg)

@@ -60,62 +60,62 @@
 #include "internal.h"
 
 
-#define c2l(c, l)                                                           \
-  (l = ((uint32_t)(*((c)++))), l |= ((uint32_t)(*((c)++))) << 8L, \
-   l |= ((uint32_t)(*((c)++))) << 16L,                                 \
-   l |= ((uint32_t)(*((c)++))) << 24L)
+#define c2l(c, l)                                                     \
+  ((l) = ((uint32_t)(*((c)++))), (l) |= ((uint32_t)(*((c)++))) << 8L, \
+   (l) |= ((uint32_t)(*((c)++))) << 16L,                              \
+   (l) |= ((uint32_t)(*((c)++))) << 24L)
 
 #define c2ln(c, l1, l2, n)                        \
   {                                               \
-    c += n;                                       \
-    l1 = l2 = 0;                                  \
+    (c) += (n);                                   \
+    (l1) = (l2) = 0;                              \
     switch (n) {                                  \
       case 8:                                     \
-        l2 = ((uint32_t)(*(--(c)))) << 24L;  \
+        (l2) = ((uint32_t)(*(--(c)))) << 24L;     \
       case 7:                                     \
-        l2 |= ((uint32_t)(*(--(c)))) << 16L; \
+        (l2) |= ((uint32_t)(*(--(c)))) << 16L;    \
       case 6:                                     \
-        l2 |= ((uint32_t)(*(--(c)))) << 8L;  \
+        (l2) |= ((uint32_t)(*(--(c)))) << 8L;     \
       case 5:                                     \
-        l2 |= ((uint32_t)(*(--(c))));        \
+        (l2) |= ((uint32_t)(*(--(c))));           \
       case 4:                                     \
-        l1 = ((uint32_t)(*(--(c)))) << 24L;  \
+        (l1) = ((uint32_t)(*(--(c)))) << 24L;     \
       case 3:                                     \
-        l1 |= ((uint32_t)(*(--(c)))) << 16L; \
+        (l1) |= ((uint32_t)(*(--(c)))) << 16L;    \
       case 2:                                     \
-        l1 |= ((uint32_t)(*(--(c)))) << 8L;  \
+        (l1) |= ((uint32_t)(*(--(c)))) << 8L;     \
       case 1:                                     \
-        l1 |= ((uint32_t)(*(--(c))));        \
+        (l1) |= ((uint32_t)(*(--(c))));           \
     }                                             \
   }
 
-#define l2c(l, c)                                   \
+#define l2c(l, c)                             \
   (*((c)++) = (uint8_t)(((l)) & 0xff),        \
    *((c)++) = (uint8_t)(((l) >> 8L) & 0xff),  \
    *((c)++) = (uint8_t)(((l) >> 16L) & 0xff), \
    *((c)++) = (uint8_t)(((l) >> 24L) & 0xff))
 
-#define l2cn(l1, l2, c, n)                                \
-  {                                                       \
-    c += n;                                               \
-    switch (n) {                                          \
-      case 8:                                             \
+#define l2cn(l1, l2, c, n)                          \
+  {                                                 \
+    (c) += (n);                                     \
+    switch (n) {                                    \
+      case 8:                                       \
         *(--(c)) = (uint8_t)(((l2) >> 24L) & 0xff); \
-      case 7:                                             \
+      case 7:                                       \
         *(--(c)) = (uint8_t)(((l2) >> 16L) & 0xff); \
-      case 6:                                             \
+      case 6:                                       \
         *(--(c)) = (uint8_t)(((l2) >> 8L) & 0xff);  \
-      case 5:                                             \
+      case 5:                                       \
         *(--(c)) = (uint8_t)(((l2)) & 0xff);        \
-      case 4:                                             \
+      case 4:                                       \
         *(--(c)) = (uint8_t)(((l1) >> 24L) & 0xff); \
-      case 3:                                             \
+      case 3:                                       \
         *(--(c)) = (uint8_t)(((l1) >> 16L) & 0xff); \
-      case 2:                                             \
+      case 2:                                       \
         *(--(c)) = (uint8_t)(((l1) >> 8L) & 0xff);  \
-      case 1:                                             \
+      case 1:                                       \
         *(--(c)) = (uint8_t)(((l1)) & 0xff);        \
-    }                                                     \
+    }                                               \
   }
 
 typedef struct rc2_key_st { uint16_t data[64]; } RC2_KEY;
