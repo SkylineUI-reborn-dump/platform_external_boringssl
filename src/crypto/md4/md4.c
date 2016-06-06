@@ -116,20 +116,20 @@ void md4_block_data_order(uint32_t *state, const uint8_t *data, size_t num);
 
 #define R0(a, b, c, d, k, s, t)        \
   {                                    \
-    a += ((k) + (t)+F((b), (c), (d))); \
-    a = ROTATE(a, s);                  \
+    (a) += ((k) + (t)+F((b), (c), (d))); \
+    (a) = ROTATE(a, s);                  \
   };
 
 #define R1(a, b, c, d, k, s, t)        \
   {                                    \
-    a += ((k) + (t)+G((b), (c), (d))); \
-    a = ROTATE(a, s);                  \
+    (a) += ((k) + (t)+G((b), (c), (d))); \
+    (a) = ROTATE(a, s);                  \
   };
 
 #define R2(a, b, c, d, k, s, t)        \
   {                                    \
-    a += ((k) + (t)+H((b), (c), (d))); \
-    a = ROTATE(a, s);                  \
+    (a) += ((k) + (t)+H((b), (c), (d))); \
+    (a) = ROTATE(a, s);                  \
   };
 
 void md4_block_data_order(uint32_t *state, const uint8_t *data, size_t num) {
