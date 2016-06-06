@@ -119,7 +119,7 @@ uint8_t *SHA1(const uint8_t *data, size_t len, uint8_t *out) {
 #define HASH_BLOCK_DATA_ORDER sha1_block_data_order
 #define ROTATE(a, n) (((a) << (n)) | ((a) >> (32 - (n))))
 #define Xupdate(a, ix, ia, ib, ic, id) \
-  ((a) = (ia ^ ib ^ ic ^ id), ix = (a) = ROTATE((a), 1))
+  ((a) = ((ia) ^ (ib) ^ (ic) ^ (id)), (ix) = (a) = ROTATE((a), 1))
 
 #ifndef SHA1_ASM
 static
@@ -144,7 +144,7 @@ void sha1_block_data_order(uint32_t *state, const uint8_t *data, size_t num);
 #define F_60_79(b, c, d) F_20_39(b, c, d)
 
 #define BODY_00_15(i, a, b, c, d, e, f, xi)                           \
-  (f) = xi + (e) + K_00_19 + ROTATE((a), 5) + F_00_19((b), (c), (d)); \
+  (f) = (xi) + (e) + K_00_19 + ROTATE((a), 5) + F_00_19((b), (c), (d)); \
   (b) = ROTATE((b), 30);
 
 #define BODY_16_19(i, a, b, c, d, e, f, xi, xa, xb, xc, xd)       \
@@ -169,7 +169,7 @@ void sha1_block_data_order(uint32_t *state, const uint8_t *data, size_t num);
 
 #define BODY_60_79(i, a, b, c, d, e, f, xa, xb, xc, xd)               \
   Xupdate(f, xa, xa, xb, xc, xd);                                     \
-  (f) = xa + (e) + K_60_79 + ROTATE((a), 5) + F_60_79((b), (c), (d)); \
+  (f) = (xa) + (e) + K_60_79 + ROTATE((a), 5) + F_60_79((b), (c), (d)); \
   (b) = ROTATE((b), 30);
 
 #ifdef X

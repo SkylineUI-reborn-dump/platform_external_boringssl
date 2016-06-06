@@ -130,24 +130,24 @@ void md5_block_data_order(uint32_t *state, const uint8_t *data, size_t num);
 #define ROTATE(a, n) (((a) << (n)) | ((a) >> (32 - (n))))
 
 #define R0(a,b,c,d,k,s,t) { \
-	a+=((k)+(t)+F((b),(c),(d))); \
-	a=ROTATE(a,s); \
-	a+=b; };\
+	(a)+=((k)+(t)+F((b),(c),(d))); \
+	(a)=ROTATE(a,s); \
+	(a)+=(b); };\
 
 #define R1(a,b,c,d,k,s,t) { \
-	a+=((k)+(t)+G((b),(c),(d))); \
-	a=ROTATE(a,s); \
-	a+=b; };
+	(a)+=((k)+(t)+G((b),(c),(d))); \
+	(a)=ROTATE(a,s); \
+	(a)+=(b); };
 
 #define R2(a,b,c,d,k,s,t) { \
-	a+=((k)+(t)+H((b),(c),(d))); \
-	a=ROTATE(a,s); \
-	a+=b; };
+	(a)+=((k)+(t)+H((b),(c),(d))); \
+	(a)=ROTATE(a,s); \
+	(a)+=(b); };
 
 #define R3(a,b,c,d,k,s,t) { \
-	a+=((k)+(t)+I((b),(c),(d))); \
-	a=ROTATE(a,s); \
-	a+=b; };
+	(a)+=((k)+(t)+I((b),(c),(d))); \
+	(a)=ROTATE(a,s); \
+	(a)+=(b); };
 
 #ifndef md5_block_data_order
 #ifdef X

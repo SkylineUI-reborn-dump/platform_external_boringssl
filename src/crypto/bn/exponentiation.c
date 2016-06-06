@@ -1243,7 +1243,7 @@ int BN_mod_exp_mont_word(BIGNUM *rr, BN_ULONG a, const BIGNUM *p,
 #define BN_MOD_MUL_WORD(r, w, m)   \
   (BN_mul_word(r, (w)) &&          \
    (/* BN_ucmp(r, (m)) < 0 ? 1 :*/ \
-    (BN_mod(t, r, m, ctx) && (swap_tmp = r, r = t, t = swap_tmp, 1))))
+    (BN_mod(t, r, m, ctx) && (swap_tmp = (r), (r) = t, t = swap_tmp, 1))))
   /* BN_MOD_MUL_WORD is only used with 'w' large, so the BN_ucmp test is
    * probably more overhead than always using BN_mod (which uses BN_copy if a
    * similar test returns true). We can use BN_mod and do not need BN_nnmod
