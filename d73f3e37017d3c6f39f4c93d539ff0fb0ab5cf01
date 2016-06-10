@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aff6b89b_ae79774a",
+        "filename": "Android.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010056
+      },
+      "writtenOn": "2016-06-10T20:11:51Z",
+      "side": 1,
+      "message": "The flags look fine to me, since Kenny mentioned that this also gets built using mingw (and thus gcc with a different set of default flags).",
+      "revId": "d73f3e37017d3c6f39f4c93d539ff0fb0ab5cf01",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
