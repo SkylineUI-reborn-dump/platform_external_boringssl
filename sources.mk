@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This file is created by generate_build_files.py. Do not edit manually.
+
 crypto_sources := \
   android_compat_hacks.c\
   android_compat_keywrap.c\
@@ -289,52 +291,6 @@ crypto_sources := \
   src/crypto/x509v3/v3_skey.c\
   src/crypto/x509v3/v3_sxnet.c\
   src/crypto/x509v3/v3_utl.c\
-
-ssl_sources := \
-  src/ssl/custom_extensions.c\
-  src/ssl/d1_both.c\
-  src/ssl/d1_lib.c\
-  src/ssl/d1_meth.c\
-  src/ssl/d1_pkt.c\
-  src/ssl/d1_srtp.c\
-  src/ssl/dtls_record.c\
-  src/ssl/handshake_client.c\
-  src/ssl/handshake_server.c\
-  src/ssl/pqueue/pqueue.c\
-  src/ssl/s3_both.c\
-  src/ssl/s3_enc.c\
-  src/ssl/s3_lib.c\
-  src/ssl/s3_meth.c\
-  src/ssl/s3_pkt.c\
-  src/ssl/ssl_aead_ctx.c\
-  src/ssl/ssl_asn1.c\
-  src/ssl/ssl_buffer.c\
-  src/ssl/ssl_cert.c\
-  src/ssl/ssl_cipher.c\
-  src/ssl/ssl_ecdh.c\
-  src/ssl/ssl_file.c\
-  src/ssl/ssl_lib.c\
-  src/ssl/ssl_rsa.c\
-  src/ssl/ssl_session.c\
-  src/ssl/ssl_stat.c\
-  src/ssl/t1_enc.c\
-  src/ssl/t1_lib.c\
-  src/ssl/tls_record.c\
-
-tool_sources := \
-  src/tool/args.cc\
-  src/tool/ciphers.cc\
-  src/tool/client.cc\
-  src/tool/const.cc\
-  src/tool/digest.cc\
-  src/tool/generate_ed25519.cc\
-  src/tool/genrsa.cc\
-  src/tool/pkcs12.cc\
-  src/tool/rand.cc\
-  src/tool/server.cc\
-  src/tool/speed.cc\
-  src/tool/tool.cc\
-  src/tool/transport_common.cc\
 
 linux_aarch64_sources := \
   linux-aarch64/crypto/aes/aesv8-armx64.S\
