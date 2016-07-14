@@ -1,3 +1,4 @@
+# Now used only by Trusty
 LOCAL_ADDITIONAL_DEPENDENCIES += $(LOCAL_PATH)/sources.mk
 include $(LOCAL_PATH)/sources.mk
 
