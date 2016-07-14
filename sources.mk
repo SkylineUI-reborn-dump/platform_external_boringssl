@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This file is created by generate_build_files.py. Do not edit manually.
+
 crypto_sources := \
   android_compat_hacks.c\
   android_compat_keywrap.c\
