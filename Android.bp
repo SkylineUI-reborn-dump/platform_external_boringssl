@@ -167,3 +167,27 @@ cc_binary {
         },
     },
 }
+
+// Test support library
+cc_library_static {
+    name: "boringssl_test_support",
+    host_supported: true,
+    defaults: ["boringssl_test_support_sources", "boringssl_flags"],
+    shared_libs: [
+        "libcrypto",
+        "libssl",
+    ],
+}
+
+// Tests
+cc_test {
+    name: "boringssl_tests",
+    host_supported: true,
+    test_per_src: true,
+    defaults: ["boringssl_tests_sources", "boringssl_flags"],
+    whole_static_libs: ["boringssl_test_support"],
+    shared_libs: [
+        "libcrypto",
+        "libssl",
+    ],
+}

@@ -140,6 +140,22 @@ class Android(object):
       blueprint.write('    ],\n')
       blueprint.write('}\n')
 
+      blueprint.write('cc_defaults {\n')
+      blueprint.write('    name: "boringssl_test_support_sources",\n')
+      blueprint.write('    srcs: [\n')
+      for f in sorted(files['test_support']):
+        blueprint.write('        "%s",\n' % f)
+      blueprint.write('    ],\n')
+      blueprint.write('}\n')
+
+      blueprint.write('cc_defaults {\n')
+      blueprint.write('    name: "boringssl_tests_sources",\n')
+      blueprint.write('    srcs: [\n')
+      for f in sorted(files['test']):
+        blueprint.write('        "%s",\n' % f)
+      blueprint.write('    ],\n')
+      blueprint.write('}\n')
+
     # Legacy Android.mk format, only used by Trusty in new branches
     with open('sources.mk', 'w+') as makefile:
       makefile.write(self.header)
