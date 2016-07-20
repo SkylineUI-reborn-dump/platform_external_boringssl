@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa114f9a_e49c3a5d",
+        "filename": "src/util/generate_build_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-07-20T23:29:28Z",
+      "side": 1,
+      "message": "Please do not modify anything in src/ directly. Get the changes in upstream BoringSSL. Otherwise these changes will be lost as soon as we next update BoringSSL.",
+      "revId": "21986fbbffc52d777b872d0d1ceb9c654501b7d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
