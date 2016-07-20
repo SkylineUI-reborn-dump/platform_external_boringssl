@@ -16,6 +16,24 @@
       "revId": "21986fbbffc52d777b872d0d1ceb9c654501b7d2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea77c70c_067fba12",
+        "filename": "src/util/generate_build_files.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-07-20T23:35:56Z",
+      "side": 1,
+      "message": "(No need to pull this in as part of a roll, but do get it into upstream at least in parallel. I just don\u0027t want to end up in a situation where we accidentally have a ton of local diffs with no clue what\u0027s going on.)",
+      "parentUuid": "aa114f9a_e49c3a5d",
+      "revId": "21986fbbffc52d777b872d0d1ceb9c654501b7d2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
