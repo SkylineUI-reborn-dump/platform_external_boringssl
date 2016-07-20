@@ -16,6 +16,24 @@
       "revId": "4e63529558866d11c5c358bddae59a67836037a4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8af56b93_511eb467",
+        "filename": "src/util/generate_build_files.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2016-07-20T20:35:40Z",
+      "side": 1,
+      "message": "Oops, this the header of the output file.",
+      "parentUuid": "8af56b93_d19624e1",
+      "revId": "4e63529558866d11c5c358bddae59a67836037a4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
