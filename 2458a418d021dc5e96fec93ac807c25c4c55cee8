@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea77c70c_6635cedc",
+        "filename": "sources.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-07-21T20:31:26Z",
+      "side": 1,
+      "message": "Hrm. Actually, how does this even work? Each of those foo_test.cc files contains a main function and expects to be built as a single binary.",
+      "revId": "2458a418d021dc5e96fec93ac807c25c4c55cee8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
