@@ -16,6 +16,24 @@
       "revId": "2458a418d021dc5e96fec93ac807c25c4c55cee8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a0b3baa_3b7cef4d",
+        "filename": "sources.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-21T20:34:17Z",
+      "side": 1,
+      "message": "We\u0027ve got a \"tests_per_src\" property that builds each individual source file as a separate property -- specifically for situations like this. They\u0027re all grouped under the same installation directory then as well.",
+      "parentUuid": "ea77c70c_6635cedc",
+      "revId": "2458a418d021dc5e96fec93ac807c25c4c55cee8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
