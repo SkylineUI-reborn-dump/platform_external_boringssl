@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8a4babfc_75a60808",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-07-22T23:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4babfc_212a8a2a",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 40
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a4babfc_01b66ef3",
         "filename": "Android.bp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-07-22T20:13:53Z",
       "side": 1,
       "message": "Move this into arch.arm with clang_asflags -- target.android_arm is basically the same, since the only supported arm OS is android",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 45
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_d5903c9b",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-07-22T23:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4babfc_01b66ef3",
       "range": {
         "startLine": 58,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8a4babfc_95a394f5",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-07-22T23:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4babfc_6493c04d",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 10
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a4babfc_618c1233",
         "filename": "Android.bp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "8a4babfc_15fea4d4",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-07-22T23:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4babfc_618c1233",
+      "range": {
+        "startLine": 120,
+        "startChar": 15,
+        "endLine": 120,
+        "endChar": 35
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a4babfc_249db856",
         "filename": "Android.bp",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2016-07-22T20:13:53Z",
       "side": 1,
       "message": "This can be removed with cc_library_static",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 6
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_f5df7863",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2016-07-22T23:30:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4babfc_249db856",
       "range": {
         "startLine": 122,
         "startChar": 0,
