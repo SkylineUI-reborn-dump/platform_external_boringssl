@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a4babfc_212a8a2a",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-22T20:13:53Z",
+      "side": 1,
+      "message": "This is only used in once place, so just put the two definitions directly in there.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 40
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_01b66ef3",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-22T20:13:53Z",
+      "side": 1,
+      "message": "Move this into arch.arm with clang_asflags -- target.android_arm is basically the same, since the only supported arm OS is android",
+      "range": {
+        "startLine": 58,
+        "startChar": 12,
+        "endLine": 58,
+        "endChar": 45
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_6493c04d",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-22T20:13:53Z",
+      "side": 1,
+      "message": "cc_library_static, since you\u0027re only using it with whole_static_libs",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 10
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_618c1233",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-22T20:13:53Z",
+      "side": 1,
+      "message": "I wouldn\u0027t use this, the only useful thing it does is local_include_dirs, which could just be copied here. Then you can move the exclude_srcs and whole_static_libs into libcrypto_defaults instead of duplicating them.",
+      "range": {
+        "startLine": 120,
+        "startChar": 15,
+        "endLine": 120,
+        "endChar": 35
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a4babfc_249db856",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2016-07-22T20:13:53Z",
+      "side": 1,
+      "message": "This can be removed with cc_library_static",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 6
+      },
+      "revId": "c08c287104c97072775a527e1d56575eed3f52fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
