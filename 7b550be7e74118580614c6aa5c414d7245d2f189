@@ -1,0 +1,9 @@
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Autosubmit+1: Kenny Root <kroot@google.com>
+Code-Review+2: Elliott Hughes <enh@google.com>
+Verified+1: Kenny Root <kroot@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Wed, 21 Sep 2016 08:26:08 +0000
+Reviewed-on: https://android-review.googlesource.com/276112
+Project: platform/external/boringssl
+Branch: refs/heads/master
