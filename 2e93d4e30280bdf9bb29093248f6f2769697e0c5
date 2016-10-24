@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e17460bf_b335180c",
+        "filename": "src/crypto/asn1/tasn_typ.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1052399
+      },
+      "writtenOn": "2016-10-24T19:38:36Z",
+      "side": 1,
+      "message": "Clang-tidy\u0027s check on macros is not smart enough to distinguish type and variable names. It does not understand partial statements either. Unless we rewrite such macros, NOLINT is the only way I know to suppress such warnings.\nWe can also leave the warnings for now without changing the source code.",
+      "parentUuid": "e17460bf_3351084e",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 73,
+        "endChar": 19
+      },
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e17460bf_b387589c",
         "filename": "src/crypto/bn/internal.h",
         "patchSetId": 10
@@ -53,6 +77,24 @@
       "writtenOn": "2016-10-24T19:28:40Z",
       "side": 1,
       "message": "Why is this needed, but nowhere else? Note that these macros emit functions, so the semicolon isn\u0027t correct.\n\n(We also try to avoid diverging this directory from upstream. It\u0027s a bunch of low-quality legacy code that we\u0027ve basically disowned and are slowly working towards getting rid of.)",
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e17460bf_332a68ac",
+        "filename": "src/crypto/x509v3/v3_sxnet.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1052399
+      },
+      "writtenOn": "2016-10-24T19:38:36Z",
+      "side": 1,
+      "message": "Maybe not needed anymore. I just did a quick merge and will try to find clang-tidy warnings later.",
+      "parentUuid": "e17460bf_134c0cb3",
       "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
