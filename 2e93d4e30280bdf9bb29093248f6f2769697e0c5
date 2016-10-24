@@ -49,6 +49,24 @@
     },
     {
       "key": {
+        "uuid": "e17460bf_93e6dc6c",
+        "filename": "src/crypto/asn1/tasn_typ.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-10-24T19:42:30Z",
+      "side": 1,
+      "message": "Mm. I\u0027ll poke at it. I would love to lose these macros altogether, but it\u0027ll be a bit of work before we get there. (This code is also part of the legacy ASN.1 and X.509 code which we would rather get rid of than try to salvage. Our code normally isn\u0027t quiiiite this hideous! :-) )\n\nDo you know why this macro is being hit but not the other IMPLEMENT_ASN1_* macros in include/openssl/asn1t.h?",
+      "parentUuid": "e17460bf_b335180c",
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e17460bf_b387589c",
         "filename": "src/crypto/bn/internal.h",
         "patchSetId": 10
