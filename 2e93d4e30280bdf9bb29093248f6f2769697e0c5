@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e17460bf_3351084e",
+        "filename": "src/crypto/asn1/tasn_typ.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-10-24T19:28:40Z",
+      "side": 1,
+      "message": "Is there any way to avoid having quite so many NOLINT macros? If clang-tidy is this finicky, I think the only way this can work is if we do this entirely upstream and have it run continuously on the BoringSSL end.",
+      "range": {
+        "startLine": 73,
+        "startChar": 13,
+        "endLine": 73,
+        "endChar": 19
+      },
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e17460bf_b387589c",
+        "filename": "src/crypto/bn/internal.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-10-24T19:28:40Z",
+      "side": 1,
+      "message": "Oops, missed that one. Here:\nhttps://boringssl-review.googlesource.com/c/11740/",
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e17460bf_134c0cb3",
+        "filename": "src/crypto/x509v3/v3_sxnet.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-10-24T19:28:40Z",
+      "side": 1,
+      "message": "Why is this needed, but nowhere else? Note that these macros emit functions, so the semicolon isn\u0027t correct.\n\n(We also try to avoid diverging this directory from upstream. It\u0027s a bunch of low-quality legacy code that we\u0027ve basically disowned and are slowly working towards getting rid of.)",
+      "revId": "2e93d4e30280bdf9bb29093248f6f2769697e0c5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
