@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6f636e5_c3d056b3",
+        "filename": "src/crypto/bio/bio_test.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-11-01T20:43:08Z",
+      "side": 1,
+      "message": "Thanks! Uploaded CL to fix.",
+      "revId": "679e92995b6c21910ce891c80b31681ac201a47d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6f636e5_03c0aee3",
+        "filename": "src/crypto/bn/internal.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-11-01T20:43:08Z",
+      "side": 1,
+      "message": "(This is already fixed in master, but we haven\u0027t updated external/boringssl yet.)",
+      "revId": "679e92995b6c21910ce891c80b31681ac201a47d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6f636e5_a3c55af3",
+        "filename": "src/include/openssl/bn.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-11-01T20:43:08Z",
+      "side": 1,
+      "message": "Thanks! Uploaded CL to fix.",
+      "revId": "679e92995b6c21910ce891c80b31681ac201a47d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6f636e5_83ca5e01",
+        "filename": "src/tool/digest.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-11-01T20:43:08Z",
+      "side": 1,
+      "message": "Thanks! Uploaded CL to fix.",
+      "revId": "679e92995b6c21910ce891c80b31681ac201a47d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6f636e5_63e08284",
+        "filename": "src/tool/speed.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2016-11-01T20:43:08Z",
+      "side": 1,
+      "message": "Thanks! Uploaded CL to fix.",
+      "revId": "679e92995b6c21910ce891c80b31681ac201a47d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
