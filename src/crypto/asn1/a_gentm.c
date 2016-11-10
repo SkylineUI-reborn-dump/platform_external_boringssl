@@ -227,12 +227,16 @@ ASN1_GENERALIZEDTIME *ASN1_GENERALIZEDTIME_adj(ASN1_GENERALIZEDTIME *s,
         return (NULL);
 
     ts = OPENSSL_gmtime(&t, &data);
-    if (ts == NULL)
+    if (ts == NULL) {
+        M_ASN1_GENERALIZEDTIME_free(s);
         return (NULL);
+    }
 
     if (offset_day || offset_sec) {
-        if (!OPENSSL_gmtime_adj(ts, offset_day, offset_sec))
+        if (!OPENSSL_gmtime_adj(ts, offset_day, offset_sec)) {
+            M_ASN1_GENERALIZEDTIME_free(s);
             return NULL;
+        }
     }
 
     p = (char *)s->data;
