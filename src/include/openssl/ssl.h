@@ -1721,6 +1721,15 @@ OPENSSL_EXPORT long SSL_CTX_set_timeout(SSL_CTX *ctx, long timeout);
  * |ctx|. */
 OPENSSL_EXPORT long SSL_CTX_get_timeout(const SSL_CTX *ctx);
 
+/* SSL_set_session_timeout sets the default lifetime, in seconds, of the
+ * session created in |ssl| to |timeout|, and returns the old value.
+ *
+ * By default the value |SSL_DEFAULT_SESSION_TIMEOUT| is used, which can be
+ * overridden at the context level by calling |SSL_CTX_set_timeout|.
+ *
+ * If |timeout| is zero the newly created session will not be resumable. */
+OPENSSL_EXPORT long SSL_set_session_timeout(SSL *ssl, long timeout);
+
 /* SSL_CTX_set_session_id_context sets |ctx|'s session ID context to |sid_ctx|.
  * It returns one on success and zero on error. The session ID context is an
  * application-defined opaque byte string. A session will not be used in a
@@ -4042,6 +4051,8 @@ struct ssl_ctx_st {
   int freelist_max_len;
 };
 
+typedef struct ssl_handshake_st SSL_HANDSHAKE;
+
 struct ssl_st {
   /* method is the method table corresponding to the current protocol (DTLS or
    * TLS). */
@@ -4080,7 +4091,7 @@ struct ssl_st {
    * with a better mechanism. */
   BIO *bbio;
 
-  int (*handshake_func)(SSL *);
+  int (*handshake_func)(SSL_HANDSHAKE *hs);
 
   BUF_MEM *init_buf; /* buffer used during init */
 
@@ -4215,6 +4226,10 @@ struct ssl_st {
 
   /* TODO(agl): remove once node.js not longer references this. */
   int tlsext_status_type;
+
+  /* session_timeout is the default lifetime in seconds of the session
+   * created in this connection. */
+  long session_timeout;
 };
 
 
@@ -4552,6 +4567,8 @@ BORINGSSL_MAKE_DELETER(SSL_SESSION, SSL_SESSION_free)
 #define SSL_R_PRE_SHARED_KEY_MUST_BE_LAST 267
 #define SSL_R_OLD_SESSION_PRF_HASH_MISMATCH 268
 #define SSL_R_INVALID_SCT_LIST 269
+#define SSL_R_TOO_MUCH_SKIPPED_EARLY_DATA 270
+#define SSL_R_PSK_IDENTITY_BINDER_COUNT_MISMATCH 271
 #define SSL_R_SSLV3_ALERT_CLOSE_NOTIFY 1000
 #define SSL_R_SSLV3_ALERT_UNEXPECTED_MESSAGE 1010
 #define SSL_R_SSLV3_ALERT_BAD_RECORD_MAC 1020

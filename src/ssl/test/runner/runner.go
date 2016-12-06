@@ -5568,7 +5568,7 @@ func addExtensionTests() {
 			"-signed-cert-timestamps",
 			base64.StdEncoding.EncodeToString([]byte{0, 0}),
 		},
-		shouldFail: true,
+		shouldFail:    true,
 		expectedError: ":INVALID_SCT_LIST:",
 	})
 }
@@ -5975,6 +5975,36 @@ func addResumptionVersionTests() {
 		shouldFail:         true,
 		expectedLocalError: "remote error: error decoding message",
 		expectedError:      ":DECODE_ERROR:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType:      serverTest,
+		name:          "Resume-Server-ExtraPSKBinder",
+		resumeSession: true,
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendExtraPSKBinder: true,
+			},
+		},
+		shouldFail:         true,
+		expectedLocalError: "remote error: illegal parameter",
+		expectedError:      ":PSK_IDENTITY_BINDER_COUNT_MISMATCH:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType:      serverTest,
+		name:          "Resume-Server-ExtraIdentityNoBinder",
+		resumeSession: true,
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				ExtraPSKIdentity: true,
+			},
+		},
+		shouldFail:         true,
+		expectedLocalError: "remote error: illegal parameter",
+		expectedError:      ":PSK_IDENTITY_BINDER_COUNT_MISMATCH:",
 	})
 
 	testCases = append(testCases, testCase{
@@ -9033,6 +9063,144 @@ func addTLS13HandshakeTests() {
 	})
 
 	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 4,
+			},
+		},
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-OmitEarlyDataExtension",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength:    4,
+				OmitEarlyDataExtension: true,
+			},
+		},
+		shouldFail:    true,
+		expectedError: ":DECRYPTION_FAILED_OR_BAD_RECORD_MAC:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-TooMuchData",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 16384 + 1,
+			},
+		},
+		shouldFail:    true,
+		expectedError: ":TOO_MUCH_SKIPPED_EARLY_DATA:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-Interleaved",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 4,
+				InterleaveEarlyData: true,
+			},
+		},
+		shouldFail:    true,
+		expectedError: ":DECRYPTION_FAILED_OR_BAD_RECORD_MAC:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-EarlyDataInTLS12",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 4,
+			},
+		},
+		shouldFail:    true,
+		expectedError: ":UNEXPECTED_RECORD:",
+		flags:         []string{"-max-version", strconv.Itoa(VersionTLS12)},
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-HRR",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 4,
+			},
+			DefaultCurves: []CurveID{},
+		},
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-HRR-Interleaved",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 4,
+				InterleaveEarlyData: true,
+			},
+			DefaultCurves: []CurveID{},
+		},
+		shouldFail:    true,
+		expectedError: ":UNEXPECTED_RECORD:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-HRR-TooMuchData",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataLength: 16384 + 1,
+			},
+			DefaultCurves: []CurveID{},
+		},
+		shouldFail:    true,
+		expectedError: ":TOO_MUCH_SKIPPED_EARLY_DATA:",
+	})
+
+	// Test that skipping early data looking for cleartext correctly
+	// processes an alert record.
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-HRR-FatalAlert",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyAlert:      true,
+				SendEarlyDataLength: 4,
+			},
+			DefaultCurves: []CurveID{},
+		},
+		shouldFail:    true,
+		expectedError: ":SSLV3_ALERT_HANDSHAKE_FAILURE:",
+	})
+
+	testCases = append(testCases, testCase{
+		testType: serverTest,
+		name:     "SkipEarlyData-SecondClientHelloEarlyData",
+		config: Config{
+			MaxVersion: VersionTLS13,
+			Bugs: ProtocolBugs{
+				SendEarlyDataOnSecondClientHello: true,
+			},
+			DefaultCurves: []CurveID{},
+		},
+		shouldFail:         true,
+		expectedLocalError: "remote error: bad record MAC",
+	})
+
+	testCases = append(testCases, testCase{
 		testType: clientTest,
 		name:     "EmptyEncryptedExtensions",
 		config: Config{
@@ -9364,7 +9532,8 @@ func addTLS13HandshakeTests() {
 		config: Config{
 			MaxVersion: VersionTLS13,
 			Bugs: ProtocolBugs{
-				ExtraPSKIdentity: true,
+				ExtraPSKIdentity:   true,
+				SendExtraPSKBinder: true,
 			},
 		},
 		resumeSession: true,
