@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3777a248_f45450e3",
+        "filename": "src/ssl/t1_lib.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2017-01-10T20:18:27Z",
+      "side": 0,
+      "message": "Did you try running libcore\u0027s CTS tests? Unfortunately, the timing was such that we didn\u0027t get to deal with this before the holidays, but I suspect one of those would need an update. I recall there\u0027s a test these days to assert on the set of curves advertised in the ClientHello.",
+      "revId": "e7531f038363d24a103c820cff38898455ff66fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
