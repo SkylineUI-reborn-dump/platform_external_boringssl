@@ -34,6 +34,24 @@
       "revId": "e7531f038363d24a103c820cff38898455ff66fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "631cfdaf_49dba5fe",
+        "filename": "src/ssl/t1_lib.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2017-01-13T23:13:03Z",
+      "side": 0,
+      "message": "Are you saying that test failure bug 34280437 was not caused by this CL? I\u0027m trying to find the cause but haven\u0027t empirically verified the causing CL yet :)",
+      "parentUuid": "97bbeed0_6c82d19f",
+      "revId": "e7531f038363d24a103c820cff38898455ff66fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
