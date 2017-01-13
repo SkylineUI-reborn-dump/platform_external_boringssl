@@ -52,6 +52,24 @@
       "revId": "e7531f038363d24a103c820cff38898455ff66fe",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c39e897c_01eaca7f",
+        "filename": "src/ssl/t1_lib.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2017-01-13T23:16:38Z",
+      "side": 0,
+      "message": "Hrm. At a glance, it does not look like it could be related, but I\u0027ll have to look at it more closely next week. (It\u0027s late here in Cambridge.)",
+      "parentUuid": "631cfdaf_49dba5fe",
+      "revId": "e7531f038363d24a103c820cff38898455ff66fe",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
