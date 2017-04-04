@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c26035a8_fd8c2333",
+        "filename": "sources.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2017-04-04T20:44:57Z",
+      "side": 1,
+      "message": "this directory name is perhaps a bad sign... you might want to explain in your commit message _why_ you need this.",
+      "revId": "1e4dfd12c6b14a08891ca5046e724d4c8d38e201",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
