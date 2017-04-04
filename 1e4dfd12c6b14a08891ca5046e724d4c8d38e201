@@ -16,6 +16,24 @@
       "revId": "1e4dfd12c6b14a08891ca5046e724d4c8d38e201",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0618c5cd_dbb025e3",
+        "filename": "sources.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1013433
+      },
+      "writtenOn": "2017-04-04T21:09:36Z",
+      "side": 1,
+      "message": "That\u0027s fair, I actually thought this was under src/crypto/bio until you pointed that out. So this hunk should be moved to maintain the alphabetical ordering.\n\nIt really boils down to code that uses BIO_f_base64() (that can be modified) and this symbol is not defined thus throwing undefined references. If there is a replacement interface to BIO_f_base64, do you know what it is?",
+      "parentUuid": "c26035a8_fd8c2333",
+      "revId": "1e4dfd12c6b14a08891ca5046e724d4c8d38e201",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
