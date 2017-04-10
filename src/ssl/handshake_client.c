@@ -545,42 +545,8 @@ uint16_t ssl_get_grease_value(const SSL *ssl, enum ssl_grease_index_t index) {
  * disabled algorithms. */
 static void ssl_get_client_disabled(SSL *ssl, uint32_t *out_mask_a,
                                     uint32_t *out_mask_k) {
-  int have_rsa = 0, have_ecdsa = 0;
   *out_mask_a = 0;
   *out_mask_k = 0;
-
-  /* Now go through all signature algorithms seeing if we support any for RSA or
-   * ECDSA. Do this for all versions not just TLS 1.2. */
-  const uint16_t *sigalgs;
-  size_t num_sigalgs = tls12_get_verify_sigalgs(ssl, &sigalgs);
-  for (size_t i = 0; i < num_sigalgs; i++) {
-    switch (sigalgs[i]) {
-      case SSL_SIGN_RSA_PSS_SHA512:
-      case SSL_SIGN_RSA_PSS_SHA384:
-      case SSL_SIGN_RSA_PSS_SHA256:
-      case SSL_SIGN_RSA_PKCS1_SHA512:
-      case SSL_SIGN_RSA_PKCS1_SHA384:
-      case SSL_SIGN_RSA_PKCS1_SHA256:
-      case SSL_SIGN_RSA_PKCS1_SHA1:
-        have_rsa = 1;
-        break;
-
-      case SSL_SIGN_ECDSA_SECP521R1_SHA512:
-      case SSL_SIGN_ECDSA_SECP384R1_SHA384:
-      case SSL_SIGN_ECDSA_SECP256R1_SHA256:
-      case SSL_SIGN_ECDSA_SHA1:
-        have_ecdsa = 1;
-        break;
-    }
-  }
-
-  /* Disable auth if we don't include any appropriate signature algorithms. */
-  if (!have_rsa) {
-    *out_mask_a |= SSL_aRSA;
-  }
-  if (!have_ecdsa) {
-    *out_mask_a |= SSL_aECDSA;
-  }
 
   /* PSK requires a client callback. */
   if (ssl->psk_client_callback == NULL) {
@@ -1527,7 +1493,7 @@ static int ssl3_send_client_certificate(SSL_HANDSHAKE *hs) {
     }
   }
 
-  if (!ssl->ctx->x509_method->ssl_auto_chain_if_needed(ssl) ||
+  if (!ssl_on_certificate_selected(hs) ||
       !ssl3_output_cert_chain(ssl)) {
     return -1;
   }
@@ -1739,7 +1705,7 @@ static int ssl3_send_cert_verify(SSL_HANDSHAKE *hs) {
   }
 
   /* Set aside space for the signature. */
-  const size_t max_sig_len = ssl_private_key_max_signature_len(ssl);
+  const size_t max_sig_len = EVP_PKEY_size(hs->local_pubkey);
   uint8_t *ptr;
   if (!CBB_add_u16_length_prefixed(&body, &child) ||
       !CBB_reserve(&child, &ptr, max_sig_len)) {

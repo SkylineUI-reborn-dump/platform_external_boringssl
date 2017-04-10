@@ -695,12 +695,9 @@ static void ssl_get_compatible_server_ciphers(SSL_HANDSHAKE *hs,
   uint32_t mask_a = 0;
 
   if (ssl_has_certificate(ssl)) {
-    int type = ssl_private_key_type(ssl);
-    if (type == NID_rsaEncryption) {
+    mask_a |= ssl_cipher_auth_mask_for_key(hs->local_pubkey);
+    if (EVP_PKEY_id(hs->local_pubkey) == EVP_PKEY_RSA) {
       mask_k |= SSL_kRSA;
-      mask_a |= SSL_aRSA;
-    } else if (ssl_is_ecdsa_key_type(type)) {
-      mask_a |= SSL_aECDSA;
     }
   }
 
@@ -879,7 +876,7 @@ static int ssl3_select_certificate(SSL_HANDSHAKE *hs) {
     }
   }
 
-  if (!ssl->ctx->x509_method->ssl_auto_chain_if_needed(ssl)) {
+  if (!ssl_on_certificate_selected(hs)) {
     return -1;
   }
 
@@ -1241,7 +1238,7 @@ static int ssl3_send_server_key_exchange(SSL_HANDSHAKE *hs) {
     }
 
     /* Add space for the signature. */
-    const size_t max_sig_len = ssl_private_key_max_signature_len(ssl);
+    const size_t max_sig_len = EVP_PKEY_size(hs->local_pubkey);
     uint8_t *ptr;
     if (!CBB_add_u16_length_prefixed(&body, &child) ||
         !CBB_reserve(&child, &ptr, max_sig_len)) {
@@ -1308,65 +1305,22 @@ err:
   return -1;
 }
 
-static int add_cert_types(SSL *ssl, CBB *cbb) {
-  /* Get configured signature algorithms. */
-  int have_rsa_sign = 0;
-  int have_ecdsa_sign = 0;
-  const uint16_t *sig_algs;
-  size_t num_sig_algs = tls12_get_verify_sigalgs(ssl, &sig_algs);
-  for (size_t i = 0; i < num_sig_algs; i++) {
-    switch (sig_algs[i]) {
-      case SSL_SIGN_RSA_PKCS1_SHA512:
-      case SSL_SIGN_RSA_PKCS1_SHA384:
-      case SSL_SIGN_RSA_PKCS1_SHA256:
-      case SSL_SIGN_RSA_PKCS1_SHA1:
-        have_rsa_sign = 1;
-        break;
-
-      case SSL_SIGN_ECDSA_SECP521R1_SHA512:
-      case SSL_SIGN_ECDSA_SECP384R1_SHA384:
-      case SSL_SIGN_ECDSA_SECP256R1_SHA256:
-      case SSL_SIGN_ECDSA_SHA1:
-        have_ecdsa_sign = 1;
-        break;
-    }
-  }
-
-  if (have_rsa_sign && !CBB_add_u8(cbb, SSL3_CT_RSA_SIGN)) {
-    return 0;
-  }
-
-  /* ECDSA certs can be used with RSA cipher suites as well so we don't need to
-   * check for SSL_kECDH or SSL_kECDHE. */
-  if (ssl->version >= TLS1_VERSION && have_ecdsa_sign &&
-      !CBB_add_u8(cbb, TLS_CT_ECDSA_SIGN)) {
-    return 0;
-  }
-
-  return 1;
-}
-
 static int ssl3_send_certificate_request(SSL_HANDSHAKE *hs) {
   SSL *const ssl = hs->ssl;
   CBB cbb, body, cert_types, sigalgs_cbb;
   if (!ssl->method->init_message(ssl, &cbb, &body,
                                  SSL3_MT_CERTIFICATE_REQUEST) ||
       !CBB_add_u8_length_prefixed(&body, &cert_types) ||
-      !add_cert_types(ssl, &cert_types)) {
+      !CBB_add_u8(&cert_types, SSL3_CT_RSA_SIGN) ||
+      (ssl->version >= TLS1_VERSION &&
+       !CBB_add_u8(&cert_types, TLS_CT_ECDSA_SIGN))) {
     goto err;
   }
 
   if (ssl3_protocol_version(ssl) >= TLS1_2_VERSION) {
-    const uint16_t *sigalgs;
-    size_t num_sigalgs = tls12_get_verify_sigalgs(ssl, &sigalgs);
-    if (!CBB_add_u16_length_prefixed(&body, &sigalgs_cbb)) {
+    if (!CBB_add_u16_length_prefixed(&body, &sigalgs_cbb) ||
+        !tls12_add_verify_sigalgs(ssl, &sigalgs_cbb)) {
       goto err;
-    }
-
-    for (size_t i = 0; i < num_sigalgs; i++) {
-      if (!CBB_add_u16(&sigalgs_cbb, sigalgs[i])) {
-        goto err;
-      }
     }
   }
 
@@ -1573,7 +1527,7 @@ static int ssl3_get_client_key_exchange(SSL_HANDSHAKE *hs) {
    * |premaster_secret_len|. */
   if (alg_k & SSL_kRSA) {
     /* Allocate a buffer large enough for an RSA decryption. */
-    const size_t rsa_size = ssl_private_key_max_signature_len(ssl);
+    const size_t rsa_size = EVP_PKEY_size(hs->local_pubkey);
     decrypt_buf = OPENSSL_malloc(rsa_size);
     if (decrypt_buf == NULL) {
       OPENSSL_PUT_ERROR(SSL, ERR_R_MALLOC_FAILURE);
@@ -1584,7 +1538,7 @@ static int ssl3_get_client_key_exchange(SSL_HANDSHAKE *hs) {
     size_t decrypt_len;
     if (hs->state == SSL3_ST_SR_KEY_EXCH_A) {
       if (!ssl_has_private_key(ssl) ||
-          ssl_private_key_type(ssl) != NID_rsaEncryption) {
+          EVP_PKEY_id(hs->local_pubkey) != EVP_PKEY_RSA) {
         al = SSL_AD_HANDSHAKE_FAILURE;
         OPENSSL_PUT_ERROR(SSL, SSL_R_MISSING_RSA_CERTIFICATE);
         goto f_err;

@@ -947,6 +947,7 @@ OPENSSL_EXPORT int SSL_set_ocsp_response(SSL *ssl,
 #define SSL_SIGN_RSA_PSS_SHA256 0x0804
 #define SSL_SIGN_RSA_PSS_SHA384 0x0805
 #define SSL_SIGN_RSA_PSS_SHA512 0x0806
+#define SSL_SIGN_ED25519 0x0807
 
 /* SSL_SIGN_RSA_PKCS1_MD5_SHA1 is an internal signature algorithm used to
  * specify raw RSASSA-PKCS1-v1_5 with an MD5/SHA-1 concatenation, as used in TLS
@@ -1069,15 +1070,16 @@ enum ssl_private_key_result_t {
 
 /* ssl_private_key_method_st (aka |SSL_PRIVATE_KEY_METHOD|) describes private
  * key hooks. This is used to off-load signing operations to a custom,
- * potentially asynchronous, backend. */
+ * potentially asynchronous, backend. Metadata about the key such as the type
+ * and size are parsed out of the certificate.
+ *
+ * TODO(davidben): This API has a number of legacy hooks. Remove the last
+ * consumer of |sign_digest| and trim it. */
 struct ssl_private_key_method_st {
-  /* type returns the type of the key used by |ssl|. For RSA keys, return
-   * |NID_rsaEncryption|. For ECDSA keys, return |NID_X9_62_prime256v1|,
-   * |NID_secp384r1|, or |NID_secp521r1|, depending on the curve. */
+  /* type is ignored and should be NULL. */
   int (*type)(SSL *ssl);
 
-  /* max_signature_len returns the maximum length of a signature signed by the
-   * key used by |ssl|. This must be a constant value for a given |ssl|. */
+  /* max_signature_len is ignored and should be NULL. */
   size_t (*max_signature_len)(SSL *ssl);
 
   /* sign signs the message |in| in using the specified signature algorithm. On
@@ -2404,6 +2406,10 @@ OPENSSL_EXPORT int SSL_set0_verify_cert_store(SSL *ssl, X509_STORE *store);
  * reference to |store| will be taken. */
 OPENSSL_EXPORT int SSL_set1_verify_cert_store(SSL *ssl, X509_STORE *store);
 
+/* SSL_CTX_set_ed25519_enabled configures whether |ctx| advertises support for
+ * the Ed25519 signature algorithm. */
+OPENSSL_EXPORT void SSL_CTX_set_ed25519_enabled(SSL_CTX *ctx, int enabled);
+
 
 /* Client certificate CA list.
  *
@@ -2585,6 +2591,13 @@ OPENSSL_EXPORT void SSL_CTX_set_alpn_select_cb(
 OPENSSL_EXPORT void SSL_get0_alpn_selected(const SSL *ssl,
                                            const uint8_t **out_data,
                                            unsigned *out_len);
+
+/* SSL_CTX_set_allow_unknown_alpn_protos configures client connections on |ctx|
+ * to allow unknown ALPN protocols from the server. Otherwise, by default, the
+ * client will require that the protocol be advertised in
+ * |SSL_CTX_set_alpn_protos|. */
+OPENSSL_EXPORT void SSL_CTX_set_allow_unknown_alpn_protos(SSL_CTX *ctx,
+                                                          int enabled);
 
 
 /* Next protocol negotiation.
@@ -3094,6 +3107,11 @@ OPENSSL_EXPORT int SSL_total_renegotiations(const SSL *ssl);
  * WARNING: This is experimental and may cause interoperability failures until
  * fully implemented. */
 OPENSSL_EXPORT void SSL_CTX_set_early_data_enabled(SSL_CTX *ctx, int enabled);
+
+/* SSL_set_early_data_enabled sets whether early data is allowed to be used
+ * with resumptions using |ssl|. See |SSL_CTX_set_early_data_enabled| for more
+ * information. */
+OPENSSL_EXPORT void SSL_set_early_data_enabled(SSL *ssl, int enabled);
 
 /* SSL_early_data_accepted returns whether early data was accepted on the
  * handshake performed by |ssl|. */
@@ -4254,10 +4272,6 @@ struct ssl_ctx_st {
    * shutdown. */
   unsigned quiet_shutdown:1;
 
-  /* If enable_early_data is non-zero, early data can be sent and accepted over
-   * new connections. */
-  unsigned enable_early_data:1;
-
   /* ocsp_stapling_enabled is only used by client connections and indicates
    * whether OCSP stapling will be requested. */
   unsigned ocsp_stapling_enabled:1;
@@ -4279,6 +4293,13 @@ struct ssl_ctx_st {
    * that this currently requires post-handshake verification of
    * certificates. */
   unsigned i_promise_to_verify_certs_after_the_handshake:1;
+
+  /* allow_unknown_alpn_protos is one if the client allows unsolicited ALPN
+   * protocols from the peer. */
+  unsigned allow_unknown_alpn_protos:1;
+
+  /* ed25519_enabled is one if Ed25519 is advertised in the handshake. */
+  unsigned ed25519_enabled:1;
 };
 
 

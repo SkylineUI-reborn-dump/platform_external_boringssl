@@ -286,23 +286,6 @@ static bssl::UniquePtr<STACK_OF(X509_NAME)> DecodeHexX509Names(
   return ret;
 }
 
-static int AsyncPrivateKeyType(SSL *ssl) {
-  EVP_PKEY *key = GetTestState(ssl)->private_key.get();
-  switch (EVP_PKEY_id(key)) {
-    case EVP_PKEY_RSA:
-      return NID_rsaEncryption;
-    case EVP_PKEY_EC:
-      return EC_GROUP_get_curve_name(
-          EC_KEY_get0_group(EVP_PKEY_get0_EC_KEY(key)));
-    default:
-      return NID_undef;
-  }
-}
-
-static size_t AsyncPrivateKeyMaxSignatureLen(SSL *ssl) {
-  return EVP_PKEY_size(GetTestState(ssl)->private_key.get());
-}
-
 static ssl_private_key_result_t AsyncPrivateKeySign(
     SSL *ssl, uint8_t *out, size_t *out_len, size_t max_out,
     uint16_t signature_algorithm, const uint8_t *in, size_t in_len) {
@@ -310,6 +293,13 @@ static ssl_private_key_result_t AsyncPrivateKeySign(
   if (!test_state->private_key_result.empty()) {
     fprintf(stderr, "AsyncPrivateKeySign called with operation pending.\n");
     abort();
+  }
+
+  bssl::UniquePtr<EVP_PKEY_CTX> ctx(
+      EVP_PKEY_CTX_new(test_state->private_key.get(), nullptr));
+  if (!ctx ||
+      !EVP_PKEY_sign_init(ctx.get())) {
+    return ssl_private_key_failure;
   }
 
   // Determine the hash.
@@ -337,16 +327,17 @@ static ssl_private_key_result_t AsyncPrivateKeySign(
     case SSL_SIGN_RSA_PKCS1_MD5_SHA1:
       md = EVP_md5_sha1();
       break;
+    case SSL_SIGN_ED25519:
+      md = nullptr;
+      break;
     default:
       fprintf(stderr, "Unknown signature algorithm %04x.\n",
               signature_algorithm);
       return ssl_private_key_failure;
   }
 
-  bssl::ScopedEVP_MD_CTX ctx;
-  EVP_PKEY_CTX *pctx;
-  if (!EVP_DigestSignInit(ctx.get(), &pctx, md, nullptr,
-                          test_state->private_key.get())) {
+  if (md != nullptr &&
+      !EVP_PKEY_CTX_set_signature_md(ctx.get(), md)) {
     return ssl_private_key_failure;
   }
 
@@ -355,8 +346,8 @@ static ssl_private_key_result_t AsyncPrivateKeySign(
     case SSL_SIGN_RSA_PSS_SHA256:
     case SSL_SIGN_RSA_PSS_SHA384:
     case SSL_SIGN_RSA_PSS_SHA512:
-      if (!EVP_PKEY_CTX_set_rsa_padding(pctx, RSA_PKCS1_PSS_PADDING) ||
-          !EVP_PKEY_CTX_set_rsa_pss_saltlen(pctx,
+      if (!EVP_PKEY_CTX_set_rsa_padding(ctx.get(), RSA_PKCS1_PSS_PADDING) ||
+          !EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx.get(),
                                             -1 /* salt len = hash len */)) {
         return ssl_private_key_failure;
       }
@@ -364,13 +355,12 @@ static ssl_private_key_result_t AsyncPrivateKeySign(
 
   // Write the signature into |test_state|.
   size_t len = 0;
-  if (!EVP_DigestSignUpdate(ctx.get(), in, in_len) ||
-      !EVP_DigestSignFinal(ctx.get(), nullptr, &len)) {
+  if (!EVP_PKEY_sign_message(ctx.get(), nullptr, &len, in, in_len)) {
     return ssl_private_key_failure;
   }
   test_state->private_key_result.resize(len);
-  if (!EVP_DigestSignFinal(ctx.get(), test_state->private_key_result.data(),
-                           &len)) {
+  if (!EVP_PKEY_sign_message(ctx.get(), test_state->private_key_result.data(),
+                             &len, in, in_len)) {
     return ssl_private_key_failure;
   }
   test_state->private_key_result.resize(len);
@@ -436,8 +426,8 @@ static ssl_private_key_result_t AsyncPrivateKeyComplete(
 }
 
 static const SSL_PRIVATE_KEY_METHOD g_async_private_key_method = {
-    AsyncPrivateKeyType,
-    AsyncPrivateKeyMaxSignatureLen,
+    nullptr /* type */,
+    nullptr /* max_signature_len */,
     AsyncPrivateKeySign,
     nullptr /* sign_digest */,
     AsyncPrivateKeyDecrypt,
@@ -1185,6 +1175,14 @@ static bssl::UniquePtr<SSL_CTX> SetupCtx(const TestConfig *config) {
 
   if (config->enable_early_data) {
     SSL_CTX_set_early_data_enabled(ssl_ctx.get(), 1);
+  }
+
+  if (config->allow_unknown_alpn_protos) {
+    SSL_CTX_set_allow_unknown_alpn_protos(ssl_ctx.get(), 1);
+  }
+
+  if (config->enable_ed25519) {
+    SSL_CTX_set_ed25519_enabled(ssl_ctx.get(), 1);
   }
 
   return ssl_ctx;
