@@ -40,12 +40,6 @@ cc_defaults {
 
 //// libcrypto
 
-// This should be removed when clang can compile everything.
-libcrypto_sources_no_clang = [
-    "linux-arm/crypto/aes/aes-armv4.S",
-    "linux-arm/crypto/aes/bsaes-armv7.S",
-]
-
 cc_defaults {
     name: "libcrypto_defaults",
     host_supported: true,
@@ -74,7 +68,6 @@ cc_defaults {
     },
 
     // This should be removed when clang can compile everything.
-    exclude_srcs: libcrypto_sources_no_clang,
     whole_static_libs: ["libcrypto_no_clang"],
 }
 
