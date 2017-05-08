@@ -248,6 +248,8 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 			break
 		}
 
+		orig := line
+
 		if strings.Contains(line, "OPENSSL_ia32cap_get@PLT") {
 			ia32capGetNeeded = true
 		}
@@ -264,12 +266,12 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 		case "call", "callq", "jmp", "jne", "jb", "jz", "jnz", "ja":
 			target := args[0]
 			// indirect via register or local label
-			if strings.HasPrefix(target, "*") || strings.HasPrefix(target, ".L") {
+			if strings.HasPrefix(target, "*") || isLocalLabel(target) {
 				ret = append(ret, line)
 				continue
 			}
 
-			if strings.HasSuffix(target, "_bss_get") {
+			if strings.HasSuffix(target, "_bss_get") || target == "OPENSSL_ia32cap_get" {
 				// reference to a synthesised function. Don't
 				// indirect it.
 				ret = append(ret, line)
@@ -307,7 +309,7 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 			ret = append(ret, line)
 			continue
 
-		case "leaq", "movq", "cmpq":
+		case "leaq", "movq", "cmpq", "cmovneq", "cmoveq":
 			if instr == "movq" && strings.Contains(line, "@GOTTPOFF(%rip)") {
 				// GOTTPOFF are offsets into the thread-local
 				// storage that are stored in the GOT. We have
@@ -332,18 +334,37 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 			}
 
 			target := args[0]
+			invertedCondition := ""
+
 			if strings.HasSuffix(target, "(%rip)") {
 				target = target[:len(target)-6]
 				if isGlobal := symbols[target]; isGlobal {
 					line = strings.Replace(line, target, localTargetName(target), 1)
 				}
 
-				if strings.Contains(line, "@GOTPCREL") && instr == "movq" {
+				if strings.Contains(line, "@GOTPCREL") && (instr == "movq" || instr == "cmoveq" || instr == "cmovneq") {
 					line = strings.Replace(line, "@GOTPCREL", "", -1)
 					target = strings.Replace(target, "@GOTPCREL", "", -1)
 
 					if isGlobal := symbols[target]; isGlobal {
 						line = strings.Replace(line, target, localTargetName(target), 1)
+					} else if !strings.HasPrefix(target, "BORINGSSL_bcm_") {
+						redirectorName := "bcm_redirector_" + target
+						redirectors[redirectorName] = target
+						line = strings.Replace(line, target, redirectorName, 1)
+						target = redirectorName
+					}
+
+					switch instr {
+					case "cmoveq":
+						invertedCondition = "ne"
+					case "cmovneq":
+						invertedCondition = "e"
+					}
+
+					if len(invertedCondition) > 0 {
+						ret = append(ret, "\t# Was " + orig)
+						ret = append(ret, "\tj" + invertedCondition + " 1f")
 					}
 
 					// Nobody actually wants to read the
@@ -351,7 +372,7 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 					// from the GOT which, now that we're
 					// referencing the symbol directly,
 					// needs to be transformed into an LEA.
-					line = strings.Replace(line, "movq", "leaq", 1)
+					line = strings.Replace(line, instr, "leaq", 1)
 					instr = "leaq"
 				}
 
@@ -385,6 +406,9 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 			}
 
 			ret = append(ret, line)
+			if len(invertedCondition) > 0 {
+				ret = append(ret, "1:")
+			}
 			continue
 
 		case ".comm":
@@ -531,6 +555,17 @@ func transform(lines []string, symbols map[string]bool) (ret []string) {
 	}
 
 	return ret
+}
+
+func isLocalLabel(label string) bool {
+	if strings.HasPrefix(label, ".L") {
+		return true
+	}
+	if strings.HasSuffix(label, "f") || strings.HasSuffix(label, "b") {
+		label = label[:len(label)-1]
+		return strings.IndexFunc(label, func(r rune) bool { return !unicode.IsNumber(r) }) == -1
+	}
+	return false
 }
 
 // handleBSSSection reads lines from source until the next section and adds a

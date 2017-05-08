@@ -13,8 +13,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
 // cavp_ecdsa2_pkv_test processes a NIST CAVP ECDSA2 PKV test vector request file
-// and emits the corresponding response. An optional sample vector file can be
-// passed to verify the result.
+// and emits the corresponding response.
 
 #include <vector>
 
@@ -51,9 +50,7 @@ static bool TestECDSA2PKV(FileTest *t, void *arg) {
   return true;
 }
 
-int main(int argc, char **argv) {
-  CRYPTO_library_init();
-
+int cavp_ecdsa2_pkv_test_main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "usage: %s <test file>\n",
             argv[0]);

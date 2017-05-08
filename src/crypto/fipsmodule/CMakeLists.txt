@@ -10,11 +10,15 @@ if (${ARCH} STREQUAL "x86_64")
     bsaes-x86_64.${ASM_EXT}
     ghash-x86_64.${ASM_EXT}
     md5-x86_64.${ASM_EXT}
+    p256-x86_64-asm.${ASM_EXT}
     rdrand-x86_64.${ASM_EXT}
+    rsaz-avx2.${ASM_EXT}
     sha1-x86_64.${ASM_EXT}
     sha256-x86_64.${ASM_EXT}
     sha512-x86_64.${ASM_EXT}
     vpaes-x86_64.${ASM_EXT}
+    x86_64-mont5.${ASM_EXT}
+    x86_64-mont.${ASM_EXT}
   )
 endif()
 
@@ -24,12 +28,15 @@ if (${ARCH} STREQUAL "x86")
 
     aes-586.${ASM_EXT}
     aesni-x86.${ASM_EXT}
+    bn-586.${ASM_EXT}
+    co-586.${ASM_EXT}
     ghash-x86.${ASM_EXT}
     md5-586.${ASM_EXT}
     sha1-586.${ASM_EXT}
     sha256-586.${ASM_EXT}
     sha512-586.${ASM_EXT}
     vpaes-x86.${ASM_EXT}
+    x86-mont.${ASM_EXT}
   )
 endif()
 
@@ -39,6 +46,7 @@ if (${ARCH} STREQUAL "arm")
 
     aes-armv4.${ASM_EXT}
     aesv8-armx.${ASM_EXT}
+    armv4-mont.${ASM_EXT}
     bsaes-armv7.${ASM_EXT}
     ghash-armv4.${ASM_EXT}
     ghashv8-armx.${ASM_EXT}
@@ -53,6 +61,7 @@ if (${ARCH} STREQUAL "aarch64")
     BCM_ASM_SOURCES
 
     aesv8-armx.${ASM_EXT}
+    armv8-mont.${ASM_EXT}
     ghashv8-armx.${ASM_EXT}
     sha1-armv8.${ASM_EXT}
     sha256-armv8.${ASM_EXT}
@@ -77,8 +86,12 @@ perlasm(aesni-x86.${ASM_EXT} aes/asm/aesni-x86.pl)
 perlasm(aesp8-ppc.${ASM_EXT} aes/asm/aesp8-ppc.pl)
 perlasm(aesv8-armx.${ASM_EXT} aes/asm/aesv8-armx.pl)
 perlasm(aes-x86_64.${ASM_EXT} aes/asm/aes-x86_64.pl)
+perlasm(armv4-mont.${ASM_EXT} bn/asm/armv4-mont.pl)
+perlasm(armv8-mont.${ASM_EXT} bn/asm/armv8-mont.pl)
+perlasm(bn-586.${ASM_EXT} bn/asm/bn-586.pl)
 perlasm(bsaes-armv7.${ASM_EXT} aes/asm/bsaes-armv7.pl)
 perlasm(bsaes-x86_64.${ASM_EXT} aes/asm/bsaes-x86_64.pl)
+perlasm(co-586.${ASM_EXT} bn/asm/co-586.pl)
 perlasm(ghash-armv4.${ASM_EXT} modes/asm/ghash-armv4.pl)
 perlasm(ghashp8-ppc.${ASM_EXT} modes/asm/ghashp8-ppc.pl)
 perlasm(ghashv8-armx.${ASM_EXT} modes/asm/ghashv8-armx.pl)
@@ -86,7 +99,9 @@ perlasm(ghash-x86_64.${ASM_EXT} modes/asm/ghash-x86_64.pl)
 perlasm(ghash-x86.${ASM_EXT} modes/asm/ghash-x86.pl)
 perlasm(md5-586.${ASM_EXT} md5/asm/md5-586.pl)
 perlasm(md5-x86_64.${ASM_EXT} md5/asm/md5-x86_64.pl)
+perlasm(p256-x86_64-asm.${ASM_EXT} ec/asm/p256-x86_64-asm.pl)
 perlasm(rdrand-x86_64.${ASM_EXT} rand/asm/rdrand-x86_64.pl)
+perlasm(rsaz-avx2.${ASM_EXT} bn/asm/rsaz-avx2.pl)
 perlasm(sha1-586.${ASM_EXT} sha/asm/sha1-586.pl)
 perlasm(sha1-armv4-large.${ASM_EXT} sha/asm/sha1-armv4-large.pl)
 perlasm(sha1-armv8.${ASM_EXT} sha/asm/sha1-armv8.pl)
@@ -101,6 +116,9 @@ perlasm(sha512-armv8.${ASM_EXT} sha/asm/sha512-armv8.pl)
 perlasm(sha512-x86_64.${ASM_EXT} sha/asm/sha512-x86_64.pl)
 perlasm(vpaes-x86_64.${ASM_EXT} aes/asm/vpaes-x86_64.pl)
 perlasm(vpaes-x86.${ASM_EXT} aes/asm/vpaes-x86.pl)
+perlasm(x86_64-mont5.${ASM_EXT} bn/asm/x86_64-mont5.pl)
+perlasm(x86_64-mont.${ASM_EXT} bn/asm/x86_64-mont.pl)
+perlasm(x86-mont.${ASM_EXT} bn/asm/x86-mont.pl)
 
 if(FIPS)
   add_library(
@@ -187,6 +205,17 @@ target_link_libraries(aes_test crypto)
 add_dependencies(all_tests aes_test)
 
 add_executable(
+  bn_test
+
+  bn/bn_test.cc
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(bn_test crypto)
+add_dependencies(all_tests bn_test)
+
+add_executable(
   gcm_test
 
   modes/gcm_test.cc
@@ -207,3 +236,56 @@ add_executable(
 
 target_link_libraries(ctrdrbg_vector_test crypto)
 add_dependencies(all_tests ctrdrbg_vector_test)
+
+add_executable(
+  example_mul
+
+  ec/example_mul.c
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(example_mul crypto)
+
+add_executable(
+  p256-x86_64_test
+
+  ec/p256-x86_64_test.cc
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(p256-x86_64_test crypto)
+add_dependencies(all_tests example_mul p256-x86_64_test)
+
+add_executable(
+  ecdsa_test
+
+  ecdsa/ecdsa_test.cc
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(ecdsa_test crypto)
+
+add_executable(
+  ecdsa_sign_test
+
+  ecdsa/ecdsa_sign_test.cc
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(ecdsa_sign_test crypto)
+
+add_executable(
+  ecdsa_verify_test
+
+  ecdsa/ecdsa_verify_test.cc
+
+  $<TARGET_OBJECTS:test_support>
+)
+
+target_link_libraries(ecdsa_verify_test crypto)
+
+add_dependencies(all_tests ecdsa_test ecdsa_sign_test ecdsa_verify_test)

@@ -252,7 +252,7 @@ func runTest(test test) (bool, error) {
 func shortTestName(test test) string {
 	var args []string
 	for _, arg := range test.args {
-		if test.args[0] == "crypto/evp/evp_test" || test.args[0] == "crypto/cipher/cipher_test" || test.args[0] == "crypto/cipher/aead_test" || !strings.HasSuffix(arg, ".txt") {
+		if test.args[0] == "crypto/evp/evp_test" || test.args[0] == "crypto/cipher_extra/cipher_test" || test.args[0] == "crypto/cipher_extra/aead_test" || !strings.HasSuffix(arg, ".txt") {
 			args = append(args, arg)
 		}
 	}
@@ -375,7 +375,7 @@ func main() {
 	if len(failed) > 0 {
 		fmt.Printf("\n%d of %d tests failed:\n", len(failed), len(testCases))
 		for _, test := range failed {
-			fmt.Printf("\t%s%s\n", strings.Join(test.args, ""), test.cpuMsg())
+			fmt.Printf("\t%s%s\n", strings.Join(test.args, " "), test.cpuMsg())
 		}
 		os.Exit(1)
 	}

@@ -100,6 +100,7 @@ FileTest::ReadResult FileTest::ReadNext() {
   std::unique_ptr<char[]> buf(new char[kBufLen]);
 
   bool in_instruction_block = false;
+  is_at_new_instruction_block_ = false;
 
   while (true) {
     // Read the next line.
@@ -130,7 +131,14 @@ FileTest::ReadResult FileTest::ReadNext() {
         // Delimit instruction block from test with a blank line.
         current_test_ += "\r\n";
       }
+    } else if (buf[0] == '#' ||
+               strcmp("[B.4.2 Key Pair Generation by Testing Candidates]\r\n",
+                      buf.get()) == 0) {
+      // Ignore comments. The above instruction-like line is treated as a
+      // comment because the FIPS lab's request files are hopelessly
+      // inconsistent.
     } else if (buf[0] == '[') {  // Inside an instruction block.
+      is_at_new_instruction_block_ = true;
       if (start_line_ != 0) {
         // Instructions should be separate blocks.
         fprintf(stderr, "Line %u is an instruction in a test case.\n", line_);
@@ -163,23 +171,33 @@ FileTest::ReadResult FileTest::ReadNext() {
           break;
         kv = kv.substr(idx + 1);
       }
-    } else if (buf[0] != '#') {  // Comment lines are ignored.
+    } else {
+      // Parsing a test case.
       if (in_instruction_block) {
-        // Test cases should be separate blocks.
-        fprintf(stderr, "Line %u is a test case attribute in an instruction block.\n",
-                line_);
-        return kReadError;
+        // Some NIST CAVP test files (TDES) have a test case immediately
+        // following an instruction block, without a separate blank line, some
+        // of the time.
+        in_instruction_block = false;
       }
 
       current_test_ += std::string(buf.get(), len);
       std::string key, value;
       std::tie(key, value) = ParseKeyValue(buf.get(), len);
 
-      unused_attributes_.insert(key);
-      attributes_[key] = value;
+      // Duplicate keys are rewritten to have “/2”, “/3”, … suffixes.
+      std::string mapped_key = key;
+      for (unsigned i = 2; attributes_.count(mapped_key) != 0; i++) {
+        char suffix[32];
+        snprintf(suffix, sizeof(suffix), "/%u", i);
+        suffix[sizeof(suffix)-1] = 0;
+        mapped_key = key + suffix;
+      }
+
+      unused_attributes_.insert(mapped_key);
+      attributes_[mapped_key] = value;
       if (start_line_ == 0) {
         // This is the start of a test.
-        type_ = key;
+        type_ = mapped_key;
         parameter_ = value;
         start_line_ = line_;
         for (const auto &kv : instructions_) {
@@ -345,12 +363,20 @@ void FileTest::OnInstructionUsed(const std::string &key) {
   unused_instructions_.erase(key);
 }
 
+bool FileTest::IsAtNewInstructionBlock() const {
+  return is_at_new_instruction_block_;
+}
+
+void FileTest::InjectInstruction(const std::string &key,
+                                 const std::string &value) {
+  instructions_[key] = value;
+}
+
 void FileTest::SetIgnoreUnusedAttributes(bool ignore) {
   ignore_unused_attributes_ = ignore;
 }
 
-int FileTestMainSilent(bool (*run_test)(FileTest *t, void *arg), void *arg,
-                       const char *path) {
+int FileTestMainSilent(FileTestFunc run_test, void *arg, const char *path) {
   FileTest t(path);
   if (!t.is_open()) {
     return 1;
@@ -395,8 +421,7 @@ int FileTestMainSilent(bool (*run_test)(FileTest *t, void *arg), void *arg,
   return failed ? 1 : 0;
 }
 
-int FileTestMain(bool (*run_test)(FileTest *t, void *arg), void *arg,
-                 const char *path) {
+int FileTestMain(FileTestFunc run_test, void *arg, const char *path) {
   int result = FileTestMainSilent(run_test, arg, path);
   if (!result) {
     printf("PASS\n");

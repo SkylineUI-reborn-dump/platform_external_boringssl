@@ -13,8 +13,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
 // cavp_ecdsa2_sigver_test processes a NIST CAVP ECDSA2 SigVer test vector
-// request file and emits the corresponding response. An optional sample vector
-// file can be passed to verify the result.
+// request file and emits the corresponding response.
 
 #include <vector>
 
@@ -69,9 +68,7 @@ static bool TestECDSA2SigVer(FileTest *t, void *arg) {
   return true;
 }
 
-int main(int argc, char **argv) {
-  CRYPTO_library_init();
-
+int cavp_ecdsa2_sigver_test_main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "usage: %s <test file>\n",
             argv[0]);
