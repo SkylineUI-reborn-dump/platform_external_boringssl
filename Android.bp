@@ -109,27 +109,6 @@ cc_library_static {
     },
 }
 
-// Static library
-// This should only be used for host modules that will be in a JVM, all other
-// modules should use the static variant of libcrypto.
-cc_library_static {
-    name: "libcrypto_static",
-    defaults: ["libcrypto_sources", "libcrypto_defaults", "boringssl_defaults", "boringssl_flags"],
-
-    target: {
-        host: {
-            // TODO: b/26160319. ASAN breaks use of this library in JVM.
-            // Re-enable sanitization when the issue with making clients of this library
-            // preload ASAN runtime is resolved. Without that, clients are getting runtime
-            // errors due to unresolved ASAN symbols, such as
-            // __asan_option_detect_stack_use_after_return.
-            sanitize: {
-                never: true,
-            },
-        },
-    },
-}
-
 //// libssl
 
 // Target static library
