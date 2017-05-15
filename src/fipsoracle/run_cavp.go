@@ -9,12 +9,15 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
+	"sync"
+	"time"
 )
 
 var (
-	binaryDir = flag.String("bin-dir", "", "Directory containing fipsoracle binaries")
-	suiteDir  = flag.String("suite-dir", "", "Base directory containing the CAVP test suite")
+	oraclePath = flag.String("oracle-bin", "", "Path to the oracle binary")
+	suiteDir   = flag.String("suite-dir", "", "Base directory containing the CAVP test suite")
 )
 
 // test describes a single request file.
@@ -35,9 +38,12 @@ type test struct {
 type testSuite struct {
 	// directory is the name of the directory in the CAVP input, i.e. “AES”.
 	directory string
-	// binary is the name of the binary that can process these tests.
-	binary string
-	tests  []test
+	// suite names the test suite to pass as the first command-line argument.
+	suite string
+	// faxScanFunc, if not nil, is the function to use instead of
+	// (*bufio.Scanner).Scan. This can be used to skip lines.
+	faxScanFunc func(*bufio.Scanner) bool
+	tests       []test
 }
 
 func (t *testSuite) getDirectory() string {
@@ -46,7 +52,8 @@ func (t *testSuite) getDirectory() string {
 
 var aesGCMTests = testSuite{
 	"AES_GCM",
-	"cavp_aes_gcm_test",
+	"aes_gcm",
+	nil,
 	[]test{
 		{"gcmDecrypt128", []string{"dec", "aes-128-gcm"}, false},
 		{"gcmDecrypt256", []string{"dec", "aes-256-gcm"}, false},
@@ -57,7 +64,8 @@ var aesGCMTests = testSuite{
 
 var aesTests = testSuite{
 	"AES",
-	"cavp_aes_test",
+	"aes",
+	nil,
 	[]test{
 		{"CBCGFSbox128", []string{"kat", "aes-128-cbc"}, false},
 		{"CBCGFSbox192", []string{"kat", "aes-192-cbc"}, false},
@@ -99,21 +107,99 @@ var aesTests = testSuite{
 	},
 }
 
+var ecdsa2KeyPairTests = testSuite{
+	"ECDSA2",
+	"ecdsa2_keypair",
+	nil,
+	[]test{{"KeyPair", nil, true}},
+}
+
 var ecdsa2PKVTests = testSuite{
 	"ECDSA2",
-	"cavp_ecdsa2_pkv_test",
+	"ecdsa2_pkv",
+	nil,
 	[]test{{"PKV", nil, false}},
+}
+
+var ecdsa2SigGenTests = testSuite{
+	"ECDSA2",
+	"ecdsa2_siggen",
+	nil,
+	[]test{
+		{"SigGen", []string{"SigGen"}, true},
+		{"SigGenComponent", []string{"SigGenComponent"}, true},
+	},
 }
 
 var ecdsa2SigVerTests = testSuite{
 	"ECDSA2",
-	"cavp_ecdsa2_sigver_test",
+	"ecdsa2_sigver",
+	nil,
 	[]test{{"SigVer", nil, false}},
+}
+
+var rsa2KeyGenTests = testSuite{
+	"RSA2",
+	"rsa2_keygen",
+	nil,
+	[]test{
+		{"KeyGen_RandomProbablyPrime3_3", nil, true},
+	},
+}
+
+var rsa2SigGenTests = testSuite{
+	"RSA2",
+	"rsa2_siggen",
+	nil,
+	[]test{
+		{"SigGen15_186-3", []string{"pkcs15"}, true},
+		{"SigGenPSS_186-3", []string{"pss"}, true},
+	},
+}
+
+var rsa2SigVerTests = testSuite{
+	"RSA2",
+	"rsa2_sigver",
+	func(s *bufio.Scanner) bool {
+		for {
+			if !s.Scan() {
+				return false
+			}
+
+			line := s.Text()
+			if strings.HasPrefix(line, "p = ") || strings.HasPrefix(line, "d = ") || strings.HasPrefix(line, "SaltVal = ") || strings.HasPrefix(line, "EM with ") {
+				continue
+			}
+			if strings.HasPrefix(line, "q = ") {
+				// Skip the "q = " line and an additional blank line.
+				if !s.Scan() {
+					return false
+				}
+				if len(strings.TrimSpace(s.Text())) > 0 {
+					return false
+				}
+				continue
+			}
+			return true
+		}
+	},
+	[]test{
+		{"SigVer15_186-3", []string{"pkcs15"}, false},
+		{"SigVerPSS_186-3", []string{"pss"}, false},
+	},
+}
+
+var hmacTests = testSuite{
+	"HMAC",
+	"hmac",
+	nil,
+	[]test{{"HMAC", nil, false}},
 }
 
 var shaTests = testSuite{
 	"SHA",
-	"cavp_sha_test",
+	"sha",
+	nil,
 	[]test{
 		{"SHA1LongMsg", []string{"SHA1"}, false},
 		{"SHA1ShortMsg", []string{"SHA1"}, false},
@@ -130,7 +216,8 @@ var shaTests = testSuite{
 
 var shaMonteTests = testSuite{
 	"SHA",
-	"cavp_sha_monte_test",
+	"sha_monte",
+	nil,
 	[]test{
 		{"SHA1Monte", []string{"SHA1"}, false},
 		{"SHA224Monte", []string{"SHA224"}, false},
@@ -140,61 +227,144 @@ var shaMonteTests = testSuite{
 	},
 }
 
+var ctrDRBGTests = testSuite{
+	"DRBG800-90A",
+	"ctr_drbg",
+	nil,
+	[]test{{"CTR_DRBG", nil, false}},
+}
+
+var tdesTests = testSuite{
+	"TDES",
+	"tdes",
+	nil,
+	[]test{
+		{"TCBCMMT2", []string{"kat", "des-ede-cbc"}, false},
+		{"TCBCMMT3", []string{"kat", "des-ede3-cbc"}, false},
+		{"TCBCMonte2", []string{"mct", "des-ede3-cbc"}, false},
+		{"TCBCMonte3", []string{"mct", "des-ede3-cbc"}, false},
+		{"TCBCinvperm", []string{"kat", "des-ede3-cbc"}, false},
+		{"TCBCpermop", []string{"kat", "des-ede3-cbc"}, false},
+		{"TCBCsubtab", []string{"kat", "des-ede3-cbc"}, false},
+		{"TCBCvarkey", []string{"kat", "des-ede3-cbc"}, false},
+		{"TCBCvartext", []string{"kat", "des-ede3-cbc"}, false},
+		{"TECBMMT2", []string{"kat", "des-ede"}, false},
+		{"TECBMMT3", []string{"kat", "des-ede3"}, false},
+		{"TECBMonte2", []string{"mct", "des-ede3"}, false},
+		{"TECBMonte3", []string{"mct", "des-ede3"}, false},
+		{"TECBinvperm", []string{"kat", "des-ede3"}, false},
+		{"TECBpermop", []string{"kat", "des-ede3"}, false},
+		{"TECBsubtab", []string{"kat", "des-ede3"}, false},
+		{"TECBvarkey", []string{"kat", "des-ede3"}, false},
+		{"TECBvartext", []string{"kat", "des-ede3"}, false},
+	},
+}
+
+var keyWrapTests = testSuite{
+	"KeyWrap38F",
+	"keywrap",
+	nil,
+	[]test{
+		{"KW_AD_128", []string{"dec", "128"}, false},
+		{"KW_AD_256", []string{"dec", "256"}, false},
+		{"KW_AE_128", []string{"enc", "128"}, false},
+		{"KW_AE_256", []string{"enc", "256"}, false},
+	},
+}
+
 var allTestSuites = []*testSuite{
 	&aesGCMTests,
 	&aesTests,
+	&ctrDRBGTests,
+	&ecdsa2KeyPairTests,
 	&ecdsa2PKVTests,
+	&ecdsa2SigGenTests,
 	&ecdsa2SigVerTests,
+	&hmacTests,
+	&keyWrapTests,
+	&rsa2KeyGenTests,
+	&rsa2SigGenTests,
+	&rsa2SigVerTests,
 	&shaTests,
 	&shaMonteTests,
+	&tdesTests,
 }
 
-func main() {
-	flag.Parse()
+// testInstance represents a specific test in a testSuite.
+type testInstance struct {
+	suite     *testSuite
+	testIndex int
+}
 
-	if len(*binaryDir) == 0 {
-		fmt.Fprintf(os.Stderr, "Must give -bin-dir\n")
-		os.Exit(1)
-	}
+func worker(wg *sync.WaitGroup, work <-chan testInstance) {
+	defer wg.Done()
 
-	for _, suite := range allTestSuites {
-		for _, test := range suite.tests {
-			if err := doTest(suite, test); err != nil {
+	for ti := range work {
+		test := ti.suite.tests[ti.testIndex]
+
+		if err := doTest(ti.suite, test); err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			os.Exit(2)
+		}
+
+		if !test.noFAX {
+			if err := compareFAX(ti.suite, test); err != nil {
 				fmt.Fprintf(os.Stderr, "%s\n", err)
-				os.Exit(2)
-			}
-
-			if !test.noFAX {
-				if err := compareFAX(suite, test); err != nil {
-					fmt.Fprintf(os.Stderr, "%s\n", err)
-					os.Exit(3)
-				}
+				os.Exit(3)
 			}
 		}
 	}
 }
 
-func doTest(suite *testSuite, test test) error {
-	binary := filepath.Join(*binaryDir, suite.binary)
+func main() {
+	flag.Parse()
 
-	var args []string
+	if len(*oraclePath) == 0 {
+		fmt.Fprintf(os.Stderr, "Must give -oracle-bin\n")
+		os.Exit(1)
+	}
+
+	work := make(chan testInstance)
+	var wg sync.WaitGroup
+
+	for i := 0; i < runtime.NumCPU(); i++ {
+		wg.Add(1)
+		go worker(&wg, work)
+	}
+
+	for _, suite := range allTestSuites {
+		for i := range suite.tests {
+			work <- testInstance{suite, i}
+		}
+	}
+
+	close(work)
+	wg.Wait()
+}
+
+func doTest(suite *testSuite, test test) error {
+	args := []string{suite.suite}
 	args = append(args, test.args...)
 	args = append(args, filepath.Join(suite.getDirectory(), "req", test.inFile+".req"))
 
-	outPath := filepath.Join(suite.getDirectory(), "resp", test.inFile+".resp")
+	outPath := filepath.Join(suite.getDirectory(), "resp", test.inFile+".rsp")
 	outFile, err := os.OpenFile(outPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("cannot open output file for %q %q: %s", suite.getDirectory(), test.inFile, err)
 	}
 	defer outFile.Close()
 
-	cmd := exec.Command(binary, args...)
+	cmd := exec.Command(*oraclePath, args...)
 	cmd.Stdout = outFile
 	cmd.Stderr = os.Stderr
 
+	cmdLine := strings.Join(append([]string{*oraclePath}, args...), " ")
+	startTime := time.Now()
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("cannot run command for %q %q: %s", suite.getDirectory(), test.inFile, err)
+		return fmt.Errorf("cannot run command for %q %q (%s): %s", suite.getDirectory(), test.inFile, cmdLine, err)
 	}
+
+	fmt.Printf("%s (%ds)\n", cmdLine, int(time.Since(startTime).Seconds()))
 
 	return nil
 }
@@ -210,7 +380,12 @@ func canonicalizeLine(in string) string {
 }
 
 func compareFAX(suite *testSuite, test test) error {
-	respPath := filepath.Join(suite.getDirectory(), "resp", test.inFile+".resp")
+	faxScanFunc := suite.faxScanFunc
+	if faxScanFunc == nil {
+		faxScanFunc = (*bufio.Scanner).Scan
+	}
+
+	respPath := filepath.Join(suite.getDirectory(), "resp", test.inFile+".rsp")
 	respFile, err := os.Open(respPath)
 	if err != nil {
 		return fmt.Errorf("cannot read output of %q %q: %s", suite.getDirectory(), test.inFile, err)
@@ -243,7 +418,7 @@ func compareFAX(suite *testSuite, test test) error {
 			haveFaxLine := false
 
 			if inHeader {
-				for faxScanner.Scan() {
+				for faxScanFunc(faxScanner) {
 					faxLine = faxScanner.Text()
 					if len(faxLine) != 0 && faxLine[0] != '#' {
 						haveFaxLine = true
@@ -253,13 +428,17 @@ func compareFAX(suite *testSuite, test test) error {
 
 				inHeader = false
 			} else {
-				if faxScanner.Scan() {
+				if faxScanFunc(faxScanner) {
 					faxLine = faxScanner.Text()
 					haveFaxLine = true
 				}
 			}
 
 			if !haveFaxLine {
+				// Ignore blank lines at the end of the generated file.
+				if len(respLine) == 0 {
+					break
+				}
 				return fmt.Errorf("resp file is longer than fax for %q %q", suite.getDirectory(), test.inFile)
 			}
 
@@ -277,7 +456,7 @@ func compareFAX(suite *testSuite, test test) error {
 		return fmt.Errorf("resp and fax differ at line %d for %q %q: %q vs %q", lineNo, suite.getDirectory(), test.inFile, respLine, faxLine)
 	}
 
-	if faxScanner.Scan() {
+	if faxScanFunc(faxScanner) {
 		return fmt.Errorf("fax file is longer than resp for %q %q", suite.getDirectory(), test.inFile)
 	}
 

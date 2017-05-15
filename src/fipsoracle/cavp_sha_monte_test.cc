@@ -13,8 +13,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
 // cavp_sha_monte_test processes a NIST CAVP SHA-Monte test vector request file
-// and emits the corresponding response. An optional sample vector file can be
-// passed to verify the result.
+// and emits the corresponding response.
 
 #include <stdlib.h>
 
@@ -25,9 +24,13 @@
 #include "cavp_test_util.h"
 
 
+namespace {
+
 struct TestCtx {
   std::string hash;
 };
+
+}
 
 static bool TestSHAMonte(FileTest *t, void *arg) {
   TestCtx *ctx = reinterpret_cast<TestCtx *>(arg);
@@ -82,9 +85,7 @@ static int usage(char *arg) {
   return 1;
 }
 
-int main(int argc, char **argv) {
-  CRYPTO_library_init();
-
+int cavp_sha_monte_test_main(int argc, char **argv) {
   if (argc != 3) {
     return usage(argv[0]);
   }

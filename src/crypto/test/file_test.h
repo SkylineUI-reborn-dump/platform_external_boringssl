@@ -139,6 +139,10 @@ class FileTest {
   bool ExpectBytesEqual(const uint8_t *expected, size_t expected_len,
                         const uint8_t *actual, size_t actual_len);
 
+  // AtNewInstructionBlock returns true if the current test was immediately
+  // preceded by an instruction block.
+  bool IsAtNewInstructionBlock() const;
+
   // HasInstruction returns true if the current test has an instruction.
   bool HasInstruction(const std::string &key);
 
@@ -153,6 +157,10 @@ class FileTest {
   // case is preceded by the instruction block and a single blank line. All
   // other blank or comment lines are omitted.
   const std::string &CurrentTestToString() const;
+
+  // InjectInstruction adds a key value pair to the most recently parsed set of
+  // instructions.
+  void InjectInstruction(const std::string &key, const std::string &value);
 
   void SetIgnoreUnusedAttributes(bool ignore);
 
@@ -185,11 +193,15 @@ class FileTest {
 
   std::string current_test_;
 
+  bool is_at_new_instruction_block_ = false;
+
   bool ignore_unused_attributes_ = false;
 
   FileTest(const FileTest &) = delete;
   FileTest &operator=(const FileTest &) = delete;
 };
+
+typedef bool (*FileTestFunc)(FileTest *t, void *arg);
 
 // FileTestMain runs a file-based test out of |path| and returns an exit code
 // suitable to return out of |main|. |run_test| should return true on pass and
@@ -202,12 +214,10 @@ class FileTest {
 // list of keys. This may be used to initialize a shared set of keys for many
 // tests. However, if one test fails, the framework will continue to run
 // subsequent tests.
-int FileTestMain(bool (*run_test)(FileTest *t, void *arg), void *arg,
-                 const char *path);
+int FileTestMain(FileTestFunc run_test, void *arg, const char *path);
 
 // FileTestMainSilent behaves like FileTestMain but does not print a final
 // FAIL/PASS message to stdout.
-int FileTestMainSilent(bool (*run_test)(FileTest *t, void *arg), void *arg,
-                       const char *path);
+int FileTestMainSilent(FileTestFunc run_test, void *arg, const char *path);
 
 #endif /* OPENSSL_HEADER_CRYPTO_TEST_FILE_TEST_H */
