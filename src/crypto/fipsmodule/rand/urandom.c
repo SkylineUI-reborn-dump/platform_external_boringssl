@@ -12,6 +12,10 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
+#if !defined(_GNU_SOURCE)
+#define _GNU_SOURCE  /* needed for syscall() on Linux. */
+#endif
+
 #include <openssl/rand.h>
 
 #if !defined(OPENSSL_WINDOWS) && !defined(OPENSSL_FUCHSIA) && \
@@ -288,6 +292,12 @@ void CRYPTO_sysrand(uint8_t *out, size_t requested) {
   if (!fill_with_entropy(out, requested)) {
     abort();
   }
+
+#if defined(BORINGSSL_FIPS_BREAK_CRNG)
+  // This breaks the "continuous random number generator test" defined in FIPS
+  // 140-2, section 4.9.2, and implemented in rand_get_seed().
+  OPENSSL_memset(out, 0, requested);
+#endif
 }
 
 #endif /* !OPENSSL_WINDOWS && !defined(OPENSSL_FUCHSIA) && \

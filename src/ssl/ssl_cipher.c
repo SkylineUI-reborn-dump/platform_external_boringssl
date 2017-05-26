@@ -1363,6 +1363,10 @@ int SSL_CIPHER_has_SHA256_HMAC(const SSL_CIPHER *cipher) {
   return (cipher->algorithm_mac & SSL_SHA256) != 0;
 }
 
+int SSL_CIPHER_has_SHA384_HMAC(const SSL_CIPHER *cipher) {
+  return (cipher->algorithm_mac & SSL_SHA384) != 0;
+}
+
 int SSL_CIPHER_is_AEAD(const SSL_CIPHER *cipher) {
   return (cipher->algorithm_mac & SSL_AEAD) != 0;
 }
@@ -1720,7 +1724,7 @@ const char *SSL_CIPHER_get_version(const SSL_CIPHER *cipher) {
   return "TLSv1/SSLv3";
 }
 
-COMP_METHOD *SSL_COMP_get_compression_methods(void) { return NULL; }
+STACK_OF(SSL_COMP) *SSL_COMP_get_compression_methods(void) { return NULL; }
 
 int SSL_COMP_add_compression_method(int id, COMP_METHOD *cm) { return 1; }
 
