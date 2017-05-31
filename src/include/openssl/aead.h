@@ -117,16 +117,6 @@ OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_128_gcm_siv(void);
  * https://tools.ietf.org/html/draft-irtf-cfrg-gcmsiv-02 */
 OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_256_gcm_siv(void);
 
-/* EVP_aead_aes_128_gcm_fips_testonly is AES-128 in Galois Counter Mode with
- * an internally-generated random nonce. This is unsafe and should not be
- * used. */
-OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_128_gcm_fips_testonly(void);
-
-/* EVP_aead_aes_256_gcm_fips_testonly is AES-256 in Galois Counter Mode with
- * an internally-generated random nonce. This is unsafe and should not be
- * used. */
-OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_256_gcm_fips_testonly(void);
-
 /* EVP_has_aes_hardware returns one if we enable hardware support for fast and
  * constant-time AES-GCM. */
 OPENSSL_EXPORT int EVP_has_aes_hardware(void);
@@ -185,6 +175,16 @@ typedef struct evp_aead_ctx_st {
  * necessary, to call |EVP_AEAD_CTX_cleanup| in this state. This may be used for
  * more uniform cleanup of |EVP_AEAD_CTX|. */
 OPENSSL_EXPORT void EVP_AEAD_CTX_zero(EVP_AEAD_CTX *ctx);
+
+/* EVP_AEAD_CTX_new allocates an |EVP_AEAD_CTX|, calls |EVP_AEAD_CTX_init| and
+ * returns the |EVP_AEAD_CTX|, or NULL on error. */
+OPENSSL_EXPORT EVP_AEAD_CTX *EVP_AEAD_CTX_new(const EVP_AEAD *aead,
+                                              const uint8_t *key,
+                                              size_t key_len, size_t tag_len);
+
+/* EVP_AEAD_CTX_free calls |EVP_AEAD_CTX_cleanup| and |OPENSSL_free| on
+ * |ctx|. */
+OPENSSL_EXPORT void EVP_AEAD_CTX_free(EVP_AEAD_CTX *ctx);
 
 /* EVP_AEAD_CTX_init initializes |ctx| for the given AEAD algorithm. The |impl|
  * argument is ignored and should be NULL. Authentication tags may be truncated
@@ -283,6 +283,14 @@ OPENSSL_EXPORT const EVP_AEAD *EVP_aead_des_ede3_cbc_sha1_tls_implicit_iv(void);
 
 OPENSSL_EXPORT const EVP_AEAD *EVP_aead_null_sha1_tls(void);
 
+/* EVP_aead_aes_128_gcm_tls12 is AES-128 in Galois Counter Mode using the TLS
+ * 1.2 nonce construction. */
+OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_128_gcm_tls12(void);
+
+/* EVP_aead_aes_256_gcm_tls12 is AES-256 in Galois Counter Mode using the TLS
+ * 1.2 nonce construction. */
+OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_256_gcm_tls12(void);
+
 
 /* SSLv3-specific AEAD algorithms.
  *
@@ -333,6 +341,8 @@ namespace bssl {
 using ScopedEVP_AEAD_CTX =
     internal::StackAllocated<EVP_AEAD_CTX, void, EVP_AEAD_CTX_zero,
                              EVP_AEAD_CTX_cleanup>;
+
+BORINGSSL_MAKE_DELETER(EVP_AEAD_CTX, EVP_AEAD_CTX_free)
 
 }  // namespace bssl
 

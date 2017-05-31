@@ -16,7 +16,7 @@ if(UNIX)
       set(PERLASM_STYLE linux32)
     endif()
   elseif (${ARCH} STREQUAL "ppc64le")
-    set(PERLASM_STYLE ppc64le)
+    set(PERLASM_STYLE linux64le)
   else()
     if (${ARCH} STREQUAL "x86")
       set(PERLASM_FLAGS "-fPIC -DOPENSSL_IA32_SSE2")
@@ -31,19 +31,24 @@ if(UNIX)
   enable_language(ASM)
   set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -Wa,--noexecstack")
 
+  # Clang's integerated assembler does not support debug symbols.
+  if(NOT CMAKE_ASM_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -Wa,-g")
+  endif()
+
   # CMake does not add -isysroot and -arch flags to assembly.
   if (APPLE)
-    set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -isysroot ${CMAKE_OSX_SYSROOT}")
+    if (CMAKE_OSX_SYSROOT)
+      set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -isysroot ${CMAKE_OSX_SYSROOT}")
+    endif()
     foreach(arch ${CMAKE_OSX_ARCHITECTURES})
       set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -arch ${arch}")
     endforeach()
   endif()
 else()
   if (CMAKE_CL_64)
-    message("Using nasm")
     set(PERLASM_STYLE nasm)
   else()
-    message("Using win32n")
     set(PERLASM_STYLE win32n)
     set(PERLASM_FLAGS "-DOPENSSL_IA32_SSE2")
   endif()
@@ -80,7 +85,6 @@ add_subdirectory(bytestring)
 add_subdirectory(pool)
 
 # Level 0.2 - depends on nothing but itself
-add_subdirectory(des)
 add_subdirectory(rc4)
 add_subdirectory(conf)
 add_subdirectory(chacha)
@@ -89,10 +93,10 @@ add_subdirectory(curve25519)
 
 # Level 1, depends only on 0.*
 add_subdirectory(digest_extra)
-add_subdirectory(cipher)
+add_subdirectory(cipher_extra)
 add_subdirectory(rand_extra)
 add_subdirectory(bio)
-add_subdirectory(bn)
+add_subdirectory(bn_extra)
 add_subdirectory(obj)
 add_subdirectory(asn1)
 
@@ -100,10 +104,10 @@ add_subdirectory(asn1)
 add_subdirectory(engine)
 add_subdirectory(dh)
 add_subdirectory(dsa)
-add_subdirectory(rsa)
-add_subdirectory(ec)
+add_subdirectory(rsa_extra)
+add_subdirectory(ec_extra)
 add_subdirectory(ecdh)
-add_subdirectory(ecdsa)
+add_subdirectory(ecdsa_extra)
 add_subdirectory(hmac_extra)
 
 # Level 3
@@ -144,7 +148,7 @@ add_library(
   thread_win.c
 )
 
-if(FIPS)
+if(FIPS_DELOCATE)
   SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES EXTERNAL_OBJECT true)
   SET_SOURCE_FILES_PROPERTIES(fipsmodule/bcm.o PROPERTIES GENERATED true)
 
@@ -167,15 +171,14 @@ add_library(
   $<TARGET_OBJECTS:pool>
   $<TARGET_OBJECTS:fipsmodule>
   $<TARGET_OBJECTS:digest_extra>
-  $<TARGET_OBJECTS:cipher>
-  $<TARGET_OBJECTS:des>
+  $<TARGET_OBJECTS:cipher_extra>
   $<TARGET_OBJECTS:rc4>
   $<TARGET_OBJECTS:conf>
   $<TARGET_OBJECTS:chacha>
   $<TARGET_OBJECTS:poly1305>
   $<TARGET_OBJECTS:curve25519>
   $<TARGET_OBJECTS:buf>
-  $<TARGET_OBJECTS:bn>
+  $<TARGET_OBJECTS:bn_extra>
   $<TARGET_OBJECTS:bio>
   $<TARGET_OBJECTS:rand_extra>
   $<TARGET_OBJECTS:obj>
@@ -183,10 +186,10 @@ add_library(
   $<TARGET_OBJECTS:engine>
   $<TARGET_OBJECTS:dh>
   $<TARGET_OBJECTS:dsa>
-  $<TARGET_OBJECTS:rsa>
-  $<TARGET_OBJECTS:ec>
+  $<TARGET_OBJECTS:rsa_extra>
+  $<TARGET_OBJECTS:ec_extra>
   $<TARGET_OBJECTS:ecdh>
-  $<TARGET_OBJECTS:ecdsa>
+  $<TARGET_OBJECTS:ecdsa_extra>
   $<TARGET_OBJECTS:cmac>
   $<TARGET_OBJECTS:evp>
   $<TARGET_OBJECTS:hkdf>
@@ -199,7 +202,7 @@ add_library(
   ${CRYPTO_FIPS_OBJECTS}
 )
 
-if(FIPS)
+if(FIPS_DELOCATE)
   add_dependencies(crypto bcm_o_target)
 endif()
 
@@ -220,15 +223,6 @@ add_executable(
 target_link_libraries(thread_test crypto)
 add_dependencies(all_tests thread_test)
 
-add_executable(
-  refcount_test
-
-  refcount_test.cc
-)
-
-target_link_libraries(refcount_test crypto)
-add_dependencies(all_tests refcount_test)
-
 # TODO(davidben): Convert the remaining tests to GTest.
 add_executable(
   crypto_test
@@ -238,19 +232,30 @@ add_executable(
   bio/bio_test.cc
   bytestring/bytestring_test.cc
   chacha/chacha_test.cc
+  cipher_extra/aead_extra_test.cc
   cmac/cmac_test.cc
   compiler_test.cc
   constant_time_test.cc
+  curve25519/ed25519_test.cc
   curve25519/spake25519_test.cc
   curve25519/x25519_test.cc
   dh/dh_test.cc
+  digest_extra/digest_test.cc
   dsa/dsa_test.cc
-  ec/ec_test.cc
   err/err_test.cc
   evp/evp_extra_test.cc
+  evp/pbkdf_test.cc
+  fipsmodule/aes/aes_test.cc
+  fipsmodule/ec/ec_test.cc
   fipsmodule/rand/ctrdrbg_test.cc
-  rsa/rsa_test.cc
+  hkdf/hkdf_test.cc
+  lhash/lhash_test.cc
+  pool/pool_test.cc
+  refcount_test.cc
+  rsa_extra/rsa_test.cc
+  test/file_test_gtest.cc
 
+  $<TARGET_OBJECTS:crypto_test_data>
   $<TARGET_OBJECTS:gtest_main>
   $<TARGET_OBJECTS:test_support>
 )
