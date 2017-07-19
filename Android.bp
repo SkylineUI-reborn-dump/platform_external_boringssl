@@ -20,6 +20,7 @@ cc_defaults {
     ],
 
     cppflags: [
+        "-std=c++11",
         "-Wall",
         "-Werror",
     ],
