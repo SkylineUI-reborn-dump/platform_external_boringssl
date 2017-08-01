@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "429161f1_8f5b87fe",
+        "filename": "src/crypto/cipher_extra/e_chacha20poly1305.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1084139
+      },
+      "writtenOn": "2017-08-01T09:01:15Z",
+      "side": 1,
+      "message": "out_tag is already a pointer (not an array), so this should be corrected to:\n OPENSSL_memcpy(tag + 48, out_tag, sizeof(*out_tag));",
+      "revId": "a12bf4695c4916207f946efafd9728eb941e3f0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
