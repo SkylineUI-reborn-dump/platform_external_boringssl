@@ -34,6 +34,24 @@
       "revId": "a12bf4695c4916207f946efafd9728eb941e3f0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0a6950f_47f86fce",
+        "filename": "src/crypto/cipher_extra/e_chacha20poly1305.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1133853
+      },
+      "writtenOn": "2017-08-01T18:38:57Z",
+      "side": 1,
+      "message": "No, sizeof(out_tag) is right here: this is a shim to send parameters to assembly, and it does want a result ptr for out_tag.\n\nAuthor says they\u0027ll add comments to make the strategy clearer.",
+      "parentUuid": "59fd60eb_2f5196bf",
+      "revId": "a12bf4695c4916207f946efafd9728eb941e3f0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
