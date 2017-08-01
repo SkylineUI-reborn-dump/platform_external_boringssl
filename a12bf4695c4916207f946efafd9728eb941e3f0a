@@ -16,6 +16,24 @@
       "revId": "a12bf4695c4916207f946efafd9728eb941e3f0a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59fd60eb_2f5196bf",
+        "filename": "src/crypto/cipher_extra/e_chacha20poly1305.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1084139
+      },
+      "writtenOn": "2017-08-01T09:37:06Z",
+      "side": 1,
+      "message": "Sorry, the correct code could look like this:\n OPENSSL_memcpy(tag + 48, out_tag, extra_in_len * sizeof(out_tag[0]));\n\nBut we need to be sure that extra_in_len \u003c\u003d 8.",
+      "parentUuid": "429161f1_8f5b87fe",
+      "revId": "a12bf4695c4916207f946efafd9728eb941e3f0a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
