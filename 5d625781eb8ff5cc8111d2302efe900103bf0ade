@@ -34,6 +34,24 @@
       "revId": "5d625781eb8ff5cc8111d2302efe900103bf0ade",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4334e22_d2f2e78e",
+        "filename": "src/ssl/t1_enc.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2017-08-09T19:05:33Z",
+      "side": 1,
+      "message": "https://boringssl-review.googlesource.com/19024",
+      "parentUuid": "cc5eccb6_5097c268",
+      "revId": "5d625781eb8ff5cc8111d2302efe900103bf0ade",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
