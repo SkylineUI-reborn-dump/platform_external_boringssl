@@ -37,6 +37,19 @@ cc_defaults {
     sdk_version: "9",
 
     cflags: ["-DBORINGSSL_ANDROID_SYSTEM"],
+
+    target: {
+        host: {
+            // TODO: b/26160319. ASAN breaks use of this library in JVM.
+            // Re-enable sanitization when the issue with making clients of this library
+            // preload ASAN runtime is resolved. Without that, clients are getting runtime
+            // errors due to unresolved ASAN symbols, such as
+            // __asan_option_detect_stack_use_after_return.
+            sanitize: {
+                never: true,
+            },
+        },
+    },
 }
 
 //// libcrypto
@@ -115,19 +128,6 @@ cc_library_static {
 cc_library_static {
     name: "libcrypto_static",
     defaults: ["libcrypto_sources", "libcrypto_defaults", "boringssl_defaults", "boringssl_flags"],
-
-    target: {
-        host: {
-            // TODO: b/26160319. ASAN breaks use of this library in JVM.
-            // Re-enable sanitization when the issue with making clients of this library
-            // preload ASAN runtime is resolved. Without that, clients are getting runtime
-            // errors due to unresolved ASAN symbols, such as
-            // __asan_option_detect_stack_use_after_return.
-            sanitize: {
-                never: true,
-            },
-        },
-    },
 }
 
 //// libssl
