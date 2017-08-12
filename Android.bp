@@ -33,7 +33,6 @@ cc_defaults {
 
     local_include_dirs: ["src/include"],
     export_include_dirs: ["src/include"],
-    stl: "libc++_static",
     sdk_version: "9",
 
     cflags: ["-DBORINGSSL_ANDROID_SYSTEM"],
