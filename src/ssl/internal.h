@@ -1249,6 +1249,8 @@ struct SSL_HANDSHAKE {
 
   unsigned received_hello_retry_request:1;
 
+  unsigned received_custom_extension:1;
+
   /* accept_psk_mode stores whether the client's PSK mode is compatible with our
    * preferences. */
   unsigned accept_psk_mode:1;
@@ -1333,6 +1335,11 @@ int tls13_handshake(SSL_HANDSHAKE *hs, int *out_early_return);
  * server. */
 enum ssl_hs_wait_t tls13_client_handshake(SSL_HANDSHAKE *hs);
 enum ssl_hs_wait_t tls13_server_handshake(SSL_HANDSHAKE *hs);
+
+/* The following functions return human-readable representations of the TLS 1.3
+ * handshake states for debugging. */
+const char *tls13_client_handshake_state(SSL_HANDSHAKE *hs);
+const char *tls13_server_handshake_state(SSL_HANDSHAKE *hs);
 
 /* tls13_post_handshake processes a post-handshake message. It returns one on
  * success and zero on failure. */
@@ -2064,6 +2071,7 @@ int ssl_compare_public_and_private_key(const EVP_PKEY *pubkey,
 int ssl_cert_check_private_key(const CERT *cert, const EVP_PKEY *privkey);
 int ssl_get_new_session(SSL_HANDSHAKE *hs, int is_server);
 int ssl_encrypt_ticket(SSL *ssl, CBB *out, const SSL_SESSION *session);
+int ssl_ctx_rotate_ticket_encryption_key(SSL_CTX *ctx);
 
 /* ssl_session_new returns a newly-allocated blank |SSL_SESSION| or nullptr on
  * error. */
@@ -2326,6 +2334,8 @@ int ssl_can_write(const SSL *ssl);
 int ssl_can_read(const SSL *ssl);
 
 void ssl_get_current_time(const SSL *ssl, struct OPENSSL_timeval *out_clock);
+void ssl_ctx_get_current_time(const SSL_CTX *ctx,
+                              struct OPENSSL_timeval *out_clock);
 
 /* ssl_reset_error_state resets state for |SSL_get_error|. */
 void ssl_reset_error_state(SSL *ssl);
