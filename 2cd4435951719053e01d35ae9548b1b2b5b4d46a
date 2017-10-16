@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe4862a0_e52ed123",
+        "filename": "sources.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1074628
+      },
+      "writtenOn": "2017-10-16T21:42:44Z",
+      "side": 1,
+      "message": "This will now create duplicate source problems, since linux_x86 means both host linux and android now. I\u0027ve got android and upstream patches out now:\n\nhttps://android-review.googlesource.com/#/c/platform/external/boringssl/+/512517/\n\nhttps://boringssl-review.googlesource.com/c/boringssl/+/22004",
+      "range": {
+        "startLine": 284,
+        "startChar": 8,
+        "endLine": 284,
+        "endChar": 18
+      },
+      "revId": "2cd4435951719053e01d35ae9548b1b2b5b4d46a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
