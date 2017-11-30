@@ -184,7 +184,7 @@ extern "C" {
 // MinGW has two different printf implementations. Ensure the format macro
 // matches the selected implementation. See
 // https://sourceforge.net/p/mingw-w64/wiki2/gnu%20printf/.
-#if defined(__MINGW_PRINTF_FORMAT)
+#if !defined(__clang__) && defined(__MINGW_PRINTF_FORMAT)
 #define OPENSSL_PRINTF_FORMAT_FUNC(string_index, first_to_check) \
   __attribute__(                                                 \
       (__format__(__MINGW_PRINTF_FORMAT, string_index, first_to_check)))
