@@ -304,6 +304,29 @@ TEST(ECTest, ArbitraryCurve) {
                                      order.get(), BN_value_one()));
 
   EXPECT_NE(0, EC_GROUP_cmp(group.get(), group3.get(), NULL));
+
+#if !defined(BORINGSSL_SHARED_LIBRARY)
+  // group4 has non-minimal components that do not fit in |EC_SCALAR| and the
+  // future |EC_FELEM|.
+  ASSERT_TRUE(bn_resize_words(p.get(), 32));
+  ASSERT_TRUE(bn_resize_words(a.get(), 32));
+  ASSERT_TRUE(bn_resize_words(b.get(), 32));
+  ASSERT_TRUE(bn_resize_words(gx.get(), 32));
+  ASSERT_TRUE(bn_resize_words(gy.get(), 32));
+  ASSERT_TRUE(bn_resize_words(order.get(), 32));
+
+  bssl::UniquePtr<EC_GROUP> group4(
+      EC_GROUP_new_curve_GFp(p.get(), a.get(), b.get(), ctx.get()));
+  ASSERT_TRUE(group4);
+  bssl::UniquePtr<EC_POINT> generator4(EC_POINT_new(group4.get()));
+  ASSERT_TRUE(generator4);
+  ASSERT_TRUE(EC_POINT_set_affine_coordinates_GFp(
+      group4.get(), generator4.get(), gx.get(), gy.get(), ctx.get()));
+  ASSERT_TRUE(EC_GROUP_set_generator(group4.get(), generator4.get(),
+                                     order.get(), BN_value_one()));
+
+  EXPECT_EQ(0, EC_GROUP_cmp(group.get(), group4.get(), NULL));
+#endif
 }
 
 TEST(ECTest, SetKeyWithoutGroup) {
@@ -334,6 +357,14 @@ TEST(ECTest, GroupMismatch) {
   // Configuring a public key with the wrong group is invalid.
   EXPECT_FALSE(
       EC_KEY_set_public_key(key.get(), EC_GROUP_get0_generator(p256.get())));
+}
+
+TEST(ECTest, EmptyKey) {
+  bssl::UniquePtr<EC_KEY> key(EC_KEY_new());
+  ASSERT_TRUE(key);
+  EXPECT_FALSE(EC_KEY_get0_group(key.get()));
+  EXPECT_FALSE(EC_KEY_get0_public_key(key.get()));
+  EXPECT_FALSE(EC_KEY_get0_private_key(key.get()));
 }
 
 class ECCurveTest : public testing::TestWithParam<EC_builtin_curve> {};
@@ -483,9 +514,8 @@ TEST_P(ECCurveTest, MulOrder) {
       << "p * order did not return point at infinity.";
 }
 
-// Test that |EC_POINT_mul| works with out-of-range scalars. Even beyond the
-// usual |bn_correct_top| disclaimer, we completely disclaim all hope here as a
-// reduction is needed, but we'll compute the right answer.
+// Test that |EC_POINT_mul| works with out-of-range scalars. The operation will
+// not be constant-time, but we'll compute the right answer.
 TEST_P(ECCurveTest, MulOutOfRange) {
   bssl::UniquePtr<EC_GROUP> group(EC_GROUP_new_by_curve_name(GetParam().nid));
   ASSERT_TRUE(group);

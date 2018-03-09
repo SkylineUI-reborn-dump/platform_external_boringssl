@@ -2952,6 +2952,11 @@ OPENSSL_EXPORT const char *SSL_get_psk_identity(const SSL *ssl);
 // phase of the experiment. It returns one for success and zero otherwise.
 OPENSSL_EXPORT int SSL_set_dummy_pq_padding_size(SSL *ssl, size_t num_bytes);
 
+// SSL_dummy_pq_padding_used returns one if the server echoed a dummy PQ padding
+// extension and zero otherwise. It may only be called on a client connection
+// once the ServerHello has been processed, otherwise it'll return zero.
+OPENSSL_EXPORT int SSL_dummy_pq_padding_used(SSL *ssl);
+
 
 // QUIC Transport Parameters.
 //
@@ -3621,17 +3626,12 @@ OPENSSL_EXPORT const SSL_METHOD *TLSv1_2_method(void);
 OPENSSL_EXPORT const SSL_METHOD *DTLSv1_method(void);
 OPENSSL_EXPORT const SSL_METHOD *DTLSv1_2_method(void);
 
-// SSLv3_method returns an |SSL_METHOD| with no versions enabled.
-OPENSSL_EXPORT const SSL_METHOD *SSLv3_method(void);
-
 // These client- and server-specific methods call their corresponding generic
 // methods.
 OPENSSL_EXPORT const SSL_METHOD *TLS_server_method(void);
 OPENSSL_EXPORT const SSL_METHOD *TLS_client_method(void);
 OPENSSL_EXPORT const SSL_METHOD *SSLv23_server_method(void);
 OPENSSL_EXPORT const SSL_METHOD *SSLv23_client_method(void);
-OPENSSL_EXPORT const SSL_METHOD *SSLv3_server_method(void);
-OPENSSL_EXPORT const SSL_METHOD *SSLv3_client_method(void);
 OPENSSL_EXPORT const SSL_METHOD *TLSv1_server_method(void);
 OPENSSL_EXPORT const SSL_METHOD *TLSv1_client_method(void);
 OPENSSL_EXPORT const SSL_METHOD *TLSv1_1_server_method(void);

@@ -100,6 +100,7 @@ func (c *Conn) clientHandshake() error {
 		pskBinderFirst:          c.config.Bugs.PSKBinderFirst,
 		omitExtensions:          c.config.Bugs.OmitExtensions,
 		emptyExtensions:         c.config.Bugs.EmptyExtensions,
+		dummyPQPaddingLen:       c.config.Bugs.SendDummyPQPaddingLength,
 	}
 
 	if maxVersion >= VersionTLS13 {
@@ -168,7 +169,7 @@ func (c *Conn) clientHandshake() error {
 			if !curvesToSend[curveID] {
 				continue
 			}
-			curve, ok := curveForCurveID(curveID)
+			curve, ok := curveForCurveID(curveID, c.config)
 			if !ok {
 				continue
 			}
@@ -523,7 +524,7 @@ NextCipherSuite:
 				c.sendAlert(alertHandshakeFailure)
 				return errors.New("tls: received invalid HelloRetryRequest")
 			}
-			curve, ok := curveForCurveID(group)
+			curve, ok := curveForCurveID(group, c.config)
 			if !ok {
 				return errors.New("tls: Unable to get curve requested in HelloRetryRequest")
 			}
@@ -1492,6 +1493,11 @@ func (hs *clientHandshakeState) processServerExtensions(serverExtensions *server
 		}
 		c.quicTransportParams = serverExtensions.quicTransportParams
 	}
+
+	if l := c.config.Bugs.ExpectDummyPQPaddingLength; l != 0 && serverExtensions.dummyPQPaddingLen != l {
+		return fmt.Errorf("tls: expected %d-byte dummy PQ padding extension, but got %d bytes", l, serverExtensions.dummyPQPaddingLen)
+	}
+
 	return nil
 }
 
