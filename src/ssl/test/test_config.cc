@@ -101,6 +101,8 @@ const Flag<bool> kBoolFlags[] = {
   { "-renegotiate-once", &TestConfig::renegotiate_once },
   { "-renegotiate-freely", &TestConfig::renegotiate_freely },
   { "-renegotiate-ignore", &TestConfig::renegotiate_ignore },
+  { "-forbid-renegotiation-after-handshake",
+    &TestConfig::forbid_renegotiation_after_handshake },
   { "-p384-only", &TestConfig::p384_only },
   { "-enable-all-curves", &TestConfig::enable_all_curves },
   { "-use-old-client-cert-callback",

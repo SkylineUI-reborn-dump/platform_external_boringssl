@@ -55,7 +55,7 @@ bool SSL_decline_handoff(SSL *ssl) {
     return false;
   }
 
-  ssl->handoff = false;
+  s3->hs->config->handoff = false;
   return true;
 }
 
@@ -94,7 +94,7 @@ bool SSL_apply_handoff(SSL *ssl, Span<const uint8_t> handoff) {
     s3->hs->transcript.Update(transcript);
     s3->is_v2_hello = true;
   }
-  ssl->handback = true;
+  s3->hs->handback = true;
 
   return true;
 }
@@ -252,13 +252,22 @@ bool SSL_apply_handback(SSL *ssl, Span<const uint8_t> handback) {
   }
 
   ssl->version = session->ssl_version;
+  s3->have_version = true;
+  if (!ssl_method_supports_version(ssl->method, ssl->version) ||
+      session->cipher != s3->hs->new_cipher ||
+      ssl_protocol_version(ssl) < SSL_CIPHER_get_min_version(session->cipher) ||
+      SSL_CIPHER_get_max_version(session->cipher) < ssl_protocol_version(ssl)) {
+    return false;
+  }
   ssl->do_handshake = ssl_server_handshake;
   ssl->server = true;
 
-  s3->have_version = true;
   s3->hs->state = CBS_len(&transcript) == 0 ? state12_finish_server_handshake
                                             : state12_read_client_certificate;
   s3->session_reused = session_reused;
+  if (s3->hs->state == state12_read_client_certificate && session_reused) {
+    return false;
+  }
   s3->tlsext_channel_id_valid = channel_id_valid;
   s3->next_proto_negotiated.CopyFrom(next_proto);
   s3->alpn_selected.CopyFrom(alpn);

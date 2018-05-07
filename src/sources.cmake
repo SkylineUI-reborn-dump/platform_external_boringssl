@@ -59,7 +59,12 @@ set(
   crypto/x509/some_names1.pem
   crypto/x509/some_names2.pem
   crypto/x509/some_names3.pem
+  third_party/wycheproof/aes_cbc_pkcs5_test.txt
+  third_party/wycheproof/aes_gcm_siv_test.txt
+  third_party/wycheproof/aes_gcm_test.txt
+  third_party/wycheproof/chacha20_poly1305_test.txt
   third_party/wycheproof/dsa_test.txt
+  third_party/wycheproof/ecdh_test.txt
   third_party/wycheproof/ecdsa_secp224r1_sha224_test.txt
   third_party/wycheproof/ecdsa_secp224r1_sha256_test.txt
   third_party/wycheproof/ecdsa_secp256r1_sha256_test.txt
@@ -67,6 +72,7 @@ set(
   third_party/wycheproof/ecdsa_secp384r1_sha512_test.txt
   third_party/wycheproof/ecdsa_secp521r1_sha512_test.txt
   third_party/wycheproof/eddsa_test.txt
+  third_party/wycheproof/kw_test.txt
   third_party/wycheproof/rsa_signature_test.txt
   third_party/wycheproof/x25519_test.txt
 )

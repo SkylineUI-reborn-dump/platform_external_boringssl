@@ -405,13 +405,13 @@ int ssl_get_new_session(SSL_HANDSHAKE *hs, int is_server) {
     session->session_id_length = 0;
   }
 
-  if (ssl->cert->sid_ctx_length > sizeof(session->sid_ctx)) {
+  if (hs->config->cert->sid_ctx_length > sizeof(session->sid_ctx)) {
     OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
     return 0;
   }
-  OPENSSL_memcpy(session->sid_ctx, ssl->cert->sid_ctx,
-                 ssl->cert->sid_ctx_length);
-  session->sid_ctx_length = ssl->cert->sid_ctx_length;
+  OPENSSL_memcpy(session->sid_ctx, hs->config->cert->sid_ctx,
+                 hs->config->cert->sid_ctx_length);
+  session->sid_ctx_length = hs->config->cert->sid_ctx_length;
 
   // The session is marked not resumable until it is completely filled in.
   session->not_resumable = 1;
@@ -475,7 +475,7 @@ int ssl_ctx_rotate_ticket_encryption_key(SSL_CTX *ctx) {
   return 1;
 }
 
-static int ssl_encrypt_ticket_with_cipher_ctx(SSL *ssl, CBB *out,
+static int ssl_encrypt_ticket_with_cipher_ctx(SSL_HANDSHAKE *hs, CBB *out,
                                               const uint8_t *session_buf,
                                               size_t session_len) {
   ScopedEVP_CIPHER_CTX ctx;
@@ -493,11 +493,11 @@ static int ssl_encrypt_ticket_with_cipher_ctx(SSL *ssl, CBB *out,
 
   // Initialize HMAC and cipher contexts. If callback present it does all the
   // work otherwise use generated values from parent ctx.
-  SSL_CTX *tctx = ssl->session_ctx;
+  SSL_CTX *tctx = hs->ssl->session_ctx;
   uint8_t iv[EVP_MAX_IV_LENGTH];
   uint8_t key_name[16];
   if (tctx->tlsext_ticket_key_cb != NULL) {
-    if (tctx->tlsext_ticket_key_cb(ssl, key_name, iv, ctx.get(), hctx.get(),
+    if (tctx->tlsext_ticket_key_cb(hs->ssl, key_name, iv, ctx.get(), hctx.get(),
                                    1 /* encrypt */) < 0) {
       return 0;
     }
@@ -554,9 +554,10 @@ static int ssl_encrypt_ticket_with_cipher_ctx(SSL *ssl, CBB *out,
   return 1;
 }
 
-static int ssl_encrypt_ticket_with_method(SSL *ssl, CBB *out,
+static int ssl_encrypt_ticket_with_method(SSL_HANDSHAKE *hs, CBB *out,
                                           const uint8_t *session_buf,
                                           size_t session_len) {
+  SSL *const ssl = hs->ssl;
   const SSL_TICKET_AEAD_METHOD *method = ssl->session_ctx->ticket_aead_method;
   const size_t max_overhead = method->max_overhead(ssl);
   const size_t max_out = session_len + max_overhead;
@@ -571,7 +572,8 @@ static int ssl_encrypt_ticket_with_method(SSL *ssl, CBB *out,
   }
 
   size_t out_len;
-  if (!method->seal(ssl, ptr, &out_len, max_out, session_buf, session_len)) {
+  if (!method->seal(ssl, ptr, &out_len, max_out, session_buf,
+                    session_len)) {
     OPENSSL_PUT_ERROR(SSL, SSL_R_TICKET_ENCRYPTION_FAILED);
     return 0;
   }
@@ -583,7 +585,8 @@ static int ssl_encrypt_ticket_with_method(SSL *ssl, CBB *out,
   return 1;
 }
 
-int ssl_encrypt_ticket(SSL *ssl, CBB *out, const SSL_SESSION *session) {
+int ssl_encrypt_ticket(SSL_HANDSHAKE *hs, CBB *out,
+                       const SSL_SESSION *session) {
   // Serialize the SSL_SESSION to be encoded into the ticket.
   uint8_t *session_buf = NULL;
   size_t session_len;
@@ -592,25 +595,25 @@ int ssl_encrypt_ticket(SSL *ssl, CBB *out, const SSL_SESSION *session) {
   }
 
   int ret = 0;
-  if (ssl->session_ctx->ticket_aead_method) {
-    ret = ssl_encrypt_ticket_with_method(ssl, out, session_buf, session_len);
+  if (hs->ssl->session_ctx->ticket_aead_method) {
+    ret = ssl_encrypt_ticket_with_method(hs, out, session_buf, session_len);
   } else {
-    ret =
-        ssl_encrypt_ticket_with_cipher_ctx(ssl, out, session_buf, session_len);
+    ret = ssl_encrypt_ticket_with_cipher_ctx(hs, out, session_buf, session_len);
   }
 
   OPENSSL_free(session_buf);
   return ret;
 }
 
-int ssl_session_is_context_valid(const SSL *ssl, const SSL_SESSION *session) {
+int ssl_session_is_context_valid(const SSL_HANDSHAKE *hs,
+                                 const SSL_SESSION *session) {
   if (session == NULL) {
     return 0;
   }
 
-  return session->sid_ctx_length == ssl->cert->sid_ctx_length &&
-         OPENSSL_memcmp(session->sid_ctx, ssl->cert->sid_ctx,
-                        ssl->cert->sid_ctx_length) == 0;
+  return session->sid_ctx_length == hs->config->cert->sid_ctx_length &&
+         OPENSSL_memcmp(session->sid_ctx, hs->config->cert->sid_ctx,
+                        hs->config->cert->sid_ctx_length) == 0;
 }
 
 int ssl_session_is_time_valid(const SSL *ssl, const SSL_SESSION *session) {
@@ -632,14 +635,14 @@ int ssl_session_is_time_valid(const SSL *ssl, const SSL_SESSION *session) {
 int ssl_session_is_resumable(const SSL_HANDSHAKE *hs,
                              const SSL_SESSION *session) {
   const SSL *const ssl = hs->ssl;
-  return ssl_session_is_context_valid(ssl, session) &&
+  return ssl_session_is_context_valid(hs, session) &&
          // The session must have been created by the same type of end point as
          // we're now using it with.
          ssl->server == session->is_server &&
          // The session must not be expired.
          ssl_session_is_time_valid(ssl, session) &&
          /* Only resume if the session's version matches the negotiated
-           * version. */
+          * version. */
          ssl->version == session->ssl_version &&
          // Only resume if the session's cipher matches the negotiated one.
          hs->new_cipher == session->cipher &&
@@ -649,14 +652,15 @@ int ssl_session_is_resumable(const SSL_HANDSHAKE *hs,
          ((sk_CRYPTO_BUFFER_num(session->certs) == 0 &&
            !session->peer_sha256_valid) ||
           session->peer_sha256_valid ==
-              ssl->retain_only_sha256_of_client_certs);
+              hs->config->retain_only_sha256_of_client_certs);
 }
 
 // ssl_lookup_session looks up |session_id| in the session cache and sets
 // |*out_session| to an |SSL_SESSION| object if found.
 static enum ssl_hs_wait_t ssl_lookup_session(
-    SSL *ssl, UniquePtr<SSL_SESSION> *out_session, const uint8_t *session_id,
-    size_t session_id_len) {
+    SSL_HANDSHAKE *hs, UniquePtr<SSL_SESSION> *out_session,
+    const uint8_t *session_id, size_t session_id_len) {
+  SSL *const ssl = hs->ssl;
   out_session->reset();
 
   if (session_id_len == 0 || session_id_len > SSL_MAX_SSL_SESSION_ID_LENGTH) {
@@ -720,13 +724,13 @@ static enum ssl_hs_wait_t ssl_lookup_session(
   return ssl_hs_ok;
 }
 
-enum ssl_hs_wait_t ssl_get_prev_session(SSL *ssl,
+enum ssl_hs_wait_t ssl_get_prev_session(SSL_HANDSHAKE *hs,
                                         UniquePtr<SSL_SESSION> *out_session,
                                         bool *out_tickets_supported,
                                         bool *out_renew_ticket,
                                         const SSL_CLIENT_HELLO *client_hello) {
   // This is used only by servers.
-  assert(ssl->server);
+  assert(hs->ssl->server);
   UniquePtr<SSL_SESSION> session;
   bool renew_ticket = false;
 
@@ -734,12 +738,12 @@ enum ssl_hs_wait_t ssl_get_prev_session(SSL *ssl,
   const uint8_t *ticket = NULL;
   size_t ticket_len = 0;
   const bool tickets_supported =
-      !(SSL_get_options(ssl) & SSL_OP_NO_TICKET) &&
-      ssl->version > SSL3_VERSION &&
+      !(SSL_get_options(hs->ssl) & SSL_OP_NO_TICKET) &&
+      hs->ssl->version > SSL3_VERSION &&
       SSL_early_callback_ctx_extension_get(
           client_hello, TLSEXT_TYPE_session_ticket, &ticket, &ticket_len);
   if (tickets_supported && ticket_len > 0) {
-    switch (ssl_process_ticket(ssl, &session, &renew_ticket, ticket, ticket_len,
+    switch (ssl_process_ticket(hs, &session, &renew_ticket, ticket, ticket_len,
                                client_hello->session_id,
                                client_hello->session_id_len)) {
       case ssl_ticket_aead_success:
@@ -755,7 +759,7 @@ enum ssl_hs_wait_t ssl_get_prev_session(SSL *ssl,
   } else {
     // The client didn't send a ticket, so the session ID is a real ID.
     enum ssl_hs_wait_t lookup_ret = ssl_lookup_session(
-        ssl, &session, client_hello->session_id, client_hello->session_id_len);
+        hs, &session, client_hello->session_id, client_hello->session_id_len);
     if (lookup_ret != ssl_hs_ok) {
       return lookup_ret;
     }

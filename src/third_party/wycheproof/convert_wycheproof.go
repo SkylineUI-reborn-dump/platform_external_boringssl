@@ -192,6 +192,9 @@ func convertWycheproof(jsonPath, txtPath string) error {
 			if curve, ok := test["curve"]; ok && !isSupportedCurve(curve.(string)) {
 				continue
 			}
+			if _, err := fmt.Fprintf(f, "# tcId = %d\n", int(test["tcId"].(float64))); err != nil {
+				return err
+			}
 			if comment, ok := test["comment"]; ok && len(comment.(string)) != 0 {
 				if err := printComment(f, comment.(string)); err != nil {
 					return err
@@ -224,7 +227,12 @@ func convertWycheproof(jsonPath, txtPath string) error {
 
 func main() {
 	jsonPaths := []string{
+		"aes_cbc_pkcs5_test.json",
+		"aes_gcm_siv_test.json",
+		"aes_gcm_test.json",
+		"chacha20_poly1305_test.json",
 		"dsa_test.json",
+		"ecdh_test.json",
 		"ecdsa_secp224r1_sha224_test.json",
 		"ecdsa_secp224r1_sha256_test.json",
 		"ecdsa_secp256r1_sha256_test.json",
@@ -232,15 +240,9 @@ func main() {
 		"ecdsa_secp384r1_sha512_test.json",
 		"ecdsa_secp521r1_sha512_test.json",
 		"eddsa_test.json",
+		"kw_test.json",
 		"rsa_signature_test.json",
 		"x25519_test.json",
-
-		// TODO(davidben): The following tests still need test drivers.
-		// "aes_cbc_pkcs5_test.json",
-		// "aes_gcm_siv_test.json",
-		// "aes_gcm_test.json",
-		// "chacha20_poly1305_test.json",
-		// "ecdh_test.json",
 	}
 	for _, jsonPath := range jsonPaths {
 		if !strings.HasSuffix(jsonPath, ".json") {
