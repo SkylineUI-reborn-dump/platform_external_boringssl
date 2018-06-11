@@ -375,7 +375,8 @@ func (hs *serverHandshakeState) doTLS13Handshake() error {
 		sessionId:             hs.clientHello.sessionId,
 		compressionMethod:     config.Bugs.SendCompressionMethod,
 		versOverride:          config.Bugs.SendServerHelloVersion,
-		supportedVersOverride: config.Bugs.SendServerSupportedExtensionVersion,
+		supportedVersOverride: config.Bugs.SendServerSupportedVersionExtension,
+		omitSupportedVers:     config.Bugs.OmitServerSupportedVersionExtension,
 		customExtension:       config.Bugs.CustomUnencryptedExtension,
 		unencryptedALPN:       config.Bugs.SendUnencryptedALPN,
 	}
@@ -833,7 +834,7 @@ ResendHelloRetryRequest:
 		if config.ClientAuth >= RequestClientCert {
 			// Request a client certificate
 			certReq := &certificateRequestMsg{
-				vers: c.wireVersion,
+				vers:                  c.wireVersion,
 				hasSignatureAlgorithm: !config.Bugs.OmitCertificateRequestAlgorithms,
 				hasRequestContext:     true,
 				requestContext:        config.Bugs.SendRequestContext,
@@ -1122,7 +1123,7 @@ func (hs *serverHandshakeState) processClientHello() (isResume bool, err error) 
 		versOverride:      config.Bugs.SendServerHelloVersion,
 		compressionMethod: config.Bugs.SendCompressionMethod,
 		extensions: serverExtensions{
-			supportedVersion: config.Bugs.SendServerSupportedExtensionVersion,
+			supportedVersion: config.Bugs.SendServerSupportedVersionExtension,
 		},
 		omitExtensions:  config.Bugs.OmitExtensions,
 		emptyExtensions: config.Bugs.EmptyExtensions,

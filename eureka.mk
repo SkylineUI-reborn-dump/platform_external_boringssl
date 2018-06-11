@@ -64,6 +64,7 @@ crypto_sources := \
   src/crypto/bytestring/ber.c\
   src/crypto/bytestring/cbb.c\
   src/crypto/bytestring/cbs.c\
+  src/crypto/bytestring/unicode.c\
   src/crypto/chacha/chacha.c\
   src/crypto/cipher_extra/cipher_extra.c\
   src/crypto/cipher_extra/derive_key.c\
@@ -148,6 +149,7 @@ crypto_sources := \
   src/crypto/refcount_c11.c\
   src/crypto/refcount_lock.c\
   src/crypto/rsa_extra/rsa_asn1.c\
+  src/crypto/rsa_extra/rsa_print.c\
   src/crypto/stack/stack.c\
   src/crypto/thread.c\
   src/crypto/thread_none.c\
@@ -224,6 +226,7 @@ crypto_sources := \
   src/crypto/x509v3/v3_int.c\
   src/crypto/x509v3/v3_lib.c\
   src/crypto/x509v3/v3_ncons.c\
+  src/crypto/x509v3/v3_ocsp.c\
   src/crypto/x509v3/v3_pci.c\
   src/crypto/x509v3/v3_pcia.c\
   src/crypto/x509v3/v3_pcons.c\

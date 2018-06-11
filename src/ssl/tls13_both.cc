@@ -123,7 +123,7 @@ int tls13_process_certificate(SSL_HANDSHAKE *hs, const SSLMessage &msg,
   }
 
   const bool retain_sha256 =
-      ssl->server && ssl->retain_only_sha256_of_client_certs;
+      ssl->server && hs->config->retain_only_sha256_of_client_certs;
   UniquePtr<EVP_PKEY> pkey;
   while (CBS_len(&certificate_list) > 0) {
     CBS certificate, extensions;
@@ -184,7 +184,7 @@ int tls13_process_certificate(SSL_HANDSHAKE *hs, const SSLMessage &msg,
     // All Certificate extensions are parsed, but only the leaf extensions are
     // stored.
     if (have_status_request) {
-      if (ssl->server || !ssl->ocsp_stapling_enabled) {
+      if (ssl->server || !hs->config->ocsp_stapling_enabled) {
         OPENSSL_PUT_ERROR(SSL, SSL_R_UNEXPECTED_EXTENSION);
         ssl_send_alert(ssl, SSL3_AL_FATAL, SSL_AD_UNSUPPORTED_EXTENSION);
         return 0;
@@ -213,7 +213,7 @@ int tls13_process_certificate(SSL_HANDSHAKE *hs, const SSLMessage &msg,
     }
 
     if (have_sct) {
-      if (ssl->server || !ssl->signed_cert_timestamps_enabled) {
+      if (ssl->server || !hs->config->signed_cert_timestamps_enabled) {
         OPENSSL_PUT_ERROR(SSL, SSL_R_UNEXPECTED_EXTENSION);
         ssl_send_alert(ssl, SSL3_AL_FATAL, SSL_AD_UNSUPPORTED_EXTENSION);
         return 0;
@@ -353,21 +353,34 @@ int tls13_process_finished(SSL_HANDSHAKE *hs, const SSLMessage &msg,
 
 int tls13_add_certificate(SSL_HANDSHAKE *hs) {
   SSL *const ssl = hs->ssl;
+  CERT *const cert = hs->config->cert;
+
   ScopedCBB cbb;
-  CBB body, certificate_list;
-  if (!ssl->method->init_message(ssl, cbb.get(), &body, SSL3_MT_CERTIFICATE) ||
-      // The request context is always empty in the handshake.
-      !CBB_add_u8(&body, 0) ||
-      !CBB_add_u24_length_prefixed(&body, &certificate_list)) {
+  CBB *body, body_storage, certificate_list;
+
+  if (hs->cert_compression_negotiated) {
+    if (!CBB_init(cbb.get(), 1024)) {
+      return false;
+    }
+    body = cbb.get();
+  } else {
+    body = &body_storage;
+    if (!ssl->method->init_message(ssl, cbb.get(), body, SSL3_MT_CERTIFICATE)) {
+      return false;
+    }
+  }
+
+  if (// The request context is always empty in the handshake.
+      !CBB_add_u8(body, 0) ||
+      !CBB_add_u24_length_prefixed(body, &certificate_list)) {
     OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
     return 0;
   }
 
-  if (!ssl_has_certificate(ssl)) {
+  if (!ssl_has_certificate(hs->config)) {
     return ssl_add_message_cbb(ssl, cbb.get());
   }
 
-  CERT *cert = ssl->cert;
   CRYPTO_BUFFER *leaf_buf = sk_CRYPTO_BUFFER_value(cert->chain.get(), 0);
   CBB leaf, extensions;
   if (!CBB_add_u24_length_prefixed(&certificate_list, &leaf) ||
@@ -378,30 +391,29 @@ int tls13_add_certificate(SSL_HANDSHAKE *hs) {
     return 0;
   }
 
-  if (hs->scts_requested && ssl->cert->signed_cert_timestamp_list != nullptr) {
+  if (hs->scts_requested && cert->signed_cert_timestamp_list != nullptr) {
     CBB contents;
     if (!CBB_add_u16(&extensions, TLSEXT_TYPE_certificate_timestamp) ||
         !CBB_add_u16_length_prefixed(&extensions, &contents) ||
         !CBB_add_bytes(
             &contents,
-            CRYPTO_BUFFER_data(ssl->cert->signed_cert_timestamp_list.get()),
-            CRYPTO_BUFFER_len(ssl->cert->signed_cert_timestamp_list.get())) ||
+            CRYPTO_BUFFER_data(cert->signed_cert_timestamp_list.get()),
+            CRYPTO_BUFFER_len(cert->signed_cert_timestamp_list.get())) ||
         !CBB_flush(&extensions)) {
       OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
       return 0;
     }
   }
 
-  if (hs->ocsp_stapling_requested &&
-      ssl->cert->ocsp_response != NULL) {
+  if (hs->ocsp_stapling_requested && cert->ocsp_response != NULL) {
     CBB contents, ocsp_response;
     if (!CBB_add_u16(&extensions, TLSEXT_TYPE_status_request) ||
         !CBB_add_u16_length_prefixed(&extensions, &contents) ||
         !CBB_add_u8(&contents, TLSEXT_STATUSTYPE_ocsp) ||
         !CBB_add_u24_length_prefixed(&contents, &ocsp_response) ||
         !CBB_add_bytes(&ocsp_response,
-                       CRYPTO_BUFFER_data(ssl->cert->ocsp_response.get()),
-                       CRYPTO_BUFFER_len(ssl->cert->ocsp_response.get())) ||
+                       CRYPTO_BUFFER_data(cert->ocsp_response.get()),
+                       CRYPTO_BUFFER_len(cert->ocsp_response.get())) ||
         !CBB_flush(&extensions)) {
       OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
       return 0;
@@ -420,7 +432,43 @@ int tls13_add_certificate(SSL_HANDSHAKE *hs) {
     }
   }
 
-  return ssl_add_message_cbb(ssl, cbb.get());
+  if (!hs->cert_compression_negotiated) {
+    return ssl_add_message_cbb(ssl, cbb.get());
+  }
+
+  Array<uint8_t> msg;
+  if (!CBBFinishArray(cbb.get(), &msg)) {
+    OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
+    return 0;
+  }
+
+  const CertCompressionAlg *alg = nullptr;
+  for (CertCompressionAlg *candidate : ssl->ctx->cert_compression_algs) {
+    if (candidate->alg_id == hs->cert_compression_alg_id) {
+      alg = candidate;
+      break;
+    }
+  }
+
+  if (alg == nullptr || alg->compress == nullptr) {
+    OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
+    return 0;
+  }
+
+  CBB compressed;
+  body = &body_storage;
+  if (!ssl->method->init_message(ssl, cbb.get(), body,
+                                 SSL3_MT_COMPRESSED_CERTIFICATE) ||
+      !CBB_add_u16(body, hs->cert_compression_alg_id) ||
+      !CBB_add_u24(body, msg.size()) ||
+      !CBB_add_u24_length_prefixed(body, &compressed) ||
+      !alg->compress(ssl, &compressed, msg) ||
+      !ssl_add_message_cbb(ssl, cbb.get())) {
+    OPENSSL_PUT_ERROR(SSL, ERR_R_INTERNAL_ERROR);
+    return 0;
+  }
+
+  return 1;
 }
 
 enum ssl_private_key_result_t tls13_add_certificate_verify(SSL_HANDSHAKE *hs) {
