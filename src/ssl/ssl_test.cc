@@ -227,7 +227,7 @@ static const CipherTest kCipherTests[] = {
     {
         // To simplify things, banish all but {ECDHE_RSA,RSA} x
         // {CHACHA20,AES_256_CBC,AES_128_CBC} x SHA1.
-        "!AESGCM:!3DES:!SHA256:!SHA384:"
+        "!AESGCM:!3DES:"
         // Order some ciphers backwards by strength.
         "ALL:-CHACHA20:-AES256:-AES128:-ALL:"
         // Select ECDHE ones and sort them by strength. Ties should resolve
@@ -286,15 +286,15 @@ static const CipherTest kCipherTests[] = {
     },
     // SSLv3 matches everything that existed before TLS 1.2.
     {
-        "AES128-SHA:AES128-SHA256:!SSLv3",
+        "AES128-SHA:ECDHE-RSA-AES128-GCM-SHA256:!SSLv3",
         {
-            {TLS1_CK_RSA_WITH_AES_128_SHA256, 0},
+            {TLS1_CK_ECDHE_RSA_WITH_AES_128_GCM_SHA256, 0},
         },
         false,
     },
     // TLSv1.2 matches everything added in TLS 1.2.
     {
-        "AES128-SHA:AES128-SHA256:!TLSv1.2",
+        "AES128-SHA:ECDHE-RSA-AES128-GCM-SHA256:!TLSv1.2",
         {
             {TLS1_CK_RSA_WITH_AES_128_SHA, 0},
         },
@@ -303,21 +303,21 @@ static const CipherTest kCipherTests[] = {
     // The two directives have no intersection.  But each component is valid, so
     // even in strict mode it is accepted.
     {
-        "AES128-SHA:AES128-SHA256:!TLSv1.2+SSLv3",
+        "AES128-SHA:ECDHE-RSA-AES128-GCM-SHA256:!TLSv1.2+SSLv3",
         {
             {TLS1_CK_RSA_WITH_AES_128_SHA, 0},
-            {TLS1_CK_RSA_WITH_AES_128_SHA256, 0},
+            {TLS1_CK_ECDHE_RSA_WITH_AES_128_GCM_SHA256, 0},
         },
         false,
     },
     // Spaces, semi-colons and commas are separators.
     {
-        "AES128-SHA: AES128-SHA256 AES256-SHA ,AES256-SHA256 ; AES128-GCM-SHA256",
+        "AES128-SHA: ECDHE-RSA-AES128-GCM-SHA256 AES256-SHA ,ECDHE-ECDSA-AES128-GCM-SHA256 ; AES128-GCM-SHA256",
         {
             {TLS1_CK_RSA_WITH_AES_128_SHA, 0},
-            {TLS1_CK_RSA_WITH_AES_128_SHA256, 0},
+            {TLS1_CK_ECDHE_RSA_WITH_AES_128_GCM_SHA256, 0},
             {TLS1_CK_RSA_WITH_AES_256_SHA, 0},
-            {TLS1_CK_RSA_WITH_AES_256_SHA256, 0},
+            {TLS1_CK_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, 0},
             {TLS1_CK_RSA_WITH_AES_128_GCM_SHA256, 0},
         },
         // …but not in strict mode.
@@ -864,22 +864,22 @@ TEST(SSLTest, CipherProperties) {
           NID_md5_sha1,
       },
       {
-          TLS1_CK_ECDHE_RSA_WITH_AES_128_SHA256,
-          "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+          TLS1_CK_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+          "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
           NID_aes_128_cbc,
-          NID_sha256,
+          NID_sha1,
           NID_kx_ecdhe,
           NID_auth_rsa,
-          NID_sha256,
+          NID_md5_sha1,
       },
       {
-          TLS1_CK_ECDHE_RSA_WITH_AES_256_SHA384,
-          "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+          TLS1_CK_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+          "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
           NID_aes_256_cbc,
-          NID_sha384,
+          NID_sha1,
           NID_kx_ecdhe,
           NID_auth_rsa,
-          NID_sha384,
+          NID_md5_sha1,
       },
       {
           TLS1_CK_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
@@ -1538,7 +1538,8 @@ static bool ConnectClientAndServer(bssl::UniquePtr<SSL> *out_client,
                                    bssl::UniquePtr<SSL> *out_server,
                                    SSL_CTX *client_ctx, SSL_CTX *server_ctx,
                                    const ClientConfig &config = ClientConfig(),
-                                   bool do_handshake = true) {
+                                   bool do_handshake = true,
+                                   bool shed_handshake_config = true) {
   bssl::UniquePtr<SSL> client(SSL_new(client_ctx)), server(SSL_new(server_ctx));
   if (!client || !server) {
     return false;
@@ -1561,6 +1562,9 @@ static bool ConnectClientAndServer(bssl::UniquePtr<SSL> *out_client,
   // SSL_set_bio takes ownership.
   SSL_set_bio(client.get(), bio1, bio1);
   SSL_set_bio(server.get(), bio2, bio2);
+
+  SSL_set_shed_handshake_config(client.get(), shed_handshake_config);
+  SSL_set_shed_handshake_config(server.get(), shed_handshake_config);
 
   if (do_handshake && !CompleteHandshakes(client.get(), server.get())) {
     return false;
@@ -1608,7 +1612,8 @@ class SSLVersionTest : public ::testing::TestWithParam<VersionParam> {
 
   bool Connect(const ClientConfig &config = ClientConfig()) {
     return ConnectClientAndServer(&client_, &server_, client_ctx_.get(),
-                                  server_ctx_.get(), config);
+                                  server_ctx_.get(), config, true,
+                                  shed_handshake_config_);
   }
 
   uint16_t version() const { return GetParam().version; }
@@ -1617,6 +1622,7 @@ class SSLVersionTest : public ::testing::TestWithParam<VersionParam> {
     return GetParam().ssl_method == VersionParam::is_dtls;
   }
 
+  bool shed_handshake_config_ = true;
   bssl::UniquePtr<SSL> client_, server_;
   bssl::UniquePtr<SSL_CTX> server_ctx_, client_ctx_;
   bssl::UniquePtr<X509> cert_;
@@ -1943,9 +1949,12 @@ TEST_P(SSLVersionTest, RetainOnlySHA256OfCerts) {
   EXPECT_FALSE(peer);
 
   SSL_SESSION *session = SSL_get_session(server_.get());
-  EXPECT_TRUE(session->peer_sha256_valid);
+  EXPECT_TRUE(SSL_SESSION_has_peer_sha256(session));
 
-  EXPECT_EQ(Bytes(cert_sha256), Bytes(session->peer_sha256));
+  const uint8_t *peer_sha256;
+  size_t peer_sha256_len;
+  SSL_SESSION_get0_peer_sha256(session, &peer_sha256, &peer_sha256_len);
+  EXPECT_EQ(Bytes(cert_sha256), Bytes(peer_sha256, peer_sha256_len));
 }
 
 // Tests that our ClientHellos do not change unexpectedly. These are purely
@@ -1982,14 +1991,13 @@ TEST(SSLTest, ClientHello) {
       0x00, 0x00, 0x23, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x02, 0x01, 0x00, 0x00,
       0x0a, 0x00, 0x08, 0x00, 0x06, 0x00, 0x1d, 0x00, 0x17, 0x00, 0x18}},
     {TLS1_2_VERSION,
-     {0x16, 0x03, 0x01, 0x00, 0x8e, 0x01, 0x00, 0x00, 0x8a, 0x03, 0x03, 0x00,
+     {0x16, 0x03, 0x01, 0x00, 0x82, 0x01, 0x00, 0x00, 0x7e, 0x03, 0x03, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x2a, 0xcc, 0xa9,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1e, 0xcc, 0xa9,
       0xcc, 0xa8, 0xc0, 0x2b, 0xc0, 0x2f, 0xc0, 0x2c, 0xc0, 0x30, 0xc0, 0x09,
-      0xc0, 0x23, 0xc0, 0x13, 0xc0, 0x27, 0xc0, 0x0a, 0xc0, 0x24, 0xc0, 0x14,
-      0xc0, 0x28, 0x00, 0x9c, 0x00, 0x9d, 0x00, 0x2f, 0x00, 0x3c, 0x00, 0x35,
-      0x00, 0x3d, 0x00, 0x0a, 0x01, 0x00, 0x00, 0x37, 0xff, 0x01, 0x00, 0x01,
+      0xc0, 0x13, 0xc0, 0x0a, 0xc0, 0x14, 0x00, 0x9c, 0x00, 0x9d, 0x00, 0x2f,
+      0x00, 0x35, 0x00, 0x0a, 0x01, 0x00, 0x00, 0x37, 0xff, 0x01, 0x00, 0x01,
       0x00, 0x00, 0x17, 0x00, 0x00, 0x00, 0x23, 0x00, 0x00, 0x00, 0x0d, 0x00,
       0x14, 0x00, 0x12, 0x04, 0x03, 0x08, 0x04, 0x04, 0x01, 0x05, 0x03, 0x08,
       0x05, 0x05, 0x01, 0x08, 0x06, 0x06, 0x01, 0x02, 0x01, 0x00, 0x0b, 0x00,
@@ -2729,6 +2737,7 @@ TEST_P(SSLVersionTest, SSLClearSessionResumption) {
     return;
   }
 
+  shed_handshake_config_ = false;
   ASSERT_TRUE(Connect());
 
   EXPECT_FALSE(SSL_session_reused(client_.get()));
@@ -2744,6 +2753,25 @@ TEST_P(SSLVersionTest, SSLClearSessionResumption) {
   // |SSL_clear| should implicitly offer the previous session to the server.
   EXPECT_TRUE(SSL_session_reused(client_.get()));
   EXPECT_TRUE(SSL_session_reused(server_.get()));
+}
+
+TEST_P(SSLVersionTest, SSLClearFailsWithShedding) {
+  shed_handshake_config_ = false;
+  ASSERT_TRUE(Connect());
+  ASSERT_TRUE(CompleteHandshakes(client_.get(), server_.get()));
+
+  // Reset everything.
+  ASSERT_TRUE(SSL_clear(client_.get()));
+  ASSERT_TRUE(SSL_clear(server_.get()));
+
+  // Now enable shedding, and connect a second time.
+  shed_handshake_config_ = true;
+  ASSERT_TRUE(Connect());
+  ASSERT_TRUE(CompleteHandshakes(client_.get(), server_.get()));
+
+  // |SSL_clear| should now fail.
+  ASSERT_FALSE(SSL_clear(client_.get()));
+  ASSERT_FALSE(SSL_clear(server_.get()));
 }
 
 static bool ChainsEqual(STACK_OF(X509) * chain,
@@ -3265,7 +3293,7 @@ TEST(SSLTest, ClientCABuffers) {
   SSL_CTX_set_cert_cb(
       client_ctx.get(),
       [](SSL *ssl, void *arg) -> int {
-        STACK_OF(CRYPTO_BUFFER) *peer_names =
+        const STACK_OF(CRYPTO_BUFFER) *peer_names =
             SSL_get0_server_requested_CAs(ssl);
         EXPECT_EQ(1u, sk_CRYPTO_BUFFER_num(peer_names));
         CRYPTO_BUFFER *peer_name = sk_CRYPTO_BUFFER_value(peer_names, 0);
@@ -3924,6 +3952,67 @@ TEST(SSLTest, SignatureAlgorithmProperties) {
   EXPECT_EQ(EVP_sha384(),
             SSL_get_signature_algorithm_digest(SSL_SIGN_RSA_PSS_RSAE_SHA384));
   EXPECT_TRUE(SSL_is_signature_algorithm_rsa_pss(SSL_SIGN_RSA_PSS_RSAE_SHA384));
+}
+
+static bool XORCompressFunc(SSL *ssl, CBB *out, Span<const uint8_t> in) {
+  for (size_t i = 0; i < in.size(); i++) {
+    if (!CBB_add_u8(out, in[i] ^ 0x55)) {
+      return false;
+    }
+  }
+
+  SSL_set_app_data(ssl, XORCompressFunc);
+
+  return true;
+}
+
+static bool XORDecompressFunc(SSL *ssl, bssl::UniquePtr<CRYPTO_BUFFER> *out,
+                              size_t uncompressed_len, Span<const uint8_t> in) {
+  if (in.size() != uncompressed_len) {
+    return false;
+  }
+
+  uint8_t *data;
+  out->reset(CRYPTO_BUFFER_alloc(&data, uncompressed_len));
+  if (out->get() == nullptr) {
+    return false;
+  }
+
+  for (size_t i = 0; i < in.size(); i++) {
+    data[i] = in[i] ^ 0x55;
+  }
+
+  SSL_set_app_data(ssl, XORDecompressFunc);
+
+  return true;
+}
+
+TEST(SSLTest, CertCompression) {
+  bssl::UniquePtr<SSL_CTX> client_ctx(SSL_CTX_new(TLS_method()));
+  bssl::UniquePtr<SSL_CTX> server_ctx(SSL_CTX_new(TLS_method()));
+  ASSERT_TRUE(client_ctx);
+  ASSERT_TRUE(server_ctx);
+
+  bssl::UniquePtr<X509> cert = GetTestCertificate();
+  bssl::UniquePtr<EVP_PKEY> key = GetTestKey();
+  ASSERT_TRUE(cert);
+  ASSERT_TRUE(key);
+  ASSERT_TRUE(SSL_CTX_use_certificate(server_ctx.get(), cert.get()));
+  ASSERT_TRUE(SSL_CTX_use_PrivateKey(server_ctx.get(), key.get()));
+
+  ASSERT_TRUE(SSL_CTX_set_max_proto_version(client_ctx.get(), TLS1_3_VERSION));
+  ASSERT_TRUE(SSL_CTX_set_max_proto_version(server_ctx.get(), TLS1_3_VERSION));
+  ASSERT_TRUE(SSL_CTX_add_cert_compression_alg(
+      client_ctx.get(), 0x1234, XORCompressFunc, XORDecompressFunc));
+  ASSERT_TRUE(SSL_CTX_add_cert_compression_alg(
+      server_ctx.get(), 0x1234, XORCompressFunc, XORDecompressFunc));
+
+  bssl::UniquePtr<SSL> client, server;
+  ASSERT_TRUE(ConnectClientAndServer(&client, &server, client_ctx.get(),
+                                     server_ctx.get()));
+
+  EXPECT_TRUE(SSL_get_app_data(client.get()) == XORDecompressFunc);
+  EXPECT_TRUE(SSL_get_app_data(server.get()) == XORCompressFunc);
 }
 
 void MoveBIOs(SSL *dest, SSL *src) {

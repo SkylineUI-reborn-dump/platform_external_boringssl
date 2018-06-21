@@ -243,6 +243,10 @@ OPENSSL_EXPORT const EVP_CIPHER *EVP_CIPHER_CTX_cipher(
 // configured.
 OPENSSL_EXPORT int EVP_CIPHER_CTX_nid(const EVP_CIPHER_CTX *ctx);
 
+// EVP_CIPHER_CTX_encrypting returns one if |ctx| is configured for encryption
+// and zero otherwise.
+OPENSSL_EXPORT int EVP_CIPHER_CTX_encrypting(const EVP_CIPHER_CTX *ctx);
+
 // EVP_CIPHER_CTX_block_size returns the block size, in bytes, of the cipher
 // underlying |ctx|, or one if the cipher is a stream cipher. It will crash if
 // no cipher has been configured.
@@ -413,6 +417,7 @@ OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_192_ecb(void);
 OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_192_cbc(void);
 OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_192_ctr(void);
 OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_192_gcm(void);
+OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_192_ofb(void);
 
 // EVP_aes_128_cfb128 is only available in decrepit.
 OPENSSL_EXPORT const EVP_CIPHER *EVP_aes_128_cfb128(void);
