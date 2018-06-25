@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "611558c2_23399396",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2018-06-25T23:31:27Z",
+      "side": 1,
+      "message": "It occurs to me this is also a little off, though probably fine for now. If an STL type crosses a shared library API boundary, using a statically-linked libc++ is a little off. This is pretty much moot right now, since BoringSSL does not depend on the C++ runtime yet, though this might change. And I guess the STL is sufficiently uninteresting that passing types between two copies of the same STL is actually just fine. So I\u0027m tempted to leave this as-is for now, and wrestle with this more in the future.\n\nThe trigger is https://boringssl.googlesource.com/boringssl/+/a307cb7d5867924a34f69995b457d00db0783ad0 tests the waters of putting the STL in BoringSSL\u0027s API boundary. (+agl)\n\nThoughts?\n\nPS: Whyyyyyy must you all have so many STLs in Android?? :-(",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
