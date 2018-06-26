@@ -22,6 +22,30 @@
       "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ca4789_0e79567e",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1042885
+      },
+      "writtenOn": "2018-06-26T15:03:46Z",
+      "side": 1,
+      "message": "\u003e It occurs to me this is also a little off, though probably fine for now. If an STL type crosses a shared library API boundary, using a statically-linked libc++ is a little off. This is pretty much moot right now, since BoringSSL does not depend on the C++ runtime yet, though this might change. And I guess the STL is sufficiently uninteresting that passing types between two copies of the same STL is actually just fine. So I\u0027m tempted to leave this as-is for now, and wrestle with this more in the future.\n\nSeems reasonable.  I don\u0027t know enough about the pitfalls here to have a lot of confidence, but what you say makes sense to me.\n\n\u003e PS: Whyyyyyy must you all have so many STLs in Android?? :-(\n\nI think it basically boils down to libc++ (static/shared) plus a bunch of legacy crap that we can\u0027t yet get rid of.",
+      "parentUuid": "611558c2_23399396",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
