@@ -46,6 +46,30 @@
       "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9195c2a_1e4f85ca",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2018-06-26T15:46:48Z",
+      "side": 1,
+      "message": "You also get a different STL if you specify an sdk_version vs not specifying one. That was the immediate issue here.\n\nDo you know when one is expected to use the static vs shared one? Also why is the NDK one different from the usual one? We\u0027re interested in (eventually) taking the C++ Chromium certificate verifier and pulling it into BoringSSL, probably as a separate target initially. We\u0027re likely to try to get Conscrypt to use that code over the basically unmaintained crypto/x509 at some point.\n\nThat verifier will almost certainly depend on Abseil and expose its types (absl::optional, absl::span, etc) in the public API. Abseil is fun because it will require that everyone touching it be built against the same STL and the same C++ version. This is fine for Chromium and the internal repository, but I gather Android is a bit more... varied.",
+      "parentUuid": "d5ca4789_0e79567e",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
