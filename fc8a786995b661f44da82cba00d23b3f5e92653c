@@ -70,6 +70,30 @@
       "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71ab2cde_c432c04c",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1043845
+      },
+      "writtenOn": "2018-06-27T20:48:52Z",
+      "side": 1,
+      "message": "tl;dr probably shouldn\u0027t use libc++_static\n\nLike David points out, using the static STL can lead to problems if it\u0027s linked more than once. It can lead to really messy errors in some cases and should be avoided (singletons suddenly aren\u0027t so singular, global data might get double initialized, if the linker leaves two copies of a global only one of them might be initialized but the uninitialized might be used elsewhere, etc). It violates the one-definition-rule and that\u0027s undefined behavior, so it can cause undefined pain.\n\n\u003e PS: Whyyyyyy must you all have so many STLs in Android?? :-(\n\nWe don\u0027t. The platform supports only libc++. We used to have a bunch because there were three bad choices with different tradeoffs. The NDK still has the old STLs until r18 (releasing sometime next quarter) and they\u0027re deprecated in r17, but they are not accessible from the platform even when using sdk_version.\n\n\u003e Also why is the NDK one different from the usual one?\n\nSince the one installed to /system/lib is set it stone the moment it ships, it needs to be kept isolated from apps since the two might have divergent ABIs in the future. Platform symbols are std::__1::basic_string, NDK symbols are std::__ndk1::basic_string to keep these separate.",
+      "parentUuid": "d9195c2a_1e4f85ca",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
