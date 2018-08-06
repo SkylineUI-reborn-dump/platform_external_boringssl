@@ -151,6 +151,8 @@ elseif(MSVC)
       "C4820" # 'bytes' bytes padding added after construct 'member_name'
       "C5026" # move constructor was implicitly defined as deleted
       "C5027" # move assignment operator was implicitly defined as deleted
+      "C5045" # Compiler will insert Spectre mitigation for memory load if
+              # /Qspectre switch specified
       )
   set(MSVC_LEVEL4_WARNINGS_LIST
       # See https://connect.microsoft.com/VisualStudio/feedback/details/1217660/warning-c4265-when-using-functional-header
@@ -170,8 +172,11 @@ if(WIN32)
   add_definitions(-DNOMINMAX)
   # Allow use of fopen.
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-  # VS 2017 and higher supports STL-only warning suppressions.
-  add_definitions("-D_STL_EXTRA_DISABLED_WARNINGS=4774 4987")
+  # VS 2017 and higher supports STL-only warning suppressions. Manually add to
+  # C++ only to work around a CMake quoting bug when using NASM with the Visual
+  # Studio generator. This will be fixed in CMake 3.13.0. See
+  # https://gitlab.kitware.com/cmake/cmake/merge_requests/2179
+  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-D_STL_EXTRA_DISABLED_WARNINGS=4774\ 4987>)
 endif()
 
 if((CMAKE_COMPILER_IS_GNUCXX AND CMAKE_C_COMPILER_VERSION VERSION_GREATER "4.7.99") OR
@@ -208,7 +213,7 @@ if(FUZZ)
 
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize-coverage=edge,indirect-calls,trace-pc-guard")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-coverage=edge,indirect-calls,trace-pc-guard")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
   link_directories(.)
 endif()
 
@@ -261,6 +266,16 @@ if(CFI)
   # -flto causes object files to contain LLVM bitcode. Mixing those with
   # assembly output in the same static library breaks the linker.
   set(OPENSSL_NO_ASM "1")
+endif()
+
+if(TSAN)
+  if(NOT CLANG)
+    message(FATAL_ERROR "Cannot enable TSAN unless using Clang")
+  endif()
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=thread")
 endif()
 
 if (GCOV)
@@ -399,5 +414,5 @@ add_custom_target(
             ${GO_EXECUTABLE} test -shim-path $<TARGET_FILE:bssl_shim>
               ${RUNNER_ARGS}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    DEPENDS all_tests bssl_shim
+    DEPENDS all_tests bssl_shim handshaker
     ${MAYBE_USES_TERMINAL})
