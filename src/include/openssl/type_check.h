@@ -64,19 +64,19 @@ extern "C" {
 #endif
 
 
-// This header file contains some common macros for enforcing type checking.
-// Several, common OpenSSL structures (i.e. stack and lhash) operate on void
-// pointers, but we wish to have type checking when they are used with a
-// specific type.
-
-// CHECKED_CAST casts |p| from type |from| to type |to|.
-#define CHECKED_CAST(to, from, p) ((to) (1 ? (p) : (from)0))
-
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-#define OPENSSL_COMPILE_ASSERT(cond, msg) _Static_assert(cond, #msg)
+// TODO(davidben): |OPENSSL_COMPILE_ASSERT| used to be implemented with a
+// typedef, so the |msg| parameter is a token. It now requires C11 or C++11
+// static asserts. If this change survives to 2018-11-05, switch the parameter
+// to a string. (Maybe rename to |OPENSSL_STATIC_ASSERT| while we're at it.)
+#if defined(__cplusplus) || (defined(_MSC_VER) && !defined(__clang__))
+// In C++ and non-clang MSVC, |static_assert| is a keyword.
+#define OPENSSL_COMPILE_ASSERT(cond, msg) static_assert(cond, #msg)
 #else
-#define OPENSSL_COMPILE_ASSERT(cond, msg) \
-  typedef char OPENSSL_COMPILE_ASSERT_##msg[((cond) ? 1 : -1)] OPENSSL_UNUSED
+// C11 defines the |_Static_assert| keyword and the |static_assert| macro in
+// assert.h. While the former is available at all versions in Clang and GCC, the
+// later depends on libc and, in glibc, depends on being built in C11 mode. We
+// do not require this, for now, so use |_Static_assert| directly.
+#define OPENSSL_COMPILE_ASSERT(cond, msg) _Static_assert(cond, #msg)
 #endif
 
 
