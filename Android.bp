@@ -70,6 +70,9 @@ cc_defaults {
         host: {
             host_ldlibs: ["-lpthread"],
         },
+        linux_bionic: {
+            enabled: true,
+        },
     },
 
     local_include_dirs: ["src/crypto"],
