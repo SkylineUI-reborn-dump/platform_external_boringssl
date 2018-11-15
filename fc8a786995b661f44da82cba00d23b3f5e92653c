@@ -118,6 +118,30 @@
       "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8f3d18_b2a15e3e",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1043845
+      },
+      "writtenOn": "2018-11-15T19:34:32Z",
+      "side": 1,
+      "message": "Does this module need to run on old devices? Part of building with the NDK means statically linking a support library for libc++ because pre-21 bionic didn\u0027t have the APIs libc++ needed. I just filed http://b/119587551 to track getting the platform up to a newer NDK so this library at least is only used pre-21, but since this module builds for 9 it won\u0027t make a difference.",
+      "parentUuid": "4e45ed8f_cc704724",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
