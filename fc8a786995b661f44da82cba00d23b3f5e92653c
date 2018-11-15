@@ -94,6 +94,30 @@
       "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e45ed8f_cc704724",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1273909
+      },
+      "writtenOn": "2018-11-15T04:39:04Z",
+      "side": 1,
+      "message": "Probably relevant to this discussion: we\u0027re statically linking libcrypto + libssl into libnetd_resolv, which is a mainline module.\n\nAt this time, we\u0027re also statically linking libc++ because there\u0027s no guaranteed ABI stability guarantee across the system-mainline boundary. This increases our binary size by 800KB and our runtime footprint by ~462KB.",
+      "parentUuid": "71ab2cde_c432c04c",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 31
+      },
+      "revId": "fc8a786995b661f44da82cba00d23b3f5e92653c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
