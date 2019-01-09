@@ -91,6 +91,7 @@ cc_library {
     vendor_available: true,
     vndk: {
         enabled: true,
+        must_use_vendor_variant: true,
     },
     recovery_available: true,
     defaults: ["libcrypto_sources", "libcrypto_defaults", "boringssl_defaults", "boringssl_flags"],
@@ -158,6 +159,7 @@ cc_library {
     vendor_available: true,
     vndk: {
         enabled: true,
+        must_use_vendor_variant: true,
     },
     host_supported: true,
     defaults: ["libssl_sources", "boringssl_defaults", "boringssl_flags"],
