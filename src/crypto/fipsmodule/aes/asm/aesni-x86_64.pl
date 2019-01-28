@@ -274,6 +274,13 @@ $code.=<<___;
 .type	${PREFIX}_encrypt,\@abi-omnipotent
 .align	16
 ${PREFIX}_encrypt:
+.cfi_startproc
+#ifndef NDEBUG
+#ifndef BORINGSSL_FIPS
+.extern	BORINGSSL_function_hit
+	movb \$1,BORINGSSL_function_hit+1(%rip)
+#endif
+#endif
 	movups	($inp),$inout0		# load input
 	mov	240($key),$rounds	# key->rounds
 ___
@@ -284,12 +291,14 @@ $code.=<<___;
 	movups	$inout0,($out)		# output
 	 pxor	$inout0,$inout0
 	ret
+.cfi_endproc
 .size	${PREFIX}_encrypt,.-${PREFIX}_encrypt
 
 .globl	${PREFIX}_decrypt
 .type	${PREFIX}_decrypt,\@abi-omnipotent
 .align	16
 ${PREFIX}_decrypt:
+.cfi_startproc
 	movups	($inp),$inout0		# load input
 	mov	240($key),$rounds	# key->rounds
 ___
@@ -300,6 +309,7 @@ $code.=<<___;
 	movups	$inout0,($out)		# output
 	 pxor	$inout0,$inout0
 	ret
+.cfi_endproc
 .size	${PREFIX}_decrypt, .-${PREFIX}_decrypt
 ___
 }
@@ -325,6 +335,7 @@ $code.=<<___;
 .type	_aesni_${dir}rypt2,\@abi-omnipotent
 .align	16
 _aesni_${dir}rypt2:
+.cfi_startproc
 	$movkey	($key),$rndkey0
 	shl	\$4,$rounds
 	$movkey	16($key),$rndkey1
@@ -350,6 +361,7 @@ _aesni_${dir}rypt2:
 	aes${dir}last	$rndkey0,$inout0
 	aes${dir}last	$rndkey0,$inout1
 	ret
+.cfi_endproc
 .size	_aesni_${dir}rypt2,.-_aesni_${dir}rypt2
 ___
 }
@@ -361,6 +373,7 @@ $code.=<<___;
 .type	_aesni_${dir}rypt3,\@abi-omnipotent
 .align	16
 _aesni_${dir}rypt3:
+.cfi_startproc
 	$movkey	($key),$rndkey0
 	shl	\$4,$rounds
 	$movkey	16($key),$rndkey1
@@ -391,6 +404,7 @@ _aesni_${dir}rypt3:
 	aes${dir}last	$rndkey0,$inout1
 	aes${dir}last	$rndkey0,$inout2
 	ret
+.cfi_endproc
 .size	_aesni_${dir}rypt3,.-_aesni_${dir}rypt3
 ___
 }
@@ -406,6 +420,7 @@ $code.=<<___;
 .type	_aesni_${dir}rypt4,\@abi-omnipotent
 .align	16
 _aesni_${dir}rypt4:
+.cfi_startproc
 	$movkey	($key),$rndkey0
 	shl	\$4,$rounds
 	$movkey	16($key),$rndkey1
@@ -442,6 +457,7 @@ _aesni_${dir}rypt4:
 	aes${dir}last	$rndkey0,$inout2
 	aes${dir}last	$rndkey0,$inout3
 	ret
+.cfi_endproc
 .size	_aesni_${dir}rypt4,.-_aesni_${dir}rypt4
 ___
 }
@@ -453,6 +469,7 @@ $code.=<<___;
 .type	_aesni_${dir}rypt6,\@abi-omnipotent
 .align	16
 _aesni_${dir}rypt6:
+.cfi_startproc
 	$movkey		($key),$rndkey0
 	shl		\$4,$rounds
 	$movkey		16($key),$rndkey1
@@ -503,6 +520,7 @@ _aesni_${dir}rypt6:
 	aes${dir}last	$rndkey0,$inout4
 	aes${dir}last	$rndkey0,$inout5
 	ret
+.cfi_endproc
 .size	_aesni_${dir}rypt6,.-_aesni_${dir}rypt6
 ___
 }
@@ -514,6 +532,7 @@ $code.=<<___;
 .type	_aesni_${dir}rypt8,\@abi-omnipotent
 .align	16
 _aesni_${dir}rypt8:
+.cfi_startproc
 	$movkey		($key),$rndkey0
 	shl		\$4,$rounds
 	$movkey		16($key),$rndkey1
@@ -574,6 +593,7 @@ _aesni_${dir}rypt8:
 	aes${dir}last	$rndkey0,$inout6
 	aes${dir}last	$rndkey0,$inout7
 	ret
+.cfi_endproc
 .size	_aesni_${dir}rypt8,.-_aesni_${dir}rypt8
 ___
 }
@@ -598,6 +618,7 @@ $code.=<<___;
 .type	${PREFIX}_ecb_encrypt,\@function,5
 .align	16
 ${PREFIX}_ecb_encrypt:
+.cfi_startproc
 ___
 $code.=<<___ if ($win64);
 	lea	-0x58(%rsp),%rsp
@@ -943,6 +964,7 @@ $code.=<<___ if ($win64);
 ___
 $code.=<<___;
 	ret
+.cfi_endproc
 .size	${PREFIX}_ecb_encrypt,.-${PREFIX}_ecb_encrypt
 ___
 
@@ -1183,6 +1205,11 @@ $code.=<<___;
 .align	16
 ${PREFIX}_ctr32_encrypt_blocks:
 .cfi_startproc
+#ifndef NDEBUG
+#ifndef BORINGSSL_FIPS
+	movb \$1,BORINGSSL_function_hit(%rip)
+#endif
+#endif
 	cmp	\$1,$len
 	jne	.Lctr32_bulk
 
@@ -4236,7 +4263,7 @@ $code.=<<___;
 .cfi_endproc
 .size	${PREFIX}_cbc_encrypt,.-${PREFIX}_cbc_encrypt
 ___
-} 
+}
 # int ${PREFIX}_set_decrypt_key(const unsigned char *inp,
 #				int bits, AES_KEY *key)
 #
@@ -4327,6 +4354,11 @@ $code.=<<___;
 ${PREFIX}_set_encrypt_key:
 __aesni_set_encrypt_key:
 .cfi_startproc
+#ifndef NDEBUG
+#ifndef BORINGSSL_FIPS
+	movb \$1,BORINGSSL_function_hit+3(%rip)
+#endif
+#endif
 	.byte	0x48,0x83,0xEC,0x08	# sub rsp,8
 .cfi_adjust_cfa_offset	8
 	mov	\$-1,%rax

@@ -54,10 +54,18 @@
 #include <gtest/gtest.h>
 
 #include <openssl/aes.h>
+#include <openssl/cpu.h>
 
 #include "internal.h"
+#include "../../test/abi_test.h"
 #include "../../test/file_test.h"
 #include "../../test/test_util.h"
+
+#if defined(OPENSSL_WINDOWS)
+OPENSSL_MSVC_PRAGMA(warning(push, 3))
+#include <windows.h>
+OPENSSL_MSVC_PRAGMA(warning(pop))
+#endif
 
 
 TEST(GCMTest, TestVectors) {
@@ -90,7 +98,10 @@ TEST(GCMTest, TestVectors) {
       CRYPTO_gcm128_encrypt(&ctx, &aes_key, plaintext.data(), out.data(),
                             plaintext.size());
     }
-    ASSERT_TRUE(CRYPTO_gcm128_finish(&ctx, tag.data(), tag.size()));
+
+    std::vector<uint8_t> got_tag(tag.size());
+    CRYPTO_gcm128_tag(&ctx, got_tag.data(), got_tag.size());
+    EXPECT_EQ(Bytes(tag), Bytes(got_tag));
     EXPECT_EQ(Bytes(ciphertext), Bytes(out));
 
     CRYPTO_gcm128_setiv(&ctx, &aes_key, nonce.data(), nonce.size());
@@ -112,3 +123,85 @@ TEST(GCMTest, ByteSwap) {
   EXPECT_EQ(UINT64_C(0x0807060504030201),
             CRYPTO_bswap8(UINT64_C(0x0102030405060708)));
 }
+
+#if defined(GHASH_ASM_X86_64) && defined(SUPPORTS_ABI_TEST)
+TEST(GCMTest, ABI) {
+  static const uint64_t kH[2] = {
+      UINT64_C(0x66e94bd4ef8a2c3b),
+      UINT64_C(0x884cfa59ca342b2e),
+  };
+  static const size_t kBlockCounts[] = {1, 2, 3, 4, 7, 8, 15, 16, 31, 32};
+  uint8_t buf[16 * 32];
+  OPENSSL_memset(buf, 42, sizeof(buf));
+
+  uint64_t X[2] = {
+      UINT64_C(0x0388dace60b6a392),
+      UINT64_C(0xf328c2b971b2fe78),
+  };
+
+  alignas(16) u128 Htable[16];
+  CHECK_ABI(gcm_init_4bit, Htable, kH);
+  CHECK_ABI(gcm_gmult_4bit, X, Htable);
+  for (size_t blocks : kBlockCounts) {
+    CHECK_ABI(gcm_ghash_4bit, X, Htable, buf, 16 * blocks);
+  }
+
+  if (gcm_ssse3_capable()) {
+    CHECK_ABI(gcm_init_ssse3, Htable, kH);
+    CHECK_ABI(gcm_gmult_ssse3, X, Htable);
+    for (size_t blocks : kBlockCounts) {
+      CHECK_ABI(gcm_ghash_ssse3, X, Htable, buf, 16 * blocks);
+    }
+  }
+
+  if (crypto_gcm_clmul_enabled()) {
+    CHECK_ABI(gcm_init_clmul, Htable, kH);
+    CHECK_ABI(gcm_gmult_clmul, X, Htable);
+    for (size_t blocks : kBlockCounts) {
+      CHECK_ABI(gcm_ghash_clmul, X, Htable, buf, 16 * blocks);
+    }
+
+    if (((OPENSSL_ia32cap_get()[1] >> 22) & 0x41) == 0x41) {  // AVX+MOVBE
+      CHECK_ABI(gcm_init_avx, Htable, kH);
+      CHECK_ABI(gcm_gmult_avx, X, Htable);
+      for (size_t blocks : kBlockCounts) {
+        CHECK_ABI(gcm_ghash_avx, X, Htable, buf, 16 * blocks);
+      }
+    }
+  }
+}
+
+#if defined(OPENSSL_WINDOWS)
+// Sanity-check the SEH unwind codes in ghash-ssse3-x86_64.pl.
+// TODO(davidben): Implement unwind testing for SEH and remove this.
+static void GCMSSSE3ExceptionTest() {
+  if (!gcm_ssse3_capable()) {
+    return;
+  }
+
+  bool handled = false;
+  __try {
+    gcm_gmult_ssse3(nullptr, nullptr);
+  } __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION
+                  ? EXCEPTION_EXECUTE_HANDLER
+                  : EXCEPTION_CONTINUE_SEARCH) {
+    handled = true;
+  }
+  EXPECT_TRUE(handled);
+
+  handled = false;
+  __try {
+    gcm_ghash_ssse3(nullptr, nullptr, nullptr, 16);
+  } __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION
+                  ? EXCEPTION_EXECUTE_HANDLER
+                  : EXCEPTION_CONTINUE_SEARCH) {
+    handled = true;
+  }
+  EXPECT_TRUE(handled);
+}
+
+TEST(GCMTest, SEH) {
+  CHECK_ABI_NO_UNWIND(GCMSSSE3ExceptionTest);
+}
+#endif  // OPENSSL_WINDOWS
+#endif  // GHASH_ASM_X86_64 && SUPPORTS_ABI_TEST

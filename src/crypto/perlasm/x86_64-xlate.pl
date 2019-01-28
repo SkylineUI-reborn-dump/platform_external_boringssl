@@ -124,6 +124,9 @@ my %globals;
 		$self->{sz} = "";
 	    } elsif ($self->{op} =~ /mov[dq]/ && $$line =~ /%xmm/) {
 		$self->{sz} = "";
+	    } elsif ($self->{op} =~ /^or([qlwb])$/) {
+		$self->{op} = "or";
+		$self->{sz} = $1;
 	    } elsif ($self->{op} =~ /([a-z]{3,})([qlwb])$/) {
 		$self->{op} = $1;
 		$self->{sz} = $2;
@@ -536,6 +539,7 @@ my %globals;
 	);
 
     my ($cfa_reg, $cfa_rsp);
+    my @cfa_stack;
 
     # [us]leb128 format is variable-length integer representation base
     # 2^128, with most significant bit of each byte being 0 denoting
@@ -683,6 +687,14 @@ my %globals;
 						      cfa_expression($$line)));
 				last;
 			      };
+	    /remember_state/
+			&& do {	push @cfa_stack, [$cfa_reg, $cfa_rsp];
+				last;
+			      };
+	    /restore_state/
+			&& do {	($cfa_reg, $cfa_rsp) = @{pop @cfa_stack};
+				last;
+			      };
 	    }
 
 	    $self->{value} = ".cfi_$dir\t$$line" if ($dir);
@@ -742,7 +754,7 @@ my %globals;
 				    }
 				    last;
 				  };
-		/\.rva|\.long|\.quad/
+		/\.rva|\.long|\.quad|\.byte/
 			    && do { $$line =~ s/([_a-z][_a-z0-9]*)/$globals{$1} or $1/gei;
 				    $$line =~ s/\.L/$decor/g;
 				    last;
@@ -1169,7 +1181,17 @@ while(defined(my $line=<>)) {
 
     $line =~ s|\R$||;           # Better chomp
 
-    $line =~ s|[#!].*$||;	# get rid of asm-style comments...
+    if ($nasm) {
+	$line =~ s|^#ifdef |%ifdef |;
+	$line =~ s|^#ifndef |%ifndef |;
+	$line =~ s|^#endif|%endif|;
+	$line =~ s|[#!].*$||;	# get rid of asm-style comments...
+    } else {
+	# Get rid of asm-style comments but not preprocessor directives. The
+	# latter are identified by not having a space after the '#'.
+	$line =~ s|[#!] .*$||;
+    }
+
     $line =~ s|/\*.*\*/||;	# ... and C-style comments...
     $line =~ s|^\s+||;		# ... and skip white spaces in beginning
     $line =~ s|\s+$||;		# ... and at the end

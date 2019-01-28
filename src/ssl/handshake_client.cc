@@ -416,8 +416,6 @@ static enum ssl_hs_wait_t do_start_connect(SSL_HANDSHAKE *hs) {
     return ssl_hs_error;
   }
 
-  // Initialize a random session ID for the experimental TLS 1.3 variant
-  // requiring a session id.
   if (ssl->session != nullptr &&
       !ssl->s3->initial_handshake_complete &&
       ssl->session->session_id_length > 0) {
@@ -425,6 +423,7 @@ static enum ssl_hs_wait_t do_start_connect(SSL_HANDSHAKE *hs) {
     OPENSSL_memcpy(hs->session_id, ssl->session->session_id,
                    hs->session_id_len);
   } else if (hs->max_version >= TLS1_3_VERSION) {
+    // Initialize a random session ID.
     hs->session_id_len = sizeof(hs->session_id);
     if (!RAND_bytes(hs->session_id, hs->session_id_len)) {
       return ssl_hs_error;
@@ -1219,7 +1218,7 @@ static enum ssl_hs_wait_t do_send_client_certificate(SSL_HANDSHAKE *hs) {
     }
   }
 
-  if (!ssl_has_certificate(hs->config)) {
+  if (!ssl_has_certificate(hs)) {
     // Without a client certificate, the handshake buffer may be released.
     hs->transcript.FreeBuffer();
   }
@@ -1386,12 +1385,12 @@ static enum ssl_hs_wait_t do_send_client_key_exchange(SSL_HANDSHAKE *hs) {
 static enum ssl_hs_wait_t do_send_client_certificate_verify(SSL_HANDSHAKE *hs) {
   SSL *const ssl = hs->ssl;
 
-  if (!hs->cert_request || !ssl_has_certificate(hs->config)) {
+  if (!hs->cert_request || !ssl_has_certificate(hs)) {
     hs->state = state_send_client_finished;
     return ssl_hs_ok;
   }
 
-  assert(ssl_has_private_key(hs->config));
+  assert(ssl_has_private_key(hs));
   ScopedCBB cbb;
   CBB body, child;
   if (!ssl->method->init_message(ssl, cbb.get(), &body,

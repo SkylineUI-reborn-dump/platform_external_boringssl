@@ -625,6 +625,10 @@ int EC_GROUP_get_order(const EC_GROUP *group, BIGNUM *order, BN_CTX *ctx) {
   return 1;
 }
 
+int EC_GROUP_order_bits(const EC_GROUP *group) {
+  return BN_num_bits(&group->order);
+}
+
 int EC_GROUP_get_cofactor(const EC_GROUP *group, BIGNUM *cofactor,
                           BN_CTX *ctx) {
   // All |EC_GROUP|s have cofactor 1.
@@ -654,6 +658,22 @@ const char *EC_curve_nid2nist(int nid) {
       return "P-521";
   }
   return NULL;
+}
+
+int EC_curve_nist2nid(const char *name) {
+  if (strcmp(name, "P-224") == 0) {
+    return NID_secp224r1;
+  }
+  if (strcmp(name, "P-256") == 0) {
+    return NID_X9_62_prime256v1;
+  }
+  if (strcmp(name, "P-384") == 0) {
+    return NID_secp384r1;
+  }
+  if (strcmp(name, "P-521") == 0) {
+    return NID_secp521r1;
+  }
+  return NID_undef;
 }
 
 EC_POINT *EC_POINT_new(const EC_GROUP *group) {

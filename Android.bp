@@ -220,6 +220,7 @@ cc_library_static {
     name: "boringssl_test_support",
     host_supported: true,
     defaults: ["boringssl_test_support_sources", "boringssl_flags"],
+    static_libs: ["libgtest"],
 
     shared_libs: [
         "libcrypto",

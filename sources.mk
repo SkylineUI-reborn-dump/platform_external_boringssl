@@ -288,6 +288,7 @@ linux_x86_64_sources := \
   linux-x86_64/crypto/fipsmodule/aesni-gcm-x86_64.S\
   linux-x86_64/crypto/fipsmodule/aesni-x86_64.S\
   linux-x86_64/crypto/fipsmodule/bsaes-x86_64.S\
+  linux-x86_64/crypto/fipsmodule/ghash-ssse3-x86_64.S\
   linux-x86_64/crypto/fipsmodule/ghash-x86_64.S\
   linux-x86_64/crypto/fipsmodule/md5-x86_64.S\
   linux-x86_64/crypto/fipsmodule/p256-x86_64-asm.S\
@@ -300,5 +301,6 @@ linux_x86_64_sources := \
   linux-x86_64/crypto/fipsmodule/vpaes-x86_64.S\
   linux-x86_64/crypto/fipsmodule/x86_64-mont.S\
   linux-x86_64/crypto/fipsmodule/x86_64-mont5.S\
+  linux-x86_64/crypto/test/trampoline-x86_64.S\
   src/crypto/hrss/asm/poly_rq_mul.S\
 

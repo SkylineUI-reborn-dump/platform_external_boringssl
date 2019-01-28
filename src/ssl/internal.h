@@ -359,8 +359,7 @@ OPENSSL_EXPORT bool CBBFinishArray(CBB *cbb, Array<uint8_t> *out);
 
 // Protocol versions.
 //
-// Due to DTLS's historical wire version differences and to support multiple
-// variants of the same protocol during development, we maintain two notions of
+// Due to DTLS's historical wire version differences, we maintain two notions of
 // version.
 //
 // The "version" or "wire version" is the actual 16-bit value that appears on
@@ -369,9 +368,8 @@ OPENSSL_EXPORT bool CBBFinishArray(CBB *cbb, Array<uint8_t> *out);
 // versions are opaque values and may not be compared numerically.
 //
 // The "protocol version" identifies the high-level handshake variant being
-// used. DTLS versions map to the corresponding TLS versions. Draft TLS 1.3
-// variants all map to TLS 1.3. Protocol versions are sequential and may be
-// compared numerically.
+// used. DTLS versions map to the corresponding TLS versions. Protocol versions
+// are sequential and may be compared numerically.
 
 // ssl_protocol_version_from_wire sets |*out| to the protocol version
 // corresponding to wire version |version| and returns true. If |version| is not
@@ -407,10 +405,6 @@ bool ssl_negotiate_version(SSL_HANDSHAKE *hs, uint8_t *out_alert,
 // ssl_protocol_version returns |ssl|'s protocol version. It is an error to
 // call this function before the version is determined.
 uint16_t ssl_protocol_version(const SSL *ssl);
-
-// ssl_is_draft28 returns whether the version corresponds to a draft28 TLS 1.3
-// variant.
-bool ssl_is_draft28(uint16_t version);
 
 // Cipher suites.
 
@@ -785,8 +779,6 @@ class SSLAEADContext {
   // omit_length_in_ad_ is true if the length should be omitted in the
   // AEAD's ad parameter.
   bool omit_length_in_ad_ : 1;
-  // omit_ad_ is true if the AEAD's ad parameter should be omitted.
-  bool omit_ad_ : 1;
   // ad_is_header_ is true if the AEAD's ad parameter is the record header.
   bool ad_is_header_ : 1;
 };
@@ -919,8 +911,8 @@ enum ssl_open_record_t ssl_process_alert(SSL *ssl, uint8_t *out_alert,
 
 // Private key operations.
 
-// ssl_has_private_key returns whether |cfg| has a private key configured.
-bool ssl_has_private_key(const SSL_CONFIG *cfg);
+// ssl_has_private_key returns whether |hs| has a private key configured.
+bool ssl_has_private_key(const SSL_HANDSHAKE *hs);
 
 // ssl_private_key_* perform the corresponding operation on
 // |SSL_PRIVATE_KEY_METHOD|. If there is a custom private key configured, they
@@ -1173,7 +1165,7 @@ int ssl_write_buffer_flush(SSL *ssl);
 
 // ssl_has_certificate returns whether a certificate and private key are
 // configured.
-bool ssl_has_certificate(const SSL_CONFIG *cfg);
+bool ssl_has_certificate(const SSL_HANDSHAKE *hs);
 
 // ssl_parse_cert_chain parses a certificate list from |cbs| in the format used
 // by a TLS Certificate message. On success, it advances |cbs| and returns
@@ -1299,8 +1291,7 @@ bool tls13_finished_mac(SSL_HANDSHAKE *hs, uint8_t *out, size_t *out_len,
 // tls13_derive_session_psk calculates the PSK for this session based on the
 // resumption master secret and |nonce|. It returns true on success, and false
 // on failure.
-bool tls13_derive_session_psk(SSL_SESSION *session, Span<const uint8_t> nonce,
-                              bool use_quic);
+bool tls13_derive_session_psk(SSL_SESSION *session, Span<const uint8_t> nonce);
 
 // tls13_write_psk_binder calculates the PSK binder value and replaces the last
 // bytes of |msg| with the resulting value. It returns true on success, and
@@ -1378,6 +1369,49 @@ enum handback_t {
   handback_after_ecdhe,
   handback_after_handshake,
 };
+
+
+// Delegated credentials.
+
+// This structure stores a delegated credential (DC) as defined by
+// draft-ietf-tls-subcerts-02.
+struct DC {
+  static constexpr bool kAllowUniquePtr = true;
+  ~DC();
+
+  // Dup returns a copy of this DC and takes references to |raw| and |pkey|.
+  UniquePtr<DC> Dup();
+
+  // Parse parses the delegated credential stored in |in|. If successful it
+  // returns the parsed structure, otherwise it returns |nullptr| and sets
+  // |*out_alert|.
+  static UniquePtr<DC> Parse(CRYPTO_BUFFER *in, uint8_t *out_alert);
+
+  // raw is the delegated credential encoded as specified in draft-ietf-tls-
+  // subcerts-02.
+  UniquePtr<CRYPTO_BUFFER> raw;
+
+  // expected_cert_verify_algorithm is the signature scheme of the DC public
+  // key.
+  uint16_t expected_cert_verify_algorithm = 0;
+
+  // expected_version is the protocol in which the DC must be used.
+  uint16_t expected_version = 0;
+
+  // pkey is the public key parsed from |public_key|.
+  UniquePtr<EVP_PKEY> pkey;
+
+ private:
+  friend DC* New<DC>();
+  DC();
+};
+
+// ssl_signing_with_dc returns true if the peer has indicated support for
+// delegated credentials and this host has sent a delegated credential in
+// response. If this is true then we've committed to using the DC in the
+// handshake.
+bool ssl_signing_with_dc(const SSL_HANDSHAKE *hs);
+
 
 struct SSL_HANDSHAKE {
   explicit SSL_HANDSHAKE(SSL *ssl);
@@ -1550,6 +1584,10 @@ struct SSL_HANDSHAKE {
   // ocsp_stapling_requested is true if a client requested OCSP stapling.
   bool ocsp_stapling_requested : 1;
 
+  // delegated_credential_requested is true if the peer indicated support for
+  // the delegated credential extension.
+  bool delegated_credential_requested : 1;
+
   // should_ack_sni is used by a server and indicates that the SNI extension
   // should be echoed in the ServerHello.
   bool should_ack_sni : 1;
@@ -1614,8 +1652,7 @@ struct SSL_HANDSHAKE {
   // record layer.
   uint16_t early_data_written = 0;
 
-  // session_id is the session ID in the ClientHello, used for the experimental
-  // TLS 1.3 variant.
+  // session_id is the session ID in the ClientHello.
   uint8_t session_id[SSL_MAX_SSL_SESSION_ID_LENGTH] = {0};
   uint8_t session_id_len = 0;
 
@@ -1648,6 +1685,11 @@ const char *ssl_client_handshake_state(SSL_HANDSHAKE *hs);
 const char *ssl_server_handshake_state(SSL_HANDSHAKE *hs);
 const char *tls13_client_handshake_state(SSL_HANDSHAKE *hs);
 const char *tls13_server_handshake_state(SSL_HANDSHAKE *hs);
+
+// tls13_add_key_update queues a KeyUpdate message on |ssl|. The
+// |update_requested| argument must be one of |SSL_KEY_UPDATE_REQUESTED| or
+// |SSL_KEY_UPDATE_NOT_REQUESTED|.
+bool tls13_add_key_update(SSL *ssl, int update_requested);
 
 // tls13_post_handshake processes a post-handshake message. It returns true on
 // success and false on failure.
@@ -1791,6 +1833,15 @@ bool tls1_get_legacy_signature_algorithm(uint16_t *out, const EVP_PKEY *pkey);
 // supported. It returns true on success and false on error.
 bool tls1_choose_signature_algorithm(SSL_HANDSHAKE *hs, uint16_t *out);
 
+// tls1_get_peer_verify_algorithms returns the signature schemes for which the
+// peer indicated support.
+//
+// NOTE: The related function |SSL_get0_peer_verify_algorithms| only has
+// well-defined behavior during the callbacks set by |SSL_CTX_set_cert_cb| and
+// |SSL_CTX_set_client_cert_cb|, or when the handshake is paused because of
+// them.
+Span<const uint16_t> tls1_get_peer_verify_algorithms(const SSL_HANDSHAKE *hs);
+
 // tls12_add_verify_sigalgs adds the signature algorithms acceptable for the
 // peer signature to |out|. It returns true on success and false on error. If
 // |for_certs| is true, the potentially more restrictive list of algorithms for
@@ -1884,6 +1935,19 @@ struct CERT {
   // ticket key. Only sessions with a matching value will be accepted.
   uint8_t sid_ctx_length = 0;
   uint8_t sid_ctx[SSL_MAX_SID_CTX_LENGTH] = {0};
+
+  // Delegated credentials.
+
+  // dc is the delegated credential to send to the peer (if requested).
+  UniquePtr<DC> dc = nullptr;
+
+  // dc_privatekey is used instead of |privatekey| or |key_method| to
+  // authenticate the host if a delegated credential is used in the handshake.
+  UniquePtr<EVP_PKEY> dc_privatekey = nullptr;
+
+  // dc_key_method, if not NULL, is used instead of |dc_privatekey| to
+  // authenticate the host.
+  const SSL_PRIVATE_KEY_METHOD *dc_key_method = nullptr;
 };
 
 // |SSL_PROTOCOL_METHOD| abstracts between TLS and DTLS.
@@ -2506,10 +2570,6 @@ struct SSL_CONFIG {
 // From RFC 8446, used in determining PSK modes.
 #define SSL_PSK_DHE_KE 0x1
 
-// From RFC 8446, used in determining whether to respond with a KeyUpdate.
-#define SSL_KEY_UPDATE_NOT_REQUESTED 0
-#define SSL_KEY_UPDATE_REQUESTED 1
-
 // kMaxEarlyDataAccepted is the advertised number of plaintext bytes of early
 // data that will be accepted. This value should be slightly below
 // kMaxEarlyDataSkipped in tls_record.c, which is measured in ciphertext.
@@ -2833,10 +2893,6 @@ struct ssl_ctx_st {
 
   // quic_method is the method table corresponding to the QUIC hooks.
   const SSL_QUIC_METHOD *quic_method = nullptr;
-
-  // tls13_variant is the variant of TLS 1.3 we are using for this
-  // configuration.
-  tls13_variant_t tls13_variant = tls13_rfc;
 
   bssl::UniquePtr<bssl::SSLCipherPreferenceList> cipher_list;
 
@@ -3163,10 +3219,6 @@ struct ssl_st {
   // second.
   unsigned initial_timeout_duration_ms = 1000;
 
-  // tls13_variant is the variant of TLS 1.3 we are using for this
-  // configuration.
-  tls13_variant_t tls13_variant = tls13_rfc;
-
   // session is the configured session to be offered by the client. This session
   // is immutable.
   bssl::UniquePtr<SSL_SESSION> session;
@@ -3186,6 +3238,9 @@ struct ssl_st {
   uint32_t mode = 0;     // API behaviour
   uint32_t max_cert_list = 0;
   bssl::UniquePtr<char> hostname;
+
+  // quic_method is the method table corresponding to the QUIC hooks.
+  const SSL_QUIC_METHOD *quic_method = nullptr;
 
   // renegotiate_mode controls how peer renegotiation attempts are handled.
   ssl_renegotiate_mode_t renegotiate_mode = ssl_renegotiate_never;
