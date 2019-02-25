@@ -85,6 +85,7 @@ cc_defaults {
     whole_static_libs: ["libcrypto_no_clang"],
 }
 
+
 // Target and host library
 cc_library {
     name: "libcrypto",
@@ -217,10 +218,29 @@ cc_binary {
 }
 
 // Test support library
+
+cc_defaults {
+  name: "boringssl_test_defaults",
+  vendor_available: false,
+  host_supported: true,
+
+  target: {
+      host: {
+          static_libs: [
+              "libgtest",
+          ],
+      },
+      android: {
+          static_libs: [
+              "libgtest_ndk_c++",
+          ],
+      },
+  },
+}
+
 cc_library_static {
     name: "boringssl_test_support",
-    host_supported: true,
-    defaults: ["boringssl_test_support_sources", "boringssl_flags"],
+    defaults: ["boringssl_test_defaults", "boringssl_test_support_sources", "boringssl_flags"],
 
     shared_libs: [
         "libcrypto",
@@ -232,19 +252,16 @@ cc_library_static {
 cc_test {
   name: "boringssl_crypto_test",
   test_suites: ["device-tests"],
-  host_supported: true,
-  defaults: ["boringssl_crypto_test_sources", "boringssl_flags"],
+  defaults: ["boringssl_test_defaults", "boringssl_crypto_test_sources", "boringssl_flags"],
   whole_static_libs: ["boringssl_test_support"],
-
   shared_libs: ["libcrypto"],
 }
 
 cc_test {
   name: "boringssl_ssl_test",
   test_suites: ["device-tests"],
-  host_supported: true,
-  defaults: ["boringssl_ssl_test_sources", "boringssl_flags"],
+  defaults: ["boringssl_test_defaults", "boringssl_ssl_test_sources", "boringssl_flags"],
   whole_static_libs: ["boringssl_test_support"],
-
   shared_libs: ["libcrypto", "libssl"],
 }
+
