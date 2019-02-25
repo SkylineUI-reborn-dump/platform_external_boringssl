@@ -220,12 +220,26 @@ cc_binary {
 cc_library_static {
     name: "boringssl_test_support",
     host_supported: true,
+    vendor_available: false,
     defaults: ["boringssl_test_support_sources", "boringssl_flags"],
 
     shared_libs: [
         "libcrypto",
         "libssl",
     ],
+
+    target: {
+        host: {
+          static_libs: [
+              "libgtest",
+          ],
+        },
+        android: {
+            static_libs: [
+                "libgtest_ndk_c++",
+            ],
+        },
+    },
 }
 
 // Tests
@@ -233,6 +247,7 @@ cc_test {
   name: "boringssl_crypto_test",
   test_suites: ["device-tests"],
   host_supported: true,
+  vendor_available: false,
   defaults: ["boringssl_crypto_test_sources", "boringssl_flags"],
   whole_static_libs: ["boringssl_test_support"],
 
@@ -243,6 +258,7 @@ cc_test {
   name: "boringssl_ssl_test",
   test_suites: ["device-tests"],
   host_supported: true,
+  vendor_available: false,
   defaults: ["boringssl_ssl_test_sources", "boringssl_flags"],
   whole_static_libs: ["boringssl_test_support"],
 
