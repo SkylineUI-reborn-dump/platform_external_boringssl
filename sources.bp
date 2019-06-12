@@ -118,6 +118,7 @@ cc_defaults {
         "src/crypto/evp/sign.c",
         "src/crypto/ex_data.c",
         "src/crypto/fipsmodule/bcm.c",
+        "src/crypto/fipsmodule/fips_shared_support.c",
         "src/crypto/fipsmodule/is_fips.c",
         "src/crypto/hkdf/hkdf.c",
         "src/crypto/hrss/hrss.c",
@@ -240,6 +241,11 @@ cc_defaults {
         "src/crypto/x509v3/v3_sxnet.c",
         "src/crypto/x509v3/v3_utl.c",
         "src/third_party/fiat/curve25519.c",
+        "src/third_party/sike/P503.c",
+        "src/third_party/sike/asm/fp_generic.c",
+        "src/third_party/sike/fpx.c",
+        "src/third_party/sike/isogeny.c",
+        "src/third_party/sike/sike.c",
     ],
     target: {
         linux_arm64: {
@@ -254,6 +260,7 @@ cc_defaults {
                 "linux-aarch64/crypto/fipsmodule/sha512-armv8.S",
                 "linux-aarch64/crypto/fipsmodule/vpaes-armv8.S",
                 "linux-aarch64/crypto/test/trampoline-armv8.S",
+                "linux-aarch64/crypto/third_party/sike/asm/fp-armv8.S",
             ],
         },
         linux_arm: {
@@ -313,6 +320,7 @@ cc_defaults {
                 "linux-x86_64/crypto/fipsmodule/x86_64-mont.S",
                 "linux-x86_64/crypto/fipsmodule/x86_64-mont5.S",
                 "linux-x86_64/crypto/test/trampoline-x86_64.S",
+                "linux-x86_64/crypto/third_party/sike/asm/fp-x86_64.S",
                 "src/crypto/hrss/asm/poly_rq_mul.S",
             ],
         },
@@ -464,6 +472,7 @@ cc_defaults {
         "src/crypto/test/abi_test.cc",
         "src/crypto/test/gtest_main.cc",
         "src/ssl/span_test.cc",
+        "src/ssl/ssl_c_test.c",
         "src/ssl/ssl_test.cc",
     ],
 }
