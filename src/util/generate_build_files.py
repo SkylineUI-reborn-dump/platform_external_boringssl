@@ -96,6 +96,11 @@ class Android(object):
       for f in sorted(files['crypto']):
         blueprint.write('        "%s",\n' % f)
       blueprint.write('    ],\n')
+      blueprint.write('}\n\n')
+
+
+      blueprint.write('cc_defaults {\n')
+      blueprint.write('    name: "libcrypto_bcm_sources",\n')
       blueprint.write('    target: {\n')
 
       for ((osname, arch), asm_files) in asm_outputs:
