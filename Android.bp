@@ -76,6 +76,86 @@ cc_defaults {
             clang_asflags: ["-march=armv8-a+crypto"],
         },
     },
+    // To allow integrity check to read and checksum the code
+    xom: false,
+}
+
+cc_object {
+    name: "bcm_object",
+    device_supported: true,
+    recovery_available: true,
+    defaults: [
+        "libcrypto_bcm_sources",
+        "libcrypto_defaults",
+        "boringssl_defaults",
+        "boringssl_flags",
+    ],
+    cflags: [
+        "-DBORINGSSL_FIPS",
+    ],
+    target: {
+        windows: {
+            enabled: false,
+        },
+        android: {
+            cflags: [
+                "-DBORINGSSL_FIPS",
+            ],
+            srcs: [
+                "src/crypto/fipsmodule/fips_shared_support.c",
+            ],
+            linker_script: "src/crypto/fipsmodule/fips_shared.lds",
+        },
+    },
+}
+
+// bootstrap_go_package {
+//     name: "bssl_ar",
+//     pkgPath: "android/soong/boringssl",
+//     srcs: [
+//         "src/util/ar/ar.go",
+//     ],
+//     testSrcs: [
+//         "src/util/ar/ar_test.go",
+//     ],
+// }
+
+// bootstrap_go_package {
+//     name: "bssl_fipscommon",
+//     pkgPath: "android/soong/boringssl",
+//     srcs: [
+//         "src/util/fipstools/fipscommon/const.go",
+//     ],
+// }
+
+blueprint_go_binary {
+    name: "bssl_inject_hash",
+    srcs: [
+        "src/util/fipstools/inject_hash/inject_hash.go",
+    ],
+    // deps: [
+    //     "bssl_ar",
+    //     "bssl_fipscommon",
+    // ],
+}
+
+cc_genrule {
+    name: "bcm_object_hashed",
+    device_supported: true,
+    recovery_available: true,
+    vendor_available: true,
+    host_supported: true,
+    tools: [
+        "bssl_inject_hash",
+    ],
+    srcs: [
+        ":bcm_object",
+    ],
+    out: [
+        "bcm_object_hashed.o",
+    ],
+
+    cmd: "$(location) -in-object $(in) -o $(out)",
 }
 
 // Target and host library
@@ -96,6 +176,23 @@ cc_library {
         "boringssl_flags",
     ],
     unique_host_soname: true,
+    no_gc_sections: true,
+    use_clang_lld: false,
+    target: {
+        not_windows: {
+            srcs: [
+                ":bcm_object_hashed",
+            ],
+        },
+        android: {
+            cflags: [
+                "-DBORINGSSL_FIPS",
+            ],
+            srcs: [
+                ":bcm_object_hashed",
+            ],
+        },
+    },
 }
 
 // Static library
@@ -105,6 +202,7 @@ cc_library_static {
     name: "libcrypto_static",
     visibility: ["//visibility:public"],
     defaults: [
+        "libcrypto_bcm_sources",
         "libcrypto_sources",
         "libcrypto_defaults",
         "boringssl_defaults",

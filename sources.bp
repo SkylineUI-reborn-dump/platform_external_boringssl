@@ -241,6 +241,10 @@ cc_defaults {
         "src/crypto/x509v3/v3_utl.c",
         "src/third_party/fiat/curve25519.c",
     ],
+}
+
+cc_defaults {
+    name: "libcrypto_bcm_sources",
     target: {
         linux_arm64: {
             srcs: [
