@@ -76,6 +76,38 @@ cc_defaults {
             clang_asflags: ["-march=armv8-a+crypto"],
         },
     },
+    // To allow integrity check to read and checksum the code
+    xom: false,
+}
+
+cc_library_static {
+    name: "libbcm",
+    defaults: [
+        "libcrypto_bcm_sources",
+        "libcrypto_defaults",
+        "boringssl_defaults",
+        "boringssl_flags",
+    ],
+    recovery_available: true,
+    target: {
+        android: {
+            cflags: [
+                "-DBORINGSSL_FIPS",
+            ],
+            srcs: [
+                // "src/crypto/fipsmodule/fips_shared_support.c",
+            ],
+            // Post processing step here: assuming the library was written to $OUT
+            // # Merge everything into a single relocatable .o with symbols addded
+            // # around the code we need to checksum
+            // ld -r -T src/crypto/fipsmodule/fips_shared.lds -o tmp.o --whole-archive $OUT
+            // # Re-create as a library so libcrypto can link it.
+            // ar c $OUT tmp.o
+            // Another option would be to generate an empty library here for Android, then create
+            // the .o file in a cc_genrule and add it to libcryto as a generated_objects
+            // dependency (which functionality doesn't exist in soong yet).
+        },
+    },
 }
 
 // Target and host library
@@ -94,8 +126,25 @@ cc_library {
         "libcrypto_defaults",
         "boringssl_defaults",
         "boringssl_flags",
+        "boringssl_flags",
+    ],
+    whole_static_libs: [
+        "libbcm",
     ],
     unique_host_soname: true,
+    target: {
+        android: {
+            cflags: [
+                "-DBORINGSSL_FIPS",
+            ],
+            // Post-processing step here: Inject the actual checksum.
+            // Essentially:-
+            // util/fipstools/inject_hash/inject_hash.go -o $OUT -in-object $OUT
+            // If we can't run Go tools under Soong we could adapt that to do something
+            // simpler in Python, e.g. look for a magic string in the .so and write
+            // the checksum there rather than parsing all the whole ELF sections and symbols.
+        },
+    },
 }
 
 // Static library
@@ -122,7 +171,15 @@ cc_library_static {
                 never: true,
             },
         },
+        android: {
+            cflags: [
+                "-DBORINGSSL_FIPS",
+            ],
+        },
     },
+    whole_static_libs: [
+        "libbcm",
+    ],
 }
 
 //// libssl
