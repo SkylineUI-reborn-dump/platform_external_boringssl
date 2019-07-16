@@ -18,6 +18,9 @@ python src/util/generate_build_files.py android
 python src/util/generate_build_files.py eureka
 cp src/LICENSE NOTICE
 
+# Format bp files.
+../../prebuilts/build-tools/linux-x86/bin/bpfmt sources.bp
+
 git add .
 git commit -m "external/boringssl: Sync to ${new_revision}.
 
