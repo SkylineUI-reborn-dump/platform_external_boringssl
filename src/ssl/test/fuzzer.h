@@ -405,12 +405,8 @@ class TLSFuzzer {
     SSL_CTX_enable_signed_cert_timestamps(ctx_.get());
     SSL_CTX_enable_ocsp_stapling(ctx_.get());
 
-    // Enable versions and ciphers that are off by default.
+    // Enable ciphers that are off by default.
     if (!SSL_CTX_set_strict_cipher_list(ctx_.get(), "ALL:NULL-SHA")) {
-      return false;
-    }
-    if (protocol_ == kTLS &&
-        !SSL_CTX_set_max_proto_version(ctx_.get(), TLS1_3_VERSION)) {
       return false;
     }
 
