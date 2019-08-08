@@ -1,0 +1,8 @@
+Verified+1: Pete Bentley <prb@google.com>
+Presubmit-Ready+1: Pete Bentley <prb@google.com>
+Build-Cop-Override+1: Santos Cordon <santoscordon@google.com>
+Submitted-by: Pete Bentley <prb@google.com>
+Submitted-at: Thu, 08 Aug 2019 15:00:50 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/boringssl/+/1098817
+Project: platform/external/boringssl
+Branch: refs/heads/master
