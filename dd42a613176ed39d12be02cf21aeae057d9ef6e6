@@ -1,0 +1,7 @@
+Presubmit-Ready+1: Srinivas Paladugu <srnvs@google.com>
+Build-Cop-Override+1: Srinivas Paladugu <srnvs@google.com>
+Submitted-by: Srinivas Paladugu <srnvs@google.com>
+Submitted-at: Fri, 09 Aug 2019 19:58:22 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/boringssl/+/1099721
+Project: platform/external/boringssl
+Branch: refs/heads/master
