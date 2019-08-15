@@ -250,6 +250,10 @@ cc_defaults {
         "src/third_party/sike/isogeny.c",
         "src/third_party/sike/sike.c",
     ],
+}
+
+cc_defaults {
+    name: "libcrypto_bcm_sources",
     target: {
         linux_arm64: {
             srcs: [
