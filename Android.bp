@@ -91,6 +91,7 @@ cc_library {
     recovery_available: true,
     defaults: [
         "libcrypto_sources",
+        "libcrypto_bcm_sources",
         "libcrypto_defaults",
         "boringssl_defaults",
         "boringssl_flags",
@@ -106,6 +107,7 @@ cc_library_static {
     visibility: ["//visibility:public"],
     defaults: [
         "libcrypto_sources",
+        "libcrypto_bcm_sources",
         "libcrypto_defaults",
         "boringssl_defaults",
         "boringssl_flags",
