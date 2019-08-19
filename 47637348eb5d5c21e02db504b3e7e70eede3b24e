@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7743d37e_c05fd611",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2019-08-19T15:36:24Z",
+      "side": 1,
+      "message": "This change didn\u0027t get picked up since it needs a tweak to the UPDATING script. Specifically generate_build_files.py needs an android-cmake option. (Also, as an optimization, it\u0027s better to call it once with multiple arguments rather than several times so we only generate the asm once.)",
+      "revId": "47637348eb5d5c21e02db504b3e7e70eede3b24e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
