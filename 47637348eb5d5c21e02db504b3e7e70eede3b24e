@@ -16,6 +16,24 @@
       "revId": "47637348eb5d5c21e02db504b3e7e70eede3b24e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e58a018_991d6bdf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2019-08-19T16:09:31Z",
+      "side": 1,
+      "message": "Done... http://r.android.com/1105337",
+      "parentUuid": "7743d37e_c05fd611",
+      "revId": "47637348eb5d5c21e02db504b3e7e70eede3b24e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
