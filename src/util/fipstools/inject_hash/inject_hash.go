@@ -30,39 +30,43 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-
-	"boringssl.googlesource.com/boringssl/util/ar"
-	"boringssl.googlesource.com/boringssl/util/fipstools/fipscommon"
 )
+
+// UninitHashValue is the default hash value that we inject into the module.
+// This value need only be distinct, i.e. so that we can safely
+// search-and-replace it in an object file.
+var UninitHashValue = [64]byte{
+	0xae, 0x2c, 0xea, 0x2a, 0xbd, 0xa6, 0xf3, 0xec, 0x97, 0x7f, 0x9b, 0xf6, 0x94, 0x9a, 0xfc, 0x83, 0x68, 0x27, 0xcb, 0xa0, 0xa0, 0x9f, 0x6b, 0x6f, 0xde, 0x52, 0xcd, 0xe2, 0xcd, 0xff, 0x31, 0x80, 0xa2, 0xd4, 0xc3, 0x66, 0x0f, 0xc2, 0x6a, 0x7b, 0xf4, 0xbe, 0x39, 0xa2, 0xd7, 0x25, 0xdb, 0x21, 0x98, 0xe9, 0xd5, 0x53, 0xbf, 0x5c, 0x32, 0x06, 0x83, 0x34, 0x0c, 0x65, 0x89, 0x52, 0xbd, 0x1f,
+}
 
 func do(outPath, oInput string, arInput string) error {
 	var objectBytes []byte
 	var isStatic bool
 	if len(arInput) > 0 {
-		isStatic = true
+		// isStatic = true
 
-		if len(oInput) > 0 {
-			return fmt.Errorf("-in-archive and -in-object are mutually exclusive")
-		}
+		// if len(oInput) > 0 {
+		// 	return fmt.Errorf("-in-archive and -in-object are mutually exclusive")
+		// }
 
-		arFile, err := os.Open(arInput)
-		if err != nil {
-			return err
-		}
-		defer arFile.Close()
+		// arFile, err := os.Open(arInput)
+		// if err != nil {
+		// 	return err
+		// }
+		// defer arFile.Close()
 
-		ar, err := ar.ParseAR(arFile)
-		if err != nil {
-			return err
-		}
+		// ar, err := ar.ParseAR(arFile)
+		// if err != nil {
+		// 	return err
+		// }
 
-		if len(ar) != 1 {
-			return fmt.Errorf("expected one file in archive, but found %d", len(ar))
-		}
+		// if len(ar) != 1 {
+		// 	return fmt.Errorf("expected one file in archive, but found %d", len(ar))
+		// }
 
-		for _, contents := range ar {
-			objectBytes = contents
-		}
+		// for _, contents := range ar {
+		// 	objectBytes = contents
+		// }
 	} else if len(oInput) > 0 {
 		var err error
 		if objectBytes, err = ioutil.ReadFile(oInput); err != nil {
@@ -101,7 +105,7 @@ func do(outPath, oInput string, arInput string) error {
 
 	var textStart, textEnd, rodataStart, rodataEnd *uint64
 
-	symbols, err := object.Symbols()
+	symbols, err := object.DynamicSymbols()
 	if err != nil {
 		return errors.New("failed to parse symbols: " + err.Error())
 	}
@@ -156,7 +160,9 @@ func do(outPath, oInput string, arInput string) error {
 	}
 
 	if textStart == nil || textEnd == nil {
-		return errors.New("could not find .text module boundaries in object")
+		// return errors.New("could not find .text module boundaries in object")
+		fmt.Println("could not find .text module boundaries in object, just copying")
+		return ioutil.WriteFile(outPath, objectBytes, 0644) // XXX
 	}
 
 	if (rodataStart == nil) != (rodataSection == nil) {
@@ -221,12 +227,12 @@ func do(outPath, oInput string, arInput string) error {
 	// Replace the default hash value in the object with the calculated
 	// value and write it out.
 
-	offset := bytes.Index(objectBytes, fipscommon.UninitHashValue[:])
+	offset := bytes.Index(objectBytes, UninitHashValue[:])
 	if offset < 0 {
 		return errors.New("did not find uninitialised hash value in object file")
 	}
 
-	if bytes.Index(objectBytes[offset+1:], fipscommon.UninitHashValue[:]) >= 0 {
+	if bytes.Index(objectBytes[offset+1:], UninitHashValue[:]) >= 0 {
 		return errors.New("found two occurrences of uninitialised hash value in object file")
 	}
 
