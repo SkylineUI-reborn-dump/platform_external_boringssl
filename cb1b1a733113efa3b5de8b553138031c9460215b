@@ -16,6 +16,24 @@
       "revId": "cb1b1a733113efa3b5de8b553138031c9460215b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29bc717e_033094d0",
+        "filename": "Android.bp",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-08-28T23:01:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5be08acd_ae319649",
+      "revId": "cb1b1a733113efa3b5de8b553138031c9460215b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
