@@ -560,6 +560,11 @@ OPENSSL_EXPORT int SSL_get_error(const SSL *ssl, int ret_code);
 #define SSL_ERROR_HANDOFF 17
 #define SSL_ERROR_HANDBACK 18
 
+// SSL_error_description returns a string representation of |err|, where |err|
+// is one of the |SSL_ERROR_*| constants returned by |SSL_get_error|, or NULL
+// if the value is unrecognized.
+OPENSSL_EXPORT const char *SSL_error_description(int err);
+
 // SSL_set_mtu sets the |ssl|'s MTU in DTLS to |mtu|. It returns one on success
 // and zero on failure.
 OPENSSL_EXPORT int SSL_set_mtu(SSL *ssl, unsigned mtu);
@@ -3135,6 +3140,13 @@ OPENSSL_EXPORT int SSL_delegated_credential_used(const SSL *ssl);
 // |SSL_process_quic_post_handshake| to process it. It is an error to call
 // |SSL_read| and |SSL_write| in QUIC.
 //
+// 0-RTT behaves similarly to |TLS_method|'s usual behavior. |SSL_do_handshake|
+// returns early as soon as the client (respectively, server) is allowed to send
+// 0-RTT (respectively, half-RTT) data. The caller should then call
+// |SSL_do_handshake| again to consume the remaining handshake messages and
+// confirm the handshake. As a client, |SSL_ERROR_EARLY_DATA_REJECTED| and
+// |SSL_reset_early_data_reject| behave as usual.
+//
 // Note that secrets for an encryption level may be available to QUIC before the
 // level is active in TLS. Callers should use |SSL_quic_read_level| to determine
 // the active read level for |SSL_provide_quic_data|. |SSL_do_handshake| will
@@ -3150,7 +3162,8 @@ OPENSSL_EXPORT int SSL_delegated_credential_used(const SSL *ssl);
 // |SSL_quic_max_handshake_flight_len| to get the maximum buffer length at each
 // encryption level.
 //
-// Note: 0-RTT is not currently supported via this API.
+// Note: 0-RTT support is incomplete and does not currently handle QUIC
+// transport parameters and server SETTINGS frame.
 
 // ssl_encryption_level_t represents a specific QUIC encryption level used to
 // transmit handshake messages.
@@ -4291,19 +4304,9 @@ OPENSSL_EXPORT const char *SSL_get_cipher_list(const SSL *ssl, int n);
 OPENSSL_EXPORT void SSL_CTX_set_client_cert_cb(
     SSL_CTX *ctx, int (*cb)(SSL *ssl, X509 **out_x509, EVP_PKEY **out_pkey));
 
-#define SSL_NOTHING 1
-#define SSL_WRITING 2
-#define SSL_READING 3
-#define SSL_X509_LOOKUP 4
-#define SSL_CHANNEL_ID_LOOKUP 5
-#define SSL_PENDING_SESSION 7
-#define SSL_CERTIFICATE_SELECTION_PENDING 8
-#define SSL_PRIVATE_KEY_OPERATION 9
-#define SSL_PENDING_TICKET 10
-#define SSL_EARLY_DATA_REJECTED 11
-#define SSL_CERTIFICATE_VERIFY 12
-#define SSL_HANDOFF 13
-#define SSL_HANDBACK 14
+#define SSL_NOTHING SSL_ERROR_NONE
+#define SSL_WRITING SSL_ERROR_WANT_WRITE
+#define SSL_READING SSL_ERROR_WANT_READ
 
 // SSL_want returns one of the above values to determine what the most recent
 // operation on |ssl| was blocked on. Use |SSL_get_error| instead.
@@ -5035,6 +5038,7 @@ BSSL_NAMESPACE_END
 #define SSL_R_TOO_MUCH_READ_EARLY_DATA 300
 #define SSL_R_INVALID_DELEGATED_CREDENTIAL 301
 #define SSL_R_KEY_USAGE_BIT_INCORRECT 302
+#define SSL_R_INCONSISTENT_CLIENT_HELLO 303
 #define SSL_R_SSLV3_ALERT_CLOSE_NOTIFY 1000
 #define SSL_R_SSLV3_ALERT_UNEXPECTED_MESSAGE 1010
 #define SSL_R_SSLV3_ALERT_BAD_RECORD_MAC 1020
