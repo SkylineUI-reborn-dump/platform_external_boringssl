@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd6b9295_fcdd3063",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2019-09-19T01:26:18Z",
+      "side": 1,
+      "message": "consider also referring to http://b/141248879 or http://b/137267623 ?",
+      "range": {
+        "startLine": 163,
+        "startChar": 19,
+        "endLine": 163,
+        "endChar": 26
+      },
+      "revId": "5d675c71953553c3809797009be2d3a16dcf42fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "783a2ee1_e735ecc9",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2019-09-19T01:26:18Z",
+      "side": 1,
+      "message": "For a future CL: Perhaps we should further restrict visibility to only specified (typically test, benchmark or host) build targets, in cases where the below paths also contain non-test targets?",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 14
+      },
+      "revId": "5d675c71953553c3809797009be2d3a16dcf42fb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
