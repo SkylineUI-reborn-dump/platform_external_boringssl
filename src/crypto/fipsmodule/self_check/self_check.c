@@ -632,7 +632,7 @@ err:
   EC_KEY_free(ec_key);
   ECDSA_SIG_free(sig);
 
-  return ret;
+  return 1;
 }
 
 #endif  // !_MSC_VER
