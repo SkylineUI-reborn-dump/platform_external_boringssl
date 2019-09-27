@@ -96,6 +96,9 @@ cc_object {
                 "-fPIC",
             ],
             linker_script: "src/crypto/fipsmodule/fips_shared.lds",
+            sanitize: {
+                address: false,
+            },
         },
     },
 }
