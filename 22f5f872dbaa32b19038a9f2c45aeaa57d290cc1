@@ -1,0 +1,8 @@
+Autosubmit+1: Peter Collingbourne <pcc@google.com>
+Presubmit-Ready+1: Peter Collingbourne <pcc@google.com>
+Build-Cop-Override+1: Simran Basi <sbasi@google.com>
+Submitted-by: Peter Collingbourne <pcc@google.com>
+Submitted-at: Sat, 28 Sep 2019 00:40:31 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/boringssl/+/1130068
+Project: platform/external/boringssl
+Branch: refs/heads/master
