@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4aff3ba_bb02e94e",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-10-03T18:13:23Z",
+      "side": 1,
+      "message": "This is not going to add a dependency, so this won\u0027t get relinked if compiler-rt changes.  Is this something the build system should be doing for all darwin builds?",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
