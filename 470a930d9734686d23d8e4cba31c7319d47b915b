@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b01b5e4e_fc25f333",
+        "filename": "src/crypto/fipsmodule/rand/urandom.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1014807
+      },
+      "writtenOn": "2019-10-03T17:56:19Z",
+      "side": 1,
+      "message": "It seems that this breaks http://ab/aosp-build-tools and http://ab/aosp-clang-tools with following message:\n\n    Undefined symbols for architecture x86_64:\n    \"___isOSVersionAtLeast\", referenced from:",
+      "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
