@@ -52,6 +52,24 @@
       "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceca0cb5_476729ef",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2019-10-03T19:24:51Z",
+      "side": 1,
+      "message": "\u003e\u003e don\u0027t do host builds\n* don\u0027t do Darwin host builds",
+      "parentUuid": "33120371_45d4ad6c",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
