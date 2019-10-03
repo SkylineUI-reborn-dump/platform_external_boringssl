@@ -16,6 +16,24 @@
       "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a0805d_8bbc17b2",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2019-10-03T18:26:00Z",
+      "side": 1,
+      "message": "I thought compiler-rt would be part of the Clang prebuilts, so should only change if we update Clang?  I believe it\u0027s a fairly stable library, mostly FP intrinsics plus a few random functions like this.\n\nI\u0027m still unsure if this is the correct solution.  It works around for the fact that for STL libs on Darwin we always add -nodefaultlibs to the command line but there may be a better way.  It may not even work if the -nodefaultlibs flag comes after this.\n\nI don\u0027t have a Darwin build environment, so haven\u0027t been able to experiment much.",
+      "parentUuid": "e4aff3ba_bb02e94e",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
