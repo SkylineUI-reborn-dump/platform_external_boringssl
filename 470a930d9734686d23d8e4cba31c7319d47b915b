@@ -16,6 +16,24 @@
       "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de39b65a_bfa9e498",
+        "filename": "src/crypto/fipsmodule/rand/urandom.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2019-10-03T18:16:43Z",
+      "side": 1,
+      "message": "The build is failing to link the compiler runtime(*), or is linking the wrong version of the runtime library for the compiler version. If fixing the build is implausible, does it build for you if this is additionally guarded by \"\u0026\u0026 !defined(OPENSSL_ANDROID)\"? If so, we could just disable this for Android and call it a day.\n\n(*) E.g. https://compiler-rt.llvm.org for Clang",
+      "parentUuid": "b01b5e4e_fc25f333",
+      "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
