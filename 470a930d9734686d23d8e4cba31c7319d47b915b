@@ -34,6 +34,24 @@
       "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7122c202_59b0675f",
+        "filename": "src/crypto/fipsmodule/rand/urandom.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2019-10-03T18:23:27Z",
+      "side": 1,
+      "message": "I\u0027m hoping https://android-review.googlesource.com/c/platform/external/boringssl/+/1133209 will fix this.  If not then then I\u0027ll go the OPENSSL_ANDROID route.",
+      "parentUuid": "de39b65a_bfa9e498",
+      "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
