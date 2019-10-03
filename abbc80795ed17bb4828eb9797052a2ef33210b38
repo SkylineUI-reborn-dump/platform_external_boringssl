@@ -34,6 +34,24 @@
       "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33120371_45d4ad6c",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2019-10-03T19:23:08Z",
+      "side": 1,
+      "message": "Would it be reasonable to submit this to see if it fixes the Darwin build and take a follow-on action to figure out the correct way to do it?\n\nOr we could just go with agl\u0027s suggestion on http://r.android.com/1131552 and not use that code on Android.  The only other thing I found in AOSP that uses __builtin_available() is curl and we don\u0027t do host builds for that, so maybe it\u0027s not worth the effort of supporting it in the build system.",
+      "parentUuid": "a8a0805d_8bbc17b2",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
