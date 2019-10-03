@@ -52,6 +52,24 @@
       "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8df305ca_b5961bd9",
+        "filename": "src/crypto/fipsmodule/rand/urandom.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-10-03T21:15:59Z",
+      "side": 1,
+      "message": "This is failing for the mac host build, so !defined(OPENSSL_ANDROID) doesn\u0027t help.  It\u0027s failing because we pass -nodefaultlibs so we can override the STL, but that is removing prebuilts/clang/host/darwin-x86/clang-r365631b//lib64/clang/9.0.7/lib/darwin/libclang_rt.osx.a from the command line too.",
+      "parentUuid": "7122c202_59b0675f",
+      "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
