@@ -70,6 +70,24 @@
       "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b6c729d_0f07c8e2",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-10-03T21:00:28Z",
+      "side": 1,
+      "message": "Tested on my mac, this still fails and also prints:\nclang-9: warning: argument unused during compilation: \u0027-rtlib\u003dcompiler-rt\u0027 [-Wunused-command-line-argument]",
+      "parentUuid": "ceca0cb5_476729ef",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
