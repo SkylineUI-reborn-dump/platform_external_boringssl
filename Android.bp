@@ -63,6 +63,8 @@ cc_defaults {
         },
         darwin: {
             cflags: ["-DOPENSSL_NO_ASM"],
+            // For __isOSVersionAtLeast(), see http://b/142032917
+            ldflags: ["-rtlib=compiler-rt"],
         },
         host: {
             host_ldlibs: ["-lpthread"],
