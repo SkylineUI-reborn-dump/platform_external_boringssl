@@ -88,6 +88,24 @@
       "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ff0f50_c10aa177",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-10-04T06:16:47Z",
+      "side": 1,
+      "message": "Fixed with https://r.android.com/q/topic:%22nostdlib%252B%252B%22+(status:open%20OR%20status:merged)",
+      "parentUuid": "7b6c729d_0f07c8e2",
+      "revId": "abbc80795ed17bb4828eb9797052a2ef33210b38",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
