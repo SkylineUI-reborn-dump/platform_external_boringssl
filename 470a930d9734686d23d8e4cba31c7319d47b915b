@@ -70,6 +70,24 @@
       "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aacd8f5_e5bee835",
+        "filename": "src/crypto/fipsmodule/rand/urandom.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2019-10-04T06:17:45Z",
+      "side": 1,
+      "message": "Fixed the mac build with https://r.android.com/q/topic:%22nostdlib%252B%252B%22+(status:open%20OR%20status:merged), which replaces -nodefaultlibs with -nostdlib++, so we still get the default libclang_rt.osx.a.",
+      "parentUuid": "8df305ca_b5961bd9",
+      "revId": "470a930d9734686d23d8e4cba31c7319d47b915b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
