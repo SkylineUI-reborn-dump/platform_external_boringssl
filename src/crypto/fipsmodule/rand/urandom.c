@@ -36,6 +36,10 @@
 #endif
 #include <sys/syscall.h>
 
+#if defined(OPENSSL_ANDROID)
+#include <sys/system_properties.h>
+#endif
+
 #if !defined(OPENSSL_ANDROID)
 #define OPENSSL_HAS_GETAUXVAL
 #endif
@@ -98,10 +102,13 @@
 void __msan_unpoison(void *, size_t);
 #endif
 
+void maybe_set_extra_getrandom_flags(void);
+int extra_getrandom_flags = 0;
+
 static ssize_t boringssl_getrandom(void *buf, size_t buf_len, unsigned flags) {
   ssize_t ret;
   do {
-    ret = syscall(__NR_getrandom, buf, buf_len, flags);
+    ret = syscall(__NR_getrandom, buf, buf_len, flags | extra_getrandom_flags);
   } while (ret == -1 && errno == EINTR);
 
 #if defined(OPENSSL_MSAN)
@@ -114,11 +121,13 @@ static ssize_t boringssl_getrandom(void *buf, size_t buf_len, unsigned flags) {
 
   return ret;
 }
-
 #endif  // EXPECTED_NR_getrandom
 
 #if !defined(GRND_NONBLOCK)
 #define GRND_NONBLOCK 1
+#endif
+#if !defined(GRND_RANDOM)
+#define GRND_RANDOM 2
 #endif
 
 #endif  // OPENSSL_LINUX
@@ -153,7 +162,7 @@ static void init_once(void) {
   CRYPTO_STATIC_MUTEX_lock_read(rand_lock_bss_get());
   int fd = *urandom_fd_requested_bss_get();
   CRYPTO_STATIC_MUTEX_unlock_read(rand_lock_bss_get());
-
+  
 #if defined(USE_NR_getrandom)
   int have_getrandom;
   uint8_t dummy;
@@ -176,6 +185,11 @@ static void init_once(void) {
 
   if (have_getrandom) {
     *urandom_fd_bss_get() = kHaveGetrandom;
+    maybe_set_extra_getrandom_flags();
+    if (extra_getrandom_flags != 0 && extra_getrandom_flags != GRND_RANDOM) {
+      perror("Invalid getrandom flags");
+      abort();
+    }
     return;
   }
 #endif  // USE_NR_getrandom
@@ -424,5 +438,19 @@ void CRYPTO_sysrand_if_available(uint8_t *out, size_t requested) {
   }
 }
 #endif  // BORINGSSL_FIPS
+
+void maybe_set_extra_getrandom_flags() {
+#if defined(BORINGSSL_FIPS) && defined(OPENSSL_ANDROID)
+  char value[PROP_VALUE_MAX];
+  int length = __system_property_get("ro.apex.updatable", value); // XXX temp prop name
+  if (length > 0 && !strncasecmp(value, "true", length)) {
+    fprintf(stderr, "BoringSSL: sysprop: true\n");
+    extra_getrandom_flags = GRND_RANDOM;
+  } else {
+    fprintf(stderr, "BoringSSL: sysprop: false\n");
+  }
+  
+#endif
+}
 
 #endif  // OPENSSL_URANDOM
