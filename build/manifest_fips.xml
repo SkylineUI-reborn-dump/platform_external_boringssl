@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<manifest>
+  <remote fetch=".." name="aosp" review="https://android-review.googlesource.com/" />
+  <default remote="aosp" revision="master" />
+  <project clone-depth="1" groups="linux,pdk,tradefed" name="platform/prebuilts/go/linux-x86" path="prebuilts/go/linux-x86" revision="efed63416765c846a4ac234c8386bccfaac45720" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/build-tools" path="prebuilts/build-tools" revision="db9b72f96e02c20de993d50bae611d12fe7e7bf0" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/clang-tools" path="prebuilts/clang-tools" revision="64c02b5a0ef86b818d611da91341a827229cd4f5" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/clang/host/linux-x86" path="prebuilts/clang/host/linux-x86" revision="fe4d48ac0f76147635e65278bededb5aac9ab178" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/ndk" path="prebuilts/ndk" revision="13d1da2cbf525ea35b97047d30d1b1c6c88f683f" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/sdk" path="prebuilts/sdk" revision="4e96b3e02017d51795c4a50d506f19c894fc24ae" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/vndk/v28" path="prebuilts/vndk/v28" revision="3fd502bdb86d26b6b5e596737a5ed905e798987a" />
+  <project clone-depth="1" groups="pdk" name="platform/prebuilts/vndk/v29" path="prebuilts/vndk/v29" revision="c212c393a3d9d6cb9f2b68df0e31064c55510914" />
+  <project clone-depth="1" groups="pdk,linux" name="platform/prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.17-4.8" revision="639243dd5cb2c5ea1313f033c75c8c533813a484" />
+  <project clone-depth="1" groups="pdk,linux,arm" name="platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" path="prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9" revision="c2885c755bd673681f24fdaf09f2886fbbdc9775" />
+  <project clone-depth="1" groups="pdk,linux,arm" name="platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9" revision="e3cfd463c4e720e7bdf50f7d314ffa023695a11f" />
+  <project clone-depth="1" groups="pdk,linux,mips" name="platform/prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" path="prebuilts/gcc/linux-x86/mips/mips64el-linux-android-4.9" revision="e4fb78ee31269beedf422a4a12e3045fdf0960a4" />
+  <project clone-depth="1" groups="pdk,linux,x86" name="platform/prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" path="prebuilts/gcc/linux-x86/x86/x86_64-linux-android-4.9" revision="9d8e2e019e5013800ee0adfaffc328f61834ca44" />
+  <project clone-depth="1" groups="pdk-fs" name="platform/prebuilts/devtools" path="prebuilts/devtools" revision="d74c94e4d5ec304560c689dd487c6d8d369dbb4c" />
+  <project clone-depth="1" groups="pdk-fs" name="platform/prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" path="prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8" revision="e9afa28841933dbd4fc36e526fe6bb70611b657a" />
+  <project groups="adt-infra,cts,developers,motodev,pdk,tools,tradefed" name="platform/tools/repohooks" path="tools/repohooks" revision="481b8785fa4229bd66286540ee8309357e381350" />
+  <project groups="notdefault,tools" name="platform/tools/base" path="tools/base" revision="17b630aa20ca1344725fa9cccc63dfda004a738e" />
+  <project groups="notdefault,tools" name="platform/tools/build" path="tools/build" revision="dbc4a43cd97e5d43a2f2d0a867239d88c212e149" />
+  <project groups="pdk" name="platform/bionic" path="bionic" revision="57f01b91d7812d7432bce4f8167953d72b613e64" />
+  <project groups="pdk" name="platform/external/boringssl" path="external/boringssl" revision="470a930d9734686d23d8e4cba31c7319d47b915b" />
+  <project groups="pdk" name="platform/external/compiler-rt" path="external/compiler-rt" revision="5ba3ca7ad793d1d8df8c819b341764650444e51c" />
+  <project groups="pdk" name="platform/external/cpu_features" path="external/cpu_features" revision="51038cd0363075720e598c5bac91d5a0d09ffacb" />
+  <project groups="pdk" name="platform/external/golang-protobuf" path="external/golang-protobuf" revision="4fa9125cb50478ba117cec6e2ee71206e490cb2d"/>
+  <project groups="pdk" name="platform/external/libcxx" path="external/libcxx" revision="50f73d79e49d58863435f4115b8f2a8b0d4d5781" />
+  <project groups="pdk" name="platform/external/libcxxabi" path="external/libcxxabi" revision="8920c61b6bfd666e1c45c1f2b8a2ebc3400db648" />
+  <project groups="pdk" name="platform/external/libdaemon" path="external/libdaemon" revision="433dd14cb58a66737e158ad1331c02162a80f43f" />
+  <project groups="pdk" name="platform/external/llvm" path="external/llvm" revision="0c3d0c5bf04d62953fd1548ceff7d16a08e02953" />
+  <project groups="pdk" name="platform/external/zlib" path="external/zlib" revision="42bbda490995e70268ee1ec4b2cd17891705d523"/>
+  <project groups="pdk" name="platform/system/core" path="system/core" revision="58ee7e3ae10bb6c151468fa723c7c273bbaf3bf5"/>
+  <project groups="pdk" name="platform/system/sepolicy" path="system/sepolicy" revision="4eca6c49c8a5ccde801385854c0cfe07064627b6"/>
+  <project groups="pdk" name="platform/system/tools/aidl" path="system/tools/aidl" revision="27e1ff69d60ac8b313761afb6fa45639b2e27bbf"/>
+  <project groups="pdk" name="platform/system/tools/hidl" path="system/tools/hidl" revision="a8be3493e82e6a64e1b7f11fe73944279b1593bf"/>
+  <project groups="pdk,tradefed" name="platform/build/blueprint" path="build/blueprint" revision="d2a5c6d5f261a4a748c6d1b26fcd98984dcfffe1" />
+
+  <project groups="vendor,qcom_sdm845" name="platform/hardware/qcom/sdm845/data/ipacfg-mgr" path="hardware/qcom/sdm845/data/ipacfg-mgr" revision="fa104a891b94ab4614894f1374a4dd702d7f0868">
+    <linkfile dest="hardware/qcom/sdm845/Android.mk" src="os_pickup.mk" />
+
+    <linkfile dest="hardware/qcom/sdm845/Android.bp" src="os_pickup.bp" />
+</project>
+  <project groups="pdk" name="platform/build" path="build/make" revision="17f505e7ea06e665f68df3581bbfbb83e1e239df">
+    <linkfile dest="build/CleanSpec.mk" src="CleanSpec.mk" />
+    <linkfile dest="build/buildspec.mk.default" src="buildspec.mk.default" />
+    <linkfile dest="build/core" src="core" />
+    <linkfile dest="build/envsetup.sh" src="envsetup.sh" />
+    <linkfile dest="build/target" src="target" />
+    <linkfile dest="build/tools" src="tools" />
+    <copyfile dest="Makefile" src="core/root.mk" />
+</project>
+  <project groups="pdk,tradefed" name="platform/build/soong" path="build/soong" revision="583a226c0ed2c543f91459a0ce724f46bceb2614">
+    <linkfile dest="Android.bp" src="root.bp" />
+    <linkfile dest="bootstrap.bash" src="bootstrap.bash" />
+</project>
+
+  <repo-hooks enabled-list="pre-upload" in-project="platform/tools/repohooks" />
+</manifest>
+
