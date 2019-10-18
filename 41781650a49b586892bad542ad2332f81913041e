@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8c83c26_cbeee698",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2019-10-18T21:00:33Z",
+      "side": 1,
+      "message": "For reference, WIP running here: https://android-build.googleplex.com/builds/forrest/run/L81900000379077995",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 31
+      },
+      "revId": "41781650a49b586892bad542ad2332f81913041e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
