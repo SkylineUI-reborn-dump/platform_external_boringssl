@@ -97,6 +97,7 @@ cc_object {
             cflags: [
                 "-DBORINGSSL_FIPS",
                 "-fPIC",
+                "-fno-function-sections",
             ],
             linker_script: "src/crypto/fipsmodule/fips_shared.lds",
         },
