@@ -237,6 +237,12 @@ cc_library {
         "boringssl_defaults",
         "boringssl_flags",
     ],
+    // Windows and Macs both have problems with assembly files
+    target: {
+        windows: {
+            enabled: true,
+        },
+    },
     unique_host_soname: true,
 
     shared_libs: ["libcrypto"],
