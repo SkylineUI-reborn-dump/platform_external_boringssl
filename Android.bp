@@ -186,6 +186,8 @@ cc_library_static {
         "//hardware/interfaces/drm/1.2/vts/functional",
         "//hardware/interfaces/keymaster/3.0/vts/functional",
         "//hardware/interfaces/keymaster/4.0/vts/functional",
+        "//packages/modules/DnsResolver",
+        "//packages/modules/DnsResolver/tests/dns_responder",
         "//system/core/adb",
         "//system/core/init",
         "//system/core/fs_mgr/liblp",
