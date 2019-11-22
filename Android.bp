@@ -194,6 +194,8 @@ cc_library_static {
         "//system/libvintf/test",
         "//system/security/keystore/tests",
         "//test/vts-testcase/security/avb",
+        "//packages/modules/DnsResolver",
+        "//packages/modules/DnsResolver/tests/dns_responder",
     ],
     defaults: [
         "libcrypto_bcm_sources",
