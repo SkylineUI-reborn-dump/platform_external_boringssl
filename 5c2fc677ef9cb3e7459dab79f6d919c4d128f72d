@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d541188_70cf07df",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2019-11-22T11:06:57Z",
+      "side": 1,
+      "message": "This makes me very nervous because DnsResolver really shouldn\u0027t be using libcrypto_static (see the warning in linej 174-176), and by making it visible here we\u0027re losing the check that prevents us accidentally depending on it.\n\nIt looks like you\u0027re only needing this for \"resolv_integration_test\", and it\u0027s fine for tests to depend on libcrypto_static. Can you maybe move the \"resolv_integration_test\" build target to the tests/Android.bp file so that you can restrict visibility to \n\n   \"//packages/modules/DnsResolver/tests:__subpackages__\",\n\nor similar?",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 41
+      },
+      "revId": "5c2fc677ef9cb3e7459dab79f6d919c4d128f72d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
