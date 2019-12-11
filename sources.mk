@@ -275,6 +275,7 @@ linux_arm_sources := \
 linux_ppc64le_sources := \
   linux-ppc64le/crypto/fipsmodule/aesp8-ppc.S\
   linux-ppc64le/crypto/fipsmodule/ghashp8-ppc.S\
+  linux-ppc64le/crypto/test/trampoline-ppc.S\
 
 linux_x86_sources := \
   linux-x86/crypto/chacha/chacha-x86.S\

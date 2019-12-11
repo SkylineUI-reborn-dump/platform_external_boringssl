@@ -601,6 +601,9 @@ type testCase struct {
 	// sendWarningAlerts is the number of consecutive warning alerts to send
 	// before each test message.
 	sendWarningAlerts int
+	// sendUserCanceledAlerts is the number of consecutive user_canceled alerts to
+	// send before each test message.
+	sendUserCanceledAlerts int
 	// sendBogusAlertType, if true, causes a bogus alert of invalid type to
 	// be sent before each test message.
 	sendBogusAlertType bool
@@ -1003,6 +1006,10 @@ func doExchange(test *testCase, config *Config, conn net.Conn, isResume bool, tr
 
 		for i := 0; i < test.sendWarningAlerts; i++ {
 			tlsConn.SendAlert(alertLevelWarning, alertUnexpectedMessage)
+		}
+
+		for i := 0; i < test.sendUserCanceledAlerts; i++ {
+			tlsConn.SendAlert(alertLevelWarning, alertUserCanceled)
 		}
 
 		if test.sendBogusAlertType {
@@ -2590,8 +2597,28 @@ read alert 1 0
 			expectedError:      ":BAD_ALERT:",
 			expectedLocalError: "remote error: error decoding message",
 		},
+		// Although TLS 1.3 intended to remove warning alerts, it left in
+		// user_canceled. JDK11 misuses this alert as a post-handshake
+		// full-duplex signal. As a workaround, skip user_canceled as in
+		// TLS 1.2, which is consistent with NSS and OpenSSL.
 		{
-			name: "SendWarningAlerts",
+			name: "SendUserCanceledAlerts-TLS13",
+			config: Config{
+				MaxVersion: VersionTLS13,
+			},
+			sendUserCanceledAlerts: 4,
+		},
+		{
+			name: "SendUserCanceledAlerts-TooMany-TLS13",
+			config: Config{
+				MaxVersion: VersionTLS13,
+			},
+			sendUserCanceledAlerts: 5,
+			shouldFail:             true,
+			expectedError:          ":TOO_MANY_WARNING_ALERTS:",
+		},
+		{
+			name: "SendWarningAlerts-TooMany",
 			config: Config{
 				MaxVersion: VersionTLS12,
 			},
@@ -2600,7 +2627,7 @@ read alert 1 0
 			expectedError:     ":TOO_MANY_WARNING_ALERTS:",
 		},
 		{
-			name: "SendWarningAlerts-Async",
+			name: "SendWarningAlerts-TooMany-Async",
 			config: Config{
 				MaxVersion: VersionTLS12,
 			},
@@ -4383,6 +4410,7 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 		resumeSession: true,
 		// Ensure session tickets are used, not session IDs.
 		noSessionCache: true,
+		flags:          []string{"-expect-no-hrr"},
 	})
 	tests = append(tests, testCase{
 		name: "Basic-Client-RenewTicket",
@@ -4414,7 +4442,10 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 			},
 		},
 		resumeSession: true,
-		flags:         []string{"-expect-no-session-id"},
+		flags: []string{
+			"-expect-no-session-id",
+			"-expect-no-hrr",
+		},
 	})
 	tests = append(tests, testCase{
 		testType: serverTest,
@@ -4482,6 +4513,7 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 			},
 			// Cover HelloRetryRequest during an ECDHE-PSK resumption.
 			resumeSession: true,
+			flags:         []string{"-expect-hrr"},
 		})
 
 		tests = append(tests, testCase{
@@ -4495,6 +4527,7 @@ func addStateMachineCoverageTests(config stateMachineTestConfig) {
 			},
 			// Cover HelloRetryRequest during an ECDHE-PSK resumption.
 			resumeSession: true,
+			flags:         []string{"-expect-hrr"},
 		})
 
 		tests = append(tests, testCase{
@@ -12538,6 +12571,7 @@ func addTLS13HandshakeTests() {
 			CurvePreferences: []CurveID{CurveX25519},
 		},
 		expectedCurveID: CurveX25519,
+		flags:           []string{"-expect-hrr"},
 	})
 
 	testCases = append(testCases, testCase{
@@ -12551,6 +12585,7 @@ func addTLS13HandshakeTests() {
 		// Although the ClientHello did not predict our preferred curve,
 		// we always select it whether it is predicted or not.
 		expectedCurveID: CurveX25519,
+		flags:           []string{"-expect-hrr"},
 	})
 
 	testCases = append(testCases, testCase{
@@ -15200,67 +15235,6 @@ func addDelegatedCredentialTests() {
 	})
 }
 
-func addPQExperimentSignalTests() {
-	testCases = append(testCases, testCase{
-		testType: serverTest,
-		name:     "PQExperimentSignal-Server-NoEchoIfNotConfigured",
-		config: Config{
-			MinVersion: VersionTLS13,
-			MaxVersion: VersionTLS13,
-			Bugs: ProtocolBugs{
-				ExpectPQExperimentSignal: false,
-			},
-			PQExperimentSignal: true,
-		},
-	})
-
-	testCases = append(testCases, testCase{
-		testType: serverTest,
-		name:     "PQExperimentSignal-Server-Echo",
-		config: Config{
-			MinVersion: VersionTLS13,
-			MaxVersion: VersionTLS13,
-			Bugs: ProtocolBugs{
-				ExpectPQExperimentSignal: true,
-			},
-			PQExperimentSignal: true,
-		},
-		flags: []string{
-			"-enable-pq-experiment-signal",
-			"-expect-pq-experiment-signal",
-		},
-	})
-
-	testCases = append(testCases, testCase{
-		testType: clientTest,
-		name:     "PQExperimentSignal-Client-NotDefault",
-		config: Config{
-			MinVersion: VersionTLS13,
-			MaxVersion: VersionTLS13,
-			Bugs: ProtocolBugs{
-				ExpectPQExperimentSignal: false,
-			},
-			PQExperimentSignal: true,
-		},
-	})
-
-	testCases = append(testCases, testCase{
-		testType: clientTest,
-		name:     "PQExperimentSignal-Client",
-		config: Config{
-			MinVersion: VersionTLS13,
-			MaxVersion: VersionTLS13,
-			Bugs: ProtocolBugs{
-				ExpectPQExperimentSignal: true,
-			},
-		},
-		flags: []string{
-			"-enable-pq-experiment-signal",
-			"-expect-pq-experiment-signal",
-		},
-	})
-}
-
 func worker(statusChan chan statusMsg, c chan *testCase, shimPath string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -15398,7 +15372,6 @@ func main() {
 	addCertCompressionTests()
 	addJDK11WorkaroundTests()
 	addDelegatedCredentialTests()
-	addPQExperimentSignalTests()
 
 	testCases = append(testCases, convertToSplitHandshakeTests(testCases)...)
 

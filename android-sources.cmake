@@ -434,6 +434,7 @@ set(crypto_sources_linux_arm
 set(crypto_sources_linux_ppc64le
   ${BORINGSSL_ROOT}linux-ppc64le/crypto/fipsmodule/aesp8-ppc.S
   ${BORINGSSL_ROOT}linux-ppc64le/crypto/fipsmodule/ghashp8-ppc.S
+  ${BORINGSSL_ROOT}linux-ppc64le/crypto/test/trampoline-ppc.S
 )
 set(crypto_sources_linux_x86
   ${BORINGSSL_ROOT}linux-x86/crypto/chacha/chacha-x86.S
