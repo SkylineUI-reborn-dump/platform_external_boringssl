@@ -46,6 +46,30 @@
       "revId": "a1519408f1b1308914a0db691169774f331afb1b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25e52985_a1de9130",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2020-03-09T13:42:37Z",
+      "side": 1,
+      "message": "com.android.vndk is explicitly exempted from the check. It\u0027s a special APEX where the membership is already controlled by `vndk: {enabled: true}`; we don\u0027t want to encode the same information differently in multiple places.\n\n\nAnd for the discrepancy, thanks for pointing that out. I\u0027ve made the property to be the same in the two modules.\nFor the reason why the build system didn\u0027t complain before, I\u0027ve filed a bug b/151071238 to track it down. Something weird is happening.",
+      "parentUuid": "29046418_e62a2913",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 18
+      },
+      "revId": "a1519408f1b1308914a0db691169774f331afb1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
