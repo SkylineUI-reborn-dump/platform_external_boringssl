@@ -113,6 +113,10 @@ cc_object {
             ],
         },
     },
+    apex_available: [
+        "//apex_available:platform",
+        "//apex_available:anyapex",
+    ],
 }
 
 bootstrap_go_package {
@@ -183,8 +187,7 @@ cc_library {
     },
     apex_available: [
         "//apex_available:platform",
-        "com.android.adbd",
-        "test_com.android.adbd",
+        "//apex_available:anyapex",
     ],
 }
 
@@ -217,8 +220,7 @@ cc_library_static {
     ],
     apex_available: [
         "//apex_available:platform",
-        "com.android.neuralnetworks",
-        "test_com.android.neuralnetworks",
+        "//apex_available:anyapex",
     ],
     defaults: [
         "libcrypto_bcm_sources",
@@ -260,8 +262,7 @@ cc_library {
 
     apex_available: [
         "//apex_available:platform",
-        "com.android.adbd",
-        "test_com.android.adbd",
+        "//apex_available:anyapex",
     ],
 }
 
