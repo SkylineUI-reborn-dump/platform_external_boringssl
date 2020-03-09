@@ -22,6 +22,30 @@
       "revId": "5d16e2f988ad9a0ffaa0f42bb68cd56aacdfe65d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0df19595_da469a75",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2020-03-09T10:21:20Z",
+      "side": 1,
+      "message": "Regardless of the linkage type, apex_available is checked when a library becomes part of an APEX. \n\nSo, if you don\u0027t have \"//apex_available:anyapex\" and instead have \"com.android.conscrypt\", then only the APEX can have this library. And any attempt to use this library - either by statically link to it, or by dynamically link to it - in other APEX will be prohibited.\n\nHowever, doing that right now will break the build as this IS being used by several other APEXes. Please visit https://android-review.googlesource.com/c/platform/build/soong/+/1252767/4/apex/apex.go for the actual lists.\n\nIf the current uses of this module is wrong, let me file a bug to separately address that.",
+      "parentUuid": "1e1369de_acc3730e",
+      "range": {
+        "startLine": 117,
+        "startChar": 11,
+        "endLine": 117,
+        "endChar": 34
+      },
+      "revId": "5d16e2f988ad9a0ffaa0f42bb68cd56aacdfe65d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
