@@ -113,6 +113,14 @@ cc_object {
             ],
         },
     },
+    apex_available: [
+        "com.android.adbd",
+        "com.android.art.debug",
+        "com.android.art.release",
+        "com.android.bluetooth.updatable",
+        "com.android.conscrypt",
+        "com.android.resolv",
+    ],
 }
 
 bootstrap_go_package {
@@ -185,6 +193,11 @@ cc_library {
         "//apex_available:platform",
         "com.android.adbd",
         "test_com.android.adbd",
+        "com.android.art.debug",
+        "com.android.art.release",
+        "com.android.bluetooth.updatable",
+        "com.android.conscrypt",
+        "com.android.resolv",
     ],
 }
 
@@ -262,6 +275,8 @@ cc_library {
         "//apex_available:platform",
         "com.android.adbd",
         "test_com.android.adbd",
+        "com.android.conscrypt",
+        "com.android.resolv",
     ],
 }
 
