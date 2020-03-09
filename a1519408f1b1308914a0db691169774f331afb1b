@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dea58fd5_4a7e7311",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-03-09T12:19:52Z",
+      "side": 1,
+      "message": "Actually, I\u0027m a bit confused here, shouldn\u0027t this be the exact same list as for libcrypto?",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 18
+      },
+      "revId": "a1519408f1b1308914a0db691169774f331afb1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
