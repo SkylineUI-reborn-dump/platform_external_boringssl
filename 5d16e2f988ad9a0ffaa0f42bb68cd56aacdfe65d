@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e1369de_acc3730e",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1038039
+      },
+      "writtenOn": "2020-03-09T08:55:08Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t know enough about native build rules, compile time / runtime linkage, or the behavior of apex_available to review this.\n\nI assume these need to have clear answers:\n\nWhether this just applies for static inclusion of the build artifacts, shared, or both. i.e. what this is actually committing the artifacts to.\n\nWhether the build artifacts actually can / are intended to support that.\n\nI\u0027m assuming prb@ is best placed to resolve.",
+      "range": {
+        "startLine": 117,
+        "startChar": 11,
+        "endLine": 117,
+        "endChar": 34
+      },
+      "revId": "5d16e2f988ad9a0ffaa0f42bb68cd56aacdfe65d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
