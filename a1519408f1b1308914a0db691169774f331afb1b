@@ -22,6 +22,30 @@
       "revId": "a1519408f1b1308914a0db691169774f331afb1b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29046418_e62a2913",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-03-09T12:21:03Z",
+      "side": 1,
+      "message": "And shouldn\u0027t com.android.vndk be on the list somewhere?",
+      "parentUuid": "dea58fd5_4a7e7311",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 18
+      },
+      "revId": "a1519408f1b1308914a0db691169774f331afb1b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
