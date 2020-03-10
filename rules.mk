@@ -51,9 +51,21 @@ LOCAL_SRC_FILES := $(filter-out src/crypto/bio/socket.c,$(LOCAL_SRC_FILES))
 LOCAL_SRC_FILES := $(filter-out src/crypto/bio/socket_helper.c,$(LOCAL_SRC_FILES))
 LOCAL_SRC_FILES := $(filter-out src/crypto/x509/by_dir.c,$(LOCAL_SRC_FILES))
 
+# Suppress the unused variable error on 'ctx':
+# external/boringssl/src/crypto/fipsmodule/digest/digests.c:252:17
+# external/boringssl/src/crypto/fipsmodule/digest/digests.c:258:17
+# external/boringssl/src/crypto/fipsmodule/digest/digests.c:264:17
+MODULE_COMPILEFLAGS += -Wno-error=unused-variable
+
 # BoringSSL detects Trusty based on this define and does things like switch to
 # no-op threading functions.
+# For Trusty kernel compilation, we disable ASM to avoid doing vector unit
+# context switches for kernel threads or kernel/user transitions.
 MODULE_CFLAGS += -DTRUSTY
+ifneq ($(XBIN_TYPE),USER_TASK)
+MODULE_CFLAGS += -DOPENSSL_NO_ASM
+MODULE_ASMFLAGS += -DTRUSTY -DOPENSSL_NO_ASM
+endif
 
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
@@ -76,7 +88,14 @@ GLOBAL_INCLUDES += $(addprefix $(LOCAL_DIR)/,$(LOCAL_C_INCLUDES))
 # scopers. Suppress those APIs.
 GLOBAL_CPPFLAGS += -DBORINGSSL_NO_CXX
 
+ifeq ($(XBIN_TYPE),USER_TASK)
 MODULE_DEPS := \
-	lib/openssl-stubs \
+	trusty/user/base/lib/openssl-stubs \
+
+else
+MODULE_DEPS := \
+	trusty/kernel/lib/openssl-stubs \
+
+endif
 
 include make/module.mk
