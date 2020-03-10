@@ -53,7 +53,9 @@ LOCAL_SRC_FILES := $(filter-out src/crypto/x509/by_dir.c,$(LOCAL_SRC_FILES))
 
 # BoringSSL detects Trusty based on this define and does things like switch to
 # no-op threading functions.
-MODULE_CFLAGS += -DTRUSTY
+MODULE_CFLAGS += -DTRUSTY -DOPENSSL_NO_ASM
+MODULE_ASMFLAGS += -DTRUSTY -DOPENSSL_NO_ASM
+
 
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
@@ -76,7 +78,10 @@ GLOBAL_INCLUDES += $(addprefix $(LOCAL_DIR)/,$(LOCAL_C_INCLUDES))
 # scopers. Suppress those APIs.
 GLOBAL_CPPFLAGS += -DBORINGSSL_NO_CXX
 
+ifeq ($(XBIN_TYPE),USER_TASK)
 MODULE_DEPS := \
 	lib/openssl-stubs \
+
+endif
 
 include make/module.mk
