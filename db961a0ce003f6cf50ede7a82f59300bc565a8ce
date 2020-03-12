@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e784a4f_61811873",
+        "filename": "rules.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2020-03-12T18:18:16Z",
+      "side": 1,
+      "message": "Same comment I gave you in person - we want the asm for the userland version, so you can\u0027t just disable it.",
+      "revId": "db961a0ce003f6cf50ede7a82f59300bc565a8ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2cb2f65_6e83cbdc",
+        "filename": "rules.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2020-03-12T18:18:16Z",
+      "side": 1,
+      "message": "Don\u0027t you also need to add a stubs dep for the kernel version?",
+      "revId": "db961a0ce003f6cf50ede7a82f59300bc565a8ce",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
