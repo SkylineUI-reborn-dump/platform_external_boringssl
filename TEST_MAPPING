@@ -1,0 +1,10 @@
+{
+  "presubmit": [
+    {
+      "name": "boringssl_crypto_test"
+    },
+    {
+      "name": "boringssl_ssl_test"
+    }
+  ]
+}
