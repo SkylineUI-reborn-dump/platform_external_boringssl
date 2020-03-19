@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2f80919_a1d37171",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1103203
+      },
+      "writtenOn": "2020-03-19T18:05:46Z",
+      "side": 1,
+      "message": "Not sure if treehugger runs newly added TEST_MAPPINGS, mind also running:\n\n(cd external/boringssl \u0026\u0026 atest)\n\n? Any recently flashed device should do.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "fd0ee87583c8a083a8859bcc4dea6b0b1116c6b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
