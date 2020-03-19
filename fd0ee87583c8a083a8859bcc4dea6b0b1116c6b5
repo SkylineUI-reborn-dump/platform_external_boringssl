@@ -22,6 +22,30 @@
       "revId": "fd0ee87583c8a083a8859bcc4dea6b0b1116c6b5",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e29b96e1_cd765f74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2020-03-19T18:33:55Z",
+      "side": 1,
+      "message": "from the failures i\u0027ve had on other CLs, yes it does.\n\nbut there does seem to be something weird here? atest doesn\u0027t seem to work:\n\n$ atest\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\nNotice:\n  We collect usage statistics in accordance with our Content Licenses (https://source.android.com/setup/start/licenses), Contributor License Agreement (https://cla.developers.google.com/), Privacy Policy (https://policies.google.com/privacy) and Terms of Service (https://policies.google.com/terms).\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n\nFinding Tests...\nFound \u0027boringssl_crypto_test\u0027 as CACHE\nFound \u0027boringssl_ssl_test\u0027 as CACHE\n\nBuilding Dependencies...\ndeps-license, out/target/product/blueline/module-info.json, atest-tradefed, tradefed-core, MODULES-IN-external-boringssl\n\nninja: no work to do.                                                                                                                   \n2020-03-19 11:07:38 atest_utils.py:193:INFO: Build successful\n\nRunning 2 tests that require device.\n\nRunning Tests...\n\nResults from tests that require device:\nExecution detail has saved in /tmp/atest_result/20200319_1107_YUYuW4/test_result\n$ cat /tmp/atest_result/20200319_1107_YUYuW4/test_result\n{\"args\": \"\", \"total_summary\": {\"FAILED\": 0, \"PASSED\": 0, \"IGNORED\": 0}, \"test_runner\": {}}\n\n\ni\u0027ll file bugs for \"atest doesn\u0027t think that running 0 tests is an error\" and \"treehugger doesn\u0027t think that running 0 tests is an error\"...\n\n\nbut using `adb shell` to run the tests directly works though.\n\ndeleting the AndroidTest.xml in external/boringssl seems to get the tests running at least. (this is reproducible too --- if i restore the AndroidTest.xml and `atest -c` it runs nothing, if it delete it again and `atest -c` again, the tests run.)\n\n\n\nbut... it looks like some of the tests require a network connection, so they\u0027re failing on my device?\n\n[7/714] BIOTest#SocketConnect: FAILED (119ms)\n\nSTACKTRACE:\nexternal/boringssl/src/crypto/bio/bio_test.cc:115: Failure\nExpected equality of these values:\nstatic_cast\u003cint\u003e(sizeof(kTestMessage))\nWhich is: 5\nBIO_write(bio.get(), kTestMessage, sizeof(kTestMessage))\nWhich is: -1\n508353416984:error:0200004a:system library:OPENSSL_internal:Not a data message:external/boringssl/src/crypto/bio/connect.c:240:\n508353416984:error:11000066:BIO routines:OPENSSL_internal:CONNECT_ERROR:external/boringssl/src/crypto/bio/connect.c:241:host\u003d::1:48623\n\n\n\nthere\u0027s a crash in DigestTest.TestVectors too, which then prevents later tests from running. (when i look more closely at the direct `adb shell` run, that was true there too, just not .)\n\n\n\nmight need someone who actually works on boringssl to take this over the finish line...",
+      "parentUuid": "f2f80919_a1d37171",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "fd0ee87583c8a083a8859bcc4dea6b0b1116c6b5",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
