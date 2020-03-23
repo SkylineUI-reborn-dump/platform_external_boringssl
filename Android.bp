@@ -213,6 +213,7 @@ cc_library_static {
     name: "libcrypto_static",
     visibility: [
         "//art/build/sdk",
+        "//art/dex2oat",
         "//bootable/recovery/updater",
         "//external/conscrypt",
         "//external/python/cpython2",
@@ -235,6 +236,8 @@ cc_library_static {
     ],
     apex_available: [
         "//apex_available:platform",
+        "com.android.art.debug",
+        "com.android.art.release",
         "com.android.neuralnetworks",
     ],
     defaults: [
