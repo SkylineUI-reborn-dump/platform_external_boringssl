@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba9f9613_1c4524f5",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1114938
+      },
+      "writtenOn": "2020-03-26T20:36:01Z",
+      "side": 1,
+      "message": "Explain why.",
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b29f0073_ce76d062",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1114938
+      },
+      "writtenOn": "2020-03-26T20:36:01Z",
+      "side": 1,
+      "message": "Factor out.",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b90fcf7_9d8cc80c",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1114938
+      },
+      "writtenOn": "2020-03-26T20:36:01Z",
+      "side": 1,
+      "message": "Why set ASMFLAGS if ASM is disabled?",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 44
+      },
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
