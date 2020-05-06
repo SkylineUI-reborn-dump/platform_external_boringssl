@@ -182,6 +182,9 @@ cc_library {
     srcs: [
         ":bcm_object",
     ],
+    sanitize: {
+        address: false,
+    },
     target: {
         android: {
             cflags: [
