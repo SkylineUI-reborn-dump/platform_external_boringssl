@@ -178,6 +178,11 @@ cc_library {
     srcs: [
         ":bcm_object",
     ],
+    sanitize: {
+        address: false,
+        hwaddress: false,
+        fuzzer: false,
+    },
     target: {
         android: {
             cflags: [
@@ -191,6 +196,18 @@ cc_library {
                 // testing, or use dynamic libcrypto.
                 enabled: false,
             },
+        },
+        // Temporary hack to let BoringSSL build with a new compiler.
+        // This doesn't enable HWASAN unconditionally, it just causes
+        // BoringSSL's asm code to unconditionally use a HWASAN-compatible
+        // global variable reference so that the non-HWASANified (because of
+        // sanitize: { hwaddress: false } above) code in the BCM can
+        // successfully link against the HWASANified code in the rest of
+        // BoringSSL in HWASAN builds.
+        android_arm64: {
+            asflags: [
+                "-fsanitize=hwaddress",
+            ],
         },
     },
     apex_available: [
