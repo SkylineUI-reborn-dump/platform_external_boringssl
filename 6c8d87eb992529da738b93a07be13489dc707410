@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "027254b1_755a0fd6",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2020-05-10T19:57:57Z",
+      "side": 1,
+      "message": "Nit: Mention that we\u0027re disabling ASM to avoid doing vector unit context switches for kernel threads or kernel/user transitions.",
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b29f0073_ce76d062",
         "filename": "rules.mk",
         "patchSetId": 5
