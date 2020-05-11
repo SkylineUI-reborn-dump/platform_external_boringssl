@@ -16,6 +16,24 @@
       "revId": "b3dea3348c421292551081ab2dc61ff144d05578",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432e2ee5_ad3df499",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-05-11T14:59:49Z",
+      "side": 1,
+      "message": "Good point!  Also, should only be relevant to Android builds, not host.\n\n@Denis, could you please verify this revision still works for you?",
+      "parentUuid": "628d6d6f_aa6b9ec4",
+      "revId": "b3dea3348c421292551081ab2dc61ff144d05578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
