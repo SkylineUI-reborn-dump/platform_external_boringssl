@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "628d6d6f_aa6b9ec4",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1038443
+      },
+      "writtenOn": "2020-05-11T13:04:40Z",
+      "side": 1,
+      "message": "nit: copy the commit message comment here?",
+      "revId": "b3dea3348c421292551081ab2dc61ff144d05578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
