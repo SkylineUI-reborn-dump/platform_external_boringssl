@@ -314,6 +314,12 @@ cc_binary {
             enabled: false,
         },
     },
+    compile_multilib: "both",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+    },
 }
 
 cc_binary {
@@ -340,6 +346,12 @@ cc_binary {
         "src/util/fipstools/cavp/cavp_test_util.cc",
         "src/util/fipstools/cavp/cavp_tlskdf_test.cc",
     ],
+    compile_multilib: "both",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+    },
 
     shared_libs: [
         "libcrypto",
