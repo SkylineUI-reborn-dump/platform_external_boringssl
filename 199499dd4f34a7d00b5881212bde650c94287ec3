@@ -22,6 +22,30 @@
       "revId": "199499dd4f34a7d00b5881212bde650c94287ec3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d81a41c_7eac83dd",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-05-18T13:26:45Z",
+      "side": 1,
+      "message": "Oops, copypasta error, thanks!",
+      "parentUuid": "9164d5d4_465c5d65",
+      "range": {
+        "startLine": 312,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 10
+      },
+      "revId": "199499dd4f34a7d00b5881212bde650c94287ec3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
