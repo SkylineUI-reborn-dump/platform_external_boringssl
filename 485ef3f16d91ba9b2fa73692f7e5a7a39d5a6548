@@ -22,6 +22,30 @@
       "revId": "485ef3f16d91ba9b2fa73692f7e5a7a39d5a6548",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d88fedc_9637cdd3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-05-18T09:39:30Z",
+      "side": 1,
+      "message": "No, no host usage. Generally these tools are installed to a device for debugging or collecting information about libcrypto, typically to /data/local/tmp rather than /system, although it\u0027s also sometimes convenient to install them to /system/bin.\n\ncavp - generates results from test vectors supplied by a lab for submission to CAVP[1].  Needs to be run for all architectures supported by the device and is run via a cavp.go script which pushes libcrypto and cavp to /data/local/tmp and runs them from there.  That script is currently single-architecture only and I\u0027ll update it in a future CL.\n\nbssl - BoringSSL command line tool analogous to the openssl one.  Useful for TLS debugging in general but also we use `bssl is_fips` to show whether libcrypto is operating in FIPS mode or not.  The instructions we give the lab for that use separate lunch targets for 32 and 64 bit so this change is just a convenience for developers.\n\n[1] https://www.nist.gov/programs-projects/cryptographic-algorithm-validation-program",
+      "parentUuid": "ce8e6596_19c7a68a",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "485ef3f16d91ba9b2fa73692f7e5a7a39d5a6548",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
