@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce8e6596_19c7a68a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2020-05-18T00:41:00Z",
+      "side": 1,
+      "message": "Could you please explain this a bit more? Is it on host?\n\n(I don\u0027t think it should be necessary in principle, but I\u0027m interested to know when it is in practice.)",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "485ef3f16d91ba9b2fa73692f7e5a7a39d5a6548",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
