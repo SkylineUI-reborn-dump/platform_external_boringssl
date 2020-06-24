@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6015302f_a3829cbb",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1543914
+      },
+      "writtenOn": "2020-06-24T03:06:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba9f9613_1c4524f5",
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "027254b1_755a0fd6",
         "filename": "rules.mk",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "6c8d87eb992529da738b93a07be13489dc707410",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24686b7a_c8be5886",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1543914
+      },
+      "writtenOn": "2020-06-24T03:06:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "027254b1_755a0fd6",
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "26f4934f_bdd7e5ae",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1543914
+      },
+      "writtenOn": "2020-06-24T03:06:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b29f0073_ce76d062",
+      "range": {
+        "startLine": 61,
+        "startChar": 17,
+        "endLine": 61,
+        "endChar": 25
+      },
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b90fcf7_9d8cc80c",
         "filename": "rules.mk",
         "patchSetId": 5
@@ -79,6 +139,30 @@
       "revId": "6c8d87eb992529da738b93a07be13489dc707410",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b208fa33_be251f98",
+        "filename": "rules.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1543914
+      },
+      "writtenOn": "2020-06-24T03:06:10Z",
+      "side": 1,
+      "message": "We need to set -DOPENSSL_NO_ASM for both MODULE_CFLAGS and MODULE_ASMFLAGS",
+      "parentUuid": "5b90fcf7_9d8cc80c",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 44
+      },
+      "revId": "6c8d87eb992529da738b93a07be13489dc707410",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
