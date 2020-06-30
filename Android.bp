@@ -67,6 +67,9 @@ cc_defaults {
         host: {
             host_ldlibs: ["-lpthread"],
         },
+        android: {
+            ldflags: ["-Wl,-Bsymbolic"],
+        },
     },
 
     local_include_dirs: ["src/crypto"],
