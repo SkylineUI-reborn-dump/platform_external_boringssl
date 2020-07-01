@@ -16,6 +16,24 @@
       "revId": "7ca2017ec0d28bc59094987e8dfa250ae55bd458",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d0936f6_daf2b0be",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1003723
+      },
+      "writtenOn": "2020-07-01T17:34:05Z",
+      "side": 1,
+      "message": "+1 (and consider including bug number as well)",
+      "parentUuid": "d9749070_38a700c3",
+      "revId": "7ca2017ec0d28bc59094987e8dfa250ae55bd458",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
