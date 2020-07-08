@@ -1,0 +1,9 @@
+Verified+1: Pete Bentley <prb@google.com>
+Presubmit-Verified+1: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <android-build-prod-ayeaye@system.gserviceaccount.com>
+Code-Review+2: Daulet Zhanguzin <dauletz@google.com>
+Submitted-by: Pete Bentley <prb@google.com>
+Submitted-at: Wed, 08 Jul 2020 17:03:36 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/boringssl/+/1352858
+Project: platform/external/boringssl
+Branch: refs/heads/master
