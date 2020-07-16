@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8693d940_82848c1f",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-07-16T09:21:13Z",
+      "side": 1,
+      "message": "Won\u0027t this change drop the header_libs from macos builds?",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 20
+      },
+      "revId": "ba9db8781ec11859132f543aebff5d6093214751",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
+    }
+  ]
+}
