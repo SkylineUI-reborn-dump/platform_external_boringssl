@@ -22,6 +22,30 @@
       "revId": "ba9db8781ec11859132f543aebff5d6093214751",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dde21c2_ddddfc07",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2020-07-16T12:26:26Z",
+      "side": 1,
+      "message": "Yes, and from ordinary glibc host builds too. These are Bionic-specific headers that shouldn\u0027t be used in those cases - they should instead come from the llvm prebuilts and the host. And libc_headers does in fact not contribute any headers on those: https://cs.android.com/android/platform/superproject/+/master:bionic/libc/Android.bp;l\u003d1881-1890;drc\u003def707f90561d0891b18a135b25287b2568434bae\n\n(I\u0027d like to try \"m bcm_object\" on mac to verify it\u0027s not needed, instead of relying on the postsubmit mac builds, but it is really slow and messy to get a build tree set up on our mac.)",
+      "parentUuid": "8693d940_82848c1f",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 20
+      },
+      "revId": "ba9db8781ec11859132f543aebff5d6093214751",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
