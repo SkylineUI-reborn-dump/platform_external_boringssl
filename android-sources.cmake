@@ -389,6 +389,18 @@ set(crypto_sources_ios_aarch64
   ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/vpaes-armv8.S
   ${BORINGSSL_ROOT}ios-aarch64/crypto/test/trampoline-armv8.S
 )
+set(crypto_sources_mac_aarch64
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/chacha/chacha-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/aesv8-armx64.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/armv8-mont.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/ghash-neon-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/ghashv8-armx64.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/sha1-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/sha256-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/sha512-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/fipsmodule/vpaes-armv8.S
+  ${BORINGSSL_ROOT}ios-aarch64/crypto/test/trampoline-armv8.S
+)
 set(crypto_sources_ios_arm
   ${BORINGSSL_ROOT}ios-arm/crypto/chacha/chacha-armv4.S
   ${BORINGSSL_ROOT}ios-arm/crypto/fipsmodule/aesv8-armx32.S
