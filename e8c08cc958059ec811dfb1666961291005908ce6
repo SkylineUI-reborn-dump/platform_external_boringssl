@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c20fc22d_c130b856",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1043845
+      },
+      "writtenOn": "2020-08-10T22:35:43Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem like a problem unique to these modules. Note that boringssl isn\u0027t even using that API. You cannot include cstdlib from modules using API levels this low at all after this change.\n\nIn the NDK, we solve this by having libandroid_support declare (but not define) a handful of functions: https://source.corp.google.com/android/ndk/sources/android/support/include/stdlib.h?q\u003dat_quick_exit\u0026ct\u003dos\u0026sq\u003dpackage:%5Eandroid$. This is essentially the same as not having any guard on the function.\n\nI wonder if having the availability-attribute-guarded decl makes this a non-issue. Otherwise, we should probably #ifdef the missing decls upstream in libc++.",
+      "revId": "e8c08cc958059ec811dfb1666961291005908ce6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
