@@ -16,6 +16,24 @@
       "revId": "e8c08cc958059ec811dfb1666961291005908ce6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84b5a693_5ee14dfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2020-08-11T02:57:14Z",
+      "side": 1,
+      "message": "I wondered why this works for the non-vendor variant of the test lib. After some investigation, I found that it works because having a non-empty sdk_version makes the module to be compiled with the NDK headers that you mentioned. The NDK headers are however not provided when building the vendor variants. Previously (i.e. before the build system change in this topic), the vendor variant was incorrectly(?) built with -target aarch64-linux-android10000, regardless of the sdk_version setting. As a result, at_quick_exit etc were available to the vendor variant even without the NDK headers.\n\nFor now, I think we should keep building the vendor variants with 10000 although that might be incorrect. The extent of the regression would be greater than this as you said.\n\nAbandoning this change.",
+      "parentUuid": "c20fc22d_c130b856",
+      "revId": "e8c08cc958059ec811dfb1666961291005908ce6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
