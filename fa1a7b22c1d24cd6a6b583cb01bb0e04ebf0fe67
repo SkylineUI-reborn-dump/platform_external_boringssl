@@ -33,6 +33,24 @@
       "revId": "fa1a7b22c1d24cd6a6b583cb01bb0e04ebf0fe67",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0751fba_98637665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2020-08-12T22:20:58Z",
+      "side": 1,
+      "message": "\u003e Also adding enh as this includes https://boringssl-review.googlesource.com/c/boringssl/+/42084 (BTI and Pauth support).  My understanding is that these should be no-ops on ARMv8 but maybe there are additional tests (or benchmarks?) we should run before submitting?  I\u0027d certainly run the Wycheproof suite to be on the safe side (might be a good opportunity to update it)\n\nno, i think the existing tests \u0026 benchmarks are sufficient. i\u0027ll ask the ARM folks to re-test for ARMv9.",
+      "parentUuid": "06ceff8c_d7c4cad4",
+      "revId": "fa1a7b22c1d24cd6a6b583cb01bb0e04ebf0fe67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
