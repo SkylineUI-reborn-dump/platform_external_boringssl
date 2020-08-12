@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78145e32_95f147d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604402
+      },
+      "writtenOn": "2020-08-12T13:39:11Z",
+      "side": 1,
+      "message": "There were some CTS failures, I\u0027m rerunning now to check if they are related to the change.",
+      "revId": "fa1a7b22c1d24cd6a6b583cb01bb0e04ebf0fe67",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
