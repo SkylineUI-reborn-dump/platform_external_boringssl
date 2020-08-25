@@ -16,6 +16,24 @@
       "revId": "c960c43412e0632abb712fc465e70b6dfa2e9657",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "129ca460_cd9ffdfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1059815
+      },
+      "writtenOn": "2020-08-25T09:09:11Z",
+      "side": 1,
+      "message": "Hey, are you sure you have the right person? I don\u0027t have anything to do with Trusty.",
+      "parentUuid": "f98db6a7_4a935af2",
+      "revId": "c960c43412e0632abb712fc465e70b6dfa2e9657",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
