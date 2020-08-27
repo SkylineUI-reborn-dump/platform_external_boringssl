@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da42eebc_7a6da603",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1018108
+      },
+      "writtenOn": "2020-08-27T16:02:02Z",
+      "side": 1,
+      "message": "LGTM but I do not have +2 rights in boringssl.",
+      "revId": "5c2e48f59b14ad8a02c2b8bf14e91aa709813468",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
