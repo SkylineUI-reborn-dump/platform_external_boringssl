@@ -16,6 +16,24 @@
       "revId": "5c2e48f59b14ad8a02c2b8bf14e91aa709813468",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2816010f_b17c05b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-08-27T16:03:17Z",
+      "side": 1,
+      "message": "Self +2-ing as it\u0027s a clean revert.",
+      "parentUuid": "da42eebc_7a6da603",
+      "revId": "5c2e48f59b14ad8a02c2b8bf14e91aa709813468",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
     }
   ]
 }
