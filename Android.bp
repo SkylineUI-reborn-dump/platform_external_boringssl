@@ -265,6 +265,8 @@ cc_library_static {
         "boringssl_defaults",
         "boringssl_flags",
     ],
+    ramdisk_available: true,
+    recovery_available: true,
 }
 
 //// libssl
