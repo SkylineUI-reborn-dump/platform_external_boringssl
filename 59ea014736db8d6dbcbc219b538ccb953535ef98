@@ -1,0 +1,328 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "51cd2e05_bd4076d8",
+        "filename": "linux-x86_64/crypto/fipsmodule/sha1-x86_64.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 1278,
+        "startChar": 14,
+        "endLine": 1278,
+        "endChar": 15
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "e5f90dc6_35546d8f",
+        "filename": "linux-x86_64/crypto/fipsmodule/sha1-x86_64.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 1441,
+        "startChar": 12,
+        "endLine": 1441,
+        "endChar": 13
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "1c6a2053_2a858ac7",
+        "filename": "linux-x86_64/crypto/fipsmodule/sha1-x86_64.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 3763,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 3763,
+        "startChar": 14,
+        "endLine": 3763,
+        "endChar": 15
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "545581f5_ae77cc07",
+        "filename": "linux-x86_64/crypto/fipsmodule/sha1-x86_64.S",
+        "patchSetId": 2
+      },
+      "lineNbr": 5450,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 5450,
+        "startChar": 12,
+        "endLine": 5450,
+        "endChar": 13
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "8d156bf8_aebcc726",
+        "filename": "src/crypto/fipsmodule/ec/p256.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027valid\u0027, \u0027validity check\u0027 or \u0027initial check\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 178,
+        "endChar": 14
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c4f606e4_69a8c006",
+        "filename": "src/crypto/trust_token/trust_token.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027primary/secondary\u0027 or \u0027manager/worker\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 26,
+        "startChar": 48,
+        "endLine": 26,
+        "endChar": 54
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "035e1a4b_87198498",
+        "filename": "src/crypto/x509/x509_test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027valid\u0027, \u0027validity check\u0027 or \u0027initial check\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 2263,
+        "startChar": 5,
+        "endLine": 2263,
+        "endChar": 11
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "d528344b_95209660",
+        "filename": "src/include/openssl/trust_token.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027primary/secondary\u0027 or \u0027manager/worker\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 34,
+        "startChar": 55,
+        "endLine": 34,
+        "endChar": 61
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "a15c4177_f3d0e4ea",
+        "filename": "src/include/openssl/trust_token.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027primary/secondary\u0027 or \u0027manager/worker\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 35,
+        "startChar": 48,
+        "endLine": 35,
+        "endChar": 54
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "03a10f19_fc899831",
+        "filename": "src/include/openssl/x509v3.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Please remove the trailing whitespace.",
+      "range": {
+        "startLine": 531,
+        "startChar": 71,
+        "endLine": 531,
+        "endChar": 72
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "4171275d_9e13c440",
+        "filename": "src/ssl/ssl_test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5781,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027valid\u0027, \u0027validity check\u0027 or \u0027initial check\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 5781,
+        "startChar": 5,
+        "endLine": 5781,
+        "endChar": 11
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    },
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005089658",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1434155?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "c48c90ef_3d3c0c34",
+        "filename": "src/util/fipstools/acvp/acvptool/subprocess/subprocess_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-09-22T17:09:54Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027complex\u0027, \u0027unexpected\u0027, or \u0027placeholder\u0027; see https://developers.google.com/style/inclusive-documentation#ableist-language for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 382,
+        "startChar": 33,
+        "endLine": 382,
+        "endChar": 38
+      },
+      "revId": "59ea014736db8d6dbcbc219b538ccb953535ef98",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
