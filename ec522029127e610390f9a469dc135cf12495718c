@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9db1a1d1_b7127a10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1114938
+      },
+      "writtenOn": "2020-09-28T21:37:20Z",
+      "side": 1,
+      "message": "TODO: I am not 100% we can commit changes to BoringSSL directly into AOSP.  Checking around what the procedure is.  Removing this flag is just a cleanup, however, so it should block this topic.",
+      "revId": "ec522029127e610390f9a469dc135cf12495718c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
