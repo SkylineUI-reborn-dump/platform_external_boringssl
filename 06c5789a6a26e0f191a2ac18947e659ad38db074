@@ -22,6 +22,30 @@
       "revId": "06c5789a6a26e0f191a2ac18947e659ad38db074",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78120021_c3798280",
+        "filename": "UPDATING",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-09-30T11:54:21Z",
+      "side": 1,
+      "message": "Good point, thanks! I\u0027ll rework that.",
+      "parentUuid": "096263cb_0e7331f2",
+      "range": {
+        "startLine": 21,
+        "startChar": 5,
+        "endLine": 21,
+        "endChar": 28
+      },
+      "revId": "06c5789a6a26e0f191a2ac18947e659ad38db074",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": true
     }
   ]
 }
