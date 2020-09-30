@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f688dd4d_f70e2fba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-09-30T08:42:00Z",
+      "side": 1,
+      "message": "TH build failures should be addressed by https://r.android.com/1441338.",
+      "revId": "7a96511936e9d9a46062bf4860d5b9544320495f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
+      "unresolved": false
+    }
+  ]
+}
