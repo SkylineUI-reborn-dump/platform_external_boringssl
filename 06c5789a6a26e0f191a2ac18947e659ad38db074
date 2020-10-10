@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "096263cb_0e7331f2",
         "filename": "UPDATING",
@@ -20,10 +21,10 @@
         "endChar": 28
       },
       "revId": "06c5789a6a26e0f191a2ac18947e659ad38db074",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "78120021_c3798280",
         "filename": "UPDATING",
@@ -44,8 +45,31 @@
         "endChar": 28
       },
       "revId": "06c5789a6a26e0f191a2ac18947e659ad38db074",
-      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889",
-      "unresolved": true
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a09b81b_e001b07a",
+        "filename": "UPDATING",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-10-10T16:12:58Z",
+      "side": 1,
+      "message": "Actually keeping the msg in a variable is a bit too painful as it needs quoting to pass on the command line to git commit, but I did replace the silly hard coded filename with a temporary file, not sure why I missed that the first time around.\n\nAlso, I accidental committed the initial version of this in https://r.android.com/1434155 so this CL is now rebased on top of that.",
+      "parentUuid": "78120021_c3798280",
+      "range": {
+        "startLine": 21,
+        "startChar": 5,
+        "endLine": 21,
+        "endChar": 28
+      },
+      "revId": "06c5789a6a26e0f191a2ac18947e659ad38db074",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
