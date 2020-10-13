@@ -1,0 +1,30 @@
+{
+  "comments": [
+    {
+      "robotId": "ayeaye",
+      "robotRunId": "AR00000000000005498517",
+      "url": "https://android-build.googleplex.com/builds/treetop/android-review/1458438?revision\u003d2",
+      "fixSuggestions": [],
+      "key": {
+        "uuid": "fbebe24f_66428754",
+        "filename": "src/ssl/test/runner/runner.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 5757,
+      "author": {
+        "id": 1757831
+      },
+      "writtenOn": "2020-10-13T14:18:04Z",
+      "side": 1,
+      "message": "Prefer to use inclusive terms like \u0027valid\u0027, \u0027validity check\u0027 or \u0027initial check\u0027; see https://source.android.com/setup/contribute/respectful-code for more details. In the case of a false positive add BYPASS_INCLUSIVE_LANGUAGE_REASON\u003dmy_reason_here to your commit message to disable this check.",
+      "range": {
+        "startLine": 5757,
+        "startChar": 7,
+        "endLine": 5757,
+        "endChar": 13
+      },
+      "revId": "b2db956ebfc3984e71931ced64c75a3af5d6cf6b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
