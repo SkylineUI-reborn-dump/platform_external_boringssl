@@ -76,7 +76,8 @@ MODULE_EXPORT_INCLUDES += $(LOCAL_DIR)/src/include
 MODULE_EXPORT_CPPFLAGS += -DBORINGSSL_NO_CXX
 
 MODULE_LIBRARY_DEPS += \
-	trusty/user/base/lib/openssl-stubs \
 	trusty/user/base/lib/libstdc++-trusty \
+
+include trusty/user/base/lib/openssl-stubs/openssl-stubs-inc.mk
 
 include make/library.mk
