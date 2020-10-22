@@ -229,6 +229,8 @@ cc_library {
 // somewhere that needs the FIPS version.
 cc_library_static {
     name: "libcrypto_static",
+    ramdisk_available: true,
+    vendor_ramdisk_available: true,
     visibility: [
         "//art/build/sdk",
         "//bootable/recovery/updater",
