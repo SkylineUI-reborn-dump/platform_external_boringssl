@@ -81,6 +81,8 @@ cc_defaults {
 cc_object {
     name: "bcm_object",
     device_supported: true,
+    ramdisk_available: true,
+    vendor_ramdisk_available: true,
     recovery_available: true,
     native_bridge_supported: true,
     defaults: [
@@ -177,6 +179,8 @@ cc_library {
         enabled: true,
     },
     double_loadable: true,
+    ramdisk_available: true,
+    vendor_ramdisk_available: true,
     recovery_available: true,
     defaults: [
         "libcrypto_sources",
