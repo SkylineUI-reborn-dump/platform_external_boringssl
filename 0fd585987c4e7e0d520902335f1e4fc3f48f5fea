@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure how this will affect FIPS validation. I\u0027ll have to defer to the other reviewers on this CL.",
       "revId": "0fd585987c4e7e0d520902335f1e4fc3f48f5fea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eb91128_ca6437fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1121838
+      },
+      "writtenOn": "2020-10-29T23:40:42Z",
+      "side": 1,
+      "message": "Daulet, PTAL",
+      "parentUuid": "2d8f0488_cac9ddd8",
+      "revId": "0fd585987c4e7e0d520902335f1e4fc3f48f5fea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
