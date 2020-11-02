@@ -34,6 +34,24 @@
       "parentUuid": "2d8f0488_cac9ddd8",
       "revId": "0fd585987c4e7e0d520902335f1e4fc3f48f5fea",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "563f2cb9_d2ce138b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-11-02T12:11:27Z",
+      "side": 1,
+      "message": "No FIPS issue with adding libcrypto to these, but we\u0027ll need to consider any uses of libcrypto_static",
+      "parentUuid": "1eb91128_ca6437fe",
+      "revId": "0fd585987c4e7e0d520902335f1e4fc3f48f5fea",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
