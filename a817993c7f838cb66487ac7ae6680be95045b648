@@ -51,6 +51,24 @@
       "parentUuid": "970b6093_e2fae103",
       "revId": "a817993c7f838cb66487ac7ae6680be95045b648",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d769b6_8b5b9fad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2020-12-01T09:29:19Z",
+      "side": 1,
+      "message": "Sorry, I should have mentioned that you\u0027re welcome to submit that change here as well as upstream if you need it in AOSP quicker.   If it causes merge conflicts later on we\u0027ll deal with that 😊",
+      "parentUuid": "d5cca313_99994470",
+      "revId": "a817993c7f838cb66487ac7ae6680be95045b648",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
