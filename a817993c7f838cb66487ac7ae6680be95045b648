@@ -33,6 +33,24 @@
       "message": "This file is actually generated via `python src/util/generate_build_files.py android-cmake` whenever we update BoringSSL via the `UPDATING` script, and its header should probably reflect that.\n\nSo what you really need to do is add this combination to `generate_build_files.py` upstream in BoringSSL, otherwise this change will be lost during the next BoringSSL update, and those are quite frequent just now.",
       "revId": "a817993c7f838cb66487ac7ae6680be95045b648",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cca313_99994470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1082465
+      },
+      "writtenOn": "2020-12-01T07:32:45Z",
+      "side": 1,
+      "message": "thanks for the advice! Will pursue that path instead.",
+      "parentUuid": "970b6093_e2fae103",
+      "revId": "a817993c7f838cb66487ac7ae6680be95045b648",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
