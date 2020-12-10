@@ -384,6 +384,33 @@ cc_binary {
     ],
 }
 
+cc_binary {
+    name: "acvp_modulewrapper",
+    host_supported: true,
+    srcs: [
+        "src/util/fipstools/acvp/modulewrapper/modulewrapper.cc",
+    ],
+    target: {
+        android: {
+            compile_multilib: "both",
+        },
+    },
+    stem: "modulewrapper",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+    },
+
+    shared_libs: [
+        "libcrypto",
+    ],
+
+    defaults: [
+        "boringssl_flags",
+    ],
+}
+
 // Test support library
 cc_library_static {
     name: "boringssl_test_support",
