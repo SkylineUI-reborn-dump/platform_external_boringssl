@@ -33,6 +33,24 @@
       "message": "Friendly ping",
       "revId": "16f7c57a20446b2f2ae0e31600e86b14f3f58dd1",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cb20f6f_6c139494",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-01-07T09:49:59Z",
+      "side": 1,
+      "message": "I\u0027ll change the OWNERS, I don\u0027t think Narayan or Kenny will want these anymore.",
+      "parentUuid": "ff0fde6f_2a1902f4",
+      "revId": "16f7c57a20446b2f2ae0e31600e86b14f3f58dd1",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
