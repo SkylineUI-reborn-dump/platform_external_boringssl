@@ -1,0 +1,9 @@
+Presubmit-Verified+2: Treehugger Robot <treehugger-gerrit@google.com>
+Lint+1: Lint 🤖 <ayeaye-gerrit@google.com>
+Code-Review+2: Pete Bentley <prb@google.com>
+Autosubmit+1: Jiyong Park <jiyong@google.com>
+Submitted-by: Treehugger Robot <treehugger-gerrit@google.com>
+Submitted-at: Thu, 07 Jan 2021 12:47:49 +0000
+Reviewed-on: https://android-review.googlesource.com/c/platform/external/boringssl/+/1538754
+Project: platform/external/boringssl
+Branch: refs/heads/master
