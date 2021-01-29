@@ -16,6 +16,24 @@
       "message": "Thanks!  \n\nThere\u0027s actually a lot of subtlety to building BoringSSL on Android for FIPS reasons. If you take a look at the existing blueprint, e.g. the way bcm_object is linked, the injection of a hash into the shared library and the restrictions on what can statically link.  So I don\u0027t think the BUILD.toplevel in BoringSSL will work here, that looks like it just has rules for simple cross-compilation for Android, which would be fine e.g. if you were bundling BoringSSL with an app but it\u0027s not going to work for BoringSSL in platform or APEXes.\n\nIf you plan is simply to land this as a starting point and iterate, then great, let me know and I\u0027ll approve.",
       "revId": "6aedb26e76e01683dfe249f98033d7e8451d2820",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f5dedad_b3ecfcab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-01-29T10:25:55Z",
+      "side": 1,
+      "message": "Oh, I should have read the CL description fully... Sorry!",
+      "parentUuid": "59343d68_8fd0de30",
+      "revId": "6aedb26e76e01683dfe249f98033d7e8451d2820",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
