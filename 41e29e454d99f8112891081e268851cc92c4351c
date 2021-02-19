@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a680854_4842d48f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1093255
+      },
+      "writtenOn": "2021-02-19T05:06:09Z",
+      "side": 1,
+      "message": "This change is going upstream first and has been rewritten: https://boringssl-review.googlesource.com/c/boringssl/+/45604. Leaving it up here until the upstream change has been merged.",
+      "revId": "41e29e454d99f8112891081e268851cc92c4351c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
