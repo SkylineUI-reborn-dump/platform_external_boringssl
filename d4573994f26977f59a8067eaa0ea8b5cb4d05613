@@ -34,6 +34,23 @@
       "parentUuid": "b2f94139_5315ede2",
       "revId": "d4573994f26977f59a8067eaa0ea8b5cb4d05613",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bf27a08_ffb8bb9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-03-03T13:22:31Z",
+      "side": 1,
+      "message": "Presubmit failure was unrelated boot test.",
+      "revId": "d4573994f26977f59a8067eaa0ea8b5cb4d05613",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
