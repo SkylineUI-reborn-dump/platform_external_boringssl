@@ -16,6 +16,29 @@
       "message": "Kenny and Pete should be sufficient to review this",
       "revId": "f29ac25b973427c8842a356ebcc36cd39e252e95",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1206a912_cc7d762e",
+        "filename": "rules.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-03-11T10:20:10Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to just remove lines 73-75?  If there\u0027s an issue then revert the CL, rather than have commented out code stick around forever.\n\n(I\u0027ll +2 it anyway as this file is only used by Trusty, but happy to review another revision)",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 39
+      },
+      "revId": "f29ac25b973427c8842a356ebcc36cd39e252e95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
