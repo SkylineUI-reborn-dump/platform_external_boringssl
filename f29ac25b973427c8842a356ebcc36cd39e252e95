@@ -39,6 +39,30 @@
       },
       "revId": "f29ac25b973427c8842a356ebcc36cd39e252e95",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dafdb9d7_3e920f67",
+        "filename": "rules.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1093255
+      },
+      "writtenOn": "2021-03-11T20:20:04Z",
+      "side": 1,
+      "message": "Done, good point, thanks.",
+      "parentUuid": "1206a912_cc7d762e",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 39
+      },
+      "revId": "f29ac25b973427c8842a356ebcc36cd39e252e95",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
