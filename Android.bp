@@ -152,6 +152,9 @@ cc_object {
         // successfully link against the HWASANified code in the rest of
         // BoringSSL in HWASAN builds.
         android_arm64: {
+            cflags: [
+                "-mharden-sls=retbr",
+            ],
             asflags: [
                 "-fsanitize=hwaddress",
             ],
