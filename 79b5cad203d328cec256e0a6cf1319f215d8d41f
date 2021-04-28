@@ -16,6 +16,23 @@
       "message": "Cannot +2 on my own.",
       "revId": "79b5cad203d328cec256e0a6cf1319f215d8d41f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59755744_2ca16089",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2021-04-28T04:12:39Z",
+      "side": 1,
+      "message": "I also cannot +2 and don\u0027t know anything about this build system. Happy to rubberstamp +1 if you like, but it\u0027s informationless and won\u0027t help land this. 😊",
+      "revId": "79b5cad203d328cec256e0a6cf1319f215d8d41f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
