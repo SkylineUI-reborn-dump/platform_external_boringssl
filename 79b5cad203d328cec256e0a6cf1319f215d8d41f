@@ -33,6 +33,23 @@
       "message": "I also cannot +2 and don\u0027t know anything about this build system. Happy to rubberstamp +1 if you like, but it\u0027s informationless and won\u0027t help land this. 😊",
       "revId": "79b5cad203d328cec256e0a6cf1319f215d8d41f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d1f9889_872fc064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-05-17T17:50:08Z",
+      "side": 1,
+      "message": "Pete, we\u0027re overhauling the Trusty userspace build system and need a code owner review on this. We\u0027re switching to building each userspace library globally once instead of for each app, but this shouldn\u0027t have any functional change.",
+      "revId": "79b5cad203d328cec256e0a6cf1319f215d8d41f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
