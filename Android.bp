@@ -266,6 +266,7 @@ cc_library {
 // somewhere that needs the FIPS version.
 cc_library_static {
     name: "libcrypto_static",
+    native_bridge_supported: true,
     visibility: [
         "//art/build/sdk",
         "//bootable/recovery/updater",
@@ -275,6 +276,7 @@ cc_library_static {
         // Strictly, only the *static* toybox for legacy devices should have
         // access to libcrypto_static, but we can't express that.
         "//external/toybox",
+        "//frameworks/native/libs/binder",
         "//hardware/interfaces/confirmationui/1.0/vts/functional",
         "//hardware/interfaces/drm/1.0/vts/functional",
         "//hardware/interfaces/drm/1.2/vts/functional",
