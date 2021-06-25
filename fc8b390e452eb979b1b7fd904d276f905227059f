@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "274e79e6_1d78e677",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2021-06-25T05:57:50Z",
+      "side": 1,
+      "message": "Can this be dropped in libbinder? b/153609531 seems to be fixed.",
+      "revId": "fc8b390e452eb979b1b7fd904d276f905227059f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
