@@ -16,6 +16,29 @@
       "message": "Can this be dropped in libbinder? b/153609531 seems to be fixed.",
       "revId": "fc8b390e452eb979b1b7fd904d276f905227059f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99394671_d302092b",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-06-25T10:52:22Z",
+      "side": 1,
+      "message": "It\u0027s not clear to me from the bug why this is needed, but can we possibly avoid it?\n\nlibcrypto_static is not built with FIPS support and so is intended only for binaries with no security impact. Binder does not fall into that category so should be using the dynamic libcrypto which is FIPS compliant.",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 42
+      },
+      "revId": "fc8b390e452eb979b1b7fd904d276f905227059f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
