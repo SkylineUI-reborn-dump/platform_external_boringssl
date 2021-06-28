@@ -314,6 +314,7 @@ cc_library_static {
 cc_library {
     name: "libssl",
     visibility: ["//visibility:public"],
+    double_loadable: true,
     recovery_available: true,
     vendor_available: true,
     product_available: true,
