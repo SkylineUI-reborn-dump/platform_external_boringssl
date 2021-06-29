@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c175311_37b8d247",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1793992
+      },
+      "writtenOn": "2021-06-29T14:12:40Z",
+      "side": 1,
+      "message": "Just wondering - should it be in ssl_test?",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 20
+      },
+      "revId": "628fe1b1f14c85e5acab2591a6716666ec5dc360",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
