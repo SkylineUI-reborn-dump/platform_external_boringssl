@@ -22,6 +22,30 @@
       },
       "revId": "628fe1b1f14c85e5acab2591a6716666ec5dc360",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfd1e478_0254bb4a",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-06-29T14:21:30Z",
+      "side": 1,
+      "message": "Thanks! I guess in theory no, as we already get libcrypto as a transitive dependency of libssl but it depends on whether any test code uses libcrypto methods.\n\nI\u0027ll try removing it in a separate CL and see.",
+      "parentUuid": "0c175311_37b8d247",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 20
+      },
+      "revId": "628fe1b1f14c85e5acab2591a6716666ec5dc360",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
