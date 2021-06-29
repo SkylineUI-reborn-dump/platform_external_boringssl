@@ -493,8 +493,22 @@ cc_library_static {
 // Tests
 cc_test {
     name: "boringssl_crypto_test",
-    test_suites: ["device-tests"],
+    test_suites: [
+        "device-tests",
+        "general-tests",
+        "mts-conscrypt",
+    ],
+    test_config: "NativeTests.xml",
     host_supported: true,
+    compile_multilib: "both",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+        lib64: {
+            suffix: "64",
+        },
+    },
     defaults: [
         "boringssl_crypto_test_sources",
         "boringssl_flags",
@@ -506,8 +520,22 @@ cc_test {
 
 cc_test {
     name: "boringssl_ssl_test",
-    test_suites: ["device-tests"],
+    test_suites: [
+        "device-tests",
+        "general-tests",
+        "mts-conscrypt",
+    ],
+    test_config: "NativeTests.xml",
     host_supported: true,
+    compile_multilib: "both",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+        lib64: {
+            suffix: "64",
+        },
+    },
     defaults: [
         "boringssl_ssl_test_sources",
         "boringssl_flags",
