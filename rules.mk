@@ -53,6 +53,8 @@ LOCAL_SRC_FILES := $(filter-out src/crypto/x509/by_dir.c,$(LOCAL_SRC_FILES))
 # no-op threading functions.
 MODULE_CFLAGS += -DTRUSTY
 
+MODULE_CFLAGS += -DBORINGSSL_FIPS
+
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
 toarmcap = $(if $(filter-out 0 false,$(2)),-DOPENSSL_STATIC_ARMCAP_$(1),)
