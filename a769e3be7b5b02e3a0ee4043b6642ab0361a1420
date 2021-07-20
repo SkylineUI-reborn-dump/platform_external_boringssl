@@ -16,6 +16,24 @@
       "message": "All the TH failures look like Trust build failures, probably due to the merge conflicts in the other CL in the topic.  Will re-run presubmits once that\u0027s resolved.",
       "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7522e65_d2c0d33d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-07-20T18:58:32Z",
+      "side": 1,
+      "message": "This is a failure due to enabling C11 atomics. Unfortunately the AOSP clang toolchain uses the bionic stdatomic.h, rather than the LLVM version, and it does not build against musl. We need to disable C11 atomics or somehow otherwise fix this for Trusty.",
+      "parentUuid": "cd40c377_bb88a534",
+      "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
