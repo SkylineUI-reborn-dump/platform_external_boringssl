@@ -70,6 +70,24 @@
       "parentUuid": "14693139_8ad83b80",
       "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e37bf7d_16584e59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-07-20T19:17:53Z",
+      "side": 1,
+      "message": "Done in https://android-review.googlesource.com/c/platform/external/boringssl/+/1773007/1",
+      "parentUuid": "1edffb2a_df7e8933",
+      "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
