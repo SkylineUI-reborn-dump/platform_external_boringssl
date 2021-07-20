@@ -34,6 +34,24 @@
       "parentUuid": "cd40c377_bb88a534",
       "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14693139_8ad83b80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2021-07-20T19:07:08Z",
+      "side": 1,
+      "message": "Ah hrm. I think there\u0027s two things we can do here.\n\n1. I\u0027ll make BoringSSL turn the atomics off on targets without threads, like Trusty.\n\n2. Trusty ought to define __STDC_NO_ATOMICS__, or fix atomics.\n\nEither of the two should be sufficient, but I think we should do both. (2) is worthwhile because atomics part of C11 and if Trusty doesn\u0027t support them, it should define the standard symbol that signals it\u0027s not there.\n\nThat would make (1) unnecessary, but if BoringSSL both knows atomics are supported and are in a configuration without threads, we shouldn\u0027t use atomics anyway. It\u0027s just unnecessary overhead at that point.",
+      "parentUuid": "a7522e65_d2c0d33d",
+      "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
