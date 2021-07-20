@@ -88,6 +88,24 @@
       "parentUuid": "1edffb2a_df7e8933",
       "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86055b1_86ce2460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2021-07-20T19:20:22Z",
+      "side": 1,
+      "message": "Cool. https://boringssl-review.googlesource.com/c/boringssl/+/48565 is (1). Even if you all fix atomics in Trusty, they\u0027re kinda pointless without threads, so I figure we don\u0027t want to use atomics anyway.",
+      "parentUuid": "8e37bf7d_16584e59",
+      "revId": "a769e3be7b5b02e3a0ee4043b6642ab0361a1420",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
