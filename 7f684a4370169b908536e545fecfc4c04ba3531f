@@ -16,6 +16,24 @@
       "message": "+cranes - this seems to break Trusty in a way I don\u0027t really understand, so any advice would be appreciated. But basically we need to land this (or equivalent preventing acvp_modulewrapper from building on non-FIPS targets) before we can reland the BoringSSL rollup you\u0027re waiting for.",
       "revId": "7f684a4370169b908536e545fecfc4c04ba3531f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb349dd7_727d7716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-07-21T18:29:44Z",
+      "side": 1,
+      "message": "Those are transient failures, try re-running. We don\u0027t use Android.bp at all in Trusty.",
+      "parentUuid": "9fccdda0_2c850c1b",
+      "revId": "7f684a4370169b908536e545fecfc4c04ba3531f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
