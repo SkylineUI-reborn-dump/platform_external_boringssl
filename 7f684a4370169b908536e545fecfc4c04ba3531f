@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fccdda0_2c850c1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-07-21T18:02:54Z",
+      "side": 1,
+      "message": "+cranes - this seems to break Trusty in a way I don\u0027t really understand, so any advice would be appreciated. But basically we need to land this (or equivalent preventing acvp_modulewrapper from building on non-FIPS targets) before we can reland the BoringSSL rollup you\u0027re waiting for.",
+      "revId": "7f684a4370169b908536e545fecfc4c04ba3531f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
