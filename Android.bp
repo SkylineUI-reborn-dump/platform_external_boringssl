@@ -422,13 +422,15 @@ cc_binary {
 // Not installed on devices by default.
 cc_binary {
     name: "acvp_modulewrapper",
-    host_supported: true,
     srcs: [
         "src/util/fipstools/acvp/modulewrapper/main.cc",
     ],
     target: {
-        android: {
+        android_arm: {
             compile_multilib: "both",
+        },
+        android_x86: {
+            enabled: false,
         },
     },
     stem: "modulewrapper",
