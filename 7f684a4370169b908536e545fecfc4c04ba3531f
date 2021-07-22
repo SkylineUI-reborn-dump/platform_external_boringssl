@@ -34,6 +34,24 @@
       "parentUuid": "9fccdda0_2c850c1b",
       "revId": "7f684a4370169b908536e545fecfc4c04ba3531f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a7a8cd_920a4d5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-07-22T08:17:09Z",
+      "side": 1,
+      "message": "Thanks! That\u0027s what I thought, but I confused myself due to the next rule down which splits out the lib_acvpmodulewrapper \"implementation shared between Android and Trusty\". :)",
+      "parentUuid": "eb349dd7_727d7716",
+      "revId": "7f684a4370169b908536e545fecfc4c04ba3531f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
