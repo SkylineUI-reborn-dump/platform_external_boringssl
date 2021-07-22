@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0524a931_34174425",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-07-22T20:44:40Z",
+      "side": 1,
+      "message": "Can we wait and get https://boringssl-review.googlesource.com/c/boringssl/+/48585 in here too?",
+      "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
