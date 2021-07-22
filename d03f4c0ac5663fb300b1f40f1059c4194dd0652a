@@ -34,6 +34,24 @@
       "parentUuid": "0524a931_34174425",
       "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89b46138_f8024f9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2021-07-22T22:19:30Z",
+      "side": 1,
+      "message": "I\u0027d suggest we try to get whatever works in, and then do another one shortly afterwards if we need one. This is the first roll after a long freeze (sigh...), so it\u0027s likely to require lots of iterations anyway. No sense in delaying us discovering the next issue.",
+      "parentUuid": "d819d7f9_1b7395c4",
+      "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
