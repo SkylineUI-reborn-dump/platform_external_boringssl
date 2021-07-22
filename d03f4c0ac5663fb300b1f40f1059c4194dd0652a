@@ -16,6 +16,24 @@
       "message": "Can we wait and get https://boringssl-review.googlesource.com/c/boringssl/+/48585 in here too?",
       "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d819d7f9_1b7395c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2021-07-22T20:46:26Z",
+      "side": 1,
+      "message": "It\u0027s not strictly needed, as it doesn\u0027t affect any code we use in the Trusty build, but we are going to use the acvptool changes and it would be nice if everything were using the same version.",
+      "parentUuid": "0524a931_34174425",
+      "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
