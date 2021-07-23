@@ -70,6 +70,24 @@
       "parentUuid": "89b46138_f8024f9d",
       "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84a0380_9c69bd08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-07-23T08:41:54Z",
+      "side": 1,
+      "message": "What David said 😊. I\u0027m happy to do these as frequently as needed now we\u0027re unfrozen again.\n\nI haven\u0027t seen any evidence of breakage apart from the `checkbuild` failure that caused the last rollback, so I\u0027m moderately confident that this CL will stick.",
+      "parentUuid": "bfee7156_504dd948",
+      "revId": "d03f4c0ac5663fb300b1f40f1059c4194dd0652a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
