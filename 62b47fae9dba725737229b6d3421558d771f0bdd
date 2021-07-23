@@ -16,6 +16,23 @@
       "message": "Hmm, breaking quiche is unexpected but it\u0027s too much of a coincidence to ignore.  Let\u0027s submit this revert while I try and repro.",
       "revId": "62b47fae9dba725737229b6d3421558d771f0bdd",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b97889b_39a9a107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1622353
+      },
+      "writtenOn": "2021-07-23T13:30:30Z",
+      "side": 1,
+      "message": "Confirmed revert makes the tests pass again.",
+      "revId": "62b47fae9dba725737229b6d3421558d771f0bdd",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
