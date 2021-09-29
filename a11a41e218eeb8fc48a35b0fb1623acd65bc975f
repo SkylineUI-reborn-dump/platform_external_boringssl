@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b6d5f9_f148b0b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1047684
+      },
+      "writtenOn": "2021-09-29T17:19:56Z",
+      "side": 1,
+      "message": "I think prb@ knows more about boringSSL than me",
+      "revId": "a11a41e218eeb8fc48a35b0fb1623acd65bc975f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
