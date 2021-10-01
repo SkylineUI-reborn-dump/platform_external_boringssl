@@ -16,6 +16,23 @@
       "message": "Fix for this is at https://partner-android-review.googlesource.com/c/platform/vendor/amlogic/common/+/2022321 but I don\u0027t think there\u0027s any chance of getting that merged tonight, so let\u0027s revert this one for now.",
       "revId": "220a654b699665d1048bc909780e4dc976e02197",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a790bd2_ed0f4528",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1874250
+      },
+      "writtenOn": "2021-10-01T00:05:15Z",
+      "side": 1,
+      "message": "Forrest build with just this CL reverted is successful, so reverting this one but keeping the other CL in the original topic.",
+      "revId": "220a654b699665d1048bc909780e4dc976e02197",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
