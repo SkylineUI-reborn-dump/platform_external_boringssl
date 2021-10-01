@@ -50,6 +50,24 @@
       "message": "@mweastwood what are your plans to fix this?",
       "revId": "220a654b699665d1048bc909780e4dc976e02197",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed6fc45_d7bf074d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-10-01T09:36:53Z",
+      "side": 1,
+      "message": "I have a fix for the vendor breakage going through TH now, then we can re-land this.",
+      "parentUuid": "23fad531_af7d3d12",
+      "revId": "220a654b699665d1048bc909780e4dc976e02197",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
