@@ -22,6 +22,30 @@
       },
       "revId": "1438023c8e40c427bc46336f8748f0b2d3b6ecda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd059deb_9e5b5c46",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2021-10-11T13:23:31Z",
+      "side": 1,
+      "message": "It was used at some point in the past, and got removed around the time we were asking module owners using it about system health issues: b/151140891#comment5",
+      "parentUuid": "15fd9c45_59296b7a",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "1438023c8e40c427bc46336f8748f0b2d3b6ecda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
