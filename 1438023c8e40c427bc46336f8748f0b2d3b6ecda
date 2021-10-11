@@ -70,6 +70,30 @@
       },
       "revId": "1438023c8e40c427bc46336f8748f0b2d3b6ecda",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e5ff573_6e157971",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1108919
+      },
+      "writtenOn": "2021-10-11T16:15:24Z",
+      "side": 1,
+      "message": "add a Bug: line in here referencing that bug.",
+      "parentUuid": "ff57d1e6_0153b3ed",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "1438023c8e40c427bc46336f8748f0b2d3b6ecda",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
