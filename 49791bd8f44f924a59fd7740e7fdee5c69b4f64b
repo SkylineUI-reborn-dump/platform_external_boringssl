@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7961ee00_7b3f5675",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1893966
+      },
+      "writtenOn": "2021-12-15T17:07:17Z",
+      "side": 1,
+      "message": "I don\u0027t have +2 but LGTM",
+      "revId": "49791bd8f44f924a59fd7740e7fdee5c69b4f64b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
