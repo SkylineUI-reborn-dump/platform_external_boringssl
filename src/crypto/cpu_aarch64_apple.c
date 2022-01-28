@@ -17,8 +17,8 @@
 #if defined(OPENSSL_AARCH64) && defined(OPENSSL_APPLE) && \
     !defined(OPENSSL_STATIC_ARMCAP)
 
-#include <sys/sysctl.h>
 #include <sys/types.h>
+#include <sys/sysctl.h>
 
 #include <openssl/arm_arch.h>
 
