@@ -16,6 +16,24 @@
       "message": "+enh for POSIX fun.",
       "revId": "308ca75cbab0e8cd9587ad651f961ffacc57256e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "136eef8c_47e0a726",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2022-01-28T17:06:04Z",
+      "side": 1,
+      "message": "this is for pthread_rwlock_t? yeah, you don\u0027t need this for bionic, and when +ccross finishes moving us off glibc for the host, you won\u0027t need it there either.\n\ninclude the mac build failure error message in the checkin comment?",
+      "parentUuid": "29915deb_65da1990",
+      "revId": "308ca75cbab0e8cd9587ad651f961ffacc57256e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
