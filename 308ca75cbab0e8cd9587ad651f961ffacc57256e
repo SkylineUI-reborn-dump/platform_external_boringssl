@@ -70,6 +70,24 @@
       "parentUuid": "9159f7d0_b2ec1c2d",
       "revId": "308ca75cbab0e8cd9587ad651f961ffacc57256e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8205189_ed9d2285",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-01-28T18:24:12Z",
+      "side": 1,
+      "message": "Based on that, Benjamin\u0027s fix sounds good... The POSIX feature flags have been there since this blueprint was migrated from a .mk file in 2016 so probably date back even further and as discussed offline can possibly be removed.\n\nMeanwhile excluding them from Mac builds seems like the way to go.",
+      "parentUuid": "63c7f89b_5315f8e8",
+      "revId": "308ca75cbab0e8cd9587ad651f961ffacc57256e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
