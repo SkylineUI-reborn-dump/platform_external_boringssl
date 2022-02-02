@@ -581,3 +581,107 @@ cc_binary {
         "src/util/fipstools/cavp/test_fips.c",
     ],
 }
+
+// Rust's bindgen doesn't cope with macros, so this target includes C functions that
+// do the same thing as macros defined in BoringSSL header files.
+cc_library {
+    name: "libbssl_sys_macro_wrappers",
+    srcs: ["src/rust/rust_wrapper.c"],
+    defaults: ["boringssl_defaults"],
+    cflags: ["-Wno-unused-parameter"],
+    vendor_available: true,
+}
+
+// Rust bindgen-generated bindings.
+rust_bindgen {
+    name: "libbssl_sys_bindgen",
+    wrapper_src: "src/rust/wrapper.h",
+    crate_name: "bssl_sys_bindgen",
+    // The upstream CMake-based code is careful to put bindgen output into an
+    // arch-specific file (as alignment may be different between target triples),
+    // but that's not needed here as Soong always puts generated code somewhere
+    // arch-specific anyway.
+    source_stem: "bssl_sys_bindings",
+    vendor_available: true,
+    shared_libs: [
+        "libcrypto",
+        "libssl",
+    ],
+    static_libs: [
+        "libbssl_sys_macro_wrappers",
+    ],
+    rustlibs: ["liblibc"],
+    bindgen_flags: [
+        "--no-derive-default",
+        "--enable-function-attribute-detection",
+        "--use-core",
+        "--size_t-is-usize",
+        "--default-macro-constant-type",
+        "signed",
+        "--rustified-enum",
+        "point_conversion_form_t",
+        // TODO(b/177080016): replace the following --blocklist-function arguments
+        // with a single argument like:
+        //    "--blocklist-file", "/usr/include/.*",
+        // or:
+        //    "--allowlist-file", ".*/openssl/.*",
+        // once upstream bindgen gets a new release that includes the option.
+        // This will also require `use libc::*` in the wrapper, so that (e.g.) things
+        // in the BoringSSL API that use `FILE*` still work.
+        "--blocklist-function",
+        "strtold",
+        "--blocklist-function",
+        "qecvt",
+        "--blocklist-function",
+        "qecvt_r",
+        "--blocklist-function",
+        "qgcvt",
+        "--blocklist-function",
+        "qfcvt",
+        "--blocklist-function",
+        "qfcvt_r",
+    ],
+    cflags: [
+        "-Isrc/include",
+    ],
+}
+
+// Encapsulate the bindgen-generated layout tests as a test target.
+rust_test {
+    name: "libbssl_sys_bindgen_test",
+    srcs: [
+        ":libbssl_sys_bindgen",
+    ],
+    rustlibs: ["liblibc"],
+    crate_name: "bssl_sys_bindgen_test",
+    test_suites: ["general-tests"],
+    auto_gen_config: true,
+    clippy_lints: "none",
+    lints: "none",
+}
+
+// The low-level bssl_sys crate.
+rust_library {
+    name: "libbssl_sys",
+    crate_name: "bssl_sys",
+    srcs: [
+        "rust/bssl_sys.rs",
+        ":libbssl_sys_bindgen",
+    ],
+    rustlibs: ["liblibc"],
+    shared_libs: [
+        "libcrypto",
+        "libssl",
+    ],
+    static_libs: [
+        "libbssl_sys_macro_wrappers",
+    ],
+    vendor_available: true,
+}
+
+rust_test {
+    name: "libbssl_sys_test",
+    srcs: ["rust/bssl_sys_test.rs"],
+    rustlibs: ["libbssl_sys"],
+    test_suites: ["general-tests"],
+}
