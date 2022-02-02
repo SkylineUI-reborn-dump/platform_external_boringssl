@@ -1,0 +1,10 @@
+{
+  "presubmit": [
+    {
+      "name": "libbssl_sys_bindgen_test"
+    },
+    {
+      "name": "libbssl_sys_test"
+    }
+  ]
+}
