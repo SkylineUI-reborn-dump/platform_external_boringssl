@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03224882_d9bcf81c",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-02-03T17:44:01Z",
+      "side": 1,
+      "message": "Is it worth splitting out separate bindings for libcrypto and libssl, so that apps not using libssl don\u0027t pay the overhead?",
+      "range": {
+        "startLine": 597,
+        "startChar": 11,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c993c52_d17fb64a",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-02-03T17:44:01Z",
+      "side": 1,
+      "message": "Please add a TODO with a bugid.  And most of the detail can go in the bug :)",
+      "range": {
+        "startLine": 640,
+        "startChar": 11,
+        "endLine": 640,
+        "endChar": 37
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b28eadc_bdb2531e",
         "filename": "rust/bssl_sys.rs",
         "patchSetId": 3
