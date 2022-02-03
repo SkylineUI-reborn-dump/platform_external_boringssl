@@ -80,6 +80,24 @@
       "parentUuid": "9b28eadc_bdb2531e",
       "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2660977e_e7f2de73",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-02-03T18:24:03Z",
+      "side": 1,
+      "message": "If you do start generating these via generate_build_files.py, then let\u0027s move them to src/rust too.",
+      "parentUuid": "e7843a9d_2fcc8f6e",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
