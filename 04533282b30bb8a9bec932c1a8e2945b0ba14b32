@@ -22,6 +22,30 @@
       },
       "revId": "04533282b30bb8a9bec932c1a8e2945b0ba14b32",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c2c1b94_51034f9c",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-03T15:26:44Z",
+      "side": 1,
+      "message": "It works without the .rs file, so removed.",
+      "parentUuid": "e2867679_3c41da6c",
+      "range": {
+        "startLine": 651,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 0
+      },
+      "revId": "04533282b30bb8a9bec932c1a8e2945b0ba14b32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
