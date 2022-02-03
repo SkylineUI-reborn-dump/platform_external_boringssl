@@ -62,6 +62,24 @@
       "message": "Nit: Can you include a pointer to rust/src/lib.rs where you instantiated this from? It\u0027d be good to know that this file isn\u0027t standalone in the event that it needs to be updated.\n\nThis is effectively generated code, but it\u0027d be overkill to switch to a cmake-based build just to generate this one file.",
       "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7843a9d_2fcc8f6e",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2022-02-03T18:13:57Z",
+      "side": 1,
+      "message": "Oh yuck. This had not occurred to me when reviewing bwb\u0027s original CL. Agreed you all shouldn\u0027t switch to CMake, but this also means this bssl-sys story should change a bit.\n\nWe should either automate generating this file (generate_build_files.py), or rearrange things so that the bulk of it (the ERR_GET_LIB wrappers) are part of static BoringSSL source.\n\nI\u0027m not very familiar with Rust. Can someone from the Android Rust team own this?",
+      "parentUuid": "9b28eadc_bdb2531e",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
