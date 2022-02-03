@@ -98,6 +98,24 @@
       "parentUuid": "e7843a9d_2fcc8f6e",
       "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b814a3da_eeb70b13",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2022-02-03T18:29:49Z",
+      "side": 1,
+      "message": "I\u0027m actually wondering whether Rust provides enough rope to avoid needing to pregenerate it. This file is completely static except for an include!(...) line.\n\nSurely we could just generate a single include! line that\u0027s good for everyone (this one\u0027s env-parameterized), or maybe just use Rust\u0027s modules mechanism? (I\u0027m handwaiving a bit because I don\u0027t know what Rust provides.)",
+      "parentUuid": "2660977e_e7f2de73",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
