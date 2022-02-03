@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59dde5f5_f6f3aa5b",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-03T18:40:00Z",
+      "side": 1,
+      "message": "I\u0027m probably expecting that users will not use bssl_sys directly, but instead will use the openssl crate, adapted to use bssl_sys as its ffi layer.  If that\u0027s the case, then the granularity here should match what openssl expects -- I\u0027ll investigate.",
+      "parentUuid": "03224882_d9bcf81c",
+      "range": {
+        "startLine": 597,
+        "startChar": 11,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c993c52_d17fb64a",
         "filename": "Android.bp",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2022-02-03T17:44:01Z",
       "side": 1,
       "message": "Please add a TODO with a bugid.  And most of the detail can go in the bug :)",
+      "range": {
+        "startLine": 640,
+        "startChar": 11,
+        "endLine": 640,
+        "endChar": 37
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef14f27_923abf83",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-03T18:40:00Z",
+      "side": 1,
+      "message": "Re-united the two halves of the comment to make the existing TODO clearer (although I\u0027ve not yet updated the bug with any details).",
+      "parentUuid": "2c993c52_d17fb64a",
       "range": {
         "startLine": 640,
         "startChar": 11,
@@ -114,6 +162,24 @@
       "side": 1,
       "message": "I\u0027m actually wondering whether Rust provides enough rope to avoid needing to pregenerate it. This file is completely static except for an include!(...) line.\n\nSurely we could just generate a single include! line that\u0027s good for everyone (this one\u0027s env-parameterized), or maybe just use Rust\u0027s modules mechanism? (I\u0027m handwaiving a bit because I don\u0027t know what Rust provides.)",
       "parentUuid": "2660977e_e7f2de73",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00ba848_50b58c17",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-03T18:40:00Z",
+      "side": 1,
+      "message": "\u003e Surely we could just generate a single include! line that\u0027s good for everyone \n\nYeah, I suspect that\u0027s possible with a bit of build.rs hackery -- I think I\u0027ve even got an experiment along those lines (git) stashed somewhere...",
+      "parentUuid": "9b28eadc_bdb2531e",
       "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
