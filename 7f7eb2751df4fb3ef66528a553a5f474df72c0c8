@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b28eadc_bdb2531e",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-02-03T17:26:26Z",
+      "side": 1,
+      "message": "Nit: Can you include a pointer to rust/src/lib.rs where you instantiated this from? It\u0027d be good to know that this file isn\u0027t standalone in the event that it needs to be updated.\n\nThis is effectively generated code, but it\u0027d be overkill to switch to a cmake-based build just to generate this one file.",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
