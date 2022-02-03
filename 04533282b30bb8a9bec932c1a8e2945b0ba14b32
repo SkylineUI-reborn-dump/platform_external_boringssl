@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2867679_3c41da6c",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1115178
+      },
+      "writtenOn": "2022-02-03T15:10:11Z",
+      "side": 1,
+      "message": "If bssl_sys_bindgen_test.rs is just boilerplate to call include on the bindgen bindings, then this can just be\n\n  srcs: [\n    \":libssl_sys_bindgen\",\n  ],\n  \nBut if you need the `use libc::*` line for successful compilation of the tests then this should probably stay as is.",
+      "range": {
+        "startLine": 651,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 0
+      },
+      "revId": "04533282b30bb8a9bec932c1a8e2945b0ba14b32",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
