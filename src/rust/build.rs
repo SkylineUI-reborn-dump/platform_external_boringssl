@@ -22,5 +22,5 @@ fn main() {
     println!("cargo:rustc-link-lib=static=ssl");
 
     println!("cargo:rustc-link-search=native=.");
-    println!("cargo:rustc-link-lib=static=rust_wrapper");
+    println!("cargo:rustc-link-lib=static=macro_wrapper");
 }

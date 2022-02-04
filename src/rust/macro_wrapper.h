@@ -12,8 +12,8 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-#ifndef OPENSSL_HEADER_RUST_WRAPPER_H
-#define OPENSSL_HEADER_RUST_WRAPPER_H
+#ifndef OPENSSL_HEADER_MACRO_WRAPPER_H
+#define OPENSSL_HEADER_MACRO_WRAPPER_H
 
 #include <openssl/err.h>
 
@@ -21,17 +21,15 @@
 extern "C" {
 #endif
 
-
 // The following functions are wrappers over inline functions and macros in
 // BoringSSL, which bindgen cannot currently correctly bind. These wrappers
 // ensure changes to the functions remain in lockstep with the Rust versions.
-int ERR_GET_LIB_RUST(uint32_t packed_error);
-int ERR_GET_REASON_RUST(uint32_t packed_error);
-int ERR_GET_FUNC_RUST(uint32_t packed_error);
-
+int ERR_GET_LIB_MACRO(uint32_t packed_error);
+int ERR_GET_REASON_MACRO(uint32_t packed_error);
+int ERR_GET_FUNC_MACRO(uint32_t packed_error);
 
 #if defined(__cplusplus)
 }  // extern C
 #endif
 
-#endif  // OPENSSL_HEADER_RUST_WRAPPER_H
+#endif  // OPENSSL_HEADER_MACRO_WRAPPER_H
