@@ -182,6 +182,24 @@
       "parentUuid": "9b28eadc_bdb2531e",
       "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9efc82b0_b6cfbbb7",
+        "filename": "rust/bssl_sys.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-04T14:57:38Z",
+      "side": 1,
+      "message": "I found some Android.bp hackery that appears to do the trick.\n\nSeparately, I\u0027ll send a CL upstream to BoringSSL that improves docs and tests; once that\u0027s in and imported, we can add another rust_test target here.",
+      "parentUuid": "d00ba848_50b58c17",
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
