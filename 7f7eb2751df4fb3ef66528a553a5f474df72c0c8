@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6f646de_845fb820",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-02-08T22:23:11Z",
+      "side": 1,
+      "message": "I think we should just keep them merged for now. If someone ends up using only part of it later, we can split them apart.",
+      "parentUuid": "55faf5da_63d97dad",
+      "range": {
+        "startLine": 597,
+        "startChar": 11,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c993c52_d17fb64a",
         "filename": "Android.bp",
         "patchSetId": 3
