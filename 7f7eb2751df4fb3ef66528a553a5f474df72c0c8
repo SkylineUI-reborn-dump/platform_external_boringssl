@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55faf5da_63d97dad",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-02-08T19:26:56Z",
+      "side": 1,
+      "message": "The Rust `openssl` crate doesn\u0027t appear to have any separation between functionality provided by libcrypto vs libssl, so dividing things up wouldn\u0027t make a difference for anyone access this lower-level stuff via that crate.\n\nSo if we don\u0027t expect much direct use of the low-level `bssl_sys` bindings, then I don\u0027t think splitting is worthwhile.\n\nThoughts?",
+      "parentUuid": "59dde5f5_f6f3aa5b",
+      "range": {
+        "startLine": 597,
+        "startChar": 11,
+        "endLine": 597,
+        "endChar": 30
+      },
+      "revId": "7f7eb2751df4fb3ef66528a553a5f474df72c0c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c993c52_d17fb64a",
         "filename": "Android.bp",
         "patchSetId": 3
