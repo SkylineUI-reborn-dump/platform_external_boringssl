@@ -16,6 +16,23 @@
       "message": "Treehugger issue seems unrelated? It\u0027s complaining about a C++14 extension in aosp-trusty-master, but this is touching C flags, not C++. It also should only affect the external/boringssl target, and I don\u0027t think trusty even uses this build file.",
       "revId": "eee229fd6f116ad0b8d60cc6017a1bb8163a5fe2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10b3517_fbb5ba8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-03-01T12:47:04Z",
+      "side": 1,
+      "message": "The Trusty metrics failure _looks_ like it might be unrelated.",
+      "revId": "eee229fd6f116ad0b8d60cc6017a1bb8163a5fe2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
