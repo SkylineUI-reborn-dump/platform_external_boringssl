@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ffe2526_023903de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-03-01T10:21:35Z",
+      "side": 1,
+      "message": "Tests pass :)\n(There\u0027s no Verified check box anymore)",
+      "revId": "83b8e972304d779fc67577a252245f09eae1f486",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
