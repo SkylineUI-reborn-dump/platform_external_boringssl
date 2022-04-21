@@ -329,6 +329,7 @@ cc_test_library {
         "boringssl_flags",
         "boringssl_fuzz_unsafe_defaults",
     ],
+    isolated: false,
 }
 
 //// libssl
