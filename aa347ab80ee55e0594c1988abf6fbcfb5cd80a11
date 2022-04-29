@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2035b9e2_22ef50f1",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-04-29T17:19:44Z",
+      "side": 1,
+      "message": "Up to you, but maybe move these definitions up above the tests and FIPS utils along with the other libraries?",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 16
+      },
+      "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848377b0_9d0c93f6",
+        "filename": "src/rust/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-04-29T17:19:44Z",
+      "side": 1,
+      "message": "You\u0027ll need to upstream this to BoringSSL or it\u0027ll get lost next time we update from them.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 24
+      },
+      "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
