@@ -45,6 +45,30 @@
       },
       "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf100b00_ce77f3d4",
+        "filename": "src/rust/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-04-29T18:21:37Z",
+      "side": 1,
+      "message": "Do we have any way of maintaining local changes? Upstream will want to keep ${INCLUDES} because they build with cmake, not Soong, but `rustc` will not even parse this file with the ${INCLUDES} in it, so we can\u0027t use conditional compilation to make a version that works in both places.",
+      "parentUuid": "848377b0_9d0c93f6",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 24
+      },
+      "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
