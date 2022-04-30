@@ -69,6 +69,30 @@
       },
       "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0912114e_035cca5c",
+        "filename": "src/rust/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-04-30T05:21:04Z",
+      "side": 1,
+      "message": "aosp/1970879 has a genrule hack to avoid the need to change the upstream code -- is it worth a look?  \n\n(Most of that CL has been superseded by this CL, but there\u0027s a couple of other bits in it that might also be helpful)",
+      "parentUuid": "cf100b00_ce77f3d4",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 24
+      },
+      "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
