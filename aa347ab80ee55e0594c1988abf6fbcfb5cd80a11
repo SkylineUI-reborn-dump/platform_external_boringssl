@@ -93,6 +93,30 @@
       },
       "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb96c0b8_24d663a5",
+        "filename": "src/rust/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-05-01T18:55:40Z",
+      "side": 1,
+      "message": "Yeah, I\u0027ll incorporate those changes, that should be enough to make it update cleanly.",
+      "parentUuid": "0912114e_035cca5c",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 24
+      },
+      "revId": "aa347ab80ee55e0594c1988abf6fbcfb5cd80a11",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
