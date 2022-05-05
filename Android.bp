@@ -124,6 +124,7 @@ cc_object {
         address: false,
         hwaddress: false,
         fuzzer: false,
+        memtag_stack: false, // incompatible with -fsanitize=hwaddress in asflags
     },
     target: {
         android: {
