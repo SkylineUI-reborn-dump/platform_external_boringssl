@@ -616,7 +616,10 @@ rust_library {
     name: "libbssl_ffi",
     host_supported: true,
     crate_name: "bssl_ffi",
-    visibility: ["//external/rust/crates/openssl"],
+    visibility: [
+        "//external/rust/crates/openssl",
+        "//system/keymint/boringssl",
+    ],
     srcs: ["src/rust/src/lib.rs"],
     vendor_available: true,
     // Since libbssl_sys_raw is not publically visible, we can't
