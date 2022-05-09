@@ -572,6 +572,7 @@ rust_bindgen {
     crate_name: "bssl_sys_raw",
     host_supported: true,
     wrapper_src: "src/rust/wrapper.h",
+    vendor_available: true,
     bindgen_flags: [
         "--no-derive-default",
         "--enable-function-attribute-detection",
@@ -617,6 +618,7 @@ rust_library {
     crate_name: "bssl_ffi",
     visibility: ["//external/rust/crates/openssl"],
     srcs: ["src/rust/src/lib.rs"],
+    vendor_available: true,
     // Since libbssl_sys_raw is not publically visible, we can't
     // accidentally force a double-link by linking statically, so do so.
     rlibs: ["libbssl_sys_raw"],
