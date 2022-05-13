@@ -449,7 +449,7 @@ int x509v3_cache_extensions(X509 *x)
         if (bs->pathlen) {
             if ((bs->pathlen->type == V_ASN1_NEG_INTEGER)
                 || !bs->ca) {
-                x->ex_flags |= EXFLAG_INVALID;
+                //x->ex_flags |= EXFLAG_INVALID;
                 x->ex_pathlen = 0;
             } else {
                 /* TODO(davidben): |ASN1_INTEGER_get| returns -1 on overflow,
