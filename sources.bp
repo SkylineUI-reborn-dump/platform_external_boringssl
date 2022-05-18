@@ -253,6 +253,7 @@ cc_defaults {
         linux_arm64: {
             srcs: [
                 "linux-aarch64/crypto/chacha/chacha-armv8.S",
+                "linux-aarch64/crypto/cipher_extra/chacha20_poly1305_armv8.S",
                 "linux-aarch64/crypto/test/trampoline-armv8.S",
             ],
         },
@@ -294,6 +295,8 @@ cc_defaults {
                 "linux-aarch64/crypto/fipsmodule/armv8-mont.S",
                 "linux-aarch64/crypto/fipsmodule/ghash-neon-armv8.S",
                 "linux-aarch64/crypto/fipsmodule/ghashv8-armx64.S",
+                "linux-aarch64/crypto/fipsmodule/p256-armv8-asm.S",
+                "linux-aarch64/crypto/fipsmodule/p256_beeu-armv8-asm.S",
                 "linux-aarch64/crypto/fipsmodule/sha1-armv8.S",
                 "linux-aarch64/crypto/fipsmodule/sha256-armv8.S",
                 "linux-aarch64/crypto/fipsmodule/sha512-armv8.S",
@@ -461,7 +464,7 @@ cc_defaults {
         "src/crypto/fipsmodule/aes/aes_test.cc",
         "src/crypto/fipsmodule/bn/bn_test.cc",
         "src/crypto/fipsmodule/ec/ec_test.cc",
-        "src/crypto/fipsmodule/ec/p256-x86_64_test.cc",
+        "src/crypto/fipsmodule/ec/p256-nistz_test.cc",
         "src/crypto/fipsmodule/ecdsa/ecdsa_test.cc",
         "src/crypto/fipsmodule/md5/md5_test.cc",
         "src/crypto/fipsmodule/modes/gcm_test.cc",
