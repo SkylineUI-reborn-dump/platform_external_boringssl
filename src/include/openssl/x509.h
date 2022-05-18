@@ -199,7 +199,8 @@ DEFINE_STACK_OF(X509_TRUST)
 #define X509_FLAG_NO_ATTRIBUTES (1L << 11)
 #define X509_FLAG_NO_IDS (1L << 12)
 
-// Flags specific to X509_NAME_print_ex()
+// Flags specific to X509_NAME_print_ex(). These flags must not collide with
+// |ASN1_STRFLGS_*|.
 
 // The field separator information
 
@@ -815,9 +816,6 @@ OPENSSL_EXPORT const char *X509_get_default_cert_file(void);
 OPENSSL_EXPORT const char *X509_get_default_cert_dir_env(void);
 OPENSSL_EXPORT const char *X509_get_default_cert_file_env(void);
 OPENSSL_EXPORT const char *X509_get_default_private_dir(void);
-
-OPENSSL_EXPORT X509_REQ *X509_to_X509_REQ(X509 *x, EVP_PKEY *pkey,
-                                          const EVP_MD *md);
 
 DECLARE_ASN1_ENCODE_FUNCTIONS(X509_ALGORS, X509_ALGORS, X509_ALGORS)
 

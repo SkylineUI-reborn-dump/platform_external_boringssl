@@ -250,10 +250,13 @@ crypto_sources := \
 
 linux_aarch64_sources := \
   linux-aarch64/crypto/chacha/chacha-armv8.S\
+  linux-aarch64/crypto/cipher_extra/chacha20_poly1305_armv8.S\
   linux-aarch64/crypto/fipsmodule/aesv8-armx64.S\
   linux-aarch64/crypto/fipsmodule/armv8-mont.S\
   linux-aarch64/crypto/fipsmodule/ghash-neon-armv8.S\
   linux-aarch64/crypto/fipsmodule/ghashv8-armx64.S\
+  linux-aarch64/crypto/fipsmodule/p256-armv8-asm.S\
+  linux-aarch64/crypto/fipsmodule/p256_beeu-armv8-asm.S\
   linux-aarch64/crypto/fipsmodule/sha1-armv8.S\
   linux-aarch64/crypto/fipsmodule/sha256-armv8.S\
   linux-aarch64/crypto/fipsmodule/sha512-armv8.S\
