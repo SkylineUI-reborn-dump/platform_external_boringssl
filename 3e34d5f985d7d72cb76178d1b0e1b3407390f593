@@ -46,6 +46,30 @@
       },
       "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c2ed59_2a32b7c8",
+        "filename": "Android.bp",
+        "patchSetId": 12
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-05-25T18:27:49Z",
+      "side": 0,
+      "message": "Everything in this file is default visibility restricted unless you expand its visibility. Is there a reason you chose to `include!` it rather than `pub use`ing it? We\u0027re generally trying to avoid `include!` when we can for 1p code.",
+      "parentUuid": "fdcc5933_9d84b7e9",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 6
+      },
+      "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
