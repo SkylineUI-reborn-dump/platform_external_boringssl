@@ -70,6 +70,30 @@
       },
       "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "819e134d_a2ab2eef",
+        "filename": "Android.bp",
+        "patchSetId": 12
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-05-25T18:51:22Z",
+      "side": 0,
+      "message": "I was just trying to follow what the upstream CMakeLists.txt does here, but I guess there\u0027s no reason not to replace `${INCLUDES}` with `pub use bssl_sys_raw::*;` instead of `include!(...)` -- I\u0027ll have a go tomorrow.",
+      "parentUuid": "d3c2ed59_2a32b7c8",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 6
+      },
+      "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
