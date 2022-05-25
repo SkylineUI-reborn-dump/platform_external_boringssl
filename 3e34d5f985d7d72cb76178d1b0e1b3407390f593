@@ -22,6 +22,30 @@
       },
       "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdcc5933_9d84b7e9",
+        "filename": "Android.bp",
+        "patchSetId": 12
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-05-25T18:25:39Z",
+      "side": 0,
+      "message": "I needed to add these dependencies in the `libbssl_ffi` target because it\u0027s now directly `include!`ing the generated source code, rather than depending on the generated crate and `pub use`-ing things. I happened to move them, rather than copying them.\n\nBut you\u0027re right, if anything depended on `libbssl_sys_raw` as a library (*), then these should be needed.  OTOH, `m libbssl_sys_raw` still works without them, which seems odd.  I\u0027ll try to dig more tomorrow.\n\n*: I guess nothing should depend on `libbssl_sys_raw` directly (instead of `libbssl_ffi`) so should we visibility-restrict it?",
+      "parentUuid": "6f379d95_d82a4d5b",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 6
+      },
+      "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
