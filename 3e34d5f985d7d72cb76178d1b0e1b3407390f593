@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f379d95_d82a4d5b",
+        "filename": "Android.bp",
+        "patchSetId": 12
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-05-25T17:55:37Z",
+      "side": 0,
+      "message": "Why move these from the bindgen module to the ffi module? This module won\u0027t work without them, so don\u0027t they go here?",
+      "range": {
+        "startLine": 598,
+        "startChar": 0,
+        "endLine": 601,
+        "endChar": 6
+      },
+      "revId": "3e34d5f985d7d72cb76178d1b0e1b3407390f593",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
