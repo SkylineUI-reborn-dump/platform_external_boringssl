@@ -16,6 +16,24 @@
       "message": "Update:\n--blocklist-file was included in bindgen 0.59.2\n--allowlist-file is in the repo, but not yet in a release.",
       "revId": "e6f2aea2a327bbc3c95da4aa82681c79eecffff4",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01a72b8a_e28e4530",
+        "filename": "Android.bp",
+        "patchSetId": 9
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2022-05-25T16:44:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "297affbc_2c3e651f",
+      "revId": "e6f2aea2a327bbc3c95da4aa82681c79eecffff4",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
