@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60341eb6_603ac0c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2022-05-26T00:00:52Z",
+      "side": 1,
+      "message": "The trusty failure looks like flake, the previous issue should now be fixed.",
+      "revId": "14d85646f4f262368899b327b98ecb87252fd6c8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
