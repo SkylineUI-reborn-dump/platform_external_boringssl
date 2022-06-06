@@ -16,6 +16,24 @@
       "message": "Please add Android-changed comment if this change is Android-only (i.e. not coming from upstream).",
       "revId": "781ec39a76b8b10b18ec81300b0dc09c09899bec",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd2c4e31_4bec0caf",
+        "filename": "src/crypto/fipsmodule/hmac/hmac.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1293738
+      },
+      "writtenOn": "2022-06-06T22:47:31Z",
+      "side": 1,
+      "message": "I will upstream it.",
+      "parentUuid": "2cc4b76e_245855a4",
+      "revId": "781ec39a76b8b10b18ec81300b0dc09c09899bec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
