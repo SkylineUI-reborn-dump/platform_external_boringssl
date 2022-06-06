@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc4b76e_245855a4",
+        "filename": "src/crypto/fipsmodule/hmac/hmac.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1793992
+      },
+      "writtenOn": "2022-06-06T16:52:34Z",
+      "side": 1,
+      "message": "Please add Android-changed comment if this change is Android-only (i.e. not coming from upstream).",
+      "revId": "781ec39a76b8b10b18ec81300b0dc09c09899bec",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
