@@ -3307,6 +3307,7 @@ TEST(X509Test, GeneralName)  {
   }
 }
 
+<<<<<<< HEAD   (d293cf Merge "ANDROID: Build fix for hmac.c" am: 1710f81be4)
 // Test that extracting fields of an |X509_ALGOR| works correctly.
 TEST(X509Test, X509AlgorExtract) {
   static const char kTestOID[] = "1.2.840.113554.4.1.72585.2";
@@ -3960,6 +3961,8 @@ TEST(X509Test, Names) {
   }
 }
 
+=======
+>>>>>>> BRANCH (54a589 Merge Android 12 QPR3 ab/8391262)
 TEST(X509Test, AddDuplicates) {
   bssl::UniquePtr<X509_STORE> store(X509_STORE_new());
   bssl::UniquePtr<X509> a(CertFromPEM(kCrossSigningRootPEM));
