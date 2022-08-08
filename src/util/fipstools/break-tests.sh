@@ -156,10 +156,18 @@ else # Device mode
   check_directory "$ANDROID_PRODUCT_OUT"
   test "$TARGET_PRODUCT" =  "aosp_arm64" || die "Lunch target is $TARGET_PRODUCT not aosp_arm64"
 
-  TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips"
+  VARIANT="64"
+  if [ "$VARIANT" = "64" ]; then
+      TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips64"
+      LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto.so"
+      LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto_for_testing.so"
+  else
+      TEST_FIPS_BIN="$ANDROID_PRODUCT_OUT/system/bin/test_fips32"
+      LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib/libcrypto.so"
+      LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib/libcrypto_for_testing.so"
+  fi
+
   check_file "$TEST_FIPS_BIN"
-  LIBCRYPTO_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto.so"
-  LIBCRYPTO_BREAK_BIN="$ANDROID_PRODUCT_OUT/system/lib64/libcrypto_for_testing.so"
   check_file "$LIBCRYPTO_BIN"
   check_file "$LIBCRYPTO_BREAK_BIN"
 
