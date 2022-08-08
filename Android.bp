@@ -655,6 +655,24 @@ cc_binary {
     defaults: [
         "boringssl_flags",
     ],
+    target: {
+        android_x86: {
+            enabled: false,
+        },
+        android_x86_64: {
+            enabled: false,
+        },
+    },
+    stem: "test_fips",
+    compile_multilib: "both",
+    multilib: {
+        lib32: {
+            suffix: "32",
+        },
+        lib64: {
+            suffix: "64",
+        },
+    },
     shared_libs: [
         "libcrypto",
     ],
