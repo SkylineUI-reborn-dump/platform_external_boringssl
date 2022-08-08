@@ -16,6 +16,23 @@
       "message": "Builds and boots, native tests pass, java tests still running... ",
       "revId": "87fc3dfcb97b5a150f1e618b0ff59560ca78b5eb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2be6571_5d0d5ac8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-08-08T12:05:26Z",
+      "side": 1,
+      "message": "Weird, this test was *not* supposed to auto-submit!  Local tests have all passed though.",
+      "revId": "87fc3dfcb97b5a150f1e618b0ff59560ca78b5eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
