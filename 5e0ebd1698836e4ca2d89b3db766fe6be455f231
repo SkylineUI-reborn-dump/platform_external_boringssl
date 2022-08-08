@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d82b47_8ce60e5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-08-08T14:24:26Z",
+      "side": 1,
+      "message": "(Bypassing presubmit - manually run FIPS test script, no impact on other builds)",
+      "revId": "5e0ebd1698836e4ca2d89b3db766fe6be455f231",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
