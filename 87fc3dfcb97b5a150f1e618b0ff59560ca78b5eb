@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ace21ca_9467eb8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-08-08T09:30:49Z",
+      "side": 1,
+      "message": "Builds and boots, native tests pass, java tests still running... ",
+      "revId": "87fc3dfcb97b5a150f1e618b0ff59560ca78b5eb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
