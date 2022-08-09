@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e3c6b13_36623361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-08-09T08:51:05Z",
+      "side": 1,
+      "message": "I\u0027m OOO today, but will follow up on the linked bug tomorrow.",
+      "revId": "37b5e9ad961448bf4b990d96bf090ac089c10a5e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
