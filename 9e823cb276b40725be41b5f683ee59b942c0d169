@@ -16,6 +16,24 @@
       "message": "Comment just to not trigger autosubmit",
       "revId": "9e823cb276b40725be41b5f683ee59b942c0d169",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41204d62_9b1b6298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1881060
+      },
+      "writtenOn": "2022-08-25T18:40:31Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you blocked autosubmit",
+      "parentUuid": "b780229a_f31dfcd8",
+      "revId": "9e823cb276b40725be41b5f683ee59b942c0d169",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
