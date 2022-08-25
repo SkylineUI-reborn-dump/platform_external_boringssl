@@ -64,7 +64,6 @@
 #include "dh/dh.c"
 #include "digest/digest.c"
 #include "digest/digests.c"
-#include "digestsign/digestsign.c"
 #include "ecdh/ecdh.c"
 #include "ecdsa/ecdsa.c"
 #include "ec/ec.c"

@@ -54,9 +54,8 @@
 #include <openssl/err.h>
 #include <openssl/mem.h>
 
-#include "../delocate.h"
-#include "../service_indicator/internal.h"
 #include "internal.h"
+#include "../service_indicator/internal.h"
 
 
 struct ccm128_context {
