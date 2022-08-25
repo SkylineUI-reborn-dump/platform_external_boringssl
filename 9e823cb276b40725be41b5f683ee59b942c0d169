@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b780229a_f31dfcd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1793992
+      },
+      "writtenOn": "2022-08-25T08:21:24Z",
+      "side": 1,
+      "message": "Comment just to not trigger autosubmit",
+      "revId": "9e823cb276b40725be41b5f683ee59b942c0d169",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
