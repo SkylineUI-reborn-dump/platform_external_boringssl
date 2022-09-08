@@ -16,6 +16,23 @@
       "message": "Separating from the rest of agl\u0027s topic as I have WIP CLs for the other parts elsewhere.\n\nLGTM but let\u0027s see what TH says.\n\nThe change to src/ has been agreed with upstream, so it won\u0027t get overwritten on the next update.",
       "revId": "ef4ce7c969b76f37cf793c62f73842a25bcdfb1f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f168fa_916e2541",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2022-09-08T17:39:56Z",
+      "side": 1,
+      "message": "The optimal way to use something from `cutils` is to add it to `rustutils` here: https://cs.android.com/android/platform/superproject/+/master:system/librustutils/lib.rs either as a wrapper or a re-implementation depending on context.\n\nWe can handle migrating your wrapper though, this is fine to land as is.",
+      "revId": "ef4ce7c969b76f37cf793c62f73842a25bcdfb1f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
