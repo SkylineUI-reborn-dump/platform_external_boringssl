@@ -1,14 +1,16 @@
 use std::{fs::File, io::Read};
 
-use anyhow::Result;
+use anyhow::{ensure, Result};
+use tokio::io::AsyncReadExt;
 
 use crate::drbg;
 
 const SEED_FOR_CLIENT_LEN: usize = 496;
+const STANDARD_REQUESTS_PER_RESEED: u32 = 128;
 const NUM_REQUESTS_PER_RESEED: u32 = 256;
 
 pub struct Conditioner {
-    hwrng: File,
+    hwrng: tokio::fs::File,
     rg: drbg::Drbg,
     requests_since_reseed: u32,
 }
@@ -19,16 +21,16 @@ impl Conditioner {
         hwrng.read_exact(&mut et)?;
         let rg = drbg::Drbg::new(&et)?;
         Ok(Conditioner {
-            hwrng,
+            hwrng: tokio::fs::File::from_std(hwrng),
             rg,
             requests_since_reseed: 0,
         })
     }
 
-    pub fn reseed_if_necessary(&mut self) -> Result<()> {
-        if self.requests_since_reseed >= NUM_REQUESTS_PER_RESEED {
+    pub async fn reseed_if_necessary(&mut self) -> Result<()> {
+        if self.requests_since_reseed >= STANDARD_REQUESTS_PER_RESEED {
             let mut et: drbg::Entropy = [0; drbg::ENTROPY_LEN];
-            self.hwrng.read_exact(&mut et)?;
+            self.hwrng.read_exact(&mut et).await?;
             self.rg.reseed(&et)?;
             self.requests_since_reseed = 0;
         }
@@ -36,7 +38,10 @@ impl Conditioner {
     }
 
     pub fn request(&mut self) -> Result<[u8; SEED_FOR_CLIENT_LEN]> {
-        self.reseed_if_necessary()?;
+        ensure!(
+            self.requests_since_reseed < NUM_REQUESTS_PER_RESEED,
+            "Not enough reseeds"
+        );
         let mut seed_for_client = [0u8; SEED_FOR_CLIENT_LEN];
         self.rg.generate(&mut seed_for_client)?;
         self.requests_since_reseed += 1;

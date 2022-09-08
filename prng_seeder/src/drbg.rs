@@ -47,3 +47,5 @@ impl Drop for Drbg {
         }
     }
 }
+
+unsafe impl Send for Drbg {}
