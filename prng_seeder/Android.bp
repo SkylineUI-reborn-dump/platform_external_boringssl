@@ -44,6 +44,9 @@ rust_binary {
         "libbssl_sys_raw",
         "libclap",
         "libcutils_socket_bindgen",
+        "liblogger",
+        "liblog_rust",
         "libnix",
+        "libtokio",
     ],
 }
