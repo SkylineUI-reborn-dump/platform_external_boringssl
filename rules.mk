@@ -57,6 +57,9 @@ MODULE_CFLAGS += -DTRUSTY
 # atomics.
 MODULE_CFLAGS += -D__STDC_NO_ATOMICS__
 
+# Unused variable warnings should not show as errors during compilation
+MODULE_CFLAGS += -Wno-unused-variable
+
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
 toarmcap = $(if $(filter-out 0 false,$(2)),-DOPENSSL_STATIC_ARMCAP_$(1),)
@@ -79,6 +82,11 @@ LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/fipsmodule/vpaes-ar
 LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/fipsmodule/sha1-armv8.S,$(LOCAL_SRC_FILES_$(ARCH)))
 LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/fipsmodule/sha256-armv8.S,$(LOCAL_SRC_FILES_$(ARCH)))
 LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/test/trampoline-armv8.S,$(LOCAL_SRC_FILES_$(ARCH)))
+
+#kychao: new locations of assembly files:
+LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/cipher_extra/chacha20_poly1305_armv8.S,$(LOCAL_SRC_FILES_$(ARCH)))
+LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/fipsmodule/sha512-armv8.S,$(LOCAL_SRC_FILES_$(ARCH)))
+LOCAL_SRC_FILES_$(ARCH) := $(filter-out linux-aarch64/crypto/fipsmodule/p256-armv8-asm.S,$(LOCAL_SRC_FILES_$(ARCH)))
 endif
 
 MODULE_SRCS += $(addprefix $(LOCAL_DIR)/,$(LOCAL_SRC_FILES))
