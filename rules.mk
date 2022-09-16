@@ -57,6 +57,9 @@ MODULE_CFLAGS += -DTRUSTY
 # atomics.
 MODULE_CFLAGS += -D__STDC_NO_ATOMICS__
 
+# Unused variable warnings should not show as errors during compilation
+MODULE_CFLAGS += -Wno-unused-variable
+
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
 toarmcap = $(if $(filter-out 0 false,$(2)),-DOPENSSL_STATIC_ARMCAP_$(1),)
