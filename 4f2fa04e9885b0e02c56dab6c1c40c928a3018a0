@@ -51,6 +51,24 @@
       "parentUuid": "d2cb419c_c5f0ec68",
       "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24308251_b8b3c2b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-09-29T17:54:33Z",
+      "side": 1,
+      "message": "Hmm, you\u0027re right, looks like all the usage is in tools and tests unless I missed something in a header.  I guess the build error mentioned in https://r.android.com/709564 must also have been outside of libcrypto itself.",
+      "parentUuid": "48c4d4a5_640ede15",
+      "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
