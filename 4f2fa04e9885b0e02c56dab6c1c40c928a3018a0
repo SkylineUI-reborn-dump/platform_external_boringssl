@@ -87,6 +87,24 @@
       "parentUuid": "24308251_b8b3c2b0",
       "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59895685_dc3ab73e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-09-29T18:06:27Z",
+      "side": 1,
+      "message": "\u003e or that part hasn\u0027t landed yet: \"This resolves a build error in an **upcoming** BoringSSL update\"\n\nIt\u0027s been 4 years... We\u0027ll burn that bridge when we get to it!",
+      "parentUuid": "63146524_2648b39f",
+      "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
