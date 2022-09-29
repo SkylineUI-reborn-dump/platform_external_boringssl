@@ -33,6 +33,24 @@
       "message": "libcrypto is no longer C only, e.g. see https://r.android.com/709564\n\nHowever the underlying issue here should already be resolved by https://r.android.com/2238759",
       "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48c4d4a5_640ede15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002751
+      },
+      "writtenOn": "2022-09-29T17:39:58Z",
+      "side": 1,
+      "message": "Looking through https://cs.android.com/android/platform/superproject/+/master:external/boringssl/sources.bp;drc\u003d2bbd592adbcc2fef5eb979af85d1e7b091f34657 I see `.cc` sources for libcrypto tests, but not for libcrypto itself.  Where does libcrypto use the STL?",
+      "parentUuid": "d2cb419c_c5f0ec68",
+      "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
