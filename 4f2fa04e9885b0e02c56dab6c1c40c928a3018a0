@@ -16,6 +16,23 @@
       "message": "thanks!",
       "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2cb419c_c5f0ec68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-09-29T17:31:33Z",
+      "side": 1,
+      "message": "libcrypto is no longer C only, e.g. see https://r.android.com/709564\n\nHowever the underlying issue here should already be resolved by https://r.android.com/2238759",
+      "revId": "4f2fa04e9885b0e02c56dab6c1c40c928a3018a0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
