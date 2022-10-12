@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54e3fe11_6875fb37",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1059815
+      },
+      "writtenOn": "2022-10-12T13:43:47Z",
+      "side": 1,
+      "message": "\u003e I guess ideally we should build in FIPS mode\n\nYes, I would love to chat to you about how to best do that. I tried to compile with `BORINGSSL_FIPS` and it depends on a bunch of POSIX/Android functionality that we don\u0027t have in pvmfw - mmap, sysprops, ...\n\n\u003e but we don\u0027t have a way of triggering FIPS self tests when linked statically\n\nIs it enough if we invoke them manually? \n\n\u003e FIPS test failures result in abort() getting called.\n\nIt can just panic and refuse to boot the VM, we do that for all sorts of failures.",
+      "parentUuid": "66e7f39f_35269f20",
+      "revId": "9851baa88735cd1d38bd470d149f1666b0abbf69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bca565a3_8ea3a7f2",
         "filename": "Android.bp",
         "patchSetId": 5
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-12T12:25:20Z",
       "side": 1,
       "message": "Won\u0027t this make the library available to everything in the system image?  I don\u0027t think we want that.",
+      "range": {
+        "startLine": 414,
+        "startChar": 8,
+        "endLine": 414,
+        "endChar": 36
+      },
+      "revId": "9851baa88735cd1d38bd470d149f1666b0abbf69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "558ead43_128b0768",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1059815
+      },
+      "writtenOn": "2022-10-12T13:43:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca565a3_8ea3a7f2",
       "range": {
         "startLine": 414,
         "startChar": 8,
