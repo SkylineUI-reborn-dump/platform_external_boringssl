@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84085028_0b92279d",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-10-12T14:28:37Z",
+      "side": 1,
+      "message": "As discussed offline, we can iterate on this part.",
+      "parentUuid": "54e3fe11_6875fb37",
+      "revId": "9851baa88735cd1d38bd470d149f1666b0abbf69",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bca565a3_8ea3a7f2",
         "filename": "Android.bp",
         "patchSetId": 5
