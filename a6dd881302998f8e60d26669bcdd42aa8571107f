@@ -33,6 +33,24 @@
       "message": "Looks like the rust-openssl errors are:\n\n1. For some reason, this block is going through the fallback path, but we have the DH getter and setters. You should call that instead.\nhttps://cs.android.com/android/platform/superproject/+/master:external/rust/crates/openssl/openssl/src/dh.rs;drc\u003dc78ec831483321dad3325160e77f9592190ffb1c;l\u003d239\n\n2. external/rust/crates/openssl/openssl/src/bio.rs is fun. We\u0027ve actually improved BIO_new_mem_buf to take an isize, so there\u0027s no need for the bounds check and the cast to c_int. In C, this is source-compatible. In Rust, this is not. Probably the easiest patch is to patch the little wrapper at the bottom of the file, but actually even better would be to make the function work for larger slices.",
       "revId": "a6dd881302998f8e60d26669bcdd42aa8571107f",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dd7ebe2_0d41187e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-11-30T17:00:18Z",
+      "side": 1,
+      "message": "mmaurer is looking into the rust-openssl changes needed.",
+      "parentUuid": "f443be93_d8fc58d3",
+      "revId": "a6dd881302998f8e60d26669bcdd42aa8571107f",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
