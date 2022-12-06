@@ -8012,6 +8012,7 @@ TEST(SSLTest, PermuteExtensions) {
 }
 
 TEST(SSLTest, HostMatching) {
+  GTEST_SKIP() << "b/261625953";
   static const char kCertPEM[] = R"(
 -----BEGIN CERTIFICATE-----
 MIIB9jCCAZ2gAwIBAgIQeudG9R61BOxUvWkeVhU5DTAKBggqhkjOPQQDAjApMRAw
