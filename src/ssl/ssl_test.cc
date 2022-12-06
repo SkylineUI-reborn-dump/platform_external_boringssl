@@ -8012,6 +8012,7 @@ TEST(SSLTest, PermuteExtensions) {
 }
 
 TEST(SSLTest, HostMatching) {
+  GTEST_SKIP() << "b/261625953";
   static const char kCertPEM[] = R"(
 -----BEGIN CERTIFICATE-----
 MIIB9jCCAZ2gAwIBAgIQeudG9R61BOxUvWkeVhU5DTAKBggqhkjOPQQDAjApMRAw
@@ -8112,6 +8113,7 @@ RVHWbCvFvNZAoWiIJ2z34RLGInyZvCZ8xLAvsuaWULDDaoeDl1M0t4Hm
                                      server_ctx.get(), config));
   }
 }
+
 
 TEST(SSLTest, NumTickets) {
   bssl::UniquePtr<SSL_CTX> server_ctx(SSL_CTX_new(TLS_method()));
