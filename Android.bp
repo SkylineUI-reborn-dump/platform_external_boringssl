@@ -409,6 +409,7 @@ cc_library_static {
         "-DOPENSSL_SMALL",
         "-DOPENSSL_NO_ASM",
     ],
+    host_supported: true,
     visibility: ["//packages/modules/Virtualization:__subpackages__"],
     apex_available: ["com.android.virt"],
 }
