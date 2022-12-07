@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14eb6f4c_631d4143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2022-12-07T11:50:16Z",
+      "side": 1,
+      "message": "Presubmits probably won\u0027t pass without the rest of the fix for b/261669237",
+      "revId": "247777154b4368b69713304cc45190e0aecf3a70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
