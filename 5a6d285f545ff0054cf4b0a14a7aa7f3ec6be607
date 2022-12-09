@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "239a5c97_a8f60c2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1980216
+      },
+      "writtenOn": "2022-12-09T02:36:10Z",
+      "side": 1,
+      "message": "the patch has merged to master branch of boringssl, \ncommit id is 785bb12634b0d2fd39b1e34609bc50366443b67e, \nplease cherry-pick this commit to aosp",
+      "revId": "5a6d285f545ff0054cf4b0a14a7aa7f3ec6be607",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
