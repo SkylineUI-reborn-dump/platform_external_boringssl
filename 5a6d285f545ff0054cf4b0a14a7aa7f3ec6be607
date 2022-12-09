@@ -16,6 +16,23 @@
       "message": "the patch has merged to master branch of boringssl, \ncommit id is 785bb12634b0d2fd39b1e34609bc50366443b67e, \nplease cherry-pick this commit to aosp",
       "revId": "5a6d285f545ff0054cf4b0a14a7aa7f3ec6be607",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a2543c_32b75cb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1352498
+      },
+      "writtenOn": "2022-12-09T06:30:33Z",
+      "side": 1,
+      "message": "Hi Pete, could you please help to review if this cherry-pick from upstream could be merged into aosp/master? Thanks.",
+      "revId": "5a6d285f545ff0054cf4b0a14a7aa7f3ec6be607",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
