@@ -33,6 +33,24 @@
       "message": "Hold for now, this is not the right way to go about this.  \n\nI thought we had an email thread where we discussed resolution, I\u0027ll go search for it.",
       "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3742b53f_8744588a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1972935
+      },
+      "writtenOn": "2022-12-13T20:13:17Z",
+      "side": 1,
+      "message": "@prb@google.com This is a partner company specific requirement to acquire PCI PTS payment industry certification on our Android devices. Is there a better way to go about having this patch approved? The goal is to meet the criteria for PCI certification while still receiving GMS certification from Google.",
+      "parentUuid": "0cda8e89_f7751ea2",
+      "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
