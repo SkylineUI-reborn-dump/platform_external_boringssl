@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9424ecc_5b165913",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1972935
+      },
+      "writtenOn": "2022-12-15T04:24:46Z",
+      "side": 1,
+      "message": "This is a partner company specific requirement to acquire PCI PTS payment industry certification on our Android devices. Is there a better way to go about having this patch approved? The goal is to meet the criteria for PCI certification while still receiving GMS certification from Google.",
+      "parentUuid": "4470b5ec_23a42a59",
+      "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0cda8e89_f7751ea2",
