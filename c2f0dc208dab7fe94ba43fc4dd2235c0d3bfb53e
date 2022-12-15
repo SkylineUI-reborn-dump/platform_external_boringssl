@@ -69,6 +69,41 @@
       "parentUuid": "0cda8e89_f7751ea2",
       "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "947c2f85_a90f4530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1972935
+      },
+      "writtenOn": "2022-12-15T08:08:27Z",
+      "side": 1,
+      "message": "a",
+      "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46684bd_de72eff4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1972935
+      },
+      "writtenOn": "2022-12-15T08:08:27Z",
+      "side": 1,
+      "message": "@prb@google.com\nWe need these changes in our build to meet the PCI/PTS-payment-industry certification criteria, however, GMS certification requires that these changes be merged into mainline as well. Do you recommend we get a waiver for these changes from Google GMS certification team instead of submitting this as a patch into Android mainline? Please advise if waiver from GMS team would be a better way forward for these changes.",
+      "parentUuid": "3742b53f_8744588a",
+      "revId": "c2f0dc208dab7fe94ba43fc4dd2235c0d3bfb53e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
