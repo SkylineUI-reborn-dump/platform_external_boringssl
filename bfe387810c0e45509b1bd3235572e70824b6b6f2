@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e91d4608_7b407b58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1385274
+      },
+      "writtenOn": "2022-12-20T03:46:03Z",
+      "side": 1,
+      "message": "Tracking bug: b/243118698",
+      "revId": "bfe387810c0e45509b1bd3235572e70824b6b6f2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
