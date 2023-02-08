@@ -67,6 +67,23 @@
       "message": "Looks fine to me. Looping in Pete as well.",
       "revId": "9a269f83db35f55441493dc02130499d2b8d5edb",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e11a1166_f57e8d53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1958315
+      },
+      "writtenOn": "2023-02-08T08:52:12Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "9a269f83db35f55441493dc02130499d2b8d5edb",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
