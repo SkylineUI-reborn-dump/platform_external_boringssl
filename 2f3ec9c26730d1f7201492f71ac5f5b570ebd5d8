@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0193e0db_efd8555f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-02-14T12:33:03Z",
+      "side": 1,
+      "message": "Got PS-1 due to b/259292099 but all other tests passed so bypassing it.",
+      "revId": "2f3ec9c26730d1f7201492f71ac5f5b570ebd5d8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
