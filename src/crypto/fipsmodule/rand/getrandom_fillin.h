@@ -26,7 +26,8 @@
 #define EXPECTED_NR_getrandom 318
 #elif defined(OPENSSL_X86)
 #define EXPECTED_NR_getrandom 355
-#elif defined(OPENSSL_AARCH64)
+#elif defined(OPENSSL_AARCH64) || defined(OPENSSL_RISCV64) \
+    || defined(OPENSSL_RISCV32)
 #define EXPECTED_NR_getrandom 278
 #elif defined(OPENSSL_ARM)
 #define EXPECTED_NR_getrandom 384
