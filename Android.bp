@@ -489,6 +489,16 @@ cc_library {
     min_sdk_version: "29",
 }
 
+cc_library_static {
+    name: "libssl_baremetal",
+    defaults: [
+        "libssl_sources",
+        "boringssl_defaults",
+        "boringssl_flags",
+    ],
+    static_libs: ["libcrypto_baremetal"],
+}
+
 // Unsafe and deterministic version of libssl. For testing and fuzzing only.
 // See src/FUZZING.md.
 cc_test_library {
@@ -760,6 +770,16 @@ cc_library_static {
     ],
 }
 
+cc_library_static {
+    name: "libbssl_rust_support_baremetal",
+    defaults: ["boringssl_flags"],
+    srcs: ["src/rust/rust_wrapper.c"],
+    static_libs: [
+        "libcrypto_baremetal",
+        "libssl_baremetal",
+    ],
+}
+
 // Replace the upstream CMake placeholder with a re-export of all of the local bindgen output.
 gensrcs {
     name: "libbssl_sys_src",
@@ -792,5 +812,24 @@ rust_library {
     apex_available: [
         "//apex_available:platform",
         "com.android.virt",
+    ],
+}
+
+rust_library {
+    name: "libbssl_ffi_nostd",
+    crate_name: "bssl_ffi",
+    visibility: [
+        "//packages/modules/Virtualization/pvmfw",
+    ],
+    srcs: [":libbssl_sys_src"],
+    rlibs: ["libbssl_sys_raw"],
+    prefer_rlib: true,
+    no_stdlibs: true,
+    stdlibs: [
+        "libcompiler_builtins.rust_sysroot",
+        "libcore.rust_sysroot",
+    ],
+    whole_static_libs: [
+        "libbssl_rust_support_baremetal",
     ],
 }
