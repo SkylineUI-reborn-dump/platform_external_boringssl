@@ -16,6 +16,23 @@
       "message": "No information on what this actually breaks or the cost of fixing forward.  Please hold off submitting while I investigate.",
       "revId": "4f59d0a2c296ca15fc7c8b48f0719a4be78c483b",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db492cca_444c0d79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-02-21T19:04:46Z",
+      "side": 1,
+      "message": "Too many post submit breakages to realistically address today, let\u0027s revert.",
+      "revId": "4f59d0a2c296ca15fc7c8b48f0719a4be78c483b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
