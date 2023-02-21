@@ -720,7 +720,7 @@ rust_bindgen {
         "--blocklist-function=qfcvt",
         "--blocklist-function=qfcvt_r",
     ],
-    shared_libs: [
+    header_libs: [
         "libcrypto",
         "libssl",
     ],
@@ -782,6 +782,10 @@ rust_library {
     // Since libbssl_sys_raw is not publicly visible, we can't accidentally
     // force a double-link by linking statically, so do so.
     rlibs: ["libbssl_sys_raw"],
+    shared_libs: [
+        "libcrypto",
+        "libssl",
+    ],
     whole_static_libs: [
         "libbssl_rust_support",
     ],
