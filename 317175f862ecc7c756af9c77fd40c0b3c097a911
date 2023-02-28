@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd53e248_58f6c408",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2023-02-28T20:07:51Z",
+      "side": 1,
+      "message": "This duplicates https://boringssl.googlesource.com/boringssl/+/45aadce3311b6ed765fae4d7bdfa17a9a809623b, but I guess AOSP is behind BoringSSL master.",
+      "revId": "317175f862ecc7c756af9c77fd40c0b3c097a911",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f222fd_8c24b4c3",
+        "filename": "src/include/openssl/base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2023-02-28T20:07:51Z",
+      "side": 1,
+      "message": "This block duplicates one from L108.",
+      "revId": "317175f862ecc7c756af9c77fd40c0b3c097a911",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
