@@ -86,6 +86,24 @@
       "parentUuid": "e9af7c2c_b6149ad4",
       "revId": "317175f862ecc7c756af9c77fd40c0b3c097a911",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe2c2e66_585b4f02",
+        "filename": "src/include/openssl/base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-01T11:36:36Z",
+      "side": 1,
+      "message": "\u003e but I guess AOSP is behind BoringSSL master\n\nIt is. 😞 Hopefully resolved RSN.\n\nNo need to merge from my pov.  As long as Prashanth\u0027s changes all exist upstream they won\u0027t get lost when we\u0027re finally back in sync.",
+      "parentUuid": "dcf810f3_060cea50",
+      "revId": "317175f862ecc7c756af9c77fd40c0b3c097a911",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
