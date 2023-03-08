@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca58a7e_0a31a132",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-08T19:26:22Z",
+      "side": 1,
+      "message": "Will fix the invalid certs in the test.",
+      "revId": "6b082fb475f43ee444339b9bd4d3951b36349639",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
