@@ -75,6 +75,7 @@ void *ASN1_item_dup(const ASN1_ITEM *it, void *x)
     if (x == NULL)
         return (NULL);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     i = ASN1_item_i2d(x, &b, it);
     if (b == NULL) {
         OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
@@ -84,4 +85,14 @@ void *ASN1_item_dup(const ASN1_ITEM *it, void *x)
     ret = ASN1_item_d2i(NULL, &p, i, it);
     OPENSSL_free(b);
     return (ret);
+=======
+  i = ASN1_item_i2d(x, &b, it);
+  if (b == NULL) {
+    return NULL;
+  }
+  p = b;
+  ret = ASN1_item_d2i(NULL, &p, i, it);
+  OPENSSL_free(b);
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

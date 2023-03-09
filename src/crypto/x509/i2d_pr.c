@@ -1,4 +1,3 @@
-/* crypto/asn1/i2d_pr.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -67,11 +66,23 @@ int i2d_PrivateKey(const EVP_PKEY *a, uint8_t **pp)
 {
     switch (EVP_PKEY_id(a)) {
     case EVP_PKEY_RSA:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return i2d_RSAPrivateKey(a->pkey.rsa, pp);
+=======
+      return i2d_RSAPrivateKey(EVP_PKEY_get0_RSA(a), pp);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     case EVP_PKEY_EC:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return i2d_ECPrivateKey(a->pkey.ec, pp);
+=======
+      return i2d_ECPrivateKey(EVP_PKEY_get0_EC_KEY(a), pp);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     case EVP_PKEY_DSA:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return i2d_DSAPrivateKey(a->pkey.dsa, pp);
+=======
+      return i2d_DSAPrivateKey(EVP_PKEY_get0_DSA(a), pp);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     default:
         /*
          * Although this file is in crypto/x509 for layering reasons, it emits

@@ -96,7 +96,13 @@ int ASN1_item_verify(const ASN1_ITEM *it, const X509_ALGOR *a,
         goto err;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     inl = ASN1_item_i2d(asn, &buf_in, it);
+=======
+  if (buf_in == NULL) {
+    goto err;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (buf_in == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);

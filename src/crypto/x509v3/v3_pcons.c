@@ -1,4 +1,3 @@
-/* v3_pcons.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -65,12 +64,21 @@
 #include <openssl/obj.h>
 #include <openssl/x509v3.h>
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD
                                                     *method, void *bcons, STACK_OF(CONF_VALUE)
                                                     *extlist);
+=======
+#include "internal.h"
+
+
+static STACK_OF(CONF_VALUE) *i2v_POLICY_CONSTRAINTS(
+    const X509V3_EXT_METHOD *method, void *bcons,
+    STACK_OF(CONF_VALUE) *extlist);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 static void *v2i_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD *method,
-                                    X509V3_CTX *ctx,
-                                    STACK_OF(CONF_VALUE) *values);
+                                    const X509V3_CTX *ctx,
+                                    const STACK_OF(CONF_VALUE) *values);
 
 const X509V3_EXT_METHOD v3_policy_constraints = {
     NID_policy_constraints, 0,
@@ -90,6 +98,7 @@ ASN1_SEQUENCE(POLICY_CONSTRAINTS) = {
 
 IMPLEMENT_ASN1_ALLOC_FUNCTIONS(POLICY_CONSTRAINTS)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD
                                                     *method, void *a, STACK_OF(CONF_VALUE)
                                                     *extlist)
@@ -100,9 +109,20 @@ static STACK_OF(CONF_VALUE) *i2v_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD
     X509V3_add_value_int("Inhibit Policy Mapping",
                          pcons->inhibitPolicyMapping, &extlist);
     return extlist;
+=======
+static STACK_OF(CONF_VALUE) *i2v_POLICY_CONSTRAINTS(
+    const X509V3_EXT_METHOD *method, void *a, STACK_OF(CONF_VALUE) *extlist) {
+  const POLICY_CONSTRAINTS *pcons = a;
+  X509V3_add_value_int("Require Explicit Policy", pcons->requireExplicitPolicy,
+                       &extlist);
+  X509V3_add_value_int("Inhibit Policy Mapping", pcons->inhibitPolicyMapping,
+                       &extlist);
+  return extlist;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static void *v2i_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                     X509V3_CTX *ctx,
                                     STACK_OF(CONF_VALUE) *values)
 {
@@ -112,6 +132,28 @@ static void *v2i_POLICY_CONSTRAINTS(const X509V3_EXT_METHOD *method,
     if (!(pcons = POLICY_CONSTRAINTS_new())) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
         return NULL;
+=======
+                                    const X509V3_CTX *ctx,
+                                    const STACK_OF(CONF_VALUE) *values) {
+  POLICY_CONSTRAINTS *pcons = NULL;
+  if (!(pcons = POLICY_CONSTRAINTS_new())) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(values); i++) {
+    const CONF_VALUE *val = sk_CONF_VALUE_value(values, i);
+    if (!strcmp(val->name, "requireExplicitPolicy")) {
+      if (!X509V3_get_value_int(val, &pcons->requireExplicitPolicy)) {
+        goto err;
+      }
+    } else if (!strcmp(val->name, "inhibitPolicyMapping")) {
+      if (!X509V3_get_value_int(val, &pcons->inhibitPolicyMapping)) {
+        goto err;
+      }
+    } else {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NAME);
+      X509V3_conf_err(val);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     for (i = 0; i < sk_CONF_VALUE_num(values); i++) {
         val = sk_CONF_VALUE_value(values, i);

@@ -60,6 +60,7 @@
 #include <openssl/mem.h>
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 ASN1_STRING *ASN1_item_pack(void *obj, const ASN1_ITEM *it, ASN1_STRING **out)
 {
     uint8_t *new_data = NULL;
@@ -67,6 +68,22 @@ ASN1_STRING *ASN1_item_pack(void *obj, const ASN1_ITEM *it, ASN1_STRING **out)
     if (len <= 0) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_ENCODE_ERROR);
         return NULL;
+=======
+ASN1_STRING *ASN1_item_pack(void *obj, const ASN1_ITEM *it, ASN1_STRING **out) {
+  uint8_t *new_data = NULL;
+  int len = ASN1_item_i2d(obj, &new_data, it);
+  if (len <= 0) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_ENCODE_ERROR);
+    return NULL;
+  }
+
+  ASN1_STRING *ret = NULL;
+  if (out == NULL || *out == NULL) {
+    ret = ASN1_STRING_new();
+    if (ret == NULL) {
+      OPENSSL_free(new_data);
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     ASN1_STRING *ret = NULL;

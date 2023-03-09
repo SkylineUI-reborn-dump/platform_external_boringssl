@@ -66,6 +66,7 @@
 #include "../internal.h"
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 X509_PKEY *X509_PKEY_new(void)
 {
     X509_PKEY *ret = OPENSSL_malloc(sizeof(X509_PKEY));
@@ -74,6 +75,14 @@ X509_PKEY *X509_PKEY_new(void)
         goto err;
     }
     OPENSSL_memset(ret, 0, sizeof(X509_PKEY));
+=======
+X509_PKEY *X509_PKEY_new(void) {
+  X509_PKEY *ret = OPENSSL_malloc(sizeof(X509_PKEY));
+  if (ret == NULL) {
+    goto err;
+  }
+  OPENSSL_memset(ret, 0, sizeof(X509_PKEY));
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     ret->enc_algor = X509_ALGOR_new();
     if (ret->enc_algor == NULL)

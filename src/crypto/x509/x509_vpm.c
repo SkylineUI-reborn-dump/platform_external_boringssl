@@ -72,6 +72,7 @@
 #define SET_HOST 0
 #define ADD_HOST 1
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static char *str_copy(char *s)
 {
     return OPENSSL_strdup(s);
@@ -81,6 +82,9 @@ static void str_free(char *s)
 {
     OPENSSL_free(s);
 }
+=======
+static void str_free(char *s) { OPENSSL_free(s); }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 #define string_stack_free(sk) sk_OPENSSL_STRING_pop_free(sk, str_free)
 
@@ -304,6 +308,87 @@ int X509_VERIFY_PARAM_inherit(X509_VERIFY_PARAM *dest,
     dest->poison = src->poison;
 
     return 1;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  inh_flags = dest->inh_flags | src->inh_flags;
+
+  if (inh_flags & X509_VP_FLAG_ONCE) {
+    dest->inh_flags = 0;
+  }
+
+  if (inh_flags & X509_VP_FLAG_LOCKED) {
+    return 1;
+  }
+
+  if (inh_flags & X509_VP_FLAG_DEFAULT) {
+    to_default = 1;
+  } else {
+    to_default = 0;
+  }
+
+  if (inh_flags & X509_VP_FLAG_OVERWRITE) {
+    to_overwrite = 1;
+  } else {
+    to_overwrite = 0;
+  }
+
+  x509_verify_param_copy(purpose, 0);
+  x509_verify_param_copy(trust, 0);
+  x509_verify_param_copy(depth, -1);
+
+  // If overwrite or check time not set, copy across
+
+  if (to_overwrite || !(dest->flags & X509_V_FLAG_USE_CHECK_TIME)) {
+    dest->check_time = src->check_time;
+    dest->flags &= ~X509_V_FLAG_USE_CHECK_TIME;
+    // Don't need to copy flag: that is done below
+  }
+
+  if (inh_flags & X509_VP_FLAG_RESET_FLAGS) {
+    dest->flags = 0;
+  }
+
+  dest->flags |= src->flags;
+
+  if (test_x509_verify_param_copy(policies, NULL)) {
+    if (!X509_VERIFY_PARAM_set1_policies(dest, src->policies)) {
+      return 0;
+    }
+  }
+
+  // Copy the host flags if and only if we're copying the host list
+  if (test_x509_verify_param_copy(hosts, NULL)) {
+    if (dest->hosts) {
+      string_stack_free(dest->hosts);
+      dest->hosts = NULL;
+    }
+    if (src->hosts) {
+      dest->hosts =
+          sk_OPENSSL_STRING_deep_copy(src->hosts, OPENSSL_strdup, str_free);
+      if (dest->hosts == NULL) {
+        return 0;
+      }
+      dest->hostflags = src->hostflags;
+    }
+  }
+
+  if (test_x509_verify_param_copy(email, NULL)) {
+    if (!X509_VERIFY_PARAM_set1_email(dest, src->email, src->emaillen)) {
+      return 0;
+    }
+  }
+
+  if (test_x509_verify_param_copy(ip, NULL)) {
+    if (!X509_VERIFY_PARAM_set1_ip(dest, src->ip, src->iplen)) {
+      return 0;
+    }
+  }
+
+  dest->poison = src->poison;
+
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509_VERIFY_PARAM_set1(X509_VERIFY_PARAM *to,
@@ -385,10 +470,20 @@ void X509_VERIFY_PARAM_set_depth(X509_VERIFY_PARAM *param, int depth)
     param->depth = depth;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void X509_VERIFY_PARAM_set_time(X509_VERIFY_PARAM *param, time_t t)
 {
     param->check_time = t;
     param->flags |= X509_V_FLAG_USE_CHECK_TIME;
+=======
+void X509_VERIFY_PARAM_set_time_posix(X509_VERIFY_PARAM *param, int64_t t) {
+  param->check_time = t;
+  param->flags |= X509_V_FLAG_USE_CHECK_TIME;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
+}
+
+void X509_VERIFY_PARAM_set_time(X509_VERIFY_PARAM *param, time_t t) {
+  X509_VERIFY_PARAM_set_time_posix(param, t);
 }
 
 int X509_VERIFY_PARAM_add0_policy(X509_VERIFY_PARAM *param,
@@ -399,12 +494,23 @@ int X509_VERIFY_PARAM_add0_policy(X509_VERIFY_PARAM *param,
         if (!param->policies)
             return 0;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!sk_ASN1_OBJECT_push(param->policies, policy))
         return 0;
     return 1;
+=======
+  }
+  if (!sk_ASN1_OBJECT_push(param->policies, policy)) {
+    return 0;
+  }
+  // TODO(davidben): This does not set |X509_V_FLAG_POLICY_CHECK|, while
+  // |X509_VERIFY_PARAM_set1_policies| does. Is this a bug?
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509_VERIFY_PARAM_set1_policies(X509_VERIFY_PARAM *param,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                     STACK_OF(ASN1_OBJECT) *policies)
 {
     size_t i;
@@ -413,7 +519,14 @@ int X509_VERIFY_PARAM_set1_policies(X509_VERIFY_PARAM *param,
         return 0;
     if (param->policies)
         sk_ASN1_OBJECT_pop_free(param->policies, ASN1_OBJECT_free);
+=======
+                                    const STACK_OF(ASN1_OBJECT) *policies) {
+  if (!param) {
+    return 0;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!policies) {
         param->policies = NULL;
         return 1;
@@ -434,7 +547,25 @@ int X509_VERIFY_PARAM_set1_policies(X509_VERIFY_PARAM *param,
         }
     }
     param->flags |= X509_V_FLAG_POLICY_CHECK;
+=======
+  sk_ASN1_OBJECT_pop_free(param->policies, ASN1_OBJECT_free);
+  if (!policies) {
+    param->policies = NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return 1;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+
+  param->policies =
+      sk_ASN1_OBJECT_deep_copy(policies, OBJ_dup, ASN1_OBJECT_free);
+  if (!param->policies) {
+    return 0;
+  }
+
+  param->flags |= X509_V_FLAG_POLICY_CHECK;
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509_VERIFY_PARAM_set1_host(X509_VERIFY_PARAM *param,

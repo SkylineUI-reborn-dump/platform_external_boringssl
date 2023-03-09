@@ -86,6 +86,7 @@ OPENSSL_DECLARE_ERROR_REASON(ASN1, INVALID_UNIVERSALSTRING)
 OPENSSL_DECLARE_ERROR_REASON(ASN1, INVALID_UTF8STRING)
 
 int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                         int inform, unsigned long mask,
                         long minsize, long maxsize)
 {
@@ -98,6 +99,16 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
         len = strlen((const char *)in);
     if (!mask)
         mask = DIRSTRING_TYPE;
+=======
+                        int inform, unsigned long mask, long minsize,
+                        long maxsize) {
+  if (len == -1) {
+    len = strlen((const char *)in);
+  }
+  if (!mask) {
+    mask = DIRSTRING_TYPE;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     int (*decode_func)(CBS *, uint32_t*);
     int error;
@@ -123,8 +134,35 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
         break;
 
     default:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNKNOWN_FORMAT);
         return -1;
+=======
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_UNKNOWN_FORMAT);
+      return -1;
+  }
+
+  // Check |minsize| and |maxsize| and work out the minimal type, if any.
+  CBS cbs;
+  CBS_init(&cbs, in, len);
+  size_t utf8_len = 0, nchar = 0;
+  while (CBS_len(&cbs) != 0) {
+    uint32_t c;
+    if (!decode_func(&cbs, &c)) {
+      OPENSSL_PUT_ERROR(ASN1, error);
+      return -1;
+    }
+    if (nchar == 0 && (inform == MBSTRING_BMP || inform == MBSTRING_UNIV) &&
+        c == 0xfeff) {
+      // Reject byte-order mark. We could drop it but that would mean
+      // adding ambiguity around whether a BOM was included or not when
+      // matching strings.
+      //
+      // For a little-endian UCS-2 string, the BOM will appear as 0xfffe
+      // and will be rejected as noncharacter, below.
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_CHARACTERS);
+      return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     /* Check |minsize| and |maxsize| and work out the minimal type, if any. */
@@ -172,13 +210,25 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
         utf8_len += cbb_get_utf8_len(c);
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (minsize > 0 && nchar < (size_t)minsize) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_STRING_TOO_SHORT);
         BIO_snprintf(strbuf, sizeof strbuf, "%ld", minsize);
         ERR_add_error_data(2, "minsize=", strbuf);
         return -1;
     }
+=======
+    nchar++;
+    utf8_len += cbb_get_utf8_len(c);
+    if (maxsize > 0 && nchar > (size_t)maxsize) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_STRING_TOO_LONG);
+      ERR_add_error_dataf("maxsize=%ld", maxsize);
+      return -1;
+    }
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (maxsize > 0 && nchar > (size_t)maxsize) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_STRING_TOO_LONG);
         BIO_snprintf(strbuf, sizeof strbuf, "%ld", maxsize);
@@ -215,7 +265,15 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_CHARACTERS);
         return -1;
     }
+=======
+  if (minsize > 0 && nchar < (size_t)minsize) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_STRING_TOO_SHORT);
+    ERR_add_error_dataf("minsize=%ld", minsize);
+    return -1;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!out)
         return str_type;
     if (*out) {
@@ -236,6 +294,38 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
         }
         *out = dest;
     }
+=======
+  // Now work out output format and string type
+  int str_type;
+  int (*encode_func)(CBB *, uint32_t) = cbb_add_latin1;
+  size_t size_estimate = nchar;
+  int outform = MBSTRING_ASC;
+  if (mask & B_ASN1_PRINTABLESTRING) {
+    str_type = V_ASN1_PRINTABLESTRING;
+  } else if (mask & B_ASN1_IA5STRING) {
+    str_type = V_ASN1_IA5STRING;
+  } else if (mask & B_ASN1_T61STRING) {
+    str_type = V_ASN1_T61STRING;
+  } else if (mask & B_ASN1_BMPSTRING) {
+    str_type = V_ASN1_BMPSTRING;
+    outform = MBSTRING_BMP;
+    encode_func = cbb_add_ucs2_be;
+    size_estimate = 2 * nchar;
+  } else if (mask & B_ASN1_UNIVERSALSTRING) {
+    str_type = V_ASN1_UNIVERSALSTRING;
+    encode_func = cbb_add_utf32_be;
+    size_estimate = 4 * nchar;
+    outform = MBSTRING_UNIV;
+  } else if (mask & B_ASN1_UTF8STRING) {
+    str_type = V_ASN1_UTF8STRING;
+    outform = MBSTRING_UTF8;
+    encode_func = cbb_add_utf8;
+    size_estimate = utf8_len;
+  } else {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_CHARACTERS);
+    return -1;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     /* If both the same type just copy across */
     if (inform == outform) {
@@ -275,14 +365,75 @@ int ASN1_mbstring_ncopy(ASN1_STRING **out, const unsigned char *in, int len,
     dest->length = (int)(data_len - 1);
     dest->data = data;
     return str_type;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
  err:
     if (free_out)
         ASN1_STRING_free(dest);
     CBB_cleanup(&cbb);
     return -1;
+=======
+  }
+
+  int free_dest = 0;
+  ASN1_STRING *dest;
+  if (*out) {
+    dest = *out;
+  } else {
+    free_dest = 1;
+    dest = ASN1_STRING_type_new(str_type);
+    if (!dest) {
+      return -1;
+    }
+  }
+
+  CBB cbb;
+  CBB_zero(&cbb);
+  // If both the same type just copy across
+  if (inform == outform) {
+    if (!ASN1_STRING_set(dest, in, len)) {
+      goto err;
+    }
+    dest->type = str_type;
+    *out = dest;
+    return str_type;
+  }
+  if (!CBB_init(&cbb, size_estimate + 1)) {
+    goto err;
+  }
+  CBS_init(&cbs, in, len);
+  while (CBS_len(&cbs) != 0) {
+    uint32_t c;
+    if (!decode_func(&cbs, &c) || !encode_func(&cbb, c)) {
+      OPENSSL_PUT_ERROR(ASN1, ERR_R_INTERNAL_ERROR);
+      goto err;
+    }
+  }
+  uint8_t *data = NULL;
+  size_t data_len;
+  if (// OpenSSL historically NUL-terminated this value with a single byte,
+      // even for |MBSTRING_BMP| and |MBSTRING_UNIV|.
+      !CBB_add_u8(&cbb, 0) || !CBB_finish(&cbb, &data, &data_len) ||
+      data_len < 1 || data_len > INT_MAX) {
+    OPENSSL_PUT_ERROR(ASN1, ERR_R_INTERNAL_ERROR);
+    OPENSSL_free(data);
+    goto err;
+  }
+  dest->type = str_type;
+  ASN1_STRING_set0(dest, data, (int)data_len - 1);
+  *out = dest;
+  return str_type;
+
+err:
+  if (free_dest) {
+    ASN1_STRING_free(dest);
+  }
+  CBB_cleanup(&cbb);
+  return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int asn1_is_printable(uint32_t value)
 {
     if (value > 0x7f) {
@@ -295,4 +446,14 @@ int asn1_is_printable(uint32_t value)
            value == ' ' || value == '\'' || value == '(' || value == ')' ||
            value == '+' || value == ',' || value == '-' || value == '.' ||
            value == '/' || value == ':' || value == '=' || value == '?';
+=======
+int asn1_is_printable(uint32_t value) {
+  if (value > 0x7f) {
+    return 0;
+  }
+  return OPENSSL_isalnum(value) || //
+         value == ' ' || value == '\'' || value == '(' || value == ')' ||
+         value == '+' || value == ',' || value == '-' || value == '.' ||
+         value == '/' || value == ':' || value == '=' || value == '?';
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

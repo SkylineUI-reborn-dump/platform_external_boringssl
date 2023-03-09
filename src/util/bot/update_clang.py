@@ -28,8 +28,13 @@ except ImportError:
 # CLANG_REVISION and CLANG_SUB_REVISION determine the build of clang
 # to use. These should be synced with tools/clang/scripts/update.py in
 # Chromium.
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 CLANG_REVISION = 'llvmorg-15-init-10168-gc2a7904a'
 CLANG_SUB_REVISION = 2
+=======
+CLANG_REVISION = 'llvmorg-16-init-17653-g39da55e8'
+CLANG_SUB_REVISION = 3
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 PACKAGE_VERSION = '%s-%s' % (CLANG_REVISION, CLANG_SUB_REVISION)
 

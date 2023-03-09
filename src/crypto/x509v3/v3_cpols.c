@@ -1,4 +1,3 @@
-/* v3_cpols.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -73,18 +72,38 @@
 
 /* Certificate policies extension support: this one is a bit complex... */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int i2r_certpol(X509V3_EXT_METHOD *method, STACK_OF(POLICYINFO) *pol,
                        BIO *out, int indent);
 static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
                                          X509V3_CTX *ctx, char *value);
 static void print_qualifiers(BIO *out, STACK_OF(POLICYQUALINFO) *quals,
+=======
+static int i2r_certpol(const X509V3_EXT_METHOD *method, void *ext, BIO *out,
+                       int indent);
+static void *r2i_certpol(const X509V3_EXT_METHOD *method, const X509V3_CTX *ctx,
+                         const char *value);
+static void print_qualifiers(BIO *out, const STACK_OF(POLICYQUALINFO) *quals,
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
                              int indent);
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static void print_notice(BIO *out, USERNOTICE *notice, int indent);
 static POLICYINFO *policy_section(X509V3_CTX *ctx,
                                   STACK_OF(CONF_VALUE) *polstrs, int ia5org);
 static POLICYQUALINFO *notice_section(X509V3_CTX *ctx,
                                       STACK_OF(CONF_VALUE) *unot, int ia5org);
 static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos);
+=======
+static void print_notice(BIO *out, const USERNOTICE *notice, int indent);
+static POLICYINFO *policy_section(const X509V3_CTX *ctx,
+                                  const STACK_OF(CONF_VALUE) *polstrs,
+                                  int ia5org);
+static POLICYQUALINFO *notice_section(const X509V3_CTX *ctx,
+                                      const STACK_OF(CONF_VALUE) *unot,
+                                      int ia5org);
+static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums,
+                    const STACK_OF(CONF_VALUE) *nos);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_cpols = {
     NID_certificate_policies, 0, ASN1_ITEM_ref(CERTIFICATEPOLICIES),
@@ -137,6 +156,7 @@ ASN1_SEQUENCE(NOTICEREF) = {
 
 IMPLEMENT_ASN1_FUNCTIONS(NOTICEREF)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
                                          X509V3_CTX *ctx, char *value)
 {
@@ -156,8 +176,57 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
     vals = X509V3_parse_list(value);
     if (vals == NULL) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_X509V3_LIB);
+=======
+static void *r2i_certpol(const X509V3_EXT_METHOD *method, const X509V3_CTX *ctx,
+                         const char *value) {
+  STACK_OF(POLICYINFO) *pols = sk_POLICYINFO_new_null();
+  if (pols == NULL) {
+    return NULL;
+  }
+  STACK_OF(CONF_VALUE) *vals = X509V3_parse_list(value);
+  if (vals == NULL) {
+    OPENSSL_PUT_ERROR(X509V3, ERR_R_X509V3_LIB);
+    goto err;
+  }
+  int ia5org = 0;
+  for (size_t i = 0; i < sk_CONF_VALUE_num(vals); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(vals, i);
+    if (cnf->value || !cnf->name) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_POLICY_IDENTIFIER);
+      X509V3_conf_err(cnf);
+      goto err;
+    }
+    POLICYINFO *pol;
+    const char *pstr = cnf->name;
+    if (!strcmp(pstr, "ia5org")) {
+      ia5org = 1;
+      continue;
+    } else if (*pstr == '@') {
+      const STACK_OF(CONF_VALUE) *polsect = X509V3_get_section(ctx, pstr + 1);
+      if (!polsect) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_SECTION);
+
+        X509V3_conf_err(cnf);
+        goto err;
+      }
+      pol = policy_section(ctx, polsect, ia5org);
+      if (!pol) {
+        goto err;
+      }
+    } else {
+      ASN1_OBJECT *pobj = OBJ_txt2obj(cnf->name, 0);
+      if (pobj == NULL) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_OBJECT_IDENTIFIER);
+        X509V3_conf_err(cnf);
+        goto err;
+      }
+      pol = POLICYINFO_new();
+      if (pol == NULL) {
+        ASN1_OBJECT_free(pobj);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         goto err;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ia5org = 0;
     for (i = 0; i < sk_CONF_VALUE_num(vals); i++) {
         cnf = sk_CONF_VALUE_value(vals, i);
@@ -202,6 +271,11 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
             OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
             goto err;
         }
+=======
+    if (!sk_POLICYINFO_push(pols, pol)) {
+      POLICYINFO_free(pol);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);
     return pols;
@@ -211,6 +285,7 @@ static STACK_OF(POLICYINFO) *r2i_certpol(X509V3_EXT_METHOD *method,
     return NULL;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static POLICYINFO *policy_section(X509V3_CTX *ctx,
                                   STACK_OF(CONF_VALUE) *polstrs, int ia5org)
 {
@@ -230,7 +305,28 @@ static POLICYINFO *policy_section(X509V3_CTX *ctx,
                 goto err;
             }
             pol->policyid = pobj;
+=======
+static POLICYINFO *policy_section(const X509V3_CTX *ctx,
+                                  const STACK_OF(CONF_VALUE) *polstrs,
+                                  int ia5org) {
+  POLICYINFO *pol;
+  POLICYQUALINFO *qual;
+  if (!(pol = POLICYINFO_new())) {
+    goto err;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(polstrs); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(polstrs, i);
+    if (!strcmp(cnf->name, "policyIdentifier")) {
+      ASN1_OBJECT *pobj;
+      if (!(pobj = OBJ_txt2obj(cnf->value, 0))) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_OBJECT_IDENTIFIER);
+        X509V3_conf_err(cnf);
+        goto err;
+      }
+      pol->policyid = pobj;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         } else if (!x509v3_name_cmp(cnf->name, "CPS")) {
             if (!pol->qualifiers)
                 pol->qualifiers = sk_POLICYQUALINFO_new_null();
@@ -274,6 +370,55 @@ static POLICYINFO *policy_section(X509V3_CTX *ctx,
                 goto merr;
         } else {
             OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_OPTION);
+=======
+    } else if (x509v3_conf_name_matches(cnf->name, "CPS")) {
+      if (!pol->qualifiers) {
+        pol->qualifiers = sk_POLICYQUALINFO_new_null();
+      }
+      if (!(qual = POLICYQUALINFO_new())) {
+        goto err;
+      }
+      if (!sk_POLICYQUALINFO_push(pol->qualifiers, qual)) {
+        goto err;
+      }
+      qual->pqualid = OBJ_nid2obj(NID_id_qt_cps);
+      if (qual->pqualid == NULL) {
+        OPENSSL_PUT_ERROR(X509V3, ERR_R_INTERNAL_ERROR);
+        goto err;
+      }
+      qual->d.cpsuri = ASN1_IA5STRING_new();
+      if (qual->d.cpsuri == NULL) {
+        goto err;
+      }
+      if (!ASN1_STRING_set(qual->d.cpsuri, cnf->value, strlen(cnf->value))) {
+        goto err;
+      }
+    } else if (x509v3_conf_name_matches(cnf->name, "userNotice")) {
+      if (*cnf->value != '@') {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_EXPECTED_A_SECTION_NAME);
+        X509V3_conf_err(cnf);
+        goto err;
+      }
+      const STACK_OF(CONF_VALUE) *unot =
+          X509V3_get_section(ctx, cnf->value + 1);
+      if (!unot) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_SECTION);
+        X509V3_conf_err(cnf);
+        goto err;
+      }
+      qual = notice_section(ctx, unot, ia5org);
+      if (!qual) {
+        goto err;
+      }
+      if (!pol->qualifiers) {
+        pol->qualifiers = sk_POLICYQUALINFO_new_null();
+      }
+      if (!sk_POLICYQUALINFO_push(pol->qualifiers, qual)) {
+        goto err;
+      }
+    } else {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_OPTION);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
             X509V3_conf_err(cnf);
             goto err;
@@ -286,6 +431,7 @@ static POLICYINFO *policy_section(X509V3_CTX *ctx,
 
     return pol;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  merr:
     OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
 
@@ -293,8 +439,14 @@ static POLICYINFO *policy_section(X509V3_CTX *ctx,
     POLICYINFO_free(pol);
     return NULL;
 
+=======
+err:
+  POLICYINFO_free(pol);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static POLICYQUALINFO *notice_section(X509V3_CTX *ctx,
                                       STACK_OF(CONF_VALUE) *unot, int ia5org)
 {
@@ -308,7 +460,71 @@ static POLICYQUALINFO *notice_section(X509V3_CTX *ctx,
     qual->pqualid = OBJ_nid2obj(NID_id_qt_unotice);
     if (qual->pqualid == NULL) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_INTERNAL_ERROR);
+=======
+static POLICYQUALINFO *notice_section(const X509V3_CTX *ctx,
+                                      const STACK_OF(CONF_VALUE) *unot,
+                                      int ia5org) {
+  USERNOTICE *notice;
+  POLICYQUALINFO *qual;
+  if (!(qual = POLICYQUALINFO_new())) {
+    goto err;
+  }
+  qual->pqualid = OBJ_nid2obj(NID_id_qt_unotice);
+  if (qual->pqualid == NULL) {
+    OPENSSL_PUT_ERROR(X509V3, ERR_R_INTERNAL_ERROR);
+    goto err;
+  }
+  if (!(notice = USERNOTICE_new())) {
+    goto err;
+  }
+  qual->d.usernotice = notice;
+  for (size_t i = 0; i < sk_CONF_VALUE_num(unot); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(unot, i);
+    if (!strcmp(cnf->name, "explicitText")) {
+      notice->exptext = ASN1_VISIBLESTRING_new();
+      if (notice->exptext == NULL) {
         goto err;
+      }
+      if (!ASN1_STRING_set(notice->exptext, cnf->value, strlen(cnf->value))) {
+        goto err;
+      }
+    } else if (!strcmp(cnf->name, "organization")) {
+      NOTICEREF *nref;
+      if (!notice->noticeref) {
+        if (!(nref = NOTICEREF_new())) {
+          goto err;
+        }
+        notice->noticeref = nref;
+      } else {
+        nref = notice->noticeref;
+      }
+      if (ia5org) {
+        nref->organization->type = V_ASN1_IA5STRING;
+      } else {
+        nref->organization->type = V_ASN1_VISIBLESTRING;
+      }
+      if (!ASN1_STRING_set(nref->organization, cnf->value,
+                           strlen(cnf->value))) {
+        goto err;
+      }
+    } else if (!strcmp(cnf->name, "noticeNumbers")) {
+      NOTICEREF *nref;
+      STACK_OF(CONF_VALUE) *nos;
+      if (!notice->noticeref) {
+        if (!(nref = NOTICEREF_new())) {
+          goto err;
+        }
+        notice->noticeref = nref;
+      } else {
+        nref = notice->noticeref;
+      }
+      nos = X509V3_parse_list(cnf->value);
+      if (!nos || !sk_CONF_VALUE_num(nos)) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NUMBERS);
+        X509V3_conf_err(cnf);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
+        goto err;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     }
     if (!(not = USERNOTICE_new()))
         goto merr;
@@ -366,19 +582,40 @@ static POLICYQUALINFO *notice_section(X509V3_CTX *ctx,
     if (not->noticeref &&
         (!not->noticeref->noticenos || !not->noticeref->organization)) {
         OPENSSL_PUT_ERROR(X509V3, X509V3_R_NEED_ORGANIZATION_AND_NUMBERS);
+=======
+      }
+      int ret = nref_nos(nref->noticenos, nos);
+      sk_CONF_VALUE_pop_free(nos, X509V3_conf_free);
+      if (!ret) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         goto err;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return qual;
+=======
+  if (notice->noticeref &&
+      (!notice->noticeref->noticenos || !notice->noticeref->organization)) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_NEED_ORGANIZATION_AND_NUMBERS);
+    goto err;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
  merr:
     OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  err:
     POLICYQUALINFO_free(qual);
     return NULL;
+=======
+err:
+  POLICYQUALINFO_free(qual);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos)
 {
     CONF_VALUE *cnf;
@@ -394,7 +631,18 @@ static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos)
         }
         if (!sk_ASN1_INTEGER_push(nnums, aint))
             goto merr;
+=======
+static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums,
+                    const STACK_OF(CONF_VALUE) *nos) {
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nos); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(nos, i);
+    ASN1_INTEGER *aint = s2i_ASN1_INTEGER(NULL, cnf->name);
+    if (aint == NULL) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NUMBER);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return 1;
 
  merr:
@@ -403,6 +651,14 @@ static int nref_nos(STACK_OF(ASN1_INTEGER) *nnums, STACK_OF(CONF_VALUE) *nos)
 
  err:
     return 0;
+=======
+    if (!sk_ASN1_INTEGER_push(nnums, aint)) {
+      ASN1_INTEGER_free(aint);
+      return 0;
+    }
+  }
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static int i2r_certpol(X509V3_EXT_METHOD *method, STACK_OF(POLICYINFO) *pol,
@@ -449,6 +705,7 @@ static void print_qualifiers(BIO *out, STACK_OF(POLICYQUALINFO) *quals,
         }
     }
 }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
 static void print_notice(BIO *out, USERNOTICE *notice, int indent)
 {
@@ -498,3 +755,5 @@ void X509_POLICY_NODE_print(BIO *out, X509_POLICY_NODE *node, int indent)
     else
         BIO_printf(out, "%*sNo Qualifiers\n", indent + 2, "");
 }
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

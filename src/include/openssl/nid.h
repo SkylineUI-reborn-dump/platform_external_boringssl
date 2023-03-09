@@ -4251,6 +4251,22 @@ extern "C" {
 #define NID_sha512_256 962
 #define OBJ_sha512_256 2L, 16L, 840L, 1L, 101L, 3L, 4L, 2L, 6L
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+#define SN_hkdf "HKDF"
+#define LN_hkdf "hkdf"
+#define NID_hkdf 963
+
+#define SN_X25519Kyber768 "X25519Kyber768"
+#define NID_X25519Kyber768 964
+
+#define SN_P256Kyber768 "P256Kyber768"
+#define NID_P256Kyber768 965
+
+#define SN_P384Kyber768 "P384Kyber768"
+#define NID_P384Kyber768 966
+
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 #if defined(__cplusplus)
 } /* extern C */

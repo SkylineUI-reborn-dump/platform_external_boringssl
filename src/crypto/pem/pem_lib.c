@@ -1,4 +1,3 @@
-/* crypto/pem/pem_lib.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -76,7 +75,7 @@
 
 #define MIN_LENGTH      4
 
-static int load_iv(char **fromp, unsigned char *to, int num);
+static int load_iv(char **fromp, unsigned char *to, size_t num);
 static int check_pem(const char *nm, const char *name);
 
 void PEM_proc_type(char *buf, int type)
@@ -228,7 +227,102 @@ int PEM_bytes_read_bio(unsigned char **pdata, long *plen, char **pnm,
         OPENSSL_free(header);
         OPENSSL_free(data);
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!PEM_get_EVP_CIPHER_INFO(header, &cipher))
+=======
+    if (check_pem(nm, name)) {
+      break;
+    }
+    OPENSSL_free(nm);
+    OPENSSL_free(header);
+    OPENSSL_free(data);
+  }
+  if (!PEM_get_EVP_CIPHER_INFO(header, &cipher)) {
+    goto err;
+  }
+  if (!PEM_do_header(&cipher, data, &len, cb, u)) {
+    goto err;
+  }
+
+  *pdata = data;
+  *plen = len;
+
+  if (pnm) {
+    *pnm = nm;
+  }
+
+  ret = 1;
+
+err:
+  if (!ret || !pnm) {
+    OPENSSL_free(nm);
+  }
+  OPENSSL_free(header);
+  if (!ret) {
+    OPENSSL_free(data);
+  }
+  return ret;
+}
+
+int PEM_ASN1_write(i2d_of_void *i2d, const char *name, FILE *fp, void *x,
+                   const EVP_CIPHER *enc, unsigned char *kstr, int klen,
+                   pem_password_cb *callback, void *u) {
+  BIO *b = BIO_new_fp(fp, BIO_NOCLOSE);
+  if (b == NULL) {
+    OPENSSL_PUT_ERROR(PEM, ERR_R_BUF_LIB);
+    return 0;
+  }
+  int ret = PEM_ASN1_write_bio(i2d, name, b, x, enc, kstr, klen, callback, u);
+  BIO_free(b);
+  return ret;
+}
+
+int PEM_ASN1_write_bio(i2d_of_void *i2d, const char *name, BIO *bp, void *x,
+                       const EVP_CIPHER *enc, unsigned char *kstr, int klen,
+                       pem_password_cb *callback, void *u) {
+  EVP_CIPHER_CTX ctx;
+  int dsize = 0, i, j, ret = 0;
+  unsigned char *p, *data = NULL;
+  const char *objstr = NULL;
+  char buf[PEM_BUFSIZE];
+  unsigned char key[EVP_MAX_KEY_LENGTH];
+  unsigned char iv[EVP_MAX_IV_LENGTH];
+
+  if (enc != NULL) {
+    objstr = OBJ_nid2sn(EVP_CIPHER_nid(enc));
+    if (objstr == NULL || cipher_by_name(objstr) == NULL ||
+        EVP_CIPHER_iv_length(enc) < 8) {
+      OPENSSL_PUT_ERROR(PEM, PEM_R_UNSUPPORTED_CIPHER);
+      goto err;
+    }
+  }
+
+  if ((dsize = i2d(x, NULL)) < 0) {
+    OPENSSL_PUT_ERROR(PEM, ERR_R_ASN1_LIB);
+    dsize = 0;
+    goto err;
+  }
+  // dzise + 8 bytes are needed
+  // actually it needs the cipher block size extra...
+  data = (unsigned char *)OPENSSL_malloc((unsigned int)dsize + 20);
+  if (data == NULL) {
+    goto err;
+  }
+  p = data;
+  i = i2d(x, &p);
+
+  if (enc != NULL) {
+    const unsigned iv_len = EVP_CIPHER_iv_length(enc);
+
+    if (kstr == NULL) {
+      klen = 0;
+      if (!callback) {
+        callback = PEM_def_callback;
+      }
+      klen = (*callback)(buf, PEM_BUFSIZE, 1, u);
+      if (klen <= 0) {
+        OPENSSL_PUT_ERROR(PEM, PEM_R_READ_KEY);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         goto err;
     if (!PEM_do_header(&cipher, data, &len, cb, u))
         goto err;
@@ -414,6 +508,7 @@ int PEM_get_EVP_CIPHER_INFO(char *header, EVP_CIPHER_INFO *cipher)
     char *p, c;
     char **header_pp = &header;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     cipher->cipher = NULL;
     OPENSSL_memset(cipher->iv, 0, sizeof(cipher->iv));
     if ((header == NULL) || (*header == '\0') || (*header == '\n'))
@@ -437,6 +532,50 @@ int PEM_get_EVP_CIPHER_INFO(char *header, EVP_CIPHER_INFO *cipher)
     if (*header == '\0') {
         OPENSSL_PUT_ERROR(PEM, PEM_R_SHORT_HEADER);
         return (0);
+=======
+  cipher->cipher = NULL;
+  OPENSSL_memset(cipher->iv, 0, sizeof(cipher->iv));
+  if ((header == NULL) || (*header == '\0') || (*header == '\n')) {
+    return 1;
+  }
+  if (strncmp(header, "Proc-Type: ", 11) != 0) {
+    OPENSSL_PUT_ERROR(PEM, PEM_R_NOT_PROC_TYPE);
+    return 0;
+  }
+  header += 11;
+  if (*header != '4') {
+    return 0;
+  }
+  header++;
+  if (*header != ',') {
+    return 0;
+  }
+  header++;
+  if (strncmp(header, "ENCRYPTED", 9) != 0) {
+    OPENSSL_PUT_ERROR(PEM, PEM_R_NOT_ENCRYPTED);
+    return 0;
+  }
+  for (; (*header != '\n') && (*header != '\0'); header++) {
+    ;
+  }
+  if (*header == '\0') {
+    OPENSSL_PUT_ERROR(PEM, PEM_R_SHORT_HEADER);
+    return 0;
+  }
+  header++;
+  if (strncmp(header, "DEK-Info: ", 10) != 0) {
+    OPENSSL_PUT_ERROR(PEM, PEM_R_NOT_DEK_INFO);
+    return 0;
+  }
+  header += 10;
+
+  p = header;
+  for (;;) {
+    c = *header;
+    if (!((c >= 'A' && c <= 'Z') || c == '-' ||
+          OPENSSL_isdigit(c))) {
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     header++;
     if (strncmp(header, "DEK-Info: ", 10) != 0) {
@@ -475,11 +614,18 @@ int PEM_get_EVP_CIPHER_INFO(char *header, EVP_CIPHER_INFO *cipher)
     return (1);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int load_iv(char **fromp, unsigned char *to, int num)
 {
     int v, i;
     char *from;
+=======
+static int load_iv(char **fromp, unsigned char *to, size_t num) {
+  uint8_t v;
+  char *from;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     from = *fromp;
     for (i = 0; i < num; i++)
         to[i] = 0;
@@ -497,7 +643,24 @@ static int load_iv(char **fromp, unsigned char *to, int num)
         }
         from++;
         to[i / 2] |= v << (long)((!(i & 1)) * 4);
+=======
+  from = *fromp;
+  for (size_t i = 0; i < num; i++) {
+    to[i] = 0;
+  }
+  num *= 2;
+  for (size_t i = 0; i < num; i++) {
+    if (!OPENSSL_fromxdigit(&v, *from)) {
+      OPENSSL_PUT_ERROR(PEM, PEM_R_BAD_IV_CHARS);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    from++;
+    to[i / 2] |= v << (!(i & 1)) * 4;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     *fromp = from;
     return (1);
@@ -538,10 +701,24 @@ int PEM_write_bio(BIO *bp, const char *name, const char *header,
             goto err;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     buf = OPENSSL_malloc(PEM_BUFSIZE * 8);
     if (buf == NULL) {
         reason = ERR_R_MALLOC_FAILURE;
         goto err;
+=======
+  buf = OPENSSL_malloc(PEM_BUFSIZE * 8);
+  if (buf == NULL) {
+    goto err;
+  }
+
+  i = j = 0;
+  while (len > 0) {
+    n = (int)((len > (PEM_BUFSIZE * 5)) ? (PEM_BUFSIZE * 5) : len);
+    EVP_EncodeUpdate(&ctx, buf, &outl, &(data[j]), n);
+    if ((outl) && (BIO_write(bp, (char *)buf, outl) != outl)) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     i = j = 0;
@@ -595,6 +772,7 @@ int PEM_read_bio(BIO *bp, char **name, char **header, unsigned char **data,
     BUF_MEM *headerB;
     BUF_MEM *dataB, *tmpB;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     nameB = BUF_MEM_new();
     headerB = BUF_MEM_new();
     dataB = BUF_MEM_new();
@@ -604,10 +782,121 @@ int PEM_read_bio(BIO *bp, char **name, char **header, unsigned char **data,
         BUF_MEM_free(dataB);
         OPENSSL_PUT_ERROR(PEM, ERR_R_MALLOC_FAILURE);
         return (0);
+=======
+  nameB = BUF_MEM_new();
+  headerB = BUF_MEM_new();
+  dataB = BUF_MEM_new();
+  if ((nameB == NULL) || (headerB == NULL) || (dataB == NULL)) {
+    BUF_MEM_free(nameB);
+    BUF_MEM_free(headerB);
+    BUF_MEM_free(dataB);
+    return 0;
+  }
+
+  buf[254] = '\0';
+  for (;;) {
+    i = BIO_gets(bp, buf, 254);
+
+    if (i <= 0) {
+      OPENSSL_PUT_ERROR(PEM, PEM_R_NO_START_LINE);
+      goto err;
     }
 
+    while ((i >= 0) && (buf[i] <= ' ')) {
+      i--;
+    }
+    buf[++i] = '\n';
+    buf[++i] = '\0';
+
+    if (strncmp(buf, "-----BEGIN ", 11) == 0) {
+      i = strlen(&(buf[11]));
+
+      if (strncmp(&(buf[11 + i - 6]), "-----\n", 6) != 0) {
+        continue;
+      }
+      if (!BUF_MEM_grow(nameB, i + 9)) {
+        goto err;
+      }
+      OPENSSL_memcpy(nameB->data, &(buf[11]), i - 6);
+      nameB->data[i - 6] = '\0';
+      break;
+    }
+  }
+  hl = 0;
+  if (!BUF_MEM_grow(headerB, 256)) {
+    goto err;
+  }
+  headerB->data[0] = '\0';
+  for (;;) {
+    i = BIO_gets(bp, buf, 254);
+    if (i <= 0) {
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
+    }
+
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     buf[254] = '\0';
+=======
+    while ((i >= 0) && (buf[i] <= ' ')) {
+      i--;
+    }
+    buf[++i] = '\n';
+    buf[++i] = '\0';
+
+    if (buf[0] == '\n') {
+      break;
+    }
+    if (!BUF_MEM_grow(headerB, hl + i + 9)) {
+      goto err;
+    }
+    if (strncmp(buf, "-----END ", 9) == 0) {
+      nohead = 1;
+      break;
+    }
+    OPENSSL_memcpy(&(headerB->data[hl]), buf, i);
+    headerB->data[hl + i] = '\0';
+    hl += i;
+  }
+
+  bl = 0;
+  if (!BUF_MEM_grow(dataB, 1024)) {
+    goto err;
+  }
+  dataB->data[0] = '\0';
+  if (!nohead) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     for (;;) {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      i = BIO_gets(bp, buf, 254);
+      if (i <= 0) {
+        break;
+      }
+
+      while ((i >= 0) && (buf[i] <= ' ')) {
+        i--;
+      }
+      buf[++i] = '\n';
+      buf[++i] = '\0';
+
+      if (i != 65) {
+        end = 1;
+      }
+      if (strncmp(buf, "-----END ", 9) == 0) {
+        break;
+      }
+      if (i > 65) {
+        break;
+      }
+      if (!BUF_MEM_grow_clean(dataB, i + bl + 9)) {
+        goto err;
+      }
+      OPENSSL_memcpy(&(dataB->data[bl]), buf, i);
+      dataB->data[bl + i] = '\0';
+      bl += i;
+      if (end) {
+        buf[0] = '\0';
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         i = BIO_gets(bp, buf, 254);
 
         if (i <= 0) {

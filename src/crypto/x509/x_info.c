@@ -65,11 +65,18 @@ X509_INFO *X509_INFO_new(void)
 {
     X509_INFO *ret = NULL;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ret = (X509_INFO *)OPENSSL_malloc(sizeof(X509_INFO));
     if (ret == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
         return (NULL);
     }
+=======
+  ret = (X509_INFO *)OPENSSL_malloc(sizeof(X509_INFO));
+  if (ret == NULL) {
+    return NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     ret->enc_cipher.cipher = NULL;
     ret->enc_len = 0;

@@ -1,4 +1,3 @@
-/* v3_info.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -68,6 +67,7 @@
 #include <openssl/obj.h>
 #include <openssl/x509v3.h>
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_INFO_ACCESS(X509V3_EXT_METHOD
                                                        *method, AUTHORITY_INFO_ACCESS
                                                        *ainfo, STACK_OF(CONF_VALUE)
@@ -77,6 +77,13 @@ static AUTHORITY_INFO_ACCESS *v2i_AUTHORITY_INFO_ACCESS(X509V3_EXT_METHOD
                                                         X509V3_CTX *ctx,
                                                         STACK_OF(CONF_VALUE)
                                                         *nval);
+=======
+static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_INFO_ACCESS(
+    const X509V3_EXT_METHOD *method, void *ext, STACK_OF(CONF_VALUE) *ret);
+static void *v2i_AUTHORITY_INFO_ACCESS(const X509V3_EXT_METHOD *method,
+                                       const X509V3_CTX *ctx,
+                                       const STACK_OF(CONF_VALUE) *nval);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_info = { NID_info_access, X509V3_EXT_MULTILINE,
     ASN1_ITEM_ref(AUTHORITY_INFO_ACCESS),
@@ -146,12 +153,69 @@ static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_INFO_ACCESS(
     if (ret == NULL && tret == NULL)
         return sk_CONF_VALUE_new_null();
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return tret;
  err:
     OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
     if (ret == NULL && tret != NULL)
         sk_CONF_VALUE_pop_free(tret, X509V3_conf_free);
+=======
+  return tret;
+err:
+  if (ret == NULL && tret != NULL) {
+    sk_CONF_VALUE_pop_free(tret, X509V3_conf_free);
+  }
+  return NULL;
+}
+
+static void *v2i_AUTHORITY_INFO_ACCESS(const X509V3_EXT_METHOD *method,
+                                       const X509V3_CTX *ctx,
+                                       const STACK_OF(CONF_VALUE) *nval) {
+  AUTHORITY_INFO_ACCESS *ainfo = NULL;
+  ACCESS_DESCRIPTION *acc;
+  char *objtmp, *ptmp;
+  if (!(ainfo = sk_ACCESS_DESCRIPTION_new_null())) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return NULL;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(nval, i);
+    if (!(acc = ACCESS_DESCRIPTION_new()) ||
+        !sk_ACCESS_DESCRIPTION_push(ainfo, acc)) {
+      goto err;
+    }
+    ptmp = strchr(cnf->name, ';');
+    if (!ptmp) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_SYNTAX);
+      goto err;
+    }
+    int objlen = ptmp - cnf->name;
+    CONF_VALUE ctmp;
+    ctmp.name = ptmp + 1;
+    ctmp.value = cnf->value;
+    if (!v2i_GENERAL_NAME_ex(acc->location, method, ctx, &ctmp, 0)) {
+      goto err;
+    }
+    if (!(objtmp = OPENSSL_malloc(objlen + 1))) {
+      goto err;
+    }
+    OPENSSL_strlcpy(objtmp, cnf->name, objlen + 1);
+    acc->method = OBJ_txt2obj(objtmp, 0);
+    if (!acc->method) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_BAD_OBJECT);
+      ERR_add_error_data(2, "value=", objtmp);
+      OPENSSL_free(objtmp);
+      goto err;
+    }
+    OPENSSL_free(objtmp);
+  }
+  return ainfo;
+err:
+  sk_ACCESS_DESCRIPTION_pop_free(ainfo, ACCESS_DESCRIPTION_free);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static AUTHORITY_INFO_ACCESS *v2i_AUTHORITY_INFO_ACCESS(X509V3_EXT_METHOD

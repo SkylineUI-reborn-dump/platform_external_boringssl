@@ -73,6 +73,7 @@ int ASN1_item_i2d_fp(const ASN1_ITEM *it, FILE *out, void *x)
     return ret;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int ASN1_item_i2d_bio(const ASN1_ITEM *it, BIO *out, void *x)
 {
     unsigned char *b = NULL;
@@ -81,6 +82,14 @@ int ASN1_item_i2d_bio(const ASN1_ITEM *it, BIO *out, void *x)
         OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
         return 0;
     }
+=======
+int ASN1_item_i2d_bio(const ASN1_ITEM *it, BIO *out, void *x) {
+  unsigned char *b = NULL;
+  int n = ASN1_item_i2d(x, &b, it);
+  if (b == NULL) {
+    return 0;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     int ret = BIO_write_all(out, b, n);
     OPENSSL_free(b);

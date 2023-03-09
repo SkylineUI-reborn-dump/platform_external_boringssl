@@ -1,4 +1,3 @@
-/* v3_genn.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -62,6 +61,8 @@
 #include <openssl/obj.h>
 #include <openssl/x509v3.h>
 
+#include "internal.h"
+
 
 ASN1_SEQUENCE(OTHERNAME) = {
         ASN1_SIMPLE(OTHERNAME, type_id, ASN1_OBJECT),
@@ -121,11 +122,35 @@ static int edipartyname_cmp(const EDIPARTYNAME *a, const EDIPARTYNAME *b)
     return ASN1_STRING_cmp(a->partyName, b->partyName);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* Returns 0 if they are equal, != 0 otherwise. */
 int GENERAL_NAME_cmp(const GENERAL_NAME *a, const GENERAL_NAME *b)
 {
     if (!a || !b || a->type != b->type)
         return -1;
+=======
+// Returns 0 if they are equal, != 0 otherwise.
+static int othername_cmp(OTHERNAME *a, OTHERNAME *b) {
+  int result = -1;
+
+  if (!a || !b) {
+    return -1;
+  }
+  // Check their type first.
+  if ((result = OBJ_cmp(a->type_id, b->type_id)) != 0) {
+    return result;
+  }
+  // Check the value.
+  result = ASN1_TYPE_cmp(a->value, b->value);
+  return result;
+}
+
+// Returns 0 if they are equal, != 0 otherwise.
+int GENERAL_NAME_cmp(const GENERAL_NAME *a, const GENERAL_NAME *b) {
+  if (!a || !b || a->type != b->type) {
+    return -1;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     switch (a->type) {
     case GEN_X400:
@@ -135,7 +160,11 @@ int GENERAL_NAME_cmp(const GENERAL_NAME *a, const GENERAL_NAME *b)
         return edipartyname_cmp(a->d.ediPartyName, b->d.ediPartyName);
 
     case GEN_OTHERNAME:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return OTHERNAME_cmp(a->d.otherName, b->d.otherName);
+=======
+      return othername_cmp(a->d.otherName, b->d.otherName);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case GEN_EMAIL:
     case GEN_DNS:
@@ -155,6 +184,7 @@ int GENERAL_NAME_cmp(const GENERAL_NAME *a, const GENERAL_NAME *b)
     return -1;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* Returns 0 if they are equal, != 0 otherwise. */
 int OTHERNAME_cmp(OTHERNAME *a, OTHERNAME *b)
 {
@@ -173,6 +203,10 @@ int OTHERNAME_cmp(OTHERNAME *a, OTHERNAME *b)
 void GENERAL_NAME_set0_value(GENERAL_NAME *a, int type, void *value)
 {
     switch (type) {
+=======
+void GENERAL_NAME_set0_value(GENERAL_NAME *a, int type, void *value) {
+  switch (type) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     case GEN_X400:
         a->d.x400Address = value;
         break;

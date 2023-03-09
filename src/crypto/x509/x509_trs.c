@@ -176,6 +176,7 @@ int X509_TRUST_add(int id, int flags, int (*ck) (X509_TRUST *, X509 *, int),
     X509_TRUST *trtmp;
     char *name_dup;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /*
      * This is set according to what we change: application can't set it
      */
@@ -185,6 +186,70 @@ int X509_TRUST_add(int id, int flags, int (*ck) (X509_TRUST *, X509 *, int),
     /* Get existing entry if any */
     idx = X509_TRUST_get_by_id(id);
     /* Need a new entry */
+=======
+X509_TRUST *X509_TRUST_get0(int idx) {
+  if (idx < 0) {
+    return NULL;
+  }
+  if (idx < (int)X509_TRUST_COUNT) {
+    return trstandard + idx;
+  }
+  return sk_X509_TRUST_value(trtable, idx - X509_TRUST_COUNT);
+}
+
+int X509_TRUST_get_by_id(int id) {
+  X509_TRUST tmp;
+  size_t idx;
+
+  if ((id >= X509_TRUST_MIN) && (id <= X509_TRUST_MAX)) {
+    return id - X509_TRUST_MIN;
+  }
+  tmp.trust = id;
+  if (!trtable) {
+    return -1;
+  }
+  sk_X509_TRUST_sort(trtable);
+  if (!sk_X509_TRUST_find(trtable, &idx, &tmp)) {
+    return -1;
+  }
+  return idx + X509_TRUST_COUNT;
+}
+
+int X509_TRUST_set(int *t, int trust) {
+  if (X509_TRUST_get_by_id(trust) == -1) {
+    OPENSSL_PUT_ERROR(X509, X509_R_INVALID_TRUST);
+    return 0;
+  }
+  *t = trust;
+  return 1;
+}
+
+int X509_TRUST_add(int id, int flags, int (*ck)(X509_TRUST *, X509 *, int),
+                   char *name, int arg1, void *arg2) {
+  int idx;
+  X509_TRUST *trtmp;
+  char *name_dup;
+
+  // This is set according to what we change: application can't set it
+  flags &= ~X509_TRUST_DYNAMIC;
+  // This will always be set for application modified trust entries
+  flags |= X509_TRUST_DYNAMIC_NAME;
+  // Get existing entry if any
+  idx = X509_TRUST_get_by_id(id);
+  // Need a new entry
+  if (idx == -1) {
+    if (!(trtmp = OPENSSL_malloc(sizeof(X509_TRUST)))) {
+      return 0;
+    }
+    trtmp->flags = X509_TRUST_DYNAMIC;
+  } else {
+    trtmp = X509_TRUST_get0(idx);
+  }
+
+  // Duplicate the supplied name.
+  name_dup = OPENSSL_strdup(name);
+  if (name_dup == NULL) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     if (idx == -1) {
         if (!(trtmp = OPENSSL_malloc(sizeof(X509_TRUST)))) {
             OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
@@ -217,6 +282,7 @@ int X509_TRUST_add(int id, int flags, int (*ck) (X509_TRUST *, X509 *, int),
     trtmp->arg1 = arg1;
     trtmp->arg2 = arg2;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* If its a new entry manage the dynamic table */
     if (idx == -1) {
         if (!trtable && !(trtable = sk_X509_TRUST_new(tr_cmp))) {
@@ -229,7 +295,15 @@ int X509_TRUST_add(int id, int flags, int (*ck) (X509_TRUST *, X509 *, int),
             trtable_free(trtmp);
             return 0;
         }
+=======
+  // If its a new entry manage the dynamic table
+  if (idx == -1) {
+    if (!trtable && !(trtable = sk_X509_TRUST_new(tr_cmp))) {
+      trtable_free(trtmp);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return 1;
 }
 
@@ -241,6 +315,11 @@ static void trtable_free(X509_TRUST *p)
         if (p->flags & X509_TRUST_DYNAMIC_NAME)
             OPENSSL_free(p->name);
         OPENSSL_free(p);
+=======
+    if (!sk_X509_TRUST_push(trtable, trtmp)) {
+      trtable_free(trtmp);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 }
 

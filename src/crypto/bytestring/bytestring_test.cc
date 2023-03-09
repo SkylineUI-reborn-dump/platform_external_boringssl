@@ -1493,3 +1493,180 @@ TEST(CBBTest, Unicode) {
   EXPECT_EQ(4u, cbb_get_utf8_len(0x10000));
   EXPECT_EQ(4u, cbb_get_utf8_len(0x10ffff));
 }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+
+TEST(CBSTest, BogusTime) {
+  static const struct {
+    const char *timestring;
+  } kBogusTimeTests[] = {
+      {""},
+      {"invalidtimesZ"},
+      {"Z"},
+      {"0000"},
+      {"9999Z"},
+      {"00000000000000000000000000000Z"},
+      {"19491231235959"},
+      {"500101000000.001Z"},
+      {"500101000000+6"},
+      {"-1970010100000Z"},
+      {"7a0101000000Z"},
+      {"20500101000000-6"},
+      {"20500101000000.001"},
+      {"20500229000000Z"},
+      {"220229000000Z"},
+      {"20500132000000Z"},
+      {"220132000000Z"},
+      {"20500332000000Z"},
+      {"220332000000Z"},
+      {"20500532000000Z"},
+      {"220532000000Z"},
+      {"20500732000000Z"},
+      {"220732000000Z"},
+      {"20500832000000Z"},
+      {"220832000000Z"},
+      {"20501032000000Z"},
+      {"221032000000Z"},
+      {"20501232000000Z"},
+      {"221232000000Z"},
+      {"20500431000000Z"},
+      {"220431000000Z"},
+      {"20500631000000Z"},
+      {"220631000000Z"},
+      {"20500931000000Z"},
+      {"220931000000Z"},
+      {"20501131000000Z"},
+      {"221131000000Z"},
+      {"20501100000000Z"},
+      {"221100000000Z"},
+      {"19500101000000+0600"},
+  };
+  for (const auto &t : kBogusTimeTests) {
+    SCOPED_TRACE(t.timestring);
+    CBS cbs;
+    CBS_init(&cbs, (const uint8_t *)t.timestring, strlen(t.timestring));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/0));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1));
+  }
+  static const struct {
+    const char *timestring;
+  } kUTCTZTests[] = {
+      {"480711220333-0700"},
+      {"140704000000-0700"},
+      {"480222202332-0500"},
+      {"480726113216-0000"},
+      {"480726113216-2359"},
+  };
+  for (const auto &t : kUTCTZTests) {
+    SCOPED_TRACE(t.timestring);
+    CBS cbs;
+    CBS_init(&cbs, (const uint8_t *)t.timestring, strlen(t.timestring));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/0));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/1));
+    EXPECT_TRUE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/0));
+  }
+  static const struct {
+    const char *timestring;
+  } kBogusUTCTZTests[] = {
+      {"480711220333-0160"},
+      {"140704000000-9999"},
+      {"480222202332-2400"},
+  };
+  for (const auto &t : kBogusUTCTZTests) {
+    SCOPED_TRACE(t.timestring);
+    CBS cbs;
+    CBS_init(&cbs, (const uint8_t *)t.timestring, strlen(t.timestring));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/0));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1));
+  }
+  static const struct {
+    const char *timestring;
+  } kGenTZTests[] = {
+      {"20480711220333-0000"},
+      {"20140704000000-0100"},
+      {"20460311174630-0300"},
+      {"20140704000000-2359"},
+  };
+  for (const auto &t : kGenTZTests) {
+    SCOPED_TRACE(t.timestring);
+    CBS cbs;
+    CBS_init(&cbs, (const uint8_t *)t.timestring, strlen(t.timestring));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/0));
+    EXPECT_TRUE(CBS_parse_generalized_time(&cbs, NULL,
+                                           /*allow_timezone_offset=*/1));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/0));
+  }
+  static const struct {
+    const char *timestring;
+  } kBogusGenTZTests[] = {
+      {"20480222202332-2400"},
+      {"20140704000000-9999"},
+      {"20480726113216-0160"},
+  };
+  for (const auto &t : kBogusGenTZTests) {
+    SCOPED_TRACE(t.timestring);
+    CBS cbs;
+    CBS_init(&cbs, (const uint8_t *)t.timestring, strlen(t.timestring));
+    EXPECT_FALSE(CBS_parse_generalized_time(&cbs, NULL,
+                                            /*allow_timezone_offset=*/0));
+    EXPECT_FALSE(CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1));
+  }
+}
+
+TEST(CBSTest, GetU64Decimal) {
+  const struct {
+    uint64_t val;
+    const char *text;
+  } kTests[] = {
+      {0, "0"},
+      {1, "1"},
+      {123456, "123456"},
+      // 2^64 - 1
+      {UINT64_C(18446744073709551615), "18446744073709551615"},
+  };
+  for (const auto &t : kTests) {
+    SCOPED_TRACE(t.text);
+    CBS cbs;
+    CBS_init(&cbs, reinterpret_cast<const uint8_t*>(t.text), strlen(t.text));
+    uint64_t v;
+    ASSERT_TRUE(CBS_get_u64_decimal(&cbs, &v));
+    EXPECT_EQ(v, t.val);
+    EXPECT_EQ(CBS_data(&cbs),
+              reinterpret_cast<const uint8_t *>(t.text) + strlen(t.text));
+    EXPECT_EQ(CBS_len(&cbs), 0u);
+
+    std::string str(t.text);
+    str += "Z";
+    CBS_init(&cbs, reinterpret_cast<const uint8_t *>(str.data()), str.size());
+    ASSERT_TRUE(CBS_get_u64_decimal(&cbs, &v));
+    EXPECT_EQ(v, t.val);
+    EXPECT_EQ(CBS_data(&cbs),
+              reinterpret_cast<const uint8_t *>(str.data()) + strlen(t.text));
+    EXPECT_EQ(CBS_len(&cbs), 1u);
+  }
+
+  static const char *kInvalidTests[] = {
+      "",
+      "nope",
+      "-1",
+      // 2^64
+      "18446744073709551616",
+      // Overflows at multiplying by 10.
+      "18446744073709551620",
+  };
+  for (const char *invalid : kInvalidTests) {
+    SCOPED_TRACE(invalid);
+    CBS cbs;
+    CBS_init(&cbs, reinterpret_cast<const uint8_t *>(invalid), strlen(invalid));
+    uint64_t v;
+    EXPECT_FALSE(CBS_get_u64_decimal(&cbs, &v));
+  }
+}
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

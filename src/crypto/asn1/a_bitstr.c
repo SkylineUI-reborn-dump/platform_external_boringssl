@@ -146,8 +146,34 @@ ASN1_BIT_STRING *c2i_ASN1_BIT_STRING(ASN1_BIT_STRING **a,
         goto err;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (len > INT_MAX) {
       OPENSSL_PUT_ERROR(ASN1, ASN1_R_STRING_TOO_LONG);
+=======
+  p = *pp;
+  padding = *(p++);
+  len--;
+  if (padding > 7) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_INVALID_BIT_STRING_BITS_LEFT);
+    goto err;
+  }
+
+  // Unused bits in a BIT STRING must be zero.
+  uint8_t padding_mask = (1 << padding) - 1;
+  if (padding != 0 && (len < 1 || (p[len - 1] & padding_mask) != 0)) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_INVALID_BIT_STRING_PADDING);
+    goto err;
+  }
+
+  // We do this to preserve the settings.  If we modify the settings, via
+  // the _set_bit function, we will recalculate on output
+  ret->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);    // clear
+  ret->flags |= (ASN1_STRING_FLAG_BITS_LEFT | padding);  // set
+
+  if (len > 0) {
+    s = OPENSSL_memdup(p, len);
+    if (s == NULL) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
       goto err;
     }
 
@@ -190,6 +216,7 @@ ASN1_BIT_STRING *c2i_ASN1_BIT_STRING(ASN1_BIT_STRING **a,
     } else {
         s = NULL;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
     ret->length = (int)len;
     OPENSSL_free(ret->data);
@@ -203,6 +230,22 @@ ASN1_BIT_STRING *c2i_ASN1_BIT_STRING(ASN1_BIT_STRING **a,
     if ((ret != NULL) && ((a == NULL) || (*a != ret)))
         ASN1_BIT_STRING_free(ret);
     return (NULL);
+=======
+    if (c == NULL) {
+      return 0;
+    }
+    if (w + 1 - a->length > 0) {
+      OPENSSL_memset(c + a->length, 0, w + 1 - a->length);
+    }
+    a->data = c;
+    a->length = w + 1;
+  }
+  a->data[w] = ((a->data[w]) & iv) | v;
+  while ((a->length > 0) && (a->data[a->length - 1] == 0)) {
+    a->length--;
+  }
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*

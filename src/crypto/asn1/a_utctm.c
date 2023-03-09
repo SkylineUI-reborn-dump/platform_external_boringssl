@@ -55,6 +55,13 @@
  * [including the GNU Public Licence.] */
 
 #include <openssl/asn1.h>
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+#include <openssl/bytestring.h>
+#include <openssl/err.h>
+#include <openssl/mem.h>
+#include <openssl/time.h>
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 #include <string.h>
 #include <time.h>
@@ -72,6 +79,7 @@ int asn1_utctime_to_tm(struct tm *tm, const ASN1_UTCTIME *d)
     char *a;
     int n, i, l, o;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (d->type != V_ASN1_UTCTIME)
         return (0);
     l = d->length;
@@ -151,6 +159,39 @@ int asn1_utctime_to_tm(struct tm *tm, const ASN1_UTCTIME *d)
         }
         if (offset && !OPENSSL_gmtime_adj(tm, 0, offset * offsign))
             return 0;
+=======
+int ASN1_UTCTIME_set_string(ASN1_UTCTIME *s, const char *str) {
+  size_t len = strlen(str);
+  CBS cbs;
+  CBS_init(&cbs, (const uint8_t *)str, len);
+  if (!CBS_parse_utc_time(&cbs, /*out_tm=*/NULL,
+                          /*allow_timezone_offset=*/1)) {
+    return 0;
+  }
+  if (s != NULL) {
+    if (!ASN1_STRING_set(s, str, len)) {
+      return 0;
+    }
+    s->type = V_ASN1_UTCTIME;
+  }
+  return 1;
+}
+
+ASN1_UTCTIME *ASN1_UTCTIME_set(ASN1_UTCTIME *s, int64_t posix_time) {
+  return ASN1_UTCTIME_adj(s, posix_time, 0, 0);
+}
+
+ASN1_UTCTIME *ASN1_UTCTIME_adj(ASN1_UTCTIME *s, int64_t posix_time, int offset_day,
+                               long offset_sec) {
+  struct tm data;
+  if (!OPENSSL_posix_to_tm(posix_time, &data)) {
+    return NULL;
+  }
+
+  if (offset_day || offset_sec) {
+    if (!OPENSSL_gmtime_adj(&data, offset_day, offset_sec)) {
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     return o == l;
  err:
@@ -246,8 +287,14 @@ int ASN1_UTCTIME_cmp_time_t(const ASN1_UTCTIME *s, time_t t)
     if (!asn1_utctime_to_tm(&stm, s))
         return -2;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!OPENSSL_gmtime(&t, &ttm))
         return -2;
+=======
+  if (!OPENSSL_posix_to_tm(t, &ttm)) {
+    return -2;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (!OPENSSL_gmtime_diff(&day, &sec, &ttm, &stm))
         return -2;

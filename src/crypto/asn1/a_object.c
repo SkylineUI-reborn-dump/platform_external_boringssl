@@ -105,6 +105,7 @@ int i2d_ASN1_OBJECT(const ASN1_OBJECT *a, unsigned char **pp)
     return objsize;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int i2t_ASN1_OBJECT(char *buf, int buf_len, const ASN1_OBJECT *a)
 {
     return OBJ_obj2txt(buf, buf_len, a, 0);
@@ -120,8 +121,15 @@ int i2a_ASN1_OBJECT(BIO *bp, const ASN1_OBJECT *a)
 {
     if (a == NULL || a->data == NULL) {
         return write_str(bp, "NULL");
+=======
+  unsigned char *p, *allocated = NULL;
+  if (*pp == NULL) {
+    if ((p = allocated = OPENSSL_malloc(objsize)) == NULL) {
+      return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     char buf[80], *allocated = NULL;
     const char *str = buf;
     int len = i2t_ASN1_OBJECT(buf, sizeof(buf), a);
@@ -133,6 +141,43 @@ int i2a_ASN1_OBJECT(BIO *bp, const ASN1_OBJECT *a)
         }
         len = i2t_ASN1_OBJECT(allocated, len + 1, a);
         str = allocated;
+=======
+  ASN1_put_object(&p, 0, a->length, V_ASN1_OBJECT, V_ASN1_UNIVERSAL);
+  OPENSSL_memcpy(p, a->data, a->length);
+
+  // If a new buffer was allocated, just return it back.
+  // If not, return the incremented buffer pointer.
+  *pp = allocated != NULL ? allocated : p + a->length;
+  return objsize;
+}
+
+int i2t_ASN1_OBJECT(char *buf, int buf_len, const ASN1_OBJECT *a) {
+  return OBJ_obj2txt(buf, buf_len, a, 0);
+}
+
+static int write_str(BIO *bp, const char *str) {
+  size_t len = strlen(str);
+  if (len > INT_MAX) {
+    OPENSSL_PUT_ERROR(ASN1, ERR_R_OVERFLOW);
+    return -1;
+  }
+  return BIO_write(bp, str, (int)len) == (int)len ? (int)len : -1;
+}
+
+int i2a_ASN1_OBJECT(BIO *bp, const ASN1_OBJECT *a) {
+  if (a == NULL || a->data == NULL) {
+    return write_str(bp, "NULL");
+  }
+
+  char buf[80], *allocated = NULL;
+  const char *str = buf;
+  int len = i2t_ASN1_OBJECT(buf, sizeof(buf), a);
+  if (len > (int)sizeof(buf) - 1) {
+    // The input was truncated. Allocate a buffer that fits.
+    allocated = OPENSSL_malloc(len + 1);
+    if (allocated == NULL) {
+      return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     if (len <= 0) {
         str = "<INVALID>";
@@ -257,6 +302,7 @@ ASN1_OBJECT *ASN1_OBJECT_new(void)
         return (NULL);
     }
     ret->length = 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ret->data = NULL;
     ret->nid = 0;
     ret->sn = NULL;
@@ -273,7 +319,14 @@ void ASN1_OBJECT_free(ASN1_OBJECT *a)
         OPENSSL_free((void *)a->sn);
         OPENSSL_free((void *)a->ln);
         a->sn = a->ln = NULL;
+=======
+    OPENSSL_free(data);
+    data = (unsigned char *)OPENSSL_malloc(length);
+    if (data == NULL) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (a->flags & ASN1_OBJECT_FLAG_DYNAMIC_DATA) {
         OPENSSL_free((void *)a->data);
         a->data = NULL;
@@ -281,6 +334,69 @@ void ASN1_OBJECT_free(ASN1_OBJECT *a)
     }
     if (a->flags & ASN1_OBJECT_FLAG_DYNAMIC)
         OPENSSL_free(a);
+=======
+    ret->flags |= ASN1_OBJECT_FLAG_DYNAMIC_DATA;
+  }
+  OPENSSL_memcpy(data, p, length);
+  // If there are dynamic strings, free them here, and clear the flag
+  if ((ret->flags & ASN1_OBJECT_FLAG_DYNAMIC_STRINGS) != 0) {
+    OPENSSL_free((char *)ret->sn);
+    OPENSSL_free((char *)ret->ln);
+    ret->flags &= ~ASN1_OBJECT_FLAG_DYNAMIC_STRINGS;
+  }
+  // reattach data to object, after which it remains const
+  ret->data = data;
+  ret->length = length;
+  ret->sn = NULL;
+  ret->ln = NULL;
+  p += length;
+
+  if (a != NULL) {
+    (*a) = ret;
+  }
+  *pp = p;
+  return ret;
+err:
+  if ((ret != NULL) && ((a == NULL) || (*a != ret))) {
+    ASN1_OBJECT_free(ret);
+  }
+  return NULL;
+}
+
+ASN1_OBJECT *ASN1_OBJECT_new(void) {
+  ASN1_OBJECT *ret;
+
+  ret = (ASN1_OBJECT *)OPENSSL_malloc(sizeof(ASN1_OBJECT));
+  if (ret == NULL) {
+    return NULL;
+  }
+  ret->length = 0;
+  ret->data = NULL;
+  ret->nid = 0;
+  ret->sn = NULL;
+  ret->ln = NULL;
+  ret->flags = ASN1_OBJECT_FLAG_DYNAMIC;
+  return ret;
+}
+
+void ASN1_OBJECT_free(ASN1_OBJECT *a) {
+  if (a == NULL) {
+    return;
+  }
+  if (a->flags & ASN1_OBJECT_FLAG_DYNAMIC_STRINGS) {
+    OPENSSL_free((void *)a->sn);
+    OPENSSL_free((void *)a->ln);
+    a->sn = a->ln = NULL;
+  }
+  if (a->flags & ASN1_OBJECT_FLAG_DYNAMIC_DATA) {
+    OPENSSL_free((void *)a->data);
+    a->data = NULL;
+    a->length = 0;
+  }
+  if (a->flags & ASN1_OBJECT_FLAG_DYNAMIC) {
+    OPENSSL_free(a);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_OBJECT *ASN1_OBJECT_create(int nid, const unsigned char *data, int len,

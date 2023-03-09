@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* pcy_map.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
@@ -129,3 +130,5 @@ int policy_cache_set_mapping(X509 *x, POLICY_MAPPINGS *maps)
     return ret;
 
 }
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

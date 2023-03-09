@@ -160,6 +160,7 @@ static int cert_self_signed(X509 *x, int *out_is_self_signed)
 
 /* Given a certificate try and find an exact match in the store */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static X509 *lookup_cert_match(X509_STORE_CTX *ctx, X509 *x)
 {
     STACK_OF(X509) *certs;
@@ -174,8 +175,88 @@ static X509 *lookup_cert_match(X509_STORE_CTX *ctx, X509 *x)
         xtmp = sk_X509_value(certs, i);
         if (!X509_cmp(xtmp, x))
             break;
+=======
+  if (ctx->cert == NULL) {
+    OPENSSL_PUT_ERROR(X509, X509_R_NO_CERT_SET_FOR_US_TO_VERIFY);
+    ctx->error = X509_V_ERR_INVALID_CALL;
+    return -1;
+  }
+  if (ctx->chain != NULL) {
+    // This X509_STORE_CTX has already been used to verify a cert. We
+    // cannot do another one.
+    OPENSSL_PUT_ERROR(X509, ERR_R_SHOULD_NOT_HAVE_BEEN_CALLED);
+    ctx->error = X509_V_ERR_INVALID_CALL;
+    return -1;
+  }
+
+  // first we make sure the chain we are going to build is present and that
+  // the first entry is in place
+  ctx->chain = sk_X509_new_null();
+  if (ctx->chain == NULL || !sk_X509_push(ctx->chain, ctx->cert)) {
+    ctx->error = X509_V_ERR_OUT_OF_MEM;
+    goto end;
+  }
+  X509_up_ref(ctx->cert);
+  ctx->last_untrusted = 1;
+
+  // We use a temporary STACK so we can chop and hack at it.
+  if (ctx->untrusted != NULL && (sktmp = sk_X509_dup(ctx->untrusted)) == NULL) {
+    ctx->error = X509_V_ERR_OUT_OF_MEM;
+    goto end;
+  }
+
+  num = sk_X509_num(ctx->chain);
+  x = sk_X509_value(ctx->chain, num - 1);
+  depth = param->depth;
+
+  for (;;) {
+    // If we have enough, we break
+    if (depth < num) {
+      break;  // FIXME: If this happens, we should take
+              // note of it and, if appropriate, use the
+              // X509_V_ERR_CERT_CHAIN_TOO_LONG error code
+              // later.
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (i < sk_X509_num(certs))
+=======
+
+    int is_self_signed;
+    if (!cert_self_signed(x, &is_self_signed)) {
+      ctx->error = X509_V_ERR_INVALID_EXTENSION;
+      goto end;
+    }
+
+    // If we are self signed, we break
+    if (is_self_signed) {
+      break;
+    }
+    // If asked see if we can find issuer in trusted store first
+    if (ctx->param->flags & X509_V_FLAG_TRUSTED_FIRST) {
+      ok = ctx->get_issuer(&xtmp, ctx, x);
+      if (ok < 0) {
+        ctx->error = X509_V_ERR_STORE_LOOKUP;
+        goto end;
+      }
+      // If successful for now free up cert so it will be picked up
+      // again later.
+      if (ok > 0) {
+        X509_free(xtmp);
+        break;
+      }
+    }
+
+    // If we were passed a cert chain, use it first
+    if (sktmp != NULL) {
+      xtmp = find_issuer(ctx, sktmp, x);
+      if (xtmp != NULL) {
+        if (!sk_X509_push(ctx->chain, xtmp)) {
+          ctx->error = X509_V_ERR_OUT_OF_MEM;
+          ok = 0;
+          goto end;
+        }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         X509_up_ref(xtmp);
     else
         xtmp = NULL;
@@ -207,6 +288,7 @@ int X509_verify_cert(X509_STORE_CTX *ctx)
         return -1;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /*
      * first we make sure the chain we are going to build is present and that
      * the first entry is in place
@@ -214,6 +296,70 @@ int X509_verify_cert(X509_STORE_CTX *ctx)
     ctx->chain = sk_X509_new_null();
     if (ctx->chain == NULL || !sk_X509_push(ctx->chain, ctx->cert)) {
         OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
+=======
+    if (is_self_signed) {
+      // we have a self signed certificate
+      if (sk_X509_num(ctx->chain) == 1) {
+        // We have a single self signed certificate: see if we can
+        // find it in the store. We must have an exact match to avoid
+        // possible impersonation.
+        ok = ctx->get_issuer(&xtmp, ctx, x);
+        if ((ok <= 0) || X509_cmp(x, xtmp)) {
+          ctx->error = X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT;
+          ctx->current_cert = x;
+          ctx->error_depth = i - 1;
+          if (ok == 1) {
+            X509_free(xtmp);
+          }
+          bad_chain = 1;
+          ok = ctx->verify_cb(0, ctx);
+          if (!ok) {
+            goto end;
+          }
+        } else {
+          // We have a match: replace certificate with store
+          // version so we get any trust settings.
+          X509_free(x);
+          x = xtmp;
+          (void)sk_X509_set(ctx->chain, i - 1, x);
+          ctx->last_untrusted = 0;
+        }
+      } else {
+        // extract and save self signed certificate for later use
+        chain_ss = sk_X509_pop(ctx->chain);
+        ctx->last_untrusted--;
+        num--;
+        j--;
+        x = sk_X509_value(ctx->chain, num - 1);
+      }
+    }
+    // We now lookup certs from the certificate store
+    for (;;) {
+      // If we have enough, we break
+      if (depth < num) {
+        break;
+      }
+      if (!cert_self_signed(x, &is_self_signed)) {
+        ctx->error = X509_V_ERR_INVALID_EXTENSION;
+        goto end;
+      }
+      // If we are self signed, we break
+      if (is_self_signed) {
+        break;
+      }
+      ok = ctx->get_issuer(&xtmp, ctx, x);
+
+      if (ok < 0) {
+        ctx->error = X509_V_ERR_STORE_LOOKUP;
+        goto end;
+      }
+      if (ok == 0) {
+        break;
+      }
+      x = xtmp;
+      if (!sk_X509_push(ctx->chain, x)) {
+        X509_free(xtmp);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         ctx->error = X509_V_ERR_OUT_OF_MEM;
         goto end;
     }
@@ -538,6 +684,7 @@ static X509 *find_issuer(X509_STORE_CTX *ctx, STACK_OF(X509) *sk, X509 *x)
 
 /* Given a possible certificate and issuer check them */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int check_issued(X509_STORE_CTX *ctx, X509 *x, X509 *issuer)
 {
     int ret;
@@ -595,6 +742,90 @@ static int check_chain_extensions(X509_STORE_CTX *ctx)
         allow_proxy_certs =
             ! !(ctx->param->flags & X509_V_FLAG_ALLOW_PROXY_CERTS);
         purpose = ctx->param->purpose;
+=======
+static int get_issuer_sk(X509 **issuer, X509_STORE_CTX *ctx, X509 *x) {
+  *issuer = find_issuer(ctx, ctx->other_ctx, x);
+  if (*issuer) {
+    X509_up_ref(*issuer);
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+// Check a certificate chains extensions for consistency with the supplied
+// purpose
+
+static int check_chain_extensions(X509_STORE_CTX *ctx) {
+  int ok = 0, plen = 0;
+
+  // If |ctx->parent| is set, this is CRL path validation.
+  int purpose =
+      ctx->parent == NULL ? ctx->param->purpose : X509_PURPOSE_CRL_SIGN;
+
+  // Check all untrusted certificates
+  for (int i = 0; i < ctx->last_untrusted; i++) {
+    X509 *x = sk_X509_value(ctx->chain, i);
+    if (!(ctx->param->flags & X509_V_FLAG_IGNORE_CRITICAL) &&
+        (x->ex_flags & EXFLAG_CRITICAL)) {
+      ctx->error = X509_V_ERR_UNHANDLED_CRITICAL_EXTENSION;
+      ctx->error_depth = i;
+      ctx->current_cert = x;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto end;
+      }
+    }
+
+    int must_be_ca = i > 0;
+    if (must_be_ca && !X509_check_ca(x)) {
+      ctx->error = X509_V_ERR_INVALID_CA;
+      ctx->error_depth = i;
+      ctx->current_cert = x;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto end;
+      }
+    }
+    if (ctx->param->purpose > 0 &&
+        X509_check_purpose(x, purpose, must_be_ca) != 1) {
+      ctx->error = X509_V_ERR_INVALID_PURPOSE;
+      ctx->error_depth = i;
+      ctx->current_cert = x;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto end;
+      }
+    }
+    // Check pathlen if not self issued
+    if (i > 1 && !(x->ex_flags & EXFLAG_SI) && x->ex_pathlen != -1 &&
+        plen > x->ex_pathlen + 1) {
+      ctx->error = X509_V_ERR_PATH_LENGTH_EXCEEDED;
+      ctx->error_depth = i;
+      ctx->current_cert = x;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto end;
+      }
+    }
+    // Increment path length if not self issued
+    if (!(x->ex_flags & EXFLAG_SI)) {
+      plen++;
+    }
+  }
+  ok = 1;
+end:
+  return ok;
+}
+
+static int reject_dns_name_in_common_name(X509 *x509) {
+  const X509_NAME *name = X509_get_subject_name(x509);
+  int i = -1;
+  for (;;) {
+    i = X509_NAME_get_index_by_NID(name, NID_commonName, i);
+    if (i == -1) {
+      return X509_V_OK;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     ca_requirement = ca_or_leaf;
@@ -1007,7 +1238,44 @@ static int check_crl_time(X509_STORE_CTX *ctx, X509_CRL *crl, int notify)
     else
         ptime = NULL;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     i = X509_cmp_time(X509_CRL_get0_lastUpdate(crl), ptime);
+=======
+  if (notify) {
+    ctx->current_crl = crl;
+  }
+  int64_t ptime;
+  if (ctx->param->flags & X509_V_FLAG_USE_CHECK_TIME) {
+    ptime = ctx->param->check_time;
+  } else {
+    ptime = time(NULL);
+  }
+
+  int i = X509_cmp_time_posix(X509_CRL_get0_lastUpdate(crl), ptime);
+  if (i == 0) {
+    if (!notify) {
+      return 0;
+    }
+    ctx->error = X509_V_ERR_ERROR_IN_CRL_LAST_UPDATE_FIELD;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  if (i > 0) {
+    if (!notify) {
+      return 0;
+    }
+    ctx->error = X509_V_ERR_CRL_NOT_YET_VALID;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  if (X509_CRL_get0_nextUpdate(crl)) {
+    i = X509_cmp_time_posix(X509_CRL_get0_nextUpdate(crl), ptime);
+
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     if (i == 0) {
         if (!notify)
             return 0;
@@ -1468,6 +1736,7 @@ static int crldp_check_crlissuer(DIST_POINT *dp, X509_CRL *crl, int crl_score)
 /* Check CRLDP and IDP */
 
 static int crl_crldp_check(X509 *x, X509_CRL *crl, int crl_score,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                            unsigned int *preasons)
 {
     size_t i;
@@ -1476,6 +1745,323 @@ static int crl_crldp_check(X509 *x, X509_CRL *crl, int crl_score,
     if (x->ex_flags & EXFLAG_CA) {
         if (crl->idp_flags & IDP_ONLYUSER)
             return 0;
+=======
+                           unsigned int *preasons) {
+  size_t i;
+  if (crl->idp_flags & IDP_ONLYATTR) {
+    return 0;
+  }
+  if (x->ex_flags & EXFLAG_CA) {
+    if (crl->idp_flags & IDP_ONLYUSER) {
+      return 0;
+    }
+  } else {
+    if (crl->idp_flags & IDP_ONLYCA) {
+      return 0;
+    }
+  }
+  *preasons = crl->idp_reasons;
+  for (i = 0; i < sk_DIST_POINT_num(x->crldp); i++) {
+    DIST_POINT *dp = sk_DIST_POINT_value(x->crldp, i);
+    if (crldp_check_crlissuer(dp, crl, crl_score)) {
+      if (!crl->idp || idp_check_dp(dp->distpoint, crl->idp->distpoint)) {
+        *preasons &= dp->dp_reasons;
+        return 1;
+      }
+    }
+  }
+  if ((!crl->idp || !crl->idp->distpoint) &&
+      (crl_score & CRL_SCORE_ISSUER_NAME)) {
+    return 1;
+  }
+  return 0;
+}
+
+// Retrieve CRL corresponding to current certificate. If deltas enabled try
+// to find a delta CRL too
+
+static int get_crl_delta(X509_STORE_CTX *ctx, X509_CRL **pcrl, X509_CRL **pdcrl,
+                         X509 *x) {
+  int ok;
+  X509 *issuer = NULL;
+  int crl_score = 0;
+  unsigned int reasons;
+  X509_CRL *crl = NULL, *dcrl = NULL;
+  STACK_OF(X509_CRL) *skcrl;
+  X509_NAME *nm = X509_get_issuer_name(x);
+  reasons = ctx->current_reasons;
+  ok = get_crl_sk(ctx, &crl, &dcrl, &issuer, &crl_score, &reasons, ctx->crls);
+
+  if (ok) {
+    goto done;
+  }
+
+  // Lookup CRLs from store
+
+  skcrl = ctx->lookup_crls(ctx, nm);
+
+  // If no CRLs found and a near match from get_crl_sk use that
+  if (!skcrl && crl) {
+    goto done;
+  }
+
+  get_crl_sk(ctx, &crl, &dcrl, &issuer, &crl_score, &reasons, skcrl);
+
+  sk_X509_CRL_pop_free(skcrl, X509_CRL_free);
+
+done:
+
+  // If we got any kind of CRL use it and return success
+  if (crl) {
+    ctx->current_issuer = issuer;
+    ctx->current_crl_score = crl_score;
+    ctx->current_reasons = reasons;
+    *pcrl = crl;
+    *pdcrl = dcrl;
+    return 1;
+  }
+
+  return 0;
+}
+
+// Check CRL validity
+static int check_crl(X509_STORE_CTX *ctx, X509_CRL *crl) {
+  X509 *issuer = NULL;
+  EVP_PKEY *ikey = NULL;
+  int ok = 0, chnum, cnum;
+  cnum = ctx->error_depth;
+  chnum = sk_X509_num(ctx->chain) - 1;
+  // if we have an alternative CRL issuer cert use that
+  if (ctx->current_issuer) {
+    issuer = ctx->current_issuer;
+  }
+
+  // Else find CRL issuer: if not last certificate then issuer is next
+  // certificate in chain.
+  else if (cnum < chnum) {
+    issuer = sk_X509_value(ctx->chain, cnum + 1);
+  } else {
+    issuer = sk_X509_value(ctx->chain, chnum);
+    // If not self signed, can't check signature
+    if (!ctx->check_issued(ctx, issuer, issuer)) {
+      ctx->error = X509_V_ERR_UNABLE_TO_GET_CRL_ISSUER;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto err;
+      }
+    }
+  }
+
+  if (issuer) {
+    // Skip most tests for deltas because they have already been done
+    if (!crl->base_crl_number) {
+      // Check for cRLSign bit if keyUsage present
+      if ((issuer->ex_flags & EXFLAG_KUSAGE) &&
+          !(issuer->ex_kusage & KU_CRL_SIGN)) {
+        ctx->error = X509_V_ERR_KEYUSAGE_NO_CRL_SIGN;
+        ok = ctx->verify_cb(0, ctx);
+        if (!ok) {
+          goto err;
+        }
+      }
+
+      if (!(ctx->current_crl_score & CRL_SCORE_SCOPE)) {
+        ctx->error = X509_V_ERR_DIFFERENT_CRL_SCOPE;
+        ok = ctx->verify_cb(0, ctx);
+        if (!ok) {
+          goto err;
+        }
+      }
+
+      if (!(ctx->current_crl_score & CRL_SCORE_SAME_PATH)) {
+        if (check_crl_path(ctx, ctx->current_issuer) <= 0) {
+          ctx->error = X509_V_ERR_CRL_PATH_VALIDATION_ERROR;
+          ok = ctx->verify_cb(0, ctx);
+          if (!ok) {
+            goto err;
+          }
+        }
+      }
+
+      if (crl->idp_flags & IDP_INVALID) {
+        ctx->error = X509_V_ERR_INVALID_EXTENSION;
+        ok = ctx->verify_cb(0, ctx);
+        if (!ok) {
+          goto err;
+        }
+      }
+    }
+
+    if (!(ctx->current_crl_score & CRL_SCORE_TIME)) {
+      ok = check_crl_time(ctx, crl, 1);
+      if (!ok) {
+        goto err;
+      }
+    }
+
+    // Attempt to get issuer certificate public key
+    ikey = X509_get_pubkey(issuer);
+
+    if (!ikey) {
+      ctx->error = X509_V_ERR_UNABLE_TO_DECODE_ISSUER_PUBLIC_KEY;
+      ok = ctx->verify_cb(0, ctx);
+      if (!ok) {
+        goto err;
+      }
+    } else {
+      // Verify CRL signature
+      if (X509_CRL_verify(crl, ikey) <= 0) {
+        ctx->error = X509_V_ERR_CRL_SIGNATURE_FAILURE;
+        ok = ctx->verify_cb(0, ctx);
+        if (!ok) {
+          goto err;
+        }
+      }
+    }
+  }
+
+  ok = 1;
+
+err:
+  EVP_PKEY_free(ikey);
+  return ok;
+}
+
+// Check certificate against CRL
+static int cert_crl(X509_STORE_CTX *ctx, X509_CRL *crl, X509 *x) {
+  int ok;
+  X509_REVOKED *rev;
+  // The rules changed for this... previously if a CRL contained unhandled
+  // critical extensions it could still be used to indicate a certificate
+  // was revoked. This has since been changed since critical extension can
+  // change the meaning of CRL entries.
+  if (!(ctx->param->flags & X509_V_FLAG_IGNORE_CRITICAL) &&
+      (crl->flags & EXFLAG_CRITICAL)) {
+    ctx->error = X509_V_ERR_UNHANDLED_CRITICAL_CRL_EXTENSION;
+    ok = ctx->verify_cb(0, ctx);
+    if (!ok) {
+      return 0;
+    }
+  }
+  // Look for serial number of certificate in CRL If found make sure reason
+  // is not removeFromCRL.
+  if (X509_CRL_get0_by_cert(crl, &rev, x)) {
+    if (rev->reason == CRL_REASON_REMOVE_FROM_CRL) {
+      return 2;
+    }
+    ctx->error = X509_V_ERR_CERT_REVOKED;
+    ok = ctx->verify_cb(0, ctx);
+    if (!ok) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+static int check_policy(X509_STORE_CTX *ctx) {
+  if (ctx->parent) {
+    return 1;
+  }
+
+  X509 *current_cert = NULL;
+  int ret = X509_policy_check(ctx->chain, ctx->param->policies,
+                              ctx->param->flags, &current_cert);
+  if (ret != X509_V_OK) {
+    ctx->current_cert = current_cert;
+    ctx->error = ret;
+    if (ret == X509_V_ERR_OUT_OF_MEM) {
+      return 0;
+    }
+    return ctx->verify_cb(0, ctx);
+  }
+
+  if (ctx->param->flags & X509_V_FLAG_NOTIFY_POLICY) {
+    ctx->current_cert = NULL;
+    // Verification errors need to be "sticky", a callback may have allowed
+    // an SSL handshake to continue despite an error, and we must then
+    // remain in an error state.  Therefore, we MUST NOT clear earlier
+    // verification errors by setting the error to X509_V_OK.
+    if (!ctx->verify_cb(2, ctx)) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+static int check_cert_time(X509_STORE_CTX *ctx, X509 *x) {
+  if (ctx->param->flags & X509_V_FLAG_NO_CHECK_TIME) {
+    return 1;
+  }
+
+  int64_t ptime;
+  if (ctx->param->flags & X509_V_FLAG_USE_CHECK_TIME) {
+    ptime = ctx->param->check_time;
+  } else {
+    ptime = time(NULL);
+  }
+
+  int i = X509_cmp_time_posix(X509_get_notBefore(x), ptime);
+  if (i == 0) {
+    ctx->error = X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD;
+    ctx->current_cert = x;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  if (i > 0) {
+    ctx->error = X509_V_ERR_CERT_NOT_YET_VALID;
+    ctx->current_cert = x;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  i = X509_cmp_time_posix(X509_get_notAfter(x), ptime);
+  if (i == 0) {
+    ctx->error = X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD;
+    ctx->current_cert = x;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  if (i < 0) {
+    ctx->error = X509_V_ERR_CERT_HAS_EXPIRED;
+    ctx->current_cert = x;
+    if (!ctx->verify_cb(0, ctx)) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+static int internal_verify(X509_STORE_CTX *ctx) {
+  int ok = 0, n;
+  X509 *xs, *xi;
+  EVP_PKEY *pkey = NULL;
+
+  n = sk_X509_num(ctx->chain);
+  ctx->error_depth = n - 1;
+  n--;
+  xi = sk_X509_value(ctx->chain, n);
+
+  if (ctx->check_issued(ctx, xi, xi)) {
+    xs = xi;
+  } else {
+    if (ctx->param->flags & X509_V_FLAG_PARTIAL_CHAIN) {
+      xs = xi;
+      goto check_cert;
+    }
+    if (n <= 0) {
+      ctx->error = X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE;
+      ctx->current_cert = xi;
+      ok = ctx->verify_cb(0, ctx);
+      goto end;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
         if (crl->idp_flags & IDP_ONLYCA)
             return 0;
@@ -1490,10 +2076,57 @@ static int crl_crldp_check(X509 *x, X509_CRL *crl, int crl_score,
             }
         }
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if ((!crl->idp || !crl->idp->distpoint)
         && (crl_score & CRL_SCORE_ISSUER_NAME))
         return 1;
+=======
+
+  check_cert:
+    ok = check_cert_time(ctx, xs);
+    if (!ok) {
+      goto end;
+    }
+
+    // The last error (if any) is still in the error value
+    ctx->current_issuer = xi;
+    ctx->current_cert = xs;
+    ok = ctx->verify_cb(1, ctx);
+    if (!ok) {
+      goto end;
+    }
+
+    n--;
+    if (n >= 0) {
+      xi = xs;
+      xs = sk_X509_value(ctx->chain, n);
+    }
+  }
+  ok = 1;
+end:
+  return ok;
+}
+
+int X509_cmp_current_time(const ASN1_TIME *ctm) {
+  return X509_cmp_time_posix(ctm, time(NULL));
+}
+
+int X509_cmp_time(const ASN1_TIME *ctm, time_t *cmp_time) {
+  int64_t compare_time = (cmp_time == NULL) ? time(NULL) : *cmp_time;
+  return X509_cmp_time_posix(ctm, compare_time);
+}
+
+int X509_cmp_time_posix(const ASN1_TIME *ctm, int64_t cmp_time) {
+  int64_t ctm_time;
+  if (!ASN1_TIME_to_posix(ctm, &ctm_time)) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  // The return value 0 is reserved for errors.
+  return (ctm_time - cmp_time <= 0) ? -1 : 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*
@@ -1515,10 +2148,24 @@ static int get_crl_delta(X509_STORE_CTX *ctx,
     ok = get_crl_sk(ctx, &crl, &dcrl,
                     &issuer, &crl_score, &reasons, ctx->crls);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (ok)
         goto done;
+=======
+ASN1_TIME *X509_time_adj_ex(ASN1_TIME *s, int offset_day, long offset_sec,
+                            time_t *in_tm) {
+  int64_t t = 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* Lookup CRLs from store */
+=======
+  if (in_tm) {
+    t = *in_tm;
+  } else {
+    t = time(NULL);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     skcrl = ctx->lookup_crls(ctx, nm);
 
@@ -1595,6 +2242,7 @@ static int check_crl(X509_STORE_CTX *ctx, X509_CRL *crl)
                     goto err;
             }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
             if (!(ctx->current_crl_score & CRL_SCORE_SAME_PATH)) {
                 if (check_crl_path(ctx, ctx->current_issuer) <= 0) {
                     ctx->error = X509_V_ERR_CRL_PATH_VALIDATION_ERROR;
@@ -2064,6 +2712,13 @@ X509_CRL *X509_CRL_diff(X509_CRL *base, X509_CRL *newer,
     if (crl)
         X509_CRL_free(crl);
     return NULL;
+=======
+memerr:
+  if (crl) {
+    X509_CRL_free(crl);
+  }
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509_STORE_CTX_get_ex_new_index(long argl, void *argp,
@@ -2229,6 +2884,7 @@ int X509_STORE_CTX_purpose_inherit(X509_STORE_CTX *ctx, int def_purpose,
     return 1;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 X509_STORE_CTX *X509_STORE_CTX_new(void)
 {
     X509_STORE_CTX *ctx;
@@ -2239,6 +2895,16 @@ X509_STORE_CTX *X509_STORE_CTX_new(void)
     }
     X509_STORE_CTX_zero(ctx);
     return ctx;
+=======
+X509_STORE_CTX *X509_STORE_CTX_new(void) {
+  X509_STORE_CTX *ctx;
+  ctx = (X509_STORE_CTX *)OPENSSL_malloc(sizeof(X509_STORE_CTX));
+  if (!ctx) {
+    return NULL;
+  }
+  X509_STORE_CTX_zero(ctx);
+  return ctx;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 void X509_STORE_CTX_zero(X509_STORE_CTX *ctx)
@@ -2265,10 +2931,132 @@ int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store, X509 *x509,
 
     CRYPTO_new_ex_data(&ctx->ex_data);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (store == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_PASSED_NULL_PARAMETER);
         goto err;
+=======
+  if (store == NULL) {
+    OPENSSL_PUT_ERROR(X509, ERR_R_PASSED_NULL_PARAMETER);
+    goto err;
+  }
+
+  ctx->param = X509_VERIFY_PARAM_new();
+  if (!ctx->param) {
+    goto err;
+  }
+
+  // Inherit callbacks and flags from X509_STORE.
+
+  ctx->verify_cb = store->verify_cb;
+  ctx->cleanup = store->cleanup;
+
+  if (!X509_VERIFY_PARAM_inherit(ctx->param, store->param) ||
+      !X509_VERIFY_PARAM_inherit(ctx->param,
+                                 X509_VERIFY_PARAM_lookup("default"))) {
+    goto err;
+  }
+
+  if (store->check_issued) {
+    ctx->check_issued = store->check_issued;
+  } else {
+    ctx->check_issued = check_issued;
+  }
+
+  if (store->get_issuer) {
+    ctx->get_issuer = store->get_issuer;
+  } else {
+    ctx->get_issuer = X509_STORE_CTX_get1_issuer;
+  }
+
+  if (store->verify_cb) {
+    ctx->verify_cb = store->verify_cb;
+  } else {
+    ctx->verify_cb = null_callback;
+  }
+
+  if (store->verify) {
+    ctx->verify = store->verify;
+  } else {
+    ctx->verify = internal_verify;
+  }
+
+  if (store->check_revocation) {
+    ctx->check_revocation = store->check_revocation;
+  } else {
+    ctx->check_revocation = check_revocation;
+  }
+
+  if (store->get_crl) {
+    ctx->get_crl = store->get_crl;
+  } else {
+    ctx->get_crl = NULL;
+  }
+
+  if (store->check_crl) {
+    ctx->check_crl = store->check_crl;
+  } else {
+    ctx->check_crl = check_crl;
+  }
+
+  if (store->cert_crl) {
+    ctx->cert_crl = store->cert_crl;
+  } else {
+    ctx->cert_crl = cert_crl;
+  }
+
+  if (store->lookup_certs) {
+    ctx->lookup_certs = store->lookup_certs;
+  } else {
+    ctx->lookup_certs = X509_STORE_get1_certs;
+  }
+
+  if (store->lookup_crls) {
+    ctx->lookup_crls = store->lookup_crls;
+  } else {
+    ctx->lookup_crls = X509_STORE_get1_crls;
+  }
+
+  ctx->check_policy = check_policy;
+
+  return 1;
+
+err:
+  CRYPTO_free_ex_data(&g_ex_data_class, ctx, &ctx->ex_data);
+  if (ctx->param != NULL) {
+    X509_VERIFY_PARAM_free(ctx->param);
+  }
+
+  OPENSSL_memset(ctx, 0, sizeof(X509_STORE_CTX));
+  return 0;
+}
+
+// Set alternative lookup method: just a STACK of trusted certificates. This
+// avoids X509_STORE nastiness where it isn't needed.
+
+void X509_STORE_CTX_set0_trusted_stack(X509_STORE_CTX *ctx,
+                                       STACK_OF(X509) *sk) {
+  ctx->other_ctx = sk;
+  ctx->get_issuer = get_issuer_sk;
+}
+
+void X509_STORE_CTX_trusted_stack(X509_STORE_CTX *ctx, STACK_OF(X509) *sk) {
+  X509_STORE_CTX_set0_trusted_stack(ctx, sk);
+}
+
+void X509_STORE_CTX_cleanup(X509_STORE_CTX *ctx) {
+  // We need to be idempotent because, unfortunately, |X509_STORE_CTX_free|
+  // also calls this function.
+  if (ctx->cleanup != NULL) {
+    ctx->cleanup(ctx);
+    ctx->cleanup = NULL;
+  }
+  if (ctx->param != NULL) {
+    if (ctx->parent == NULL) {
+      X509_VERIFY_PARAM_free(ctx->param);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
     ctx->param = X509_VERIFY_PARAM_new();
     if (!ctx->param)
@@ -2350,6 +3138,16 @@ int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store, X509 *x509,
     OPENSSL_memset(ctx, 0, sizeof(X509_STORE_CTX));
     OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
     return 0;
+=======
+    ctx->param = NULL;
+  }
+  if (ctx->chain != NULL) {
+    sk_X509_pop_free(ctx->chain, X509_free);
+    ctx->chain = NULL;
+  }
+  CRYPTO_free_ex_data(&g_ex_data_class, ctx, &(ctx->ex_data));
+  OPENSSL_memset(&ctx->ex_data, 0, sizeof(CRYPTO_EX_DATA));
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*
@@ -2398,15 +3196,31 @@ void X509_STORE_CTX_set_flags(X509_STORE_CTX *ctx, unsigned long flags)
     X509_VERIFY_PARAM_set_flags(ctx->param, flags);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void X509_STORE_CTX_set_time(X509_STORE_CTX *ctx, unsigned long flags,
                              time_t t)
 {
     X509_VERIFY_PARAM_set_time(ctx->param, t);
+=======
+void X509_STORE_CTX_set_time_posix(X509_STORE_CTX *ctx, unsigned long flags,
+                             int64_t t) {
+  X509_VERIFY_PARAM_set_time_posix(ctx->param, t);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 X509 *X509_STORE_CTX_get0_cert(X509_STORE_CTX *ctx)
 {
     return ctx->cert;
+=======
+void X509_STORE_CTX_set_time(X509_STORE_CTX *ctx, unsigned long flags,
+                             time_t t) {
+  X509_STORE_CTX_set_time_posix(ctx, flags, t);
+}
+
+X509 *X509_STORE_CTX_get0_cert(X509_STORE_CTX *ctx) {
+  return ctx->cert;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 void X509_STORE_CTX_set_verify_cb(X509_STORE_CTX *ctx,

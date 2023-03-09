@@ -75,22 +75,48 @@ IMPLEMENT_ASN1_MSTRING(ASN1_TIME, B_ASN1_TIME)
 
 IMPLEMENT_ASN1_FUNCTIONS_const(ASN1_TIME)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 ASN1_TIME *ASN1_TIME_set(ASN1_TIME *s, time_t t)
 {
     return ASN1_TIME_adj(s, t, 0, 0);
+=======
+ASN1_TIME *ASN1_TIME_set_posix(ASN1_TIME *s, int64_t posix_time) {
+  return ASN1_TIME_adj(s, posix_time, 0, 0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 ASN1_TIME *ASN1_TIME_adj(ASN1_TIME *s, time_t t,
                          int offset_day, long offset_sec)
 {
     struct tm *ts;
     struct tm data;
+=======
+ASN1_TIME *ASN1_TIME_set(ASN1_TIME *s, time_t time) {
+  return ASN1_TIME_adj(s, time, 0, 0);
+}
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ts = OPENSSL_gmtime(&t, &data);
     if (ts == NULL) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_ERROR_GETTING_TIME);
         return NULL;
+=======
+ASN1_TIME *ASN1_TIME_adj(ASN1_TIME *s, int64_t posix_time, int offset_day,
+                         long offset_sec) {
+  struct tm tm;
+
+  if (!OPENSSL_posix_to_tm(posix_time, &tm)) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_ERROR_GETTING_TIME);
+    return NULL;
+  }
+  if (offset_day || offset_sec) {
+    if (!OPENSSL_gmtime_adj(&tm, offset_day, offset_sec)) {
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (offset_day || offset_sec) {
         if (!OPENSSL_gmtime_adj(ts, offset_day, offset_sec))
             return NULL;
@@ -98,6 +124,13 @@ ASN1_TIME *ASN1_TIME_adj(ASN1_TIME *s, time_t t,
     if ((ts->tm_year >= 50) && (ts->tm_year < 150))
         return ASN1_UTCTIME_adj(s, t, offset_day, offset_sec);
     return ASN1_GENERALIZEDTIME_adj(s, t, offset_day, offset_sec);
+=======
+  }
+  if ((tm.tm_year >= 50) && (tm.tm_year < 150)) {
+    return ASN1_UTCTIME_adj(s, posix_time, offset_day, offset_sec);
+  }
+  return ASN1_GENERALIZEDTIME_adj(s, posix_time, offset_day, offset_sec);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int ASN1_TIME_check(const ASN1_TIME *t)
@@ -159,6 +192,7 @@ ASN1_GENERALIZEDTIME *ASN1_TIME_to_generalizedtime(const ASN1_TIME *t,
     return NULL;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
 int ASN1_TIME_set_string(ASN1_TIME *s, const char *str)
 {
@@ -180,8 +214,14 @@ int ASN1_TIME_set_string(ASN1_TIME *s, const char *str)
         return 0;
 
     return 1;
+=======
+int ASN1_TIME_set_string(ASN1_TIME *s, const char *str) {
+  return ASN1_UTCTIME_set_string(s, str) ||
+         ASN1_GENERALIZEDTIME_set_string(s, str);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int asn1_time_to_tm(struct tm *tm, const ASN1_TIME *t)
 {
     if (t == NULL) {
@@ -190,6 +230,13 @@ static int asn1_time_to_tm(struct tm *tm, const ASN1_TIME *t)
         if (OPENSSL_gmtime(&now_t, tm))
             return 1;
         return 0;
+=======
+static int asn1_time_to_tm(struct tm *tm, const ASN1_TIME *t,
+                           int allow_timezone_offset) {
+  if (t == NULL) {
+    if (OPENSSL_posix_to_tm(time(NULL), tm)) {
+      return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     if (t->type == V_ASN1_UTCTIME)

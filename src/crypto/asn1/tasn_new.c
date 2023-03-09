@@ -67,8 +67,6 @@
 #include "../internal.h"
 
 
-static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,
-                                    int combine);
 static void asn1_item_clear(ASN1_VALUE **pval, const ASN1_ITEM *it);
 static int ASN1_template_new(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt);
 static void asn1_template_clear(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt);
@@ -85,6 +83,7 @@ ASN1_VALUE *ASN1_item_new(const ASN1_ITEM *it)
 
 /* Allocate an ASN1 structure */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int ASN1_item_ex_new(ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
     return asn1_item_ex_combine_new(pval, it, 0);
@@ -97,6 +96,13 @@ static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,
     const ASN1_EXTERN_FUNCS *ef;
     ASN1_VALUE **pseqval;
     int i;
+=======
+int ASN1_item_ex_new(ASN1_VALUE **pval, const ASN1_ITEM *it) {
+  const ASN1_TEMPLATE *tt = NULL;
+  const ASN1_EXTERN_FUNCS *ef;
+  ASN1_VALUE **pseqval;
+  int i;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     switch (it->itype) {
 
@@ -138,10 +144,24 @@ static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,
                 goto memerr;
             OPENSSL_memset(*pval, 0, it->size);
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         asn1_set_choice_selector(pval, -1, it);
         if (asn1_cb && !asn1_cb(ASN1_OP_NEW_POST, pval, it, NULL))
             goto auxerr2;
         break;
+=======
+      }
+      *pval = OPENSSL_malloc(it->size);
+      if (!*pval) {
+        goto memerr;
+      }
+      OPENSSL_memset(*pval, 0, it->size);
+      asn1_set_choice_selector(pval, -1, it);
+      if (asn1_cb && !asn1_cb(ASN1_OP_NEW_POST, pval, it, NULL)) {
+        goto auxerr2;
+      }
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     case ASN1_ITYPE_SEQUENCE: {
@@ -163,6 +183,7 @@ static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,
             asn1_refcount_set_one(pval, it);
             asn1_enc_init(pval, it);
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         for (i = 0, tt = it->templates; i < it->tcount; tt++, i++) {
             pseqval = asn1_get_field_ptr(pval, tt);
             if (!ASN1_template_new(pseqval, tt))
@@ -171,22 +192,57 @@ static int asn1_item_ex_combine_new(ASN1_VALUE **pval, const ASN1_ITEM *it,
         if (asn1_cb && !asn1_cb(ASN1_OP_NEW_POST, pval, it, NULL))
             goto auxerr2;
         break;
+=======
+      }
+      *pval = OPENSSL_malloc(it->size);
+      if (!*pval) {
+        goto memerr;
+      }
+      OPENSSL_memset(*pval, 0, it->size);
+      asn1_refcount_set_one(pval, it);
+      asn1_enc_init(pval, it);
+      for (i = 0, tt = it->templates; i < it->tcount; tt++, i++) {
+        pseqval = asn1_get_field_ptr(pval, tt);
+        if (!ASN1_template_new(pseqval, tt)) {
+          goto memerr2;
+        }
+      }
+      if (asn1_cb && !asn1_cb(ASN1_OP_NEW_POST, pval, it, NULL)) {
+        goto auxerr2;
+      }
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     }
     return 1;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  memerr2:
     asn1_item_combine_free(pval, it, combine);
  memerr:
     OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
     return 0;
+=======
+memerr2:
+  ASN1_item_ex_free(pval, it);
+memerr:
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  auxerr2:
     asn1_item_combine_free(pval, it, combine);
  auxerr:
     OPENSSL_PUT_ERROR(ASN1, ASN1_R_AUX_ERROR);
     return 0;
 
+=======
+auxerr2:
+  ASN1_item_ex_free(pval, it);
+auxerr:
+  OPENSSL_PUT_ERROR(ASN1, ASN1_R_AUX_ERROR);
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static void asn1_item_clear(ASN1_VALUE **pval, const ASN1_ITEM *it)
@@ -216,9 +272,48 @@ static void asn1_item_clear(ASN1_VALUE **pval, const ASN1_ITEM *it)
 
     case ASN1_ITYPE_CHOICE:
     case ASN1_ITYPE_SEQUENCE:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         *pval = NULL;
         break;
+=======
+      *pval = NULL;
+      break;
+  }
+}
+
+static int ASN1_template_new(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt) {
+  const ASN1_ITEM *it = ASN1_ITEM_ptr(tt->item);
+  int ret;
+  if (tt->flags & ASN1_TFLG_OPTIONAL) {
+    asn1_template_clear(pval, tt);
+    return 1;
+  }
+  // If ANY DEFINED BY nothing to do
+
+  if (tt->flags & ASN1_TFLG_ADB_MASK) {
+    *pval = NULL;
+    return 1;
+  }
+  // If SET OF or SEQUENCE OF, its a STACK
+  if (tt->flags & ASN1_TFLG_SK_MASK) {
+    STACK_OF(ASN1_VALUE) *skval;
+    skval = sk_ASN1_VALUE_new_null();
+    if (!skval) {
+      ret = 0;
+      goto done;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    *pval = (ASN1_VALUE *)skval;
+    ret = 1;
+    goto done;
+  }
+  // Otherwise pass it back to the item routine
+  ret = ASN1_item_ex_new(pval, it);
+done:
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static int ASN1_template_new(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt)
@@ -263,6 +358,7 @@ static void asn1_template_clear(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt)
         asn1_item_clear(pval, ASN1_ITEM_ptr(tt->item));
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /*
  * NB: could probably combine most of the real XXX_new() behaviour and junk
  * all the old functions.
@@ -272,10 +368,17 @@ static int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
     ASN1_TYPE *typ;
     int utype;
+=======
+static int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it) {
+  if (!it) {
+    return 0;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (!it)
         return 0;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* Historically, |it->funcs| for primitive types contained an
      * |ASN1_PRIMITIVE_FUNCS| table of calbacks. */
     assert(it->funcs == NULL);
@@ -285,18 +388,33 @@ static int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it)
     else
         utype = it->utype;
     switch (utype) {
+=======
+  int utype;
+  if (it->itype == ASN1_ITYPE_MSTRING) {
+    utype = -1;
+  } else {
+    utype = it->utype;
+  }
+  switch (utype) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     case V_ASN1_OBJECT:
         *pval = (ASN1_VALUE *)OBJ_nid2obj(NID_undef);
         return 1;
 
     case V_ASN1_BOOLEAN:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         *(ASN1_BOOLEAN *)pval = it->size;
         return 1;
+=======
+      *(ASN1_BOOLEAN *)pval = (ASN1_BOOLEAN)it->size;
+      return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case V_ASN1_NULL:
         *pval = (ASN1_VALUE *)1;
         return 1;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     case V_ASN1_ANY:
         typ = OPENSSL_malloc(sizeof(ASN1_TYPE));
         if (!typ)
@@ -305,6 +423,18 @@ static int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it)
         typ->type = -1;
         *pval = (ASN1_VALUE *)typ;
         break;
+=======
+    case V_ASN1_ANY: {
+      ASN1_TYPE *typ = OPENSSL_malloc(sizeof(ASN1_TYPE));
+      if (!typ) {
+        return 0;
+      }
+      typ->value.ptr = NULL;
+      typ->type = -1;
+      *pval = (ASN1_VALUE *)typ;
+      break;
+    }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     default:
         *pval = (ASN1_VALUE *)ASN1_STRING_type_new(utype);
@@ -315,6 +445,7 @@ static int ASN1_primitive_new(ASN1_VALUE **pval, const ASN1_ITEM *it)
     return 0;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static void asn1_primitive_clear(ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
     int utype;
@@ -329,4 +460,21 @@ static void asn1_primitive_clear(ASN1_VALUE **pval, const ASN1_ITEM *it)
         *(ASN1_BOOLEAN *)pval = it->size;
     else
         *pval = NULL;
+=======
+static void asn1_primitive_clear(ASN1_VALUE **pval, const ASN1_ITEM *it) {
+  int utype;
+  // Historically, |it->funcs| for primitive types contained an
+  // |ASN1_PRIMITIVE_FUNCS| table of calbacks.
+  assert(it == NULL || it->funcs == NULL);
+  if (!it || (it->itype == ASN1_ITYPE_MSTRING)) {
+    utype = -1;
+  } else {
+    utype = it->utype;
+  }
+  if (utype == V_ASN1_BOOLEAN) {
+    *(ASN1_BOOLEAN *)pval = (ASN1_BOOLEAN)it->size;
+  } else {
+    *pval = NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
