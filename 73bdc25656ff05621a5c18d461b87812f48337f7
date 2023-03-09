@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b02864f_8442eada",
+        "filename": "apple-aarch64/crypto/chacha/chacha-armv8-apple.S",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-03-09T18:53:54Z",
+      "side": 1,
+      "message": "Looks like the update script may have left the old versions of the files around. :-/\nhttps://android.googlesource.com/platform/external/boringssl/+/refs/changes/96/2480396/1/apple-aarch64/crypto/chacha\n\n(Apologies for the filename churn. It was needed to deal with a mess of build constraints from everything tugging every way.)",
+      "revId": "73bdc25656ff05621a5c18d461b87812f48337f7",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
