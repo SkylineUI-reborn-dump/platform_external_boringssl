@@ -1,4 +1,3 @@
-/* crypto/x509/x509_lu.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -388,6 +387,77 @@ int X509_OBJECT_up_ref_count(X509_OBJECT *a)
     case X509_LU_X509:
         X509_up_ref(a->data.x509);
         break;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      }
+    }
+    if (tmp == NULL) {
+      return 0;
+    }
+  }
+
+  // if (ret->data.ptr != NULL) X509_OBJECT_free_contents(ret);
+
+  ret->type = tmp->type;
+  ret->data.ptr = tmp->data.ptr;
+
+  X509_OBJECT_up_ref_count(ret);
+
+  return 1;
+}
+
+static int x509_store_add(X509_STORE *ctx, void *x, int is_crl) {
+  if (x == NULL) {
+    return 0;
+  }
+
+  X509_OBJECT *const obj = (X509_OBJECT *)OPENSSL_malloc(sizeof(X509_OBJECT));
+  if (obj == NULL) {
+    return 0;
+  }
+
+  if (is_crl) {
+    obj->type = X509_LU_CRL;
+    obj->data.crl = (X509_CRL *)x;
+  } else {
+    obj->type = X509_LU_X509;
+    obj->data.x509 = (X509 *)x;
+  }
+  X509_OBJECT_up_ref_count(obj);
+
+  CRYPTO_MUTEX_lock_write(&ctx->objs_lock);
+
+  int ret = 1;
+  int added = 0;
+  // Duplicates are silently ignored
+  if (!X509_OBJECT_retrieve_match(ctx->objs, obj)) {
+    ret = added = (sk_X509_OBJECT_push(ctx->objs, obj) != 0);
+  }
+
+  CRYPTO_MUTEX_unlock_write(&ctx->objs_lock);
+
+  if (!added) {
+    X509_OBJECT_free_contents(obj);
+    OPENSSL_free(obj);
+  }
+
+  return ret;
+}
+
+int X509_STORE_add_cert(X509_STORE *ctx, X509 *x) {
+  return x509_store_add(ctx, x, /*is_crl=*/0);
+}
+
+int X509_STORE_add_crl(X509_STORE *ctx, X509_CRL *x) {
+  return x509_store_add(ctx, x, /*is_crl=*/1);
+}
+
+int X509_OBJECT_up_ref_count(X509_OBJECT *a) {
+  switch (a->type) {
+    case X509_LU_X509:
+      X509_up_ref(a->data.x509);
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     case X509_LU_CRL:
         X509_CRL_up_ref(a->data.crl);
         break;

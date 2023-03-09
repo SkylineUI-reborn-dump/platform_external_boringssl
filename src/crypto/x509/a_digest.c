@@ -67,6 +67,7 @@ int ASN1_digest(i2d_of_void *i2d, const EVP_MD *type, char *data,
     int i, ret;
     unsigned char *str, *p;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     i = i2d(data, NULL);
     if ((str = (unsigned char *)OPENSSL_malloc(i)) == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
@@ -74,6 +75,14 @@ int ASN1_digest(i2d_of_void *i2d, const EVP_MD *type, char *data,
     }
     p = str;
     i2d(data, &p);
+=======
+  i = i2d(data, NULL);
+  if ((str = (unsigned char *)OPENSSL_malloc(i)) == NULL) {
+    return 0;
+  }
+  p = str;
+  i2d(data, &p);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     ret = EVP_Digest(str, i, md, len, type, NULL);
     OPENSSL_free(str);

@@ -144,16 +144,31 @@ X509_EXTENSION *X509v3_delete_ext(STACK_OF(X509_EXTENSION) *x, int loc)
 }
 
 STACK_OF(X509_EXTENSION) *X509v3_add_ext(STACK_OF(X509_EXTENSION) **x,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                          X509_EXTENSION *ex, int loc)
 {
     X509_EXTENSION *new_ex = NULL;
     int n;
     STACK_OF(X509_EXTENSION) *sk = NULL;
+=======
+                                         const X509_EXTENSION *ex, int loc) {
+  X509_EXTENSION *new_ex = NULL;
+  int n;
+  STACK_OF(X509_EXTENSION) *sk = NULL;
+  int free_sk = 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (x == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_PASSED_NULL_PARAMETER);
         goto err2;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    free_sk = 1;
+  } else {
+    sk = *x;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (*x == NULL) {
         if ((sk = sk_X509_EXTENSION_new_null()) == NULL)
@@ -161,6 +176,7 @@ STACK_OF(X509_EXTENSION) *X509v3_add_ext(STACK_OF(X509_EXTENSION) **x,
     } else
         sk = *x;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     n = sk_X509_EXTENSION_num(sk);
     if (loc > n)
         loc = n;
@@ -180,6 +196,25 @@ STACK_OF(X509_EXTENSION) *X509v3_add_ext(STACK_OF(X509_EXTENSION) **x,
     X509_EXTENSION_free(new_ex);
     sk_X509_EXTENSION_free(sk);
     return NULL;
+=======
+  if ((new_ex = X509_EXTENSION_dup(ex)) == NULL) {
+    goto err2;
+  }
+  if (!sk_X509_EXTENSION_insert(sk, new_ex, loc)) {
+    goto err;
+  }
+  if (*x == NULL) {
+    *x = sk;
+  }
+  return sk;
+err:
+err2:
+  X509_EXTENSION_free(new_ex);
+  if (free_sk) {
+    sk_X509_EXTENSION_free(sk);
+  }
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 X509_EXTENSION *X509_EXTENSION_create_by_NID(X509_EXTENSION **ex, int nid,
@@ -204,6 +239,7 @@ X509_EXTENSION *X509_EXTENSION_create_by_OBJ(X509_EXTENSION **ex,
 {
     X509_EXTENSION *ret;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if ((ex == NULL) || (*ex == NULL)) {
         if ((ret = X509_EXTENSION_new()) == NULL) {
             OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
@@ -211,6 +247,15 @@ X509_EXTENSION *X509_EXTENSION_create_by_OBJ(X509_EXTENSION **ex,
         }
     } else
         ret = *ex;
+=======
+  if ((ex == NULL) || (*ex == NULL)) {
+    if ((ret = X509_EXTENSION_new()) == NULL) {
+      return NULL;
+    }
+  } else {
+    ret = *ex;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (!X509_EXTENSION_set_object(ret, obj))
         goto err;
@@ -278,4 +323,58 @@ int X509_EXTENSION_get_critical(const X509_EXTENSION *ex)
     if (ex->critical > 0)
         return 1;
     return 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  ASN1_OBJECT_free(ex->object);
+  ex->object = OBJ_dup(obj);
+  return ex->object != NULL;
+}
+
+int X509_EXTENSION_set_critical(X509_EXTENSION *ex, int crit) {
+  if (ex == NULL) {
+    return 0;
+  }
+  // The critical field is DEFAULT FALSE, so non-critical extensions should omit
+  // the value.
+  ex->critical = crit ? ASN1_BOOLEAN_TRUE : ASN1_BOOLEAN_NONE;
+  return 1;
+}
+
+int X509_EXTENSION_set_data(X509_EXTENSION *ex, const ASN1_OCTET_STRING *data) {
+  int i;
+
+  if (ex == NULL) {
+    return 0;
+  }
+  i = ASN1_OCTET_STRING_set(ex->value, data->data, data->length);
+  if (!i) {
+    return 0;
+  }
+  return 1;
+}
+
+ASN1_OBJECT *X509_EXTENSION_get_object(const X509_EXTENSION *ex) {
+  if (ex == NULL) {
+    return NULL;
+  }
+  return ex->object;
+}
+
+ASN1_OCTET_STRING *X509_EXTENSION_get_data(const X509_EXTENSION *ex) {
+  if (ex == NULL) {
+    return NULL;
+  }
+  return ex->value;
+}
+
+int X509_EXTENSION_get_critical(const X509_EXTENSION *ex) {
+  if (ex == NULL) {
+    return 0;
+  }
+  if (ex->critical > 0) {
+    return 1;
+  }
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

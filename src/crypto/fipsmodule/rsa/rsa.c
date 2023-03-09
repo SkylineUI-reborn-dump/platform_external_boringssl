@@ -87,7 +87,6 @@ RSA *RSA_new(void) { return RSA_new_method(NULL); }
 RSA *RSA_new_method(const ENGINE *engine) {
   RSA *rsa = OPENSSL_malloc(sizeof(RSA));
   if (rsa == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return NULL;
   }
 
@@ -513,7 +512,6 @@ int RSA_add_pkcs1_prefix(uint8_t **out_msg, size_t *out_msg_len,
 
     signed_msg = OPENSSL_malloc(signed_msg_len);
     if (!signed_msg) {
-      OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
       return 0;
     }
 
@@ -582,7 +580,6 @@ int RSA_sign_pss_mgf1(RSA *rsa, size_t *out_len, uint8_t *out, size_t max_out,
   size_t padded_len = RSA_size(rsa);
   uint8_t *padded = OPENSSL_malloc(padded_len);
   if (padded == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 
@@ -616,7 +613,6 @@ int rsa_verify_no_self_test(int hash_nid, const uint8_t *digest,
 
   buf = OPENSSL_malloc(rsa_size);
   if (!buf) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 
@@ -663,7 +659,6 @@ int RSA_verify_pss_mgf1(RSA *rsa, const uint8_t *digest, size_t digest_len,
   size_t em_len = RSA_size(rsa);
   uint8_t *em = OPENSSL_malloc(em_len);
   if (em == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 
@@ -744,7 +739,6 @@ int RSA_check_key(const RSA *key) {
 
   BN_CTX *ctx = BN_CTX_new();
   if (ctx == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 
@@ -759,7 +753,8 @@ int RSA_check_key(const RSA *key) {
 
   // Check that p * q == n. Before we multiply, we check that p and q are in
   // bounds, to avoid a DoS vector in |bn_mul_consttime| below. Note that
-  // n was bound by |rsa_check_public_key|.
+  // n was bound by |rsa_check_public_key|. This also implicitly checks p and q
+  // are odd, which is a necessary condition for Montgomery reduction.
   if (BN_is_negative(key->p) || BN_cmp(key->p, key->n) >= 0 ||
       BN_is_negative(key->q) || BN_cmp(key->q, key->n) >= 0) {
     OPENSSL_PUT_ERROR(RSA, RSA_R_N_NOT_EQUAL_P_Q);
@@ -871,7 +866,6 @@ int RSA_check_fips(RSA *key) {
 
   BN_CTX *ctx = BN_CTX_new();
   if (ctx == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 
@@ -918,7 +912,6 @@ int RSA_check_fips(RSA *key) {
   unsigned sig_len = RSA_size(key);
   uint8_t *sig = OPENSSL_malloc(sig_len);
   if (sig == NULL) {
-    OPENSSL_PUT_ERROR(RSA, ERR_R_MALLOC_FAILURE);
     return 0;
   }
 

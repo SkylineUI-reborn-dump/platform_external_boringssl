@@ -2728,6 +2728,65 @@ TEST_F(BNTest, ModSqrtInvalid) {
   BN_free(BN_mod_sqrt(nullptr, bn2140142.get(), bn4588033.get(), ctx()));
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+// Test that constructing Montgomery contexts for large bignums is not possible.
+// Our Montgomery reduction implementation stack-allocates temporaries, so we
+// cap how large of moduli we accept.
+TEST_F(BNTest, MontgomeryLarge) {
+  std::vector<uint8_t> large_bignum_bytes(16 * 1024, 0xff);
+  bssl::UniquePtr<BIGNUM> large_bignum(
+      BN_bin2bn(large_bignum_bytes.data(), large_bignum_bytes.size(), nullptr));
+  ASSERT_TRUE(large_bignum);
+  bssl::UniquePtr<BN_MONT_CTX> mont(
+      BN_MONT_CTX_new_for_modulus(large_bignum.get(), ctx()));
+  EXPECT_FALSE(mont);
+
+  // The same limit should apply when |BN_mod_exp_mont_consttime| internally
+  // constructs a |BN_MONT_CTX|.
+  bssl::UniquePtr<BIGNUM> r(BN_new());
+  ASSERT_TRUE(r);
+  EXPECT_FALSE(BN_mod_exp_mont_consttime(r.get(), BN_value_one(),
+                                         large_bignum.get(), large_bignum.get(),
+                                         ctx(), nullptr));
+}
+
+#if defined(SUPPORTS_ABI_TEST)
+// These functions are not always implemented in assembly, but they sometimes
+// are, so include ABI tests for each.
+TEST_F(BNTest, ArithmeticABI) {
+  EXPECT_EQ(0u, CHECK_ABI(bn_add_words, nullptr, nullptr, nullptr, 0));
+  EXPECT_EQ(0u, CHECK_ABI(bn_sub_words, nullptr, nullptr, nullptr, 0));
+
+  for (size_t num :
+       {1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 17, 31, 32, 33, 63, 64, 65}) {
+    SCOPED_TRACE(num);
+    std::vector<BN_ULONG> a(num, 123456789);
+    std::vector<BN_ULONG> b(num, static_cast<BN_ULONG>(-1));
+    std::vector<BN_ULONG> r(num);
+
+    CHECK_ABI(bn_add_words, r.data(), a.data(), b.data(), num);
+    CHECK_ABI(bn_sub_words, r.data(), a.data(), b.data(), num);
+
+    CHECK_ABI(bn_mul_words, r.data(), a.data(), num, 42);
+    CHECK_ABI(bn_mul_add_words, r.data(), a.data(), num, 42);
+
+    r.resize(2 * num);
+    CHECK_ABI(bn_sqr_words, r.data(), a.data(), num);
+
+    if (num == 4) {
+      CHECK_ABI(bn_mul_comba4, r.data(), a.data(), b.data());
+      CHECK_ABI(bn_sqr_comba4, r.data(), a.data());
+    }
+    if (num == 8) {
+      CHECK_ABI(bn_mul_comba8, r.data(), a.data(), b.data());
+      CHECK_ABI(bn_sqr_comba8, r.data(), a.data());
+    }
+  }
+}
+#endif
+
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 #if defined(OPENSSL_BN_ASM_MONT) && defined(SUPPORTS_ABI_TEST)
 TEST_F(BNTest, BNMulMontABI) {
   for (size_t words : {4, 5, 6, 7, 8, 16, 32}) {

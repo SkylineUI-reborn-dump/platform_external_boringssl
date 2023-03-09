@@ -1,4 +1,3 @@
-/* v3_alt.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -68,6 +67,7 @@
 #include "internal.h"
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static GENERAL_NAMES *v2i_subject_alt(X509V3_EXT_METHOD *method,
                                       X509V3_CTX *ctx,
                                       STACK_OF(CONF_VALUE) *nval);
@@ -78,6 +78,20 @@ static int copy_email(X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p);
 static int copy_issuer(X509V3_CTX *ctx, GENERAL_NAMES *gens);
 static int do_othername(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx);
 static int do_dirname(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx);
+=======
+static void *v2i_subject_alt(const X509V3_EXT_METHOD *method,
+                             const X509V3_CTX *ctx,
+                             const STACK_OF(CONF_VALUE) *nval);
+static void *v2i_issuer_alt(const X509V3_EXT_METHOD *method,
+                            const X509V3_CTX *ctx,
+                            const STACK_OF(CONF_VALUE) *nval);
+static int copy_email(const X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p);
+static int copy_issuer(const X509V3_CTX *ctx, GENERAL_NAMES *gens);
+static int do_othername(GENERAL_NAME *gen, const char *value,
+                        const X509V3_CTX *ctx);
+static int do_dirname(GENERAL_NAME *gen, const char *value,
+                      const X509V3_CTX *ctx);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_alt[] = {
     {NID_subject_alt_name, 0, ASN1_ITEM_ref(GENERAL_NAMES),
@@ -198,6 +212,40 @@ STACK_OF(CONF_VALUE) *i2v_GENERAL_NAME(X509V3_EXT_METHOD *method,
         if (!X509V3_add_value("Registered ID", oline, &ret))
             return NULL;
         break;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      }
+      break;
+
+    case GEN_RID:
+      BIO_printf(out, "Registered ID");
+      i2a_ASN1_OBJECT(out, gen->d.rid);
+      break;
+  }
+  return 1;
+}
+
+static void *v2i_issuer_alt(const X509V3_EXT_METHOD *method,
+                            const X509V3_CTX *ctx,
+                            const STACK_OF(CONF_VALUE) *nval) {
+  GENERAL_NAMES *gens = sk_GENERAL_NAME_new_null();
+  if (gens == NULL) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(nval, i);
+    if (x509v3_conf_name_matches(cnf->name, "issuer") && cnf->value &&
+        !strcmp(cnf->value, "copy")) {
+      if (!copy_issuer(ctx, gens)) {
+        goto err;
+      }
+    } else {
+      GENERAL_NAME *gen = v2i_GENERAL_NAME(method, ctx, cnf);
+      if (gen == NULL || !sk_GENERAL_NAME_push(gens, gen)) {
+        GENERAL_NAME_free(gen);
+        goto err;
+      }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     return ret;
 }
@@ -211,6 +259,7 @@ int GENERAL_NAME_print(BIO *out, GENERAL_NAME *gen)
         BIO_printf(out, "othername:<unsupported>");
         break;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     case GEN_X400:
         BIO_printf(out, "X400Name:<unsupported>");
         break;
@@ -263,6 +312,10 @@ int GENERAL_NAME_print(BIO *out, GENERAL_NAME *gen)
         i2a_ASN1_OBJECT(out, gen->d.rid);
         break;
     }
+=======
+static int copy_issuer(const X509V3_CTX *ctx, GENERAL_NAMES *gens) {
+  if (ctx && (ctx->flags == X509V3_CTX_TEST)) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return 1;
 }
 
@@ -425,9 +478,121 @@ static int copy_email(X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p)
     ASN1_IA5STRING_free(email);
     return 0;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  int ret = 0;
+  GENERAL_NAMES *ialt = NULL;
+  X509_EXTENSION *ext;
+  if (!(ext = X509_get_ext(ctx->issuer_cert, i)) ||
+      !(ialt = X509V3_EXT_d2i(ext))) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_ISSUER_DECODE_ERROR);
+    goto err;
+  }
+
+  for (size_t j = 0; j < sk_GENERAL_NAME_num(ialt); j++) {
+    GENERAL_NAME *gen = sk_GENERAL_NAME_value(ialt, j);
+    if (!sk_GENERAL_NAME_push(gens, gen)) {
+      goto err;
+    }
+    // Ownership of |gen| has moved from |ialt| to |gens|.
+    sk_GENERAL_NAME_set(ialt, j, NULL);
+  }
+
+  ret = 1;
+
+err:
+  GENERAL_NAMES_free(ialt);
+  return ret;
+}
+
+static void *v2i_subject_alt(const X509V3_EXT_METHOD *method,
+                             const X509V3_CTX *ctx,
+                             const STACK_OF(CONF_VALUE) *nval) {
+  GENERAL_NAMES *gens = sk_GENERAL_NAME_new_null();
+  if (gens == NULL) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(nval, i);
+    if (x509v3_conf_name_matches(cnf->name, "email") && cnf->value &&
+        !strcmp(cnf->value, "copy")) {
+      if (!copy_email(ctx, gens, 0)) {
+        goto err;
+      }
+    } else if (x509v3_conf_name_matches(cnf->name, "email") && cnf->value &&
+               !strcmp(cnf->value, "move")) {
+      if (!copy_email(ctx, gens, 1)) {
+        goto err;
+      }
+    } else {
+      GENERAL_NAME *gen = v2i_GENERAL_NAME(method, ctx, cnf);
+      if (gen == NULL || !sk_GENERAL_NAME_push(gens, gen)) {
+        GENERAL_NAME_free(gen);
+        goto err;
+      }
+    }
+  }
+  return gens;
+err:
+  sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
+  return NULL;
+}
+
+// Copy any email addresses in a certificate or request to GENERAL_NAMES
+
+static int copy_email(const X509V3_CTX *ctx, GENERAL_NAMES *gens, int move_p) {
+  X509_NAME *nm;
+  ASN1_IA5STRING *email = NULL;
+  X509_NAME_ENTRY *ne;
+  GENERAL_NAME *gen = NULL;
+  int i;
+  if (ctx != NULL && ctx->flags == X509V3_CTX_TEST) {
+    return 1;
+  }
+  if (!ctx || (!ctx->subject_cert && !ctx->subject_req)) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_SUBJECT_DETAILS);
+    goto err;
+  }
+  // Find the subject name
+  if (ctx->subject_cert) {
+    nm = X509_get_subject_name(ctx->subject_cert);
+  } else {
+    nm = X509_REQ_get_subject_name(ctx->subject_req);
+  }
+
+  // Now add any email address(es) to STACK
+  i = -1;
+  while ((i = X509_NAME_get_index_by_NID(nm, NID_pkcs9_emailAddress, i)) >= 0) {
+    ne = X509_NAME_get_entry(nm, i);
+    email = ASN1_STRING_dup(X509_NAME_ENTRY_get_data(ne));
+    if (move_p) {
+      X509_NAME_delete_entry(nm, i);
+      X509_NAME_ENTRY_free(ne);
+      i--;
+    }
+    if (!email || !(gen = GENERAL_NAME_new())) {
+      goto err;
+    }
+    gen->d.ia5 = email;
+    email = NULL;
+    gen->type = GEN_EMAIL;
+    if (!sk_GENERAL_NAME_push(gens, gen)) {
+      goto err;
+    }
+    gen = NULL;
+  }
+
+  return 1;
+
+err:
+  GENERAL_NAME_free(gen);
+  ASN1_IA5STRING_free(email);
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 GENERAL_NAMES *v2i_GENERAL_NAMES(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                  X509V3_CTX *ctx, STACK_OF(CONF_VALUE) *nval)
 {
     GENERAL_NAME *gen;
@@ -437,7 +602,22 @@ GENERAL_NAMES *v2i_GENERAL_NAMES(const X509V3_EXT_METHOD *method,
     if (!(gens = sk_GENERAL_NAME_new_null())) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
         return NULL;
+=======
+                                 const X509V3_CTX *ctx,
+                                 const STACK_OF(CONF_VALUE) *nval) {
+  GENERAL_NAMES *gens = sk_GENERAL_NAME_new_null();
+  if (gens == NULL) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(nval, i);
+    GENERAL_NAME *gen = v2i_GENERAL_NAME(method, ctx, cnf);
+    if (gen == NULL || !sk_GENERAL_NAME_push(gens, gen)) {
+      GENERAL_NAME_free(gen);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     for (i = 0; i < sk_CONF_VALUE_num(nval); i++) {
         cnf = sk_CONF_VALUE_value(nval, i);
         if (!(gen = v2i_GENERAL_NAME(method, ctx, cnf)))
@@ -448,16 +628,29 @@ GENERAL_NAMES *v2i_GENERAL_NAMES(const X509V3_EXT_METHOD *method,
  err:
     sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
     return NULL;
+=======
+  }
+  return gens;
+err:
+  sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 GENERAL_NAME *v2i_GENERAL_NAME(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                X509V3_CTX *ctx, CONF_VALUE *cnf)
 {
     return v2i_GENERAL_NAME_ex(NULL, method, ctx, cnf, 0);
+=======
+                               const X509V3_CTX *ctx, const CONF_VALUE *cnf) {
+  return v2i_GENERAL_NAME_ex(NULL, method, ctx, cnf, 0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
                                const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                X509V3_CTX *ctx, int gen_type,
                                const char *value, int is_nc)
 {
@@ -467,6 +660,22 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
     if (!value) {
         OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
         return NULL;
+=======
+                               const X509V3_CTX *ctx, int gen_type,
+                               const char *value, int is_nc) {
+  if (!value) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
+    return NULL;
+  }
+
+  GENERAL_NAME *gen = NULL;
+  if (out) {
+    gen = out;
+  } else {
+    gen = GENERAL_NAME_new();
+    if (gen == NULL) {
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     if (out)
@@ -482,10 +691,24 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
     switch (gen_type) {
     case GEN_URI:
     case GEN_EMAIL:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     case GEN_DNS:
         is_string = 1;
         break;
+=======
+    case GEN_DNS: {
+      ASN1_IA5STRING *str = ASN1_IA5STRING_new();
+      if (str == NULL || !ASN1_STRING_set(str, value, strlen(value))) {
+        ASN1_STRING_free(str);
+        goto err;
+      }
+      gen->type = gen_type;
+      gen->d.ia5 = str;
+      break;
+    }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     case GEN_RID:
         {
             ASN1_OBJECT *obj;
@@ -497,8 +720,22 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
             gen->d.rid = obj;
         }
         break;
+=======
+    case GEN_RID: {
+      ASN1_OBJECT *obj;
+      if (!(obj = OBJ_txt2obj(value, 0))) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_BAD_OBJECT);
+        ERR_add_error_data(2, "value=", value);
+        goto err;
+      }
+      gen->type = GEN_RID;
+      gen->d.rid = obj;
+      break;
+    }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case GEN_IPADD:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if (is_nc)
             gen->d.ip = a2i_IPADDRESS_NC(value);
         else
@@ -509,6 +746,20 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
             goto err;
         }
         break;
+=======
+      gen->type = GEN_IPADD;
+      if (is_nc) {
+        gen->d.ip = a2i_IPADDRESS_NC(value);
+      } else {
+        gen->d.ip = a2i_IPADDRESS(value);
+      }
+      if (gen->d.ip == NULL) {
+        OPENSSL_PUT_ERROR(X509V3, X509V3_R_BAD_IP_ADDRESS);
+        ERR_add_error_data(2, "value=", value);
+        goto err;
+      }
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case GEN_DIRNAME:
         if (!do_dirname(gen, value, ctx)) {
@@ -524,6 +775,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
         }
         break;
     default:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNSUPPORTED_TYPE);
         goto err;
     }
@@ -538,6 +790,13 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
     }
 
     gen->type = gen_type;
+=======
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNSUPPORTED_TYPE);
+      goto err;
+  }
+
+  return gen;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     return gen;
 
@@ -549,6 +808,7 @@ GENERAL_NAME *a2i_GENERAL_NAME(GENERAL_NAME *out,
 
 GENERAL_NAME *v2i_GENERAL_NAME_ex(GENERAL_NAME *out,
                                   const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                   X509V3_CTX *ctx, CONF_VALUE *cnf, int is_nc)
 {
     int type;
@@ -562,7 +822,18 @@ GENERAL_NAME *v2i_GENERAL_NAME_ex(GENERAL_NAME *out,
         OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
         return NULL;
     }
+=======
+                                  const X509V3_CTX *ctx, const CONF_VALUE *cnf,
+                                  int is_nc) {
+  const char *name = cnf->name;
+  const char *value = cnf->value;
+  if (!value) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_MISSING_VALUE);
+    return NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!x509v3_name_cmp(name, "email"))
         type = GEN_EMAIL;
     else if (!x509v3_name_cmp(name, "URI"))
@@ -582,11 +853,34 @@ GENERAL_NAME *v2i_GENERAL_NAME_ex(GENERAL_NAME *out,
         ERR_add_error_data(2, "name=", name);
         return NULL;
     }
+=======
+  int type;
+  if (x509v3_conf_name_matches(name, "email")) {
+    type = GEN_EMAIL;
+  } else if (x509v3_conf_name_matches(name, "URI")) {
+    type = GEN_URI;
+  } else if (x509v3_conf_name_matches(name, "DNS")) {
+    type = GEN_DNS;
+  } else if (x509v3_conf_name_matches(name, "RID")) {
+    type = GEN_RID;
+  } else if (x509v3_conf_name_matches(name, "IP")) {
+    type = GEN_IPADD;
+  } else if (x509v3_conf_name_matches(name, "dirName")) {
+    type = GEN_DIRNAME;
+  } else if (x509v3_conf_name_matches(name, "otherName")) {
+    type = GEN_OTHERNAME;
+  } else {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNSUPPORTED_OPTION);
+    ERR_add_error_data(2, "name=", name);
+    return NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     return a2i_GENERAL_NAME(out, method, ctx, type, value, is_nc);
 
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int do_othername(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx)
 {
     char *objtmp = NULL;
@@ -613,8 +907,47 @@ static int do_othername(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx)
     if (!gen->d.otherName->type_id)
         return 0;
     return 1;
+=======
+static int do_othername(GENERAL_NAME *gen, const char *value,
+                        const X509V3_CTX *ctx) {
+  const char *semicolon = strchr(value, ';');
+  if (semicolon == NULL) {
+    return 0;
+  }
+
+  OTHERNAME *name = OTHERNAME_new();
+  if (name == NULL) {
+    return 0;
+  }
+
+  char *objtmp = OPENSSL_strndup(value, semicolon - value);
+  if (objtmp == NULL) {
+    goto err;
+  }
+  ASN1_OBJECT_free(name->type_id);
+  name->type_id = OBJ_txt2obj(objtmp, /*dont_search_names=*/0);
+  OPENSSL_free(objtmp);
+  if (name->type_id == NULL) {
+    goto err;
+  }
+
+  ASN1_TYPE_free(name->value);
+  name->value = ASN1_generate_v3(semicolon + 1, ctx);
+  if (name->value == NULL) {
+    goto err;
+  }
+
+  gen->type = GEN_OTHERNAME;
+  gen->d.otherName = name;
+  return 1;
+
+err:
+  OTHERNAME_free(name);
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int do_dirname(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx)
 {
     int ret = 0;
@@ -633,10 +966,40 @@ static int do_dirname(GENERAL_NAME *gen, const char *value, X509V3_CTX *ctx)
         goto err;
     gen->d.dirn = nm;
     ret = 1;
+=======
+static int do_dirname(GENERAL_NAME *gen, const char *value,
+                      const X509V3_CTX *ctx) {
+  int ret = 0;
+  X509_NAME *nm = X509_NAME_new();
+  if (nm == NULL) {
+    goto err;
+  }
+  const STACK_OF(CONF_VALUE) *sk = X509V3_get_section(ctx, value);
+  if (sk == NULL) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_SECTION_NOT_FOUND);
+    ERR_add_error_data(2, "section=", value);
+    goto err;
+  }
+  // FIXME: should allow other character types...
+  if (!X509V3_NAME_from_section(nm, sk, MBSTRING_ASC)) {
+    goto err;
+  }
+  gen->type = GEN_DIRNAME;
+  gen->d.dirn = nm;
+  ret = 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  err:
     if (!ret)
         X509_NAME_free(nm);
     X509V3_section_free(ctx, sk);
     return ret;
+=======
+err:
+  if (!ret) {
+    X509_NAME_free(nm);
+  }
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

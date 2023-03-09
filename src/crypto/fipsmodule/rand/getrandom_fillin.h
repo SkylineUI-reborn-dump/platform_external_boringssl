@@ -30,8 +30,13 @@
 #define EXPECTED_NR_getrandom 278
 #elif defined(OPENSSL_ARM)
 #define EXPECTED_NR_getrandom 384
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 #elif defined(OPENSSL_PPC64LE)
 #define EXPECTED_NR_getrandom 359
+=======
+#elif defined(OPENSSL_RISCV64)
+#define EXPECTED_NR_getrandom 278
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 #endif
 
 #if defined(EXPECTED_NR_getrandom)

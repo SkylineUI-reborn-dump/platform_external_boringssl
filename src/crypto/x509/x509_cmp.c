@@ -1,4 +1,3 @@
-/* crypto/x509/x509_cmp.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -319,6 +318,7 @@ int X509_check_private_key(X509 *x, const EVP_PKEY *k)
     return 0;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /*
  * Check a suite B algorithm is permitted: pass in a public key and the NID
  * of its signature (or 0 if no signature). The pflags is a pointer to a
@@ -447,4 +447,18 @@ STACK_OF(X509) *X509_chain_up_ref(STACK_OF(X509) *chain)
         X509_up_ref(sk_X509_value(ret, i));
     }
     return ret;
+=======
+// Not strictly speaking an "up_ref" as a STACK doesn't have a reference
+// count but it has the same effect by duping the STACK and upping the ref of
+// each X509 structure.
+STACK_OF(X509) *X509_chain_up_ref(STACK_OF(X509) *chain) {
+  STACK_OF(X509) *ret = sk_X509_dup(chain);
+  if (ret == NULL) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_X509_num(ret); i++) {
+    X509_up_ref(sk_X509_value(ret, i));
+  }
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

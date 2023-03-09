@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* v3_pci.c -*- mode:C; c-file-style: "eay" -*- */
 /*
  * Contributed to the OpenSSL Project 2004 by Richard Levitte
@@ -287,3 +288,5 @@ static PROXY_CERT_INFO_EXTENSION *r2i_pci(X509V3_EXT_METHOD *method,
     sk_CONF_VALUE_pop_free(vals, X509V3_conf_free);
     return pci;
 }
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

@@ -1,4 +1,3 @@
-/* crypto/x509/x509_att.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -125,11 +124,23 @@ STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr(STACK_OF(X509_ATTRIBUTE) **x,
     X509_ATTRIBUTE *new_attr = NULL;
     STACK_OF(X509_ATTRIBUTE) *sk = NULL;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (x == NULL) {
         OPENSSL_PUT_ERROR(X509, ERR_R_PASSED_NULL_PARAMETER);
         goto err2;
+=======
+  if (x == NULL) {
+    OPENSSL_PUT_ERROR(X509, ERR_R_PASSED_NULL_PARAMETER);
+    goto err;
+  }
+
+  if (*x == NULL) {
+    if ((sk = sk_X509_ATTRIBUTE_new_null()) == NULL) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (*x == NULL) {
         if ((sk = sk_X509_ATTRIBUTE_new_null()) == NULL)
             goto err;
@@ -151,6 +162,26 @@ STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr(STACK_OF(X509_ATTRIBUTE) **x,
     if (sk != NULL)
         sk_X509_ATTRIBUTE_free(sk);
     return (NULL);
+=======
+  if ((new_attr = X509_ATTRIBUTE_dup(attr)) == NULL) {
+    goto err;
+  }
+  if (!sk_X509_ATTRIBUTE_push(sk, new_attr)) {
+    goto err;
+  }
+  if (*x == NULL) {
+    *x = sk;
+  }
+  return sk;
+err:
+  if (new_attr != NULL) {
+    X509_ATTRIBUTE_free(new_attr);
+  }
+  if (sk != NULL) {
+    sk_X509_ATTRIBUTE_free(sk);
+  }
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 STACK_OF(X509_ATTRIBUTE) *X509at_add1_attr_by_OBJ(STACK_OF(X509_ATTRIBUTE)
@@ -221,6 +252,7 @@ X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_OBJ(X509_ATTRIBUTE **attr,
 {
     X509_ATTRIBUTE *ret;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if ((attr == NULL) || (*attr == NULL)) {
         if ((ret = X509_ATTRIBUTE_new()) == NULL) {
             OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
@@ -228,6 +260,15 @@ X509_ATTRIBUTE *X509_ATTRIBUTE_create_by_OBJ(X509_ATTRIBUTE **attr,
         }
     } else
         ret = *attr;
+=======
+  if ((attr == NULL) || (*attr == NULL)) {
+    if ((ret = X509_ATTRIBUTE_new()) == NULL) {
+      return NULL;
+    }
+  } else {
+    ret = *attr;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (!X509_ATTRIBUTE_set1_object(ret, obj))
         goto err;
@@ -345,7 +386,22 @@ void *X509_ATTRIBUTE_get0_data(X509_ATTRIBUTE *attr, int idx,
         OPENSSL_PUT_ERROR(X509, X509_R_WRONG_TYPE);
         return NULL;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return (void *)asn1_type_value_as_pointer(ttmp);
+=======
+  } else {
+    ASN1_TYPE_set(ttmp, atype, stmp);
+    stmp = NULL;
+  }
+  if (!sk_ASN1_TYPE_push(attr->set, ttmp)) {
+    goto err;
+  }
+  return 1;
+err:
+  ASN1_TYPE_free(ttmp);
+  ASN1_STRING_free(stmp);
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_TYPE *X509_ATTRIBUTE_get0_type(X509_ATTRIBUTE *attr, int idx)

@@ -55,7 +55,16 @@
  * [including the GNU Public Licence.] */
 
 #include <openssl/asn1.h>
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+#include <openssl/asn1t.h>
+#include <openssl/bytestring.h>
+#include <openssl/err.h>
+#include <openssl/mem.h>
+#include <openssl/pool.h>
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+#include <assert.h>
 #include <limits.h>
 #include <string.h>
 
@@ -78,6 +87,7 @@ static int asn1_check_tlen(long *olen, int *otag, unsigned char *oclass,
                            char *cst, const unsigned char **in, long len,
                            int exptag, int expclass, char opt);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int asn1_template_ex_d2i(ASN1_VALUE **pval,
                                 const unsigned char **in, long len,
                                 const ASN1_TEMPLATE *tt, char opt,
@@ -86,6 +96,14 @@ static int asn1_template_noexp_d2i(ASN1_VALUE **val,
                                    const unsigned char **in, long len,
                                    const ASN1_TEMPLATE *tt, char opt,
                                    int depth);
+=======
+static int asn1_template_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
+                                long len, const ASN1_TEMPLATE *tt, char opt,
+                                CRYPTO_BUFFER *buf, int depth);
+static int asn1_template_noexp_d2i(ASN1_VALUE **val, const unsigned char **in,
+                                   long len, const ASN1_TEMPLATE *tt, char opt,
+                                   CRYPTO_BUFFER *buf, int depth);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 static int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
                        int utype, const ASN1_ITEM *it);
 static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
@@ -94,7 +112,7 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
                                  int tag, int aclass, char opt);
 static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                             long len, const ASN1_ITEM *it, int tag, int aclass,
-                            char opt, int depth);
+                            char opt, CRYPTO_BUFFER *buf, int depth);
 
 /* Table to convert tags to bit values, used for MSTRING type */
 static const unsigned long tag2bit[32] = {
@@ -133,6 +151,7 @@ unsigned long ASN1_tag2bit(int tag)
  * this will simply be a special case.
  */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 ASN1_VALUE *ASN1_item_d2i(ASN1_VALUE **pval,
                           const unsigned char **in, long len,
                           const ASN1_ITEM *it)
@@ -140,19 +159,56 @@ ASN1_VALUE *ASN1_item_d2i(ASN1_VALUE **pval,
     ASN1_VALUE *ptmpval = NULL;
     if (!pval)
         pval = &ptmpval;
+=======
+ASN1_VALUE *ASN1_item_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
+                          const ASN1_ITEM *it) {
+  ASN1_VALUE *ret = NULL;
+  if (asn1_item_ex_d2i(&ret, in, len, it, /*tag=*/-1, /*aclass=*/0, /*opt=*/0,
+                       /*buf=*/NULL, /*depth=*/0) <= 0) {
+    // Clean up, in case the caller left a partial object.
+    //
+    // TODO(davidben): I don't think it can leave one, but the codepaths below
+    // are a bit inconsistent. Revisit this when rewriting this function.
+    ASN1_item_ex_free(&ret, it);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (asn1_item_ex_d2i(pval, in, len, it, -1, 0, 0, 0) > 0)
         return *pval;
     return NULL;
+=======
+  // If the caller supplied an output pointer, free the old one and replace it
+  // with |ret|. This differs from OpenSSL slightly in that we don't support
+  // object reuse. We run this on both success and failure. On failure, even
+  // with object reuse, OpenSSL destroys the previous object.
+  if (pval != NULL) {
+    ASN1_item_ex_free(pval, it);
+    *pval = ret;
+  }
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /*
  * Decode an item, taking care of IMPLICIT tagging, if any. If 'opt' set and
  * tag mismatch return -1 to handle OPTIONAL
  */
+=======
+// Decode an item, taking care of IMPLICIT tagging, if any. If 'opt' set and
+// tag mismatch return -1 to handle OPTIONAL
+//
+// TODO(davidben): Historically, all functions in this file had to account for
+// |*pval| containing an arbitrary existing value. This is no longer the case
+// because |ASN1_item_d2i| now always starts from NULL. As part of rewriting
+// this function, take the simplified assumptions into account. Though we must
+// still account for the internal calls to |ASN1_item_ex_new|.
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
                             long len, const ASN1_ITEM *it, int tag, int aclass,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                             char opt, int depth)
 {
     const ASN1_TEMPLATE *tt, *errtt = NULL;
@@ -168,7 +224,22 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
     aclass &= ~ASN1_TFLG_COMBINE;
     if (!pval)
         return 0;
+=======
+                            char opt, CRYPTO_BUFFER *buf, int depth) {
+  const ASN1_TEMPLATE *tt, *errtt = NULL;
+  const unsigned char *p = NULL, *q;
+  unsigned char oclass;
+  char cst, isopt;
+  int i;
+  int otag;
+  int ret = 0;
+  ASN1_VALUE **pchptr;
+  if (!pval) {
+    return 0;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /*
      * Bound |len| to comfortably fit in an int. Lengths in this module often
      * switch between int and long without overflow checks.
@@ -176,6 +247,18 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
     if (len > INT_MAX/2) {
         len = INT_MAX/2;
     }
+=======
+  if (buf != NULL) {
+    assert(CRYPTO_BUFFER_data(buf) <= *in &&
+           *in + len <= CRYPTO_BUFFER_data(buf) + CRYPTO_BUFFER_len(buf));
+  }
+
+  // Bound |len| to comfortably fit in an int. Lengths in this module often
+  // switch between int and long without overflow checks.
+  if (len > INT_MAX / 2) {
+    len = INT_MAX / 2;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (++depth > ASN1_MAX_CONSTRUCTED_NEST) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_TOO_DEEP);
@@ -199,9 +282,17 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             return asn1_template_ex_d2i(pval, in, len,
                                         it->templates, opt, depth);
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return asn1_d2i_ex_primitive(pval, in, len, it,
                                      tag, aclass, opt);
         break;
+=======
+        return asn1_template_ex_d2i(pval, in, len, it->templates, opt, buf,
+                                    depth);
+      }
+      return asn1_d2i_ex_primitive(pval, in, len, it, tag, aclass, opt);
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case ASN1_ITYPE_MSTRING:
         /*
@@ -240,10 +331,22 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
         }
         return asn1_d2i_ex_primitive(pval, in, len, it, otag, 0, 0);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     case ASN1_ITYPE_EXTERN:
         /* Use new style d2i */
         ef = it->funcs;
         return ef->asn1_ex_d2i(pval, in, len, it, tag, aclass, opt, NULL);
+=======
+    case ASN1_ITYPE_EXTERN: {
+      // We don't support implicit tagging with external types.
+      if (tag != -1) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+        goto err;
+      }
+      const ASN1_EXTERN_FUNCS *ef = it->funcs;
+      return ef->asn1_ex_d2i(pval, in, len, it, opt, NULL);
+    }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case ASN1_ITYPE_CHOICE: {
         /*
@@ -254,6 +357,32 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
             goto err;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      } else if (!ASN1_item_ex_new(pval, it)) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+        goto err;
+      }
+      // CHOICE type, try each possibility in turn
+      p = *in;
+      for (i = 0, tt = it->templates; i < it->tcount; i++, tt++) {
+        pchptr = asn1_get_field_ptr(pval, tt);
+        // We mark field as OPTIONAL so its absence can be recognised.
+        ret = asn1_template_ex_d2i(pchptr, &p, len, tt, 1, buf, depth);
+        // If field not present, try the next one
+        if (ret == -1) {
+          continue;
+        }
+        // If positive return, read OK, break loop
+        if (ret > 0) {
+          break;
+        }
+        // Otherwise must be an ASN1 parsing error
+        errtt = tt;
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+        goto err;
+      }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
         const ASN1_AUX *aux = it->funcs;
         ASN1_aux_cb *asn1_cb = aux != NULL ? aux->asn1_cb : NULL;
@@ -320,9 +449,40 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             tag = V_ASN1_SEQUENCE;
             aclass = V_ASN1_UNIVERSAL;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         /* Get SEQUENCE length and update len, p */
         ret = asn1_check_tlen(&len, NULL, NULL, &cst,
                               &p, len, tag, aclass, opt);
+=======
+      }
+
+      // Get each field entry
+      for (i = 0, tt = it->templates; i < it->tcount; i++, tt++) {
+        const ASN1_TEMPLATE *seqtt;
+        ASN1_VALUE **pseqval;
+        seqtt = asn1_do_adb(pval, tt, 1);
+        if (seqtt == NULL) {
+          goto err;
+        }
+        pseqval = asn1_get_field_ptr(pval, seqtt);
+        // Have we ran out of data?
+        if (!len) {
+          break;
+        }
+        q = p;
+        // This determines the OPTIONAL flag value. The field cannot be
+        // omitted if it is the last of a SEQUENCE and there is still
+        // data to be read. This isn't strictly necessary but it
+        // increases efficiency in some cases.
+        if (i == (it->tcount - 1)) {
+          isopt = 0;
+        } else {
+          isopt = (seqtt->flags & ASN1_TFLG_OPTIONAL) != 0;
+        }
+        // attempt to read in field, allowing each to be OPTIONAL
+
+        ret = asn1_template_ex_d2i(pseqval, &p, len, seqtt, isopt, buf, depth);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         if (!ret) {
             OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
             goto err;
@@ -396,6 +556,7 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             /* Update length */
             len -= p - q;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
         /* Check all data read */
         if (len) {
@@ -430,9 +591,22 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
             goto auxerr;
         *in = p;
         return 1;
+=======
+      }
+      // Save encoding
+      if (!asn1_enc_save(pval, *in, p - *in, it, buf)) {
+        goto auxerr;
+      }
+      if (asn1_cb && !asn1_cb(ASN1_OP_D2I_POST, pval, it, NULL)) {
+        goto auxerr;
+      }
+      *in = p;
+      return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     default:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         return 0;
     }
  auxerr:
@@ -446,13 +620,34 @@ static int asn1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in,
     else
         ERR_add_error_data(2, "Type=", it->sname);
     return 0;
+=======
+      return 0;
+  }
+auxerr:
+  OPENSSL_PUT_ERROR(ASN1, ASN1_R_AUX_ERROR);
+err:
+  ASN1_item_ex_free(pval, it);
+  if (errtt) {
+    ERR_add_error_data(4, "Field=", errtt->field_name, ", Type=", it->sname);
+  } else {
+    ERR_add_error_data(2, "Type=", it->sname);
+  }
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                      const ASN1_ITEM *it,
                      int tag, int aclass, char opt, ASN1_TLC *ctx)
 {
     return asn1_item_ex_d2i(pval, in, len, it, tag, aclass, opt, 0);
+=======
+                     const ASN1_ITEM *it, int tag, int aclass, char opt,
+                     CRYPTO_BUFFER *buf) {
+  return asn1_item_ex_d2i(pval, in, len, it, tag, aclass, opt, buf,
+                          /*depth=*/0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*
@@ -460,6 +655,7 @@ int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
  * EXPLICIT tag and the other handles the rest.
  */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int asn1_template_ex_d2i(ASN1_VALUE **val,
                                 const unsigned char **in, long inlen,
                                 const ASN1_TEMPLATE *tt, char opt,
@@ -516,8 +712,24 @@ static int asn1_template_ex_d2i(ASN1_VALUE **val,
 
  err:
     ASN1_template_free(val, tt);
+=======
+static int asn1_template_ex_d2i(ASN1_VALUE **val, const unsigned char **in,
+                                long inlen, const ASN1_TEMPLATE *tt, char opt,
+                                CRYPTO_BUFFER *buf, int depth) {
+  int aclass;
+  int ret;
+  long len;
+  const unsigned char *p, *q;
+  if (!val) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 }
+=======
+  }
+  uint32_t flags = tt->flags;
+  aclass = flags & ASN1_TFLG_TAG_CLASS;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 static int asn1_template_noexp_d2i(ASN1_VALUE **val,
                                    const unsigned char **in, long len,
@@ -629,14 +841,106 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
     int ret = 0, utype;
     long plen;
     char cst;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     const unsigned char *p;
     const unsigned char *cont = NULL;
     long len;
     if (!pval) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_NULL);
         return 0;               /* Should never happen */
+=======
+    // Need to work out amount of data available to the inner content and
+    // where it starts: so read in EXPLICIT header to get the info.
+    ret = asn1_check_tlen(&len, NULL, NULL, &cst, &p, inlen, tt->tag, aclass,
+                          opt);
+    q = p;
+    if (!ret) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+      return 0;
+    } else if (ret == -1) {
+      return -1;
+    }
+    if (!cst) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPLICIT_TAG_NOT_CONSTRUCTED);
+      return 0;
+    }
+    // We've found the field so it can't be OPTIONAL now
+    ret = asn1_template_noexp_d2i(val, &p, len, tt, /*opt=*/0, buf, depth);
+    if (!ret) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+      return 0;
+    }
+    // We read the field in OK so update length
+    len -= p - q;
+    // Check for trailing data.
+    if (len) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPLICIT_LENGTH_MISMATCH);
+      goto err;
+    }
+  } else {
+    return asn1_template_noexp_d2i(val, in, inlen, tt, opt, buf, depth);
+  }
+
+  *in = p;
+  return 1;
+
+err:
+  ASN1_template_free(val, tt);
+  return 0;
+}
+
+static int asn1_template_noexp_d2i(ASN1_VALUE **val, const unsigned char **in,
+                                   long len, const ASN1_TEMPLATE *tt, char opt,
+                                   CRYPTO_BUFFER *buf, int depth) {
+  int aclass;
+  int ret;
+  const unsigned char *p;
+  if (!val) {
+    return 0;
+  }
+  uint32_t flags = tt->flags;
+  aclass = flags & ASN1_TFLG_TAG_CLASS;
+
+  p = *in;
+
+  if (flags & ASN1_TFLG_SK_MASK) {
+    // SET OF, SEQUENCE OF
+    int sktag, skaclass;
+    // First work out expected inner tag value
+    if (flags & ASN1_TFLG_IMPTAG) {
+      sktag = tt->tag;
+      skaclass = aclass;
+    } else {
+      skaclass = V_ASN1_UNIVERSAL;
+      if (flags & ASN1_TFLG_SET_OF) {
+        sktag = V_ASN1_SET;
+      } else {
+        sktag = V_ASN1_SEQUENCE;
+      }
+    }
+    // Get the tag
+    ret =
+        asn1_check_tlen(&len, NULL, NULL, NULL, &p, len, sktag, skaclass, opt);
+    if (!ret) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+      return 0;
+    } else if (ret == -1) {
+      return -1;
+    }
+    if (!*val) {
+      *val = (ASN1_VALUE *)sk_ASN1_VALUE_new_null();
+    } else {
+      // We've got a valid STACK: free up any items present
+      STACK_OF(ASN1_VALUE) *sktmp = (STACK_OF(ASN1_VALUE) *)*val;
+      ASN1_VALUE *vtmp;
+      while (sk_ASN1_VALUE_num(sktmp) > 0) {
+        vtmp = sk_ASN1_VALUE_pop(sktmp);
+        ASN1_item_ex_free(&vtmp, ASN1_ITEM_ptr(tt->item));
+      }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (it->itype == ASN1_ITYPE_MSTRING) {
         utype = tag;
         tag = -1;
@@ -663,10 +967,95 @@ static int asn1_d2i_ex_primitive(ASN1_VALUE **pval,
         }
         if (oclass != V_ASN1_UNIVERSAL)
             utype = V_ASN1_OTHER;
+=======
+    if (!*val) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (tag == -1) {
         tag = utype;
         aclass = V_ASN1_UNIVERSAL;
+=======
+
+    // Read as many items as we can
+    while (len > 0) {
+      ASN1_VALUE *skfield;
+      const unsigned char *q = p;
+      skfield = NULL;
+      if (!asn1_item_ex_d2i(&skfield, &p, len, ASN1_ITEM_ptr(tt->item),
+                            /*tag=*/-1, /*aclass=*/0, /*opt=*/0, buf, depth)) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+        goto err;
+      }
+      len -= p - q;
+      if (!sk_ASN1_VALUE_push((STACK_OF(ASN1_VALUE) *)*val, skfield)) {
+        ASN1_item_ex_free(&skfield, ASN1_ITEM_ptr(tt->item));
+        goto err;
+      }
+    }
+  } else if (flags & ASN1_TFLG_IMPTAG) {
+    // IMPLICIT tagging
+    ret = asn1_item_ex_d2i(val, &p, len, ASN1_ITEM_ptr(tt->item), tt->tag,
+                           aclass, opt, buf, depth);
+    if (!ret) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+      goto err;
+    } else if (ret == -1) {
+      return -1;
+    }
+  } else {
+    // Nothing special
+    ret = asn1_item_ex_d2i(val, &p, len, ASN1_ITEM_ptr(tt->item), /*tag=*/-1,
+                           /*aclass=*/0, opt, buf, depth);
+    if (!ret) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_NESTED_ASN1_ERROR);
+      goto err;
+    } else if (ret == -1) {
+      return -1;
+    }
+  }
+
+  *in = p;
+  return 1;
+
+err:
+  ASN1_template_free(val, tt);
+  return 0;
+}
+
+static int asn1_d2i_ex_primitive(ASN1_VALUE **pval, const unsigned char **in,
+                                 long inlen, const ASN1_ITEM *it, int tag,
+                                 int aclass, char opt) {
+  int ret = 0, utype;
+  long plen;
+  char cst;
+  const unsigned char *p;
+  const unsigned char *cont = NULL;
+  long len;
+  if (!pval) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_NULL);
+    return 0;  // Should never happen
+  }
+
+  if (it->itype == ASN1_ITYPE_MSTRING) {
+    utype = tag;
+    tag = -1;
+  } else {
+    utype = it->utype;
+  }
+
+  if (utype == V_ASN1_ANY) {
+    // If type is ANY need to figure out type from tag
+    unsigned char oclass;
+    if (tag >= 0) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_TAGGED_ANY);
+      return 0;
+    }
+    if (opt) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_ILLEGAL_OPTIONAL_ANY);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     p = *in;
     /* Check header */
@@ -825,7 +1214,43 @@ static int asn1_ex_c2i(ASN1_VALUE **pval, const unsigned char *cont, int len,
             *pval = NULL;
             goto err;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         break;
+=======
+      }
+      if (utype == V_ASN1_UTCTIME) {
+        if (!CBS_parse_utc_time(&cbs, NULL, /*allow_timezone_offset=*/1)) {
+          OPENSSL_PUT_ERROR(ASN1, ASN1_R_INVALID_TIME_FORMAT);
+          goto err;
+        }
+      }
+      if (utype == V_ASN1_GENERALIZEDTIME) {
+        if (!CBS_parse_generalized_time(&cbs, NULL,
+                                        /*allow_timezone_offset=*/0)) {
+          OPENSSL_PUT_ERROR(ASN1, ASN1_R_INVALID_TIME_FORMAT);
+          goto err;
+        }
+      }
+      // TODO(https://crbug.com/boringssl/427): Check other string types.
+
+      // All based on ASN1_STRING and handled the same
+      if (!*pval) {
+        stmp = ASN1_STRING_type_new(utype);
+        if (!stmp) {
+          goto err;
+        }
+        *pval = (ASN1_VALUE *)stmp;
+      } else {
+        stmp = (ASN1_STRING *)*pval;
+        stmp->type = utype;
+      }
+      if (!ASN1_STRING_set(stmp, cont, len)) {
+        ASN1_STRING_free(stmp);
+        *pval = NULL;
+        goto err;
+      }
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     /* If ASN1_ANY and NULL type fix up value */
     if (typ && (utype == V_ASN1_NULL))

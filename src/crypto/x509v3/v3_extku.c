@@ -1,4 +1,3 @@
-/* v3_extku.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -63,12 +62,22 @@
 #include <openssl/obj.h>
 #include <openssl/x509v3.h>
 
+#include "internal.h"
+
+
 static void *v2i_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                     X509V3_CTX *ctx,
                                     STACK_OF(CONF_VALUE) *nval);
 static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD
                                                     *method, void *eku, STACK_OF(CONF_VALUE)
                                                     *extlist);
+=======
+                                    const X509V3_CTX *ctx,
+                                    const STACK_OF(CONF_VALUE) *nval);
+static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(
+    const X509V3_EXT_METHOD *method, void *eku, STACK_OF(CONF_VALUE) *extlist);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_ext_ku = {
     NID_ext_key_usage, 0,
@@ -99,6 +108,7 @@ ASN1_ITEM_TEMPLATE_END(EXTENDED_KEY_USAGE)
 
 IMPLEMENT_ASN1_FUNCTIONS(EXTENDED_KEY_USAGE)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD
                                                     *method, void *a, STACK_OF(CONF_VALUE)
                                                     *ext_list)
@@ -113,9 +123,22 @@ static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD
         X509V3_add_value(NULL, obj_tmp, &ext_list);
     }
     return ext_list;
+=======
+static STACK_OF(CONF_VALUE) *i2v_EXTENDED_KEY_USAGE(
+    const X509V3_EXT_METHOD *method, void *a, STACK_OF(CONF_VALUE) *ext_list) {
+  const EXTENDED_KEY_USAGE *eku = a;
+  for (size_t i = 0; i < sk_ASN1_OBJECT_num(eku); i++) {
+    const ASN1_OBJECT *obj = sk_ASN1_OBJECT_value(eku, i);
+    char obj_tmp[80];
+    i2t_ASN1_OBJECT(obj_tmp, 80, obj);
+    X509V3_add_value(NULL, obj_tmp, &ext_list);
+  }
+  return ext_list;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static void *v2i_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                     X509V3_CTX *ctx,
                                     STACK_OF(CONF_VALUE) *nval)
 {
@@ -129,7 +152,16 @@ static void *v2i_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD *method,
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
         return NULL;
     }
+=======
+                                    const X509V3_CTX *ctx,
+                                    const STACK_OF(CONF_VALUE) *nval) {
+  EXTENDED_KEY_USAGE *extku = sk_ASN1_OBJECT_new_null();
+  if (extku == NULL) {
+    return NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     for (i = 0; i < sk_CONF_VALUE_num(nval); i++) {
         val = sk_CONF_VALUE_value(nval, i);
         if (val->value)
@@ -143,6 +175,29 @@ static void *v2i_EXTENDED_KEY_USAGE(const X509V3_EXT_METHOD *method,
             return NULL;
         }
         sk_ASN1_OBJECT_push(extku, objtmp);
+=======
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *val = sk_CONF_VALUE_value(nval, i);
+    const char *extval;
+    if (val->value) {
+      extval = val->value;
+    } else {
+      extval = val->name;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     return extku;
+=======
+    ASN1_OBJECT *obj = OBJ_txt2obj(extval, 0);
+    if (obj == NULL || !sk_ASN1_OBJECT_push(extku, obj)) {
+      ASN1_OBJECT_free(obj);
+      sk_ASN1_OBJECT_pop_free(extku, ASN1_OBJECT_free);
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_OBJECT_IDENTIFIER);
+      X509V3_conf_err(val);
+      return NULL;
+    }
+  }
+
+  return extku;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

@@ -81,13 +81,19 @@ DEFINE_STACK_OF(STACK_OF_X509_NAME_ENTRY)
 
 #define X509_NAME_MAX (1024 * 1024)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int x509_name_ex_d2i(ASN1_VALUE **val,
                             const unsigned char **in, long len,
                             const ASN1_ITEM *it,
                             int tag, int aclass, char opt, ASN1_TLC *ctx);
+=======
+static int x509_name_ex_d2i(ASN1_VALUE **val, const unsigned char **in,
+                            long len, const ASN1_ITEM *it, int opt,
+                            ASN1_TLC *ctx);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 static int x509_name_ex_i2d(ASN1_VALUE **val, unsigned char **out,
-                            const ASN1_ITEM *it, int tag, int aclass);
+                            const ASN1_ITEM *it);
 static int x509_name_ex_new(ASN1_VALUE **val, const ASN1_ITEM *it);
 static void x509_name_ex_free(ASN1_VALUE **val, const ASN1_ITEM *it);
 
@@ -126,13 +132,11 @@ ASN1_ITEM_TEMPLATE_END(X509_NAME_INTERNAL)
  */
 
 static const ASN1_EXTERN_FUNCS x509_name_ff = {
-    NULL,
     x509_name_ex_new,
     x509_name_ex_free,
     0,                          /* Default clear behaviour is OK */
     x509_name_ex_d2i,
     x509_name_ex_i2d,
-    NULL,
 };
 
 IMPLEMENT_EXTERN_ASN1(X509_NAME, V_ASN1_SEQUENCE, x509_name_ff)
@@ -157,12 +161,19 @@ static int x509_name_ex_new(ASN1_VALUE **val, const ASN1_ITEM *it)
     *val = (ASN1_VALUE *)ret;
     return 1;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  memerr:
     OPENSSL_PUT_ERROR(X509, ERR_R_MALLOC_FAILURE);
     if (ret) {
         if (ret->entries)
             sk_X509_NAME_ENTRY_free(ret->entries);
         OPENSSL_free(ret);
+=======
+memerr:
+  if (ret) {
+    if (ret->entries) {
+      sk_X509_NAME_ENTRY_free(ret->entries);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     return 0;
 }
@@ -192,6 +203,7 @@ static void local_sk_X509_NAME_ENTRY_pop_free(STACK_OF(X509_NAME_ENTRY) *ne)
     sk_X509_NAME_ENTRY_pop_free(ne, X509_NAME_ENTRY_free);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int x509_name_ex_d2i(ASN1_VALUE **val,
                             const unsigned char **in, long len,
                             const ASN1_ITEM *it, int tag, int aclass,
@@ -209,7 +221,25 @@ static int x509_name_ex_d2i(ASN1_VALUE **val,
         len = X509_NAME_MAX;
     }
     q = p;
+=======
+static int x509_name_ex_d2i(ASN1_VALUE **val, const unsigned char **in,
+                            long len, const ASN1_ITEM *it, int opt,
+                            ASN1_TLC *ctx) {
+  const unsigned char *p = *in, *q;
+  STACK_OF(STACK_OF_X509_NAME_ENTRY) *intname = NULL;
+  X509_NAME *nm = NULL;
+  size_t i, j;
+  int ret;
+  STACK_OF(X509_NAME_ENTRY) *entries;
+  X509_NAME_ENTRY *entry;
+  // Bound the size of an X509_NAME we are willing to parse.
+  if (len > X509_NAME_MAX) {
+    len = X509_NAME_MAX;
+  }
+  q = p;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* Get internal representation of Name */
     ASN1_VALUE *intname_val = NULL;
     ret = ASN1_item_ex_d2i(&intname_val,
@@ -218,6 +248,17 @@ static int x509_name_ex_d2i(ASN1_VALUE **val,
     if (ret <= 0)
         return ret;
     intname = (STACK_OF(STACK_OF_X509_NAME_ENTRY) *)intname_val;
+=======
+  // Get internal representation of Name
+  ASN1_VALUE *intname_val = NULL;
+  ret = ASN1_item_ex_d2i(&intname_val, &p, len,
+                         ASN1_ITEM_rptr(X509_NAME_INTERNAL), /*tag=*/-1,
+                         /*aclass=*/0, opt, /*buf=*/NULL);
+  if (ret <= 0) {
+    return ret;
+  }
+  intname = (STACK_OF(STACK_OF_X509_NAME_ENTRY) *)intname_val;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (*val)
         x509_name_ex_free(val, NULL);
@@ -259,6 +300,7 @@ static int x509_name_ex_d2i(ASN1_VALUE **val,
 }
 
 static int x509_name_ex_i2d(ASN1_VALUE **val, unsigned char **out,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                             const ASN1_ITEM *it, int tag, int aclass)
 {
     X509_NAME *a = (X509_NAME *)*val;
@@ -273,8 +315,22 @@ static int x509_name_ex_i2d(ASN1_VALUE **val, unsigned char **out,
         *out += ret;
     }
     return ret;
+=======
+                            const ASN1_ITEM *it) {
+  X509_NAME *a = (X509_NAME *)*val;
+  if (a->modified && (!x509_name_encode(a) || !x509_name_canon(a))) {
+    return -1;
+  }
+  int ret = a->bytes->length;
+  if (out != NULL) {
+    OPENSSL_memcpy(*out, a->bytes->data, ret);
+    *out += ret;
+  }
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int x509_name_encode(X509_NAME *a)
 {
     int len;
@@ -301,11 +357,47 @@ static int x509_name_encode(X509_NAME *a)
         }
         if (!sk_X509_NAME_ENTRY_push(entries, entry))
             goto memerr;
+=======
+static int x509_name_encode(X509_NAME *a) {
+  int len;
+  unsigned char *p;
+  STACK_OF(X509_NAME_ENTRY) *entries = NULL;
+  X509_NAME_ENTRY *entry;
+  int set = -1;
+  size_t i;
+  STACK_OF(STACK_OF_X509_NAME_ENTRY) *intname =
+      sk_STACK_OF_X509_NAME_ENTRY_new_null();
+  if (!intname) {
+    goto err;
+  }
+  for (i = 0; i < sk_X509_NAME_ENTRY_num(a->entries); i++) {
+    entry = sk_X509_NAME_ENTRY_value(a->entries, i);
+    if (entry->set != set) {
+      entries = sk_X509_NAME_ENTRY_new_null();
+      if (!entries) {
+        goto err;
+      }
+      if (!sk_STACK_OF_X509_NAME_ENTRY_push(intname, entries)) {
+        sk_X509_NAME_ENTRY_free(entries);
+        goto err;
+      }
+      set = entry->set;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ASN1_VALUE *intname_val = (ASN1_VALUE *)intname;
     len =
         ASN1_item_ex_i2d(&intname_val, NULL, ASN1_ITEM_rptr(X509_NAME_INTERNAL),
+=======
+    if (!sk_X509_NAME_ENTRY_push(entries, entry)) {
+      goto err;
+    }
+  }
+  ASN1_VALUE *intname_val = (ASN1_VALUE *)intname;
+  len = ASN1_item_ex_i2d(&intname_val, NULL, ASN1_ITEM_rptr(X509_NAME_INTERNAL),
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
                          /*tag=*/-1, /*aclass=*/0);
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (len <= 0) {
       goto err;
     }
@@ -314,6 +406,62 @@ static int x509_name_encode(X509_NAME *a)
     p = (unsigned char *)a->bytes->data;
     if (ASN1_item_ex_i2d(&intname_val, &p, ASN1_ITEM_rptr(X509_NAME_INTERNAL),
                          /*tag=*/-1, /*aclass=*/0) <= 0) {
+=======
+  if (len <= 0) {
+    goto err;
+  }
+  if (!BUF_MEM_grow(a->bytes, len)) {
+    goto err;
+  }
+  p = (unsigned char *)a->bytes->data;
+  if (ASN1_item_ex_i2d(&intname_val, &p, ASN1_ITEM_rptr(X509_NAME_INTERNAL),
+                       /*tag=*/-1, /*aclass=*/0) <= 0) {
+    goto err;
+  }
+  sk_STACK_OF_X509_NAME_ENTRY_pop_free(intname, local_sk_X509_NAME_ENTRY_free);
+  a->modified = 0;
+  return 1;
+err:
+  sk_STACK_OF_X509_NAME_ENTRY_pop_free(intname, local_sk_X509_NAME_ENTRY_free);
+  return 0;
+}
+
+// This function generates the canonical encoding of the Name structure. In
+// it all strings are converted to UTF8, leading, trailing and multiple
+// spaces collapsed, converted to lower case and the leading SEQUENCE header
+// removed. In future we could also normalize the UTF8 too. By doing this
+// comparison of Name structures can be rapidly perfomed by just using
+// OPENSSL_memcmp() of the canonical encoding. By omitting the leading SEQUENCE
+// name constraints of type dirName can also be checked with a simple
+// OPENSSL_memcmp().
+
+static int x509_name_canon(X509_NAME *a) {
+  unsigned char *p;
+  STACK_OF(STACK_OF_X509_NAME_ENTRY) *intname = NULL;
+  STACK_OF(X509_NAME_ENTRY) *entries = NULL;
+  X509_NAME_ENTRY *entry, *tmpentry = NULL;
+  int set = -1, ret = 0, len;
+  size_t i;
+
+  if (a->canon_enc) {
+    OPENSSL_free(a->canon_enc);
+    a->canon_enc = NULL;
+  }
+  // Special case: empty X509_NAME => null encoding
+  if (sk_X509_NAME_ENTRY_num(a->entries) == 0) {
+    a->canon_enclen = 0;
+    return 1;
+  }
+  intname = sk_STACK_OF_X509_NAME_ENTRY_new_null();
+  if (!intname) {
+    goto err;
+  }
+  for (i = 0; i < sk_X509_NAME_ENTRY_num(a->entries); i++) {
+    entry = sk_X509_NAME_ENTRY_value(a->entries, i);
+    if (entry->set != set) {
+      entries = sk_X509_NAME_ENTRY_new_null();
+      if (!entries) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         goto err;
     }
     sk_STACK_OF_X509_NAME_ENTRY_pop_free(intname,
@@ -347,6 +495,7 @@ static int x509_name_canon(X509_NAME *a)
     int set = -1, ret = 0, len;
     size_t i;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (a->canon_enc) {
         OPENSSL_free(a->canon_enc);
         a->canon_enc = NULL;
@@ -448,8 +597,47 @@ static int asn1_string_canon(ASN1_STRING *out, ASN1_STRING *in)
 
     /* Ignore leading spaces */
     while ((len > 0) && !(*from & 0x80) && isspace(*from)) {
+=======
+  // Convert string in place to canonical form.
+
+  // Ignore leading spaces
+  while ((len > 0) && OPENSSL_isspace(*from)) {
+    from++;
+    len--;
+  }
+
+  to = from + len;
+
+  // Ignore trailing spaces
+  while ((len > 0) && OPENSSL_isspace(to[-1])) {
+    to--;
+    len--;
+  }
+
+  to = out->data;
+
+  i = 0;
+  while (i < len) {
+    // Collapse multiple spaces
+    if (OPENSSL_isspace(*from)) {
+      // Copy one space across
+      *to++ = ' ';
+      // Ignore subsequent spaces. Note: don't need to check len here
+      // because we know the last character is a non-space so we can't
+      // overflow.
+      do {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         from++;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         len--;
+=======
+        i++;
+      } while (OPENSSL_isspace(*from));
+    } else {
+      *to++ = OPENSSL_tolower(*from);
+      from++;
+      i++;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     to = from + len;

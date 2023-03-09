@@ -1,5 +1,3 @@
-include_directories(../include)
-
 add_library(
   ssl
 
@@ -41,15 +39,19 @@ add_library(
   tls13_enc.cc
   tls13_server.cc
 )
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 target_include_directories(ssl INTERFACE
   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
 install(TARGETS ssl EXPORT OpenSSLTargets DESTINATION ${CMAKE_INSTALL_LIBDIR})
+=======
+# Although libssl also provides headers that require an include directory, the
+# flag is already specified by libcrypto, so we omit target_include_directories
+# here.
+install_if_enabled(TARGETS ssl EXPORT OpenSSLTargets ${INSTALL_DESTINATION_DEFAULT})
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 set_property(TARGET ssl PROPERTY EXPORT_NAME SSL)
-
-add_dependencies(ssl global_target)
-
 target_link_libraries(ssl crypto)
 
 add_executable(
@@ -58,14 +60,6 @@ add_executable(
   span_test.cc
   ssl_test.cc
   ssl_c_test.c
-
-  $<TARGET_OBJECTS:boringssl_gtest_main>
 )
-
-add_dependencies(ssl_test global_target)
-
-target_link_libraries(ssl_test test_support_lib boringssl_gtest ssl crypto)
-if(WIN32)
-  target_link_libraries(ssl_test ws2_32)
-endif()
+target_link_libraries(ssl_test test_support_lib boringssl_gtest_main ssl crypto)
 add_dependencies(all_tests ssl_test)

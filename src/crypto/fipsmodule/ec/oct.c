@@ -218,7 +218,32 @@ size_t EC_POINT_point2oct(const EC_GROUP *group, const EC_POINT *point,
   if (!ec_jacobian_to_affine(group, &affine, &point->raw)) {
     return 0;
   }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
   return ec_point_to_bytes(group, &affine, form, buf, len);
+=======
+  return ec_point_to_bytes(group, &affine, form, buf, max_out);
+}
+
+size_t EC_POINT_point2buf(const EC_GROUP *group, const EC_POINT *point,
+                          point_conversion_form_t form, uint8_t **out_buf,
+                          BN_CTX *ctx) {
+  *out_buf = NULL;
+  size_t len = EC_POINT_point2oct(group, point, form, NULL, 0, ctx);
+  if (len == 0) {
+    return 0;
+  }
+  uint8_t *buf = OPENSSL_malloc(len);
+  if (buf == NULL) {
+    return 0;
+  }
+  len = EC_POINT_point2oct(group, point, form, buf, len, ctx);
+  if (len == 0) {
+    OPENSSL_free(buf);
+    return 0;
+  }
+  *out_buf = buf;
+  return len;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int EC_POINT_set_compressed_coordinates_GFp(const EC_GROUP *group,

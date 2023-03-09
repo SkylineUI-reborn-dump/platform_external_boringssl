@@ -1,4 +1,3 @@
-/* v3_akey.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -69,6 +68,7 @@
 #include "internal.h"
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                                  AUTHORITY_KEYID *akeyid,
                                                  STACK_OF(CONF_VALUE)
@@ -76,6 +76,13 @@ static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
 static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                             X509V3_CTX *ctx,
                                             STACK_OF(CONF_VALUE) *values);
+=======
+static STACK_OF(CONF_VALUE) *i2v_AUTHORITY_KEYID(
+    const X509V3_EXT_METHOD *method, void *ext, STACK_OF(CONF_VALUE) *extlist);
+static void *v2i_AUTHORITY_KEYID(const X509V3_EXT_METHOD *method,
+                                 const X509V3_CTX *ctx,
+                                 const STACK_OF(CONF_VALUE) *values);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_akey_id = {
     NID_authority_key_identifier,
@@ -133,6 +140,7 @@ err:
  * is always included.
  */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
                                             X509V3_CTX *ctx,
                                             STACK_OF(CONF_VALUE) *values)
@@ -149,7 +157,22 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
     X509_EXTENSION *ext;
     X509 *cert;
     AUTHORITY_KEYID *akeyid;
+=======
+static void *v2i_AUTHORITY_KEYID(const X509V3_EXT_METHOD *method,
+                                 const X509V3_CTX *ctx,
+                                 const STACK_OF(CONF_VALUE) *values) {
+  char keyid = 0, issuer = 0;
+  int j;
+  ASN1_OCTET_STRING *ikeyid = NULL;
+  X509_NAME *isname = NULL;
+  GENERAL_NAMES *gens = NULL;
+  GENERAL_NAME *gen = NULL;
+  ASN1_INTEGER *serial = NULL;
+  const X509 *cert;
+  AUTHORITY_KEYID *akeyid;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     for (i = 0; i < sk_CONF_VALUE_num(values); i++) {
         cnf = sk_CONF_VALUE_value(values, i);
         if (!strcmp(cnf->name, "keyid")) {
@@ -165,13 +188,37 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
             ERR_add_error_data(2, "name=", cnf->name);
             return NULL;
         }
+=======
+  for (size_t i = 0; i < sk_CONF_VALUE_num(values); i++) {
+    const CONF_VALUE *cnf = sk_CONF_VALUE_value(values, i);
+    if (!strcmp(cnf->name, "keyid")) {
+      keyid = 1;
+      if (cnf->value && !strcmp(cnf->value, "always")) {
+        keyid = 2;
+      }
+    } else if (!strcmp(cnf->name, "issuer")) {
+      issuer = 1;
+      if (cnf->value && !strcmp(cnf->value, "always")) {
+        issuer = 2;
+      }
+    } else {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNKNOWN_OPTION);
+      ERR_add_error_data(2, "name=", cnf->name);
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!ctx || !ctx->issuer_cert) {
         if (ctx && (ctx->flags == CTX_TEST))
             return AUTHORITY_KEYID_new();
         OPENSSL_PUT_ERROR(X509V3, X509V3_R_NO_ISSUER_CERTIFICATE);
         return NULL;
+=======
+  if (!ctx || !ctx->issuer_cert) {
+    if (ctx && (ctx->flags == X509V3_CTX_TEST)) {
+      return AUTHORITY_KEYID_new();
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     cert = ctx->issuer_cert;
@@ -220,4 +267,56 @@ static AUTHORITY_KEYID *v2i_AUTHORITY_KEYID(X509V3_EXT_METHOD *method,
     ASN1_INTEGER_free(serial);
     ASN1_OCTET_STRING_free(ikeyid);
     return NULL;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+
+  cert = ctx->issuer_cert;
+
+  if (keyid) {
+    j = X509_get_ext_by_NID(cert, NID_subject_key_identifier, -1);
+    const X509_EXTENSION *ext;
+    if ((j >= 0) && (ext = X509_get_ext(cert, j))) {
+      ikeyid = X509V3_EXT_d2i(ext);
+    }
+    if (keyid == 2 && !ikeyid) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNABLE_TO_GET_ISSUER_KEYID);
+      return NULL;
+    }
+  }
+
+  if ((issuer && !ikeyid) || (issuer == 2)) {
+    isname = X509_NAME_dup(X509_get_issuer_name(cert));
+    serial = ASN1_INTEGER_dup(X509_get0_serialNumber(cert));
+    if (!isname || !serial) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_UNABLE_TO_GET_ISSUER_DETAILS);
+      goto err;
+    }
+  }
+
+  if (!(akeyid = AUTHORITY_KEYID_new())) {
+    goto err;
+  }
+
+  if (isname) {
+    if (!(gens = sk_GENERAL_NAME_new_null()) || !(gen = GENERAL_NAME_new()) ||
+        !sk_GENERAL_NAME_push(gens, gen)) {
+      goto err;
+    }
+    gen->type = GEN_DIRNAME;
+    gen->d.dirn = isname;
+  }
+
+  akeyid->issuer = gens;
+  akeyid->serial = serial;
+  akeyid->keyid = ikeyid;
+
+  return akeyid;
+
+err:
+  X509_NAME_free(isname);
+  ASN1_INTEGER_free(serial);
+  ASN1_OCTET_STRING_free(ikeyid);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

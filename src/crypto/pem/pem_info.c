@@ -1,4 +1,3 @@
-/* crypto/pem/pem_info.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -143,6 +142,7 @@ STACK_OF(X509_INFO) *PEM_X509_INFO_read_bio(BIO *bp, STACK_OF(X509_INFO) *sk,
     int ok = 0;
     STACK_OF(X509_INFO) *ret = NULL;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (sk == NULL) {
         ret = sk_X509_INFO_new_null();
         if (ret == NULL) {
@@ -151,6 +151,12 @@ STACK_OF(X509_INFO) *PEM_X509_INFO_read_bio(BIO *bp, STACK_OF(X509_INFO) *sk,
         }
     } else {
         ret = sk;
+=======
+  if (sk == NULL) {
+    ret = sk_X509_INFO_new_null();
+    if (ret == NULL) {
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     size_t orig_num = sk_X509_INFO_num(ret);
 

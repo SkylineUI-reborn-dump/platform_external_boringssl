@@ -1,4 +1,3 @@
-/* v3_purp.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 2001.
@@ -219,6 +218,7 @@ int X509_PURPOSE_add(int id, int trust, int flags,
     X509_PURPOSE *ptmp;
     char *name_dup, *sname_dup;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /*
      * This is set according to what we change: application can't set it
      */
@@ -228,6 +228,34 @@ int X509_PURPOSE_add(int id, int trust, int flags,
     /* Get existing entry if any */
     idx = X509_PURPOSE_get_by_id(id);
     /* Need a new entry */
+=======
+  // This is set according to what we change: application can't set it
+  flags &= ~X509_PURPOSE_DYNAMIC;
+  // This will always be set for application modified trust entries
+  flags |= X509_PURPOSE_DYNAMIC_NAME;
+  // Get existing entry if any
+  idx = X509_PURPOSE_get_by_id(id);
+  // Need a new entry
+  if (idx == -1) {
+    if (!(ptmp = OPENSSL_malloc(sizeof(X509_PURPOSE)))) {
+      return 0;
+    }
+    ptmp->flags = X509_PURPOSE_DYNAMIC;
+  } else {
+    ptmp = X509_PURPOSE_get0(idx);
+  }
+
+  // Duplicate the supplied names.
+  name_dup = OPENSSL_strdup(name);
+  sname_dup = OPENSSL_strdup(sname);
+  if (name_dup == NULL || sname_dup == NULL) {
+    if (name_dup != NULL) {
+      OPENSSL_free(name_dup);
+    }
+    if (sname_dup != NULL) {
+      OPENSSL_free(sname_dup);
+    }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     if (idx == -1) {
         if (!(ptmp = OPENSSL_malloc(sizeof(X509_PURPOSE)))) {
             OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
@@ -251,11 +279,38 @@ int X509_PURPOSE_add(int id, int trust, int flags,
         return 0;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* OPENSSL_free existing name if dynamic */
     if (ptmp->flags & X509_PURPOSE_DYNAMIC_NAME) {
         OPENSSL_free(ptmp->name);
         OPENSSL_free(ptmp->sname);
+=======
+  // OPENSSL_free existing name if dynamic
+  if (ptmp->flags & X509_PURPOSE_DYNAMIC_NAME) {
+    OPENSSL_free(ptmp->name);
+    OPENSSL_free(ptmp->sname);
+  }
+  // dup supplied name
+  ptmp->name = name_dup;
+  ptmp->sname = sname_dup;
+  // Keep the dynamic flag of existing entry
+  ptmp->flags &= X509_PURPOSE_DYNAMIC;
+  // Set all other flags
+  ptmp->flags |= flags;
+
+  ptmp->purpose = id;
+  ptmp->trust = trust;
+  ptmp->check_purpose = ck;
+  ptmp->usr_data = arg;
+
+  // If its a new entry manage the dynamic table
+  if (idx == -1) {
+    if (!xptable && !(xptable = sk_X509_PURPOSE_new(xp_cmp))) {
+      xptable_free(ptmp);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* dup supplied name */
     ptmp->name = name_dup;
     ptmp->sname = sname_dup;
@@ -281,7 +336,83 @@ int X509_PURPOSE_add(int id, int trust, int flags,
             xptable_free(ptmp);
             return 0;
         }
+=======
+    if (!sk_X509_PURPOSE_push(xptable, ptmp)) {
+      xptable_free(ptmp);
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  return 1;
+}
+
+static void xptable_free(X509_PURPOSE *p) {
+  if (!p) {
+    return;
+  }
+  if (p->flags & X509_PURPOSE_DYNAMIC) {
+    if (p->flags & X509_PURPOSE_DYNAMIC_NAME) {
+      OPENSSL_free(p->name);
+      OPENSSL_free(p->sname);
+    }
+    OPENSSL_free(p);
+  }
+}
+
+void X509_PURPOSE_cleanup(void) {
+  unsigned int i;
+  sk_X509_PURPOSE_pop_free(xptable, xptable_free);
+  for (i = 0; i < X509_PURPOSE_COUNT; i++) {
+    xptable_free(xstandard + i);
+  }
+  xptable = NULL;
+}
+
+int X509_PURPOSE_get_id(const X509_PURPOSE *xp) { return xp->purpose; }
+
+char *X509_PURPOSE_get0_name(const X509_PURPOSE *xp) { return xp->name; }
+
+char *X509_PURPOSE_get0_sname(const X509_PURPOSE *xp) { return xp->sname; }
+
+int X509_PURPOSE_get_trust(const X509_PURPOSE *xp) { return xp->trust; }
+
+static int nid_cmp(const void *void_a, const void *void_b) {
+  const int *a = void_a, *b = void_b;
+
+  return *a - *b;
+}
+
+int X509_supported_extension(const X509_EXTENSION *ex) {
+  // This table is a list of the NIDs of supported extensions: that is
+  // those which are used by the verify process. If an extension is
+  // critical and doesn't appear in this list then the verify process will
+  // normally reject the certificate. The list must be kept in numerical
+  // order because it will be searched using bsearch.
+
+  static const int supported_nids[] = {
+      NID_netscape_cert_type,    // 71
+      NID_key_usage,             // 83
+      NID_subject_alt_name,      // 85
+      NID_basic_constraints,     // 87
+      NID_certificate_policies,  // 89
+      NID_ext_key_usage,         // 126
+      NID_policy_constraints,    // 401
+      NID_name_constraints,      // 666
+      NID_policy_mappings,       // 747
+      NID_inhibit_any_policy     // 748
+  };
+
+  int ex_nid = OBJ_obj2nid(X509_EXTENSION_get_object(ex));
+
+  if (ex_nid == NID_undef) {
+    return 0;
+  }
+
+  if (bsearch(&ex_nid, supported_nids, sizeof(supported_nids) / sizeof(int),
+              sizeof(int), nid_cmp) != NULL) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return 1;
 }
 
@@ -370,6 +501,7 @@ int X509_supported_extension(X509_EXTENSION *ex)
     return 0;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int setup_dp(X509 *x, DIST_POINT *dp)
 {
     X509_NAME *iname = NULL;
@@ -393,6 +525,15 @@ static int setup_dp(X509 *x, DIST_POINT *dp)
     }
     if (!iname)
         iname = X509_get_issuer_name(x);
+=======
+int x509v3_cache_extensions(X509 *x) {
+  BASIC_CONSTRAINTS *bs;
+  ASN1_BIT_STRING *usage;
+  ASN1_BIT_STRING *ns;
+  EXTENDED_KEY_USAGE *extusage;
+  size_t i;
+  int j;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     return DIST_POINT_set_dpname(dp->distpoint, iname);
 }
@@ -597,6 +738,163 @@ int x509v3_cache_extensions(X509 *x)
 
     CRYPTO_MUTEX_unlock_write(&x->lock);
     return (x->ex_flags & EXFLAG_INVALID) == 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+
+  if (!X509_digest(x, EVP_sha256(), x->cert_hash, NULL)) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  // V1 should mean no extensions ...
+  if (X509_get_version(x) == X509_VERSION_1) {
+    x->ex_flags |= EXFLAG_V1;
+  }
+  // Handle basic constraints
+  if ((bs = X509_get_ext_d2i(x, NID_basic_constraints, &j, NULL))) {
+    if (bs->ca) {
+      x->ex_flags |= EXFLAG_CA;
+    }
+    if (bs->pathlen) {
+      if ((bs->pathlen->type == V_ASN1_NEG_INTEGER) || !bs->ca) {
+        x->ex_flags |= EXFLAG_INVALID;
+        x->ex_pathlen = 0;
+      } else {
+        // TODO(davidben): |ASN1_INTEGER_get| returns -1 on overflow,
+        // which currently acts as if the constraint isn't present. This
+        // works (an overflowing path length constraint may as well be
+        // infinity), but Chromium's verifier simply treats values above
+        // 255 as an error.
+        x->ex_pathlen = ASN1_INTEGER_get(bs->pathlen);
+      }
+    } else {
+      x->ex_pathlen = -1;
+    }
+    BASIC_CONSTRAINTS_free(bs);
+    x->ex_flags |= EXFLAG_BCONS;
+  } else if (j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  // Handle key usage
+  if ((usage = X509_get_ext_d2i(x, NID_key_usage, &j, NULL))) {
+    if (usage->length > 0) {
+      x->ex_kusage = usage->data[0];
+      if (usage->length > 1) {
+        x->ex_kusage |= usage->data[1] << 8;
+      }
+    } else {
+      x->ex_kusage = 0;
+    }
+    x->ex_flags |= EXFLAG_KUSAGE;
+    ASN1_BIT_STRING_free(usage);
+  } else if (j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  x->ex_xkusage = 0;
+  if ((extusage = X509_get_ext_d2i(x, NID_ext_key_usage, &j, NULL))) {
+    x->ex_flags |= EXFLAG_XKUSAGE;
+    for (i = 0; i < sk_ASN1_OBJECT_num(extusage); i++) {
+      switch (OBJ_obj2nid(sk_ASN1_OBJECT_value(extusage, i))) {
+        case NID_server_auth:
+          x->ex_xkusage |= XKU_SSL_SERVER;
+          break;
+
+        case NID_client_auth:
+          x->ex_xkusage |= XKU_SSL_CLIENT;
+          break;
+
+        case NID_email_protect:
+          x->ex_xkusage |= XKU_SMIME;
+          break;
+
+        case NID_code_sign:
+          x->ex_xkusage |= XKU_CODE_SIGN;
+          break;
+
+        case NID_ms_sgc:
+        case NID_ns_sgc:
+          x->ex_xkusage |= XKU_SGC;
+          break;
+
+        case NID_OCSP_sign:
+          x->ex_xkusage |= XKU_OCSP_SIGN;
+          break;
+
+        case NID_time_stamp:
+          x->ex_xkusage |= XKU_TIMESTAMP;
+          break;
+
+        case NID_dvcs:
+          x->ex_xkusage |= XKU_DVCS;
+          break;
+
+        case NID_anyExtendedKeyUsage:
+          x->ex_xkusage |= XKU_ANYEKU;
+          break;
+      }
+    }
+    sk_ASN1_OBJECT_pop_free(extusage, ASN1_OBJECT_free);
+  } else if (j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+
+  if ((ns = X509_get_ext_d2i(x, NID_netscape_cert_type, &j, NULL))) {
+    if (ns->length > 0) {
+      x->ex_nscert = ns->data[0];
+    } else {
+      x->ex_nscert = 0;
+    }
+    x->ex_flags |= EXFLAG_NSCERT;
+    ASN1_BIT_STRING_free(ns);
+  } else if (j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  x->skid = X509_get_ext_d2i(x, NID_subject_key_identifier, &j, NULL);
+  if (x->skid == NULL && j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  x->akid = X509_get_ext_d2i(x, NID_authority_key_identifier, &j, NULL);
+  if (x->akid == NULL && j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  // Does subject name match issuer ?
+  if (!X509_NAME_cmp(X509_get_subject_name(x), X509_get_issuer_name(x))) {
+    x->ex_flags |= EXFLAG_SI;
+    // If SKID matches AKID also indicate self signed
+    if (X509_check_akid(x, x->akid) == X509_V_OK &&
+        !ku_reject(x, KU_KEY_CERT_SIGN)) {
+      x->ex_flags |= EXFLAG_SS;
+    }
+  }
+  x->altname = X509_get_ext_d2i(x, NID_subject_alt_name, &j, NULL);
+  if (x->altname == NULL && j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  x->nc = X509_get_ext_d2i(x, NID_name_constraints, &j, NULL);
+  if (x->nc == NULL && j != -1) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+  if (!setup_crldp(x)) {
+    x->ex_flags |= EXFLAG_INVALID;
+  }
+
+  for (j = 0; j < X509_get_ext_count(x); j++) {
+    const X509_EXTENSION *ex = X509_get_ext(x, j);
+    if (OBJ_obj2nid(X509_EXTENSION_get_object(ex)) == NID_freshest_crl) {
+      x->ex_flags |= EXFLAG_FRESHEST;
+    }
+    if (!X509_EXTENSION_get_critical(ex)) {
+      continue;
+    }
+    if (!X509_supported_extension(ex)) {
+      x->ex_flags |= EXFLAG_CRITICAL;
+      break;
+    }
+  }
+  x->ex_flags |= EXFLAG_SET;
+
+  CRYPTO_MUTEX_unlock_write(&x->lock);
+  return (x->ex_flags & EXFLAG_INVALID) == 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /* check_ca returns one if |x| should be considered a CA certificate and zero
@@ -781,9 +1079,42 @@ static int check_purpose_timestamp_sign(const X509_PURPOSE *xp, const X509 *x,
     return 1;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int no_check(const X509_PURPOSE *xp, const X509 *x, int ca)
 {
     return 1;
+=======
+static int no_check(const X509_PURPOSE *xp, const X509 *x, int ca) { return 1; }
+
+// Various checks to see if one certificate issued the second. This can be
+// used to prune a set of possible issuer certificates which have been looked
+// up using some simple method such as by subject name. These are: 1. Check
+// issuer_name(subject) == subject_name(issuer) 2. If akid(subject) exists
+// check it matches issuer 3. If key_usage(issuer) exists check it supports
+// certificate signing returns 0 for OK, positive for reason for mismatch,
+// reasons match codes for X509_verify_cert()
+
+int X509_check_issued(X509 *issuer, X509 *subject) {
+  if (X509_NAME_cmp(X509_get_subject_name(issuer),
+                    X509_get_issuer_name(subject))) {
+    return X509_V_ERR_SUBJECT_ISSUER_MISMATCH;
+  }
+  if (!x509v3_cache_extensions(issuer) || !x509v3_cache_extensions(subject)) {
+    return X509_V_ERR_UNSPECIFIED;
+  }
+
+  if (subject->akid) {
+    int ret = X509_check_akid(issuer, subject->akid);
+    if (ret != X509_V_OK) {
+      return ret;
+    }
+  }
+
+  if (ku_reject(issuer, KU_KEY_CERT_SIGN)) {
+    return X509_V_ERR_KEYUSAGE_NO_CERTSIGN;
+  }
+  return X509_V_OK;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*

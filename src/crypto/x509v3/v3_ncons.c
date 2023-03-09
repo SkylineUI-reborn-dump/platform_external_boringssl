@@ -1,4 +1,3 @@
-/* v3_ncons.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -70,8 +69,13 @@
 
 
 static void *v2i_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                   X509V3_CTX *ctx,
                                   STACK_OF(CONF_VALUE) *nval);
+=======
+                                  const X509V3_CTX *ctx,
+                                  const STACK_OF(CONF_VALUE) *nval);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 static int i2r_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method, void *a,
                                 BIO *bp, int ind);
 static int do_i2r_name_constraints(const X509V3_EXT_METHOD *method,
@@ -114,6 +118,7 @@ IMPLEMENT_ASN1_ALLOC_FUNCTIONS(GENERAL_SUBTREE)
 IMPLEMENT_ASN1_ALLOC_FUNCTIONS(NAME_CONSTRAINTS)
 
 static void *v2i_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                   X509V3_CTX *ctx, STACK_OF(CONF_VALUE) *nval)
 {
     size_t i;
@@ -145,10 +150,50 @@ static void *v2i_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method,
         if (!*ptree || !sk_GENERAL_SUBTREE_push(*ptree, sub))
             goto memerr;
         sub = NULL;
+=======
+                                  const X509V3_CTX *ctx,
+                                  const STACK_OF(CONF_VALUE) *nval) {
+  STACK_OF(GENERAL_SUBTREE) **ptree = NULL;
+  NAME_CONSTRAINTS *ncons = NULL;
+  GENERAL_SUBTREE *sub = NULL;
+  ncons = NAME_CONSTRAINTS_new();
+  if (!ncons) {
+    goto err;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(nval); i++) {
+    const CONF_VALUE *val = sk_CONF_VALUE_value(nval, i);
+    CONF_VALUE tval;
+    if (!strncmp(val->name, "permitted", 9) && val->name[9]) {
+      ptree = &ncons->permittedSubtrees;
+      tval.name = val->name + 10;
+    } else if (!strncmp(val->name, "excluded", 8) && val->name[8]) {
+      ptree = &ncons->excludedSubtrees;
+      tval.name = val->name + 9;
+    } else {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_SYNTAX);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    tval.value = val->value;
+    sub = GENERAL_SUBTREE_new();
+    if (!v2i_GENERAL_NAME_ex(sub->base, method, ctx, &tval, 1)) {
+      goto err;
+    }
+    if (!*ptree) {
+      *ptree = sk_GENERAL_SUBTREE_new_null();
+    }
+    if (!*ptree || !sk_GENERAL_SUBTREE_push(*ptree, sub)) {
+      goto err;
+    }
+    sub = NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     return ncons;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
  memerr:
     OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
  err:
@@ -158,6 +203,12 @@ static void *v2i_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method,
         GENERAL_SUBTREE_free(sub);
 
     return NULL;
+=======
+err:
+  NAME_CONSTRAINTS_free(ncons);
+  GENERAL_SUBTREE_free(sub);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 static int i2r_NAME_CONSTRAINTS(const X509V3_EXT_METHOD *method, void *a,

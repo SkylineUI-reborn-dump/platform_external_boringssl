@@ -1,4 +1,3 @@
-/* crypto/x509/x509_req.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -102,6 +101,7 @@ int X509_REQ_check_private_key(X509_REQ *x, EVP_PKEY *k)
         OPENSSL_PUT_ERROR(X509, X509_R_KEY_TYPE_MISMATCH);
         break;
     case -2:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if (k->type == EVP_PKEY_EC) {
             OPENSSL_PUT_ERROR(X509, ERR_R_EC_LIB);
             break;
@@ -113,6 +113,14 @@ int X509_REQ_check_private_key(X509_REQ *x, EVP_PKEY *k)
         }
         OPENSSL_PUT_ERROR(X509, X509_R_UNKNOWN_KEY_TYPE);
     }
+=======
+      if (EVP_PKEY_id(k) == EVP_PKEY_EC) {
+        OPENSSL_PUT_ERROR(X509, ERR_R_EC_LIB);
+        break;
+      }
+      OPENSSL_PUT_ERROR(X509, X509_R_UNKNOWN_KEY_TYPE);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     EVP_PKEY_free(xk);
     return (ok);

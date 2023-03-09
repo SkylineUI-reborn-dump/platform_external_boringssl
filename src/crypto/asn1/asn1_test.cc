@@ -901,12 +901,56 @@ static std::string ASN1StringToStdString(const ASN1_STRING *str) {
                      ASN1_STRING_get0_data(str) + ASN1_STRING_length(str));
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+static bool ASN1Time_check_posix(const ASN1_TIME *s, int64_t t) {
+  struct tm stm, ttm;
+  int day, sec;
+
+  switch (ASN1_STRING_type(s)) {
+    case V_ASN1_GENERALIZEDTIME:
+      if (!asn1_generalizedtime_to_tm(&stm, s)) {
+        return false;
+      }
+      break;
+    case V_ASN1_UTCTIME:
+      if (!asn1_utctime_to_tm(&stm, s, /*allow_timezone_offset=*/1)) {
+        return false;
+      }
+      break;
+    default:
+      return false;
+  }
+  if (!OPENSSL_posix_to_tm(t, &ttm) ||
+      !OPENSSL_gmtime_diff(&day, &sec, &ttm, &stm)) {
+    return false;
+  }
+  return day == 0 && sec ==0;
+}
+
+static std::string PrintStringToBIO(const ASN1_STRING *str,
+                                    int (*print_func)(BIO *,
+                                                      const ASN1_STRING *)) {
+  const uint8_t *data;
+  size_t len;
+  bssl::UniquePtr<BIO> bio(BIO_new(BIO_s_mem()));
+  if (!bio ||  //
+      !print_func(bio.get(), str) ||
+      !BIO_mem_contents(bio.get(), &data, &len)) {
+    ADD_FAILURE() << "Could not print to BIO";
+    return "";
+  }
+  return std::string(data, data + len);
+}
+
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 TEST(ASN1Test, SetTime) {
   static const struct {
-    time_t time;
+    int64_t time;
     const char *generalized;
     const char *utc;
   } kTests[] = {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     {-631152001, "19491231235959Z", nullptr},
     {-631152000, "19500101000000Z", "500101000000Z"},
     {0, "19700101000000Z", "700101000000Z"},
@@ -923,8 +967,35 @@ TEST(ASN1Test, SetTime) {
     {253402300799, "99991231235959Z", nullptr},
     {253402300800, nullptr, nullptr},
 #endif
+=======
+      {-631152001, "19491231235959Z", nullptr, "Dec 31 23:59:59 1949 GMT"},
+      {-631152000, "19500101000000Z", "500101000000Z",
+       "Jan  1 00:00:00 1950 GMT"},
+      {0, "19700101000000Z", "700101000000Z", "Jan  1 00:00:00 1970 GMT"},
+      {981173106, "20010203040506Z", "010203040506Z",
+       "Feb  3 04:05:06 2001 GMT"},
+      {951804000, "20000229060000Z", "000229060000Z",
+       "Feb 29 06:00:00 2000 GMT"},
+      // NASA says this is the correct time for posterity.
+      {-16751025, "19690621025615Z", "690621025615Z",
+       "Jun 21 02:56:15 1969 GMT"},
+      // -1 is sometimes used as an error value. Ensure we correctly handle it.
+      {-1, "19691231235959Z", "691231235959Z", "Dec 31 23:59:59 1969 GMT"},
+      {2524607999, "20491231235959Z", "491231235959Z",
+       "Dec 31 23:59:59 2049 GMT"},
+      {2524608000, "20500101000000Z", nullptr, "Jan  1 00:00:00 2050 GMT"},
+      // Test boundary conditions.
+      {-62167219200, "00000101000000Z", nullptr, "Jan  1 00:00:00 0 GMT"},
+      {-62167219201, nullptr, nullptr, nullptr},
+      {253402300799, "99991231235959Z", nullptr, "Dec 31 23:59:59 9999 GMT"},
+      {253402300800, nullptr, nullptr, nullptr},
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
   };
   for (const auto &t : kTests) {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    int64_t tt;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     SCOPED_TRACE(t.time);
 #if defined(OPENSSL_WINDOWS)
     // Windows |time_t| functions can only handle 1970 through 3000. See
@@ -939,6 +1010,14 @@ TEST(ASN1Test, SetTime) {
       ASSERT_TRUE(utc);
       EXPECT_EQ(V_ASN1_UTCTIME, ASN1_STRING_type(utc.get()));
       EXPECT_EQ(t.utc, ASN1StringToStdString(utc.get()));
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      EXPECT_TRUE(ASN1Time_check_posix(utc.get(), t.time));
+      EXPECT_EQ(ASN1_TIME_to_posix(utc.get(), &tt), 1);
+      EXPECT_EQ(tt, t.time);
+      EXPECT_EQ(PrintStringToBIO(utc.get(), &ASN1_UTCTIME_print), t.printed);
+      EXPECT_EQ(PrintStringToBIO(utc.get(), &ASN1_TIME_print), t.printed);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
       EXPECT_FALSE(utc);
     }
@@ -949,11 +1028,22 @@ TEST(ASN1Test, SetTime) {
       ASSERT_TRUE(generalized);
       EXPECT_EQ(V_ASN1_GENERALIZEDTIME, ASN1_STRING_type(generalized.get()));
       EXPECT_EQ(t.generalized, ASN1StringToStdString(generalized.get()));
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      EXPECT_TRUE(ASN1Time_check_posix(generalized.get(), t.time));
+      EXPECT_EQ(ASN1_TIME_to_posix(generalized.get(), &tt), 1);
+      EXPECT_EQ(tt, t.time);
+      EXPECT_EQ(
+          PrintStringToBIO(generalized.get(), &ASN1_GENERALIZEDTIME_print),
+          t.printed);
+      EXPECT_EQ(PrintStringToBIO(generalized.get(), &ASN1_TIME_print),
+                t.printed);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
       EXPECT_FALSE(generalized);
     }
 
-    bssl::UniquePtr<ASN1_TIME> choice(ASN1_TIME_set(nullptr, t.time));
+    bssl::UniquePtr<ASN1_TIME> choice(ASN1_TIME_set_posix(nullptr, t.time));
     if (t.generalized) {
       ASSERT_TRUE(choice);
       if (t.utc) {
@@ -963,12 +1053,87 @@ TEST(ASN1Test, SetTime) {
         EXPECT_EQ(V_ASN1_GENERALIZEDTIME, ASN1_STRING_type(choice.get()));
         EXPECT_EQ(t.generalized, ASN1StringToStdString(choice.get()));
       }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      EXPECT_TRUE(ASN1Time_check_posix(choice.get(), t.time));
+      EXPECT_EQ(ASN1_TIME_to_posix(choice.get(), &tt), 1);
+      EXPECT_EQ(tt, t.time);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
       EXPECT_FALSE(choice);
     }
   }
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+TEST(ASN1Test, TimeSetString) {
+  bssl::UniquePtr<ASN1_STRING> s(ASN1_STRING_new());
+  ASSERT_TRUE(s);
+
+  ASSERT_TRUE(ASN1_UTCTIME_set_string(s.get(), "700101000000Z"));
+  EXPECT_EQ(V_ASN1_UTCTIME, ASN1_STRING_type(s.get()));
+  EXPECT_EQ("700101000000Z", ASN1StringToStdString(s.get()));
+
+  ASSERT_TRUE(ASN1_GENERALIZEDTIME_set_string(s.get(), "19700101000000Z"));
+  EXPECT_EQ(V_ASN1_GENERALIZEDTIME, ASN1_STRING_type(s.get()));
+  EXPECT_EQ("19700101000000Z", ASN1StringToStdString(s.get()));
+
+  // |ASN1_TIME_set_string| accepts either format. It relies on there being no
+  // overlap between the two.
+  ASSERT_TRUE(ASN1_TIME_set_string(s.get(), "700101000000Z"));
+  EXPECT_EQ(V_ASN1_UTCTIME, ASN1_STRING_type(s.get()));
+  EXPECT_EQ("700101000000Z", ASN1StringToStdString(s.get()));
+
+  ASSERT_TRUE(ASN1_TIME_set_string(s.get(), "19700101000000Z"));
+  EXPECT_EQ(V_ASN1_GENERALIZEDTIME, ASN1_STRING_type(s.get()));
+  EXPECT_EQ("19700101000000Z", ASN1StringToStdString(s.get()));
+
+  // Invalid inputs are rejected.
+  EXPECT_FALSE(ASN1_UTCTIME_set_string(s.get(), "nope"));
+  EXPECT_FALSE(ASN1_UTCTIME_set_string(s.get(), "19700101000000Z"));
+  EXPECT_FALSE(ASN1_GENERALIZEDTIME_set_string(s.get(), "nope"));
+  EXPECT_FALSE(ASN1_GENERALIZEDTIME_set_string(s.get(), "700101000000Z"));
+  EXPECT_FALSE(ASN1_TIME_set_string(s.get(), "nope"));
+
+  // If passed a null object, the functions validate the input without writing
+  // to anything.
+  EXPECT_TRUE(ASN1_UTCTIME_set_string(nullptr, "700101000000Z"));
+  EXPECT_TRUE(ASN1_TIME_set_string(nullptr, "700101000000Z"));
+  EXPECT_TRUE(ASN1_GENERALIZEDTIME_set_string(nullptr, "19700101000000Z"));
+  EXPECT_TRUE(ASN1_TIME_set_string(nullptr, "19700101000000Z"));
+  EXPECT_FALSE(ASN1_UTCTIME_set_string(nullptr, "nope"));
+  EXPECT_FALSE(ASN1_GENERALIZEDTIME_set_string(nullptr, "nope"));
+  EXPECT_FALSE(ASN1_TIME_set_string(nullptr, "nope"));
+}
+
+TEST(ASN1Test, AdjTime) {
+  struct tm tm1, tm2;
+  int days, secs;
+
+  OPENSSL_posix_to_tm(0, &tm1);
+  OPENSSL_posix_to_tm(0, &tm2);
+  // Test values that are too large and should be rejected.
+  EXPECT_FALSE(OPENSSL_gmtime_adj(&tm1, INT_MIN, INT_MIN));
+  EXPECT_FALSE(OPENSSL_gmtime_adj(&tm1, INT_MAX, INT_MAX));
+  // Basic functionality.
+  EXPECT_TRUE(OPENSSL_gmtime_adj(&tm2, 1, 1));
+  EXPECT_TRUE(OPENSSL_gmtime_diff(&days, &secs, &tm1, &tm2));
+  EXPECT_EQ(days, 1);
+  EXPECT_EQ(secs, 1);
+  EXPECT_TRUE(OPENSSL_gmtime_diff(&days, &secs, &tm2, &tm1));
+  EXPECT_EQ(days, -1);
+  EXPECT_EQ(secs, -1);
+  // Test a value of days that is very large, but valid.
+  EXPECT_TRUE(OPENSSL_gmtime_adj(&tm2, 2932800, 0));
+  EXPECT_TRUE(OPENSSL_gmtime_diff(&days, &secs, &tm1, &tm2));
+  EXPECT_EQ(days, 2932801);
+  EXPECT_EQ(secs, 1);
+  EXPECT_TRUE(OPENSSL_gmtime_diff(&days, &secs, &tm2, &tm1));
+  EXPECT_EQ(days, -2932801);
+  EXPECT_EQ(secs, -1);
+}
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 static std::vector<uint8_t> StringToVector(const std::string &str) {
   return std::vector<uint8_t>(str.begin(), str.end());
 }
@@ -1192,6 +1357,7 @@ TEST(ASN1Test, StringPrintEx) {
     SCOPED_TRACE(t.flags);
 
     bssl::UniquePtr<ASN1_STRING> str(ASN1_STRING_type_new(t.type));
+    ASSERT_TRUE(str);
     ASSERT_TRUE(ASN1_STRING_set(str.get(), t.data.data(), t.data.size()));
     str->flags = t.str_flags;
 
@@ -1234,6 +1400,7 @@ TEST(ASN1Test, StringPrintEx) {
     SCOPED_TRACE(t.flags);
 
     bssl::UniquePtr<ASN1_STRING> str(ASN1_STRING_type_new(t.type));
+    ASSERT_TRUE(str);
     ASSERT_TRUE(ASN1_STRING_set(str.get(), t.data.data(), t.data.size()));
     str->flags = t.str_flags;
 
@@ -2270,6 +2437,137 @@ TEST(ASN1Test, MissingRequiredField) {
     (*obj).*field = nullptr;
     EXPECT_EQ(-1, i2d_REQUIRED_FIELD(obj.get(), nullptr));
   }
+}
+
+struct BOOLEANS {
+  ASN1_BOOLEAN required;
+  ASN1_BOOLEAN optional;
+  ASN1_BOOLEAN default_true;
+  ASN1_BOOLEAN default_false;
+};
+
+DECLARE_ASN1_FUNCTIONS(BOOLEANS)
+ASN1_SEQUENCE(BOOLEANS) = {
+    ASN1_SIMPLE(BOOLEANS, required, ASN1_BOOLEAN),
+    ASN1_IMP_OPT(BOOLEANS, optional, ASN1_BOOLEAN, 1),
+    // Although not actually optional, |ASN1_TBOOLEAN| and |ASN1_FBOOLEAN| need
+    // to be marked optional in the template.
+    ASN1_IMP_OPT(BOOLEANS, default_true, ASN1_TBOOLEAN, 2),
+    ASN1_IMP_OPT(BOOLEANS, default_false, ASN1_FBOOLEAN, 3),
+} ASN1_SEQUENCE_END(BOOLEANS)
+IMPLEMENT_ASN1_FUNCTIONS(BOOLEANS)
+
+TEST(ASN1Test, OptionalAndDefaultBooleans) {
+  std::unique_ptr<BOOLEANS, decltype(&BOOLEANS_free)> obj(nullptr,
+                                                          BOOLEANS_free);
+
+  // A default-constructed object should use, respectively, omitted, omitted,
+  // TRUE, FALSE.
+  //
+  // TODO(davidben): Is the first one a bug? It seems more consistent for a
+  // required BOOLEAN default to FALSE. |FOO_new| typically default-initializes
+  // fields valid states. (Though there are exceptions. CHOICE, ANY, and OBJECT
+  // IDENTIFIER are default-initialized to something invalid.)
+  obj.reset(BOOLEANS_new());
+  ASSERT_TRUE(obj);
+  EXPECT_EQ(obj->required, ASN1_BOOLEAN_NONE);
+  EXPECT_EQ(obj->optional, ASN1_BOOLEAN_NONE);
+  EXPECT_EQ(obj->default_true, ASN1_BOOLEAN_TRUE);
+  EXPECT_EQ(obj->default_false, ASN1_BOOLEAN_FALSE);
+
+  // Trying to serialize this should fail, because |obj->required| is omitted.
+  EXPECT_EQ(-1, i2d_BOOLEANS(obj.get(), nullptr));
+
+  // Otherwise, this object is serializable. Most fields are omitted, due to
+  // them being optional or defaulted.
+  static const uint8_t kFieldsOmitted[] = {0x30, 0x03, 0x01, 0x01, 0x00};
+  obj->required = 0;
+  TestSerialize(obj.get(), i2d_BOOLEANS, kFieldsOmitted);
+
+  const uint8_t *der = kFieldsOmitted;
+  obj.reset(d2i_BOOLEANS(nullptr, &der, sizeof(kFieldsOmitted)));
+  ASSERT_TRUE(obj);
+  EXPECT_EQ(obj->required, ASN1_BOOLEAN_FALSE);
+  EXPECT_EQ(obj->optional, ASN1_BOOLEAN_NONE);
+  EXPECT_EQ(obj->default_true, ASN1_BOOLEAN_TRUE);
+  EXPECT_EQ(obj->default_false, ASN1_BOOLEAN_FALSE);
+
+  // Include the optinonal fields instead.
+  static const uint8_t kFieldsIncluded[] = {0x30, 0x0c, 0x01, 0x01, 0xff,
+                                            0x81, 0x01, 0x00, 0x82, 0x01,
+                                            0x00, 0x83, 0x01, 0xff};
+  obj->required = ASN1_BOOLEAN_TRUE;
+  obj->optional = ASN1_BOOLEAN_FALSE;
+  obj->default_true = ASN1_BOOLEAN_FALSE;
+  obj->default_false = ASN1_BOOLEAN_TRUE;
+  TestSerialize(obj.get(), i2d_BOOLEANS, kFieldsIncluded);
+
+  der = kFieldsIncluded;
+  obj.reset(d2i_BOOLEANS(nullptr, &der, sizeof(kFieldsIncluded)));
+  ASSERT_TRUE(obj);
+  EXPECT_EQ(obj->required, ASN1_BOOLEAN_TRUE);
+  EXPECT_EQ(obj->optional, ASN1_BOOLEAN_FALSE);
+  EXPECT_EQ(obj->default_true, ASN1_BOOLEAN_FALSE);
+  EXPECT_EQ(obj->default_false, ASN1_BOOLEAN_TRUE);
+
+  // TODO(https://crbug.com/boringssl/354): Reject explicit DEFAULTs.
+}
+
+// EXPLICIT_BOOLEAN is a [1] EXPLICIT BOOLEAN.
+ASN1_ITEM_TEMPLATE(EXPLICIT_BOOLEAN) = ASN1_EX_TEMPLATE_TYPE(ASN1_TFLG_EXPLICIT,
+                                                             1,
+                                                             EXPLICIT_BOOLEAN,
+                                                             ASN1_BOOLEAN)
+ASN1_ITEM_TEMPLATE_END(EXPLICIT_BOOLEAN)
+
+// EXPLICIT_OCTET_STRING is a [2] EXPLICIT OCTET STRING.
+ASN1_ITEM_TEMPLATE(EXPLICIT_OCTET_STRING) = ASN1_EX_TEMPLATE_TYPE(
+    ASN1_TFLG_EXPLICIT, 2, EXPLICIT_OCTET_STRING, ASN1_OCTET_STRING)
+ASN1_ITEM_TEMPLATE_END(EXPLICIT_OCTET_STRING)
+
+// DOUBLY_TAGGED is
+//   SEQUENCE {
+//     b   [3] EXPLICIT [1] EXPLICIT BOOLEAN OPTIONAL,
+//     oct [4] EXPLICIT [2] EXPLICIT OCTET STRING OPTIONAL }
+// with explicit tagging.
+struct DOUBLY_TAGGED {
+  ASN1_BOOLEAN b;
+  ASN1_OCTET_STRING *oct;
+};
+
+DECLARE_ASN1_FUNCTIONS(DOUBLY_TAGGED)
+ASN1_SEQUENCE(DOUBLY_TAGGED) = {
+    ASN1_EXP_OPT(DOUBLY_TAGGED, b, EXPLICIT_BOOLEAN, 3),
+    ASN1_EXP_OPT(DOUBLY_TAGGED, oct, EXPLICIT_OCTET_STRING, 4),
+} ASN1_SEQUENCE_END(DOUBLY_TAGGED)
+IMPLEMENT_ASN1_FUNCTIONS(DOUBLY_TAGGED)
+
+// Test that optional fields with two layers of explicit tagging are correctly
+// handled.
+TEST(ASN1Test, DoublyTagged) {
+  std::unique_ptr<DOUBLY_TAGGED, decltype(&DOUBLY_TAGGED_free)> obj(
+      nullptr, DOUBLY_TAGGED_free);
+
+  // Both fields missing.
+  static const uint8_t kOmitted[] = {0x30, 0x00};
+  const uint8_t *inp = kOmitted;
+  obj.reset(d2i_DOUBLY_TAGGED(nullptr, &inp, sizeof(kOmitted)));
+  ASSERT_TRUE(obj);
+  EXPECT_EQ(obj->b, -1);
+  EXPECT_FALSE(obj->oct);
+  TestSerialize(obj.get(), i2d_DOUBLY_TAGGED, kOmitted);
+
+  // Both fields present, true and the empty string.
+  static const uint8_t kTrueEmpty[] = {0x30, 0x0d, 0xa3, 0x05, 0xa1,
+                                       0x03, 0x01, 0x01, 0xff, 0xa4,
+                                       0x04, 0xa2, 0x02, 0x04, 0x00};
+  inp = kTrueEmpty;
+  obj.reset(d2i_DOUBLY_TAGGED(nullptr, &inp, sizeof(kTrueEmpty)));
+  ASSERT_TRUE(obj);
+  EXPECT_EQ(obj->b, 0xff);
+  ASSERT_TRUE(obj->oct);
+  EXPECT_EQ(ASN1_STRING_length(obj->oct), 0);
+  TestSerialize(obj.get(), i2d_DOUBLY_TAGGED, kTrueEmpty);
 }
 
 #endif  // !WINDOWS || !SHARED_LIBRARY

@@ -372,6 +372,7 @@ static int X509_REVOKED_cmp(const X509_REVOKED **a, const X509_REVOKED **b)
     return ASN1_STRING_cmp((*a)->serialNumber, (*b)->serialNumber);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int X509_CRL_add0_revoked(X509_CRL *crl, X509_REVOKED *rev)
 {
     X509_CRL_INFO *inf;
@@ -384,6 +385,19 @@ int X509_CRL_add0_revoked(X509_CRL *crl, X509_REVOKED *rev)
     }
     inf->enc.modified = 1;
     return 1;
+=======
+int X509_CRL_add0_revoked(X509_CRL *crl, X509_REVOKED *rev) {
+  X509_CRL_INFO *inf;
+  inf = crl->crl;
+  if (!inf->revoked) {
+    inf->revoked = sk_X509_REVOKED_new(X509_REVOKED_cmp);
+  }
+  if (!inf->revoked || !sk_X509_REVOKED_push(inf->revoked, rev)) {
+    return 0;
+  }
+  asn1_encoding_clear(&inf->enc);
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509_CRL_verify(X509_CRL *crl, EVP_PKEY *pkey)

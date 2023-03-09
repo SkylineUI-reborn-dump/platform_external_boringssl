@@ -78,7 +78,8 @@ static int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cont, int *out_omit,
 static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
                             int skcontlen, const ASN1_ITEM *item, int do_sort);
 static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
-                                const ASN1_TEMPLATE *tt, int tag, int aclass);
+                                const ASN1_TEMPLATE *tt, int tag, int aclass,
+                                int optional);
 
 /*
  * Top level i2d equivalents
@@ -106,6 +107,23 @@ int ASN1_item_i2d(ASN1_VALUE *val, unsigned char **out, const ASN1_ITEM *it)
         *out = buf;
         return len;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    buf = OPENSSL_malloc(len);
+    if (!buf) {
+      return -1;
+    }
+    p = buf;
+    int len2 = ASN1_item_ex_i2d(&val, &p, it, /*tag=*/-1, /*aclass=*/0);
+    if (len2 <= 0) {
+      OPENSSL_free(buf);
+      return len2;
+    }
+    assert(len == len2);
+    *out = buf;
+    return len;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     return ASN1_item_ex_i2d(&val, out, it, /*tag=*/-1, /*aclass=*/0);
 }
@@ -138,12 +156,33 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
     /* If not overridding the tag, |aclass| is ignored and should be zero. */
     assert(tag != -1 || aclass == 0);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* All fields are pointers, except for boolean |ASN1_ITYPE_PRIMITIVE|s.
      * Optional primitives are handled later. */
     if ((it->itype != ASN1_ITYPE_PRIMITIVE) && !*pval) {
         if (optional) {
             return 0;
+=======
+  // All fields are pointers, except for boolean |ASN1_ITYPE_PRIMITIVE|s.
+  // Optional primitives are handled later.
+  if ((it->itype != ASN1_ITYPE_PRIMITIVE) && !*pval) {
+    if (optional) {
+      return 0;
+    }
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_VALUE);
+    return -1;
+  }
+
+  switch (it->itype) {
+    case ASN1_ITYPE_PRIMITIVE:
+      if (it->templates) {
+        // This is an |ASN1_ITEM_TEMPLATE|.
+        if (it->templates->flags & ASN1_TFLG_OPTIONAL) {
+          OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+          return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_VALUE);
         return -1;
     }
@@ -159,6 +198,12 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
             return asn1_template_ex_i2d(pval, out, it->templates, tag, aclass);
         }
         return asn1_i2d_ex_primitive(pval, out, it, tag, aclass, optional);
+=======
+        return asn1_template_ex_i2d(pval, out, it->templates, tag, aclass,
+                                    optional);
+      }
+      return asn1_i2d_ex_primitive(pval, out, it, tag, aclass, optional);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case ASN1_ITYPE_MSTRING:
         /*
@@ -172,6 +217,7 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
         return asn1_i2d_ex_primitive(pval, out, it, -1, 0, optional);
 
     case ASN1_ITYPE_CHOICE: {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         /*
          * It never makes sense for CHOICE types to have implicit tagging, so if
          * tag != -1, then this looks like an error in the template.
@@ -192,9 +238,30 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
         }
         ASN1_VALUE **pchval = asn1_get_field_ptr(pval, chtt);
         return asn1_template_ex_i2d(pchval, out, chtt, -1, 0);
+=======
+      // It never makes sense for CHOICE types to have implicit tagging, so if
+      // tag != -1, then this looks like an error in the template.
+      if (tag != -1) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+        return -1;
+      }
+      i = asn1_get_choice_selector(pval, it);
+      if (i < 0 || i >= it->tcount) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_NO_MATCHING_CHOICE_TYPE);
+        return -1;
+      }
+      const ASN1_TEMPLATE *chtt = it->templates + i;
+      if (chtt->flags & ASN1_TFLG_OPTIONAL) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+        return -1;
+      }
+      ASN1_VALUE **pchval = asn1_get_field_ptr(pval, chtt);
+      return asn1_template_ex_i2d(pchval, out, chtt, -1, 0, /*optional=*/0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     case ASN1_ITYPE_EXTERN: {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         /* If new style i2d it does all the work */
         const ASN1_EXTERN_FUNCS *ef = it->funcs;
         int ret = ef->asn1_ex_i2d(pval, out, it, tag, aclass);
@@ -206,6 +273,23 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
             return -1;
         }
         return ret;
+=======
+      // We don't support implicit tagging with external types.
+      if (tag != -1) {
+        OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+        return -1;
+      }
+      const ASN1_EXTERN_FUNCS *ef = it->funcs;
+      int ret = ef->asn1_ex_i2d(pval, out, it);
+      if (ret == 0) {
+        // |asn1_ex_i2d| should never return zero. We have already checked
+        // for optional values generically, and |ASN1_ITYPE_EXTERN| fields
+        // must be pointers.
+        OPENSSL_PUT_ERROR(ASN1, ERR_R_INTERNAL_ERROR);
+        return -1;
+      }
+      return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     case ASN1_ITYPE_SEQUENCE: {
@@ -223,6 +307,7 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
             tag = V_ASN1_SEQUENCE;
             aclass = V_ASN1_UNIVERSAL;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         /* First work out sequence content length */
         for (i = 0, tt = it->templates; i < it->tcount; tt++, i++) {
             const ASN1_TEMPLATE *seqtt;
@@ -236,6 +321,13 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
             if (tmplen == -1 || (tmplen > INT_MAX - seqcontlen))
                 return -1;
             seqcontlen += tmplen;
+=======
+        pseqval = asn1_get_field_ptr(pval, seqtt);
+        tmplen =
+            asn1_template_ex_i2d(pseqval, NULL, seqtt, -1, 0, /*optional=*/0);
+        if (tmplen == -1 || (tmplen > INT_MAX - seqcontlen)) {
+          return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
 
         seqlen = ASN1_object_size(/*constructed=*/1, seqcontlen, tag);
@@ -255,6 +347,26 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
             }
         }
         return seqlen;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+      }
+      // Output SEQUENCE header
+      ASN1_put_object(out, /*constructed=*/1, seqcontlen, tag, aclass);
+      for (i = 0, tt = it->templates; i < it->tcount; tt++, i++) {
+        const ASN1_TEMPLATE *seqtt;
+        ASN1_VALUE **pseqval;
+        seqtt = asn1_do_adb(pval, tt, 1);
+        if (!seqtt) {
+          return -1;
+        }
+        pseqval = asn1_get_field_ptr(pval, seqtt);
+        if (asn1_template_ex_i2d(pseqval, out, seqtt, -1, 0, /*optional=*/0) <
+            0) {
+          return -1;
+        }
+      }
+      return seqlen;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     default:
@@ -263,16 +375,30 @@ int asn1_item_ex_i2d_opt(ASN1_VALUE **pval, unsigned char **out,
     }
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* asn1_template_ex_i2d behaves like |asn1_item_ex_i2d_opt| but uses an
  * |ASN1_TEMPLATE| instead of an |ASN1_ITEM|. An |ASN1_TEMPLATE| wraps an
  * |ASN1_ITEM| with modifiers such as tagging, SEQUENCE or SET, etc. Instead of
  * taking an |optional| parameter, it uses the |ASN1_TFLG_OPTIONAL| flag. */
+=======
+// asn1_template_ex_i2d behaves like |asn1_item_ex_i2d_opt| but uses an
+// |ASN1_TEMPLATE| instead of an |ASN1_ITEM|. An |ASN1_TEMPLATE| wraps an
+// |ASN1_ITEM| with modifiers such as tagging, SEQUENCE or SET, etc.
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                 const ASN1_TEMPLATE *tt, int tag, int iclass)
 {
     int i, ret, flags, ttag, tclass;
     size_t j;
     flags = tt->flags;
+=======
+                                const ASN1_TEMPLATE *tt, int tag, int iclass,
+                                int optional) {
+  int i, ret, ttag, tclass;
+  size_t j;
+  uint32_t flags = tt->flags;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     /* Historically, |iclass| was repurposed to pass additional flags into the
      * encoding process. */
@@ -280,6 +406,7 @@ static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
     /* If not overridding the tag, |iclass| is ignored and should be zero. */
     assert(tag != -1 || iclass == 0);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /*
      * Work out tag and class to use: tagging may come either from the
      * template or the arguments, not both because this would create
@@ -298,6 +425,59 @@ static int asn1_template_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
         /* No template tagging, get from arguments */
         ttag = tag;
         tclass = iclass & ASN1_TFLG_TAG_CLASS;
+=======
+  // Work out tag and class to use: tagging may come either from the
+  // template or the arguments, not both because this would create
+  // ambiguity.
+  if (flags & ASN1_TFLG_TAG_MASK) {
+    // Error if argument and template tagging
+    if (tag != -1) {
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_TEMPLATE);
+      return -1;
+    }
+    // Get tagging from template
+    ttag = tt->tag;
+    tclass = flags & ASN1_TFLG_TAG_CLASS;
+  } else if (tag != -1) {
+    // No template tagging, get from arguments
+    ttag = tag;
+    tclass = iclass & ASN1_TFLG_TAG_CLASS;
+  } else {
+    ttag = -1;
+    tclass = 0;
+  }
+
+  // The template may itself by marked as optional, or this may be the template
+  // of an |ASN1_ITEM_TEMPLATE| type which was contained inside an outer
+  // optional template. (They cannot both be true because the
+  // |ASN1_ITEM_TEMPLATE| codepath rejects optional templates.)
+  assert(!optional || (flags & ASN1_TFLG_OPTIONAL) == 0);
+  optional = optional || (flags & ASN1_TFLG_OPTIONAL) != 0;
+
+  // At this point 'ttag' contains the outer tag to use, and 'tclass' is the
+  // class.
+
+  if (flags & ASN1_TFLG_SK_MASK) {
+    // SET OF, SEQUENCE OF
+    STACK_OF(ASN1_VALUE) *sk = (STACK_OF(ASN1_VALUE) *)*pval;
+    int isset, sktag, skaclass;
+    int skcontlen, sklen;
+    ASN1_VALUE *skitem;
+
+    if (!*pval) {
+      if (optional) {
+        return 0;
+      }
+      OPENSSL_PUT_ERROR(ASN1, ASN1_R_MISSING_VALUE);
+      return -1;
+    }
+
+    if (flags & ASN1_TFLG_SET_OF) {
+      isset = 1;
+      // Historically, types with both bits set were mutated when
+      // serialized to apply the sort. We no longer support this.
+      assert((flags & ASN1_TFLG_SEQUENCE_OF) == 0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
         ttag = -1;
         tclass = 0;
@@ -454,12 +634,35 @@ static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
         return 0;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     int ret = 0;
     unsigned char *const buf = OPENSSL_malloc(skcontlen);
     DER_ENC *encoded = OPENSSL_malloc(sk_ASN1_VALUE_num(sk) * sizeof(*encoded));
     if (encoded == NULL || buf == NULL) {
         OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
         goto err;
+=======
+  if (sk_ASN1_VALUE_num(sk) > ((size_t)-1) / sizeof(DER_ENC)) {
+    OPENSSL_PUT_ERROR(ASN1, ERR_R_OVERFLOW);
+    return 0;
+  }
+
+  int ret = 0;
+  unsigned char *const buf = OPENSSL_malloc(skcontlen);
+  DER_ENC *encoded = OPENSSL_malloc(sk_ASN1_VALUE_num(sk) * sizeof(*encoded));
+  if (encoded == NULL || buf == NULL) {
+    goto err;
+  }
+
+  // Encode all the elements into |buf| and populate |encoded|.
+  unsigned char *p = buf;
+  for (size_t i = 0; i < sk_ASN1_VALUE_num(sk); i++) {
+    ASN1_VALUE *skitem = sk_ASN1_VALUE_value(sk, i);
+    encoded[i].data = p;
+    encoded[i].length = ASN1_item_ex_i2d(&skitem, &p, item, -1, 0);
+    if (encoded[i].length < 0) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     /* Encode all the elements into |buf| and populate |encoded|. */
@@ -644,10 +847,23 @@ static int asn1_ex_i2c(ASN1_VALUE **pval, unsigned char *cout, int *out_omit,
         break;
 
     case V_ASN1_BOOLEAN:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         tbool = (ASN1_BOOLEAN *)pval;
         if (*tbool == -1) {
             *out_omit = 1;
             return 0;
+=======
+      tbool = (ASN1_BOOLEAN *)pval;
+      if (*tbool == ASN1_BOOLEAN_NONE) {
+        *out_omit = 1;
+        return 0;
+      }
+      if (it->utype != V_ASN1_ANY) {
+        // Default handling if value == size field then omit
+        if ((*tbool && (it->size > 0)) || (!*tbool && !it->size)) {
+          *out_omit = 1;
+          return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
         if (it->utype != V_ASN1_ANY) {
             /*
