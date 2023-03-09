@@ -247,6 +247,7 @@ int ASN1_object_size(int constructed, int length, int tag)
     return ret + length;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int ASN1_STRING_copy(ASN1_STRING *dst, const ASN1_STRING *str)
 {
     if (str == NULL)
@@ -269,7 +270,88 @@ ASN1_STRING *ASN1_STRING_dup(const ASN1_STRING *str)
     if (!ASN1_STRING_copy(ret, str)) {
         ASN1_STRING_free(ret);
         return NULL;
+=======
+    if (str->data == NULL) {
+      str->data = c;
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  str->length = (int)len;
+  if (data != NULL) {
+    OPENSSL_memcpy(str->data, data, len);
+    // Historically, OpenSSL would NUL-terminate most (but not all)
+    // |ASN1_STRING|s, in case anyone accidentally passed |str->data| into a
+    // function expecting a C string. We retain this behavior for compatibility,
+    // but code must not rely on this. See CVE-2021-3712.
+    str->data[len] = '\0';
+  }
+  return 1;
+}
+
+void ASN1_STRING_set0(ASN1_STRING *str, void *data, int len) {
+  OPENSSL_free(str->data);
+  str->data = data;
+  str->length = len;
+}
+
+ASN1_STRING *ASN1_STRING_new(void) {
+  return (ASN1_STRING_type_new(V_ASN1_OCTET_STRING));
+}
+
+ASN1_STRING *ASN1_STRING_type_new(int type) {
+  ASN1_STRING *ret;
+
+  ret = (ASN1_STRING *)OPENSSL_malloc(sizeof(ASN1_STRING));
+  if (ret == NULL) {
+    return NULL;
+  }
+  ret->length = 0;
+  ret->type = type;
+  ret->data = NULL;
+  ret->flags = 0;
+  return ret;
+}
+
+void ASN1_STRING_free(ASN1_STRING *str) {
+  if (str == NULL) {
+    return;
+  }
+  OPENSSL_free(str->data);
+  OPENSSL_free(str);
+}
+
+int ASN1_STRING_cmp(const ASN1_STRING *a, const ASN1_STRING *b) {
+  // Capture padding bits and implicit truncation in BIT STRINGs.
+  int a_length = a->length, b_length = b->length;
+  uint8_t a_padding = 0, b_padding = 0;
+  if (a->type == V_ASN1_BIT_STRING) {
+    a_length = asn1_bit_string_length(a, &a_padding);
+  }
+  if (b->type == V_ASN1_BIT_STRING) {
+    b_length = asn1_bit_string_length(b, &b_padding);
+  }
+
+  if (a_length < b_length) {
+    return -1;
+  }
+  if (a_length > b_length) {
+    return 1;
+  }
+  // In a BIT STRING, the number of bits is 8 * length - padding. Invert this
+  // comparison so we compare by lengths.
+  if (a_padding > b_padding) {
+    return -1;
+  }
+  if (a_padding < b_padding) {
+    return 1;
+  }
+
+  int ret = OPENSSL_memcmp(a->data, b->data, a_length);
+  if (ret != 0) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return ret;
 }
 

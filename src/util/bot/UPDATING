@@ -31,6 +31,7 @@ nasm-win32.exe: Update to the appropriate release of NASM, found at
 
     The current revision is nasm-2.13.03-win64.zip.
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     TODO(davidben): The Chromium link currently does not work. It will get
     filled in in the future. See https://crbug.com/766721.
 
@@ -40,6 +41,8 @@ perl-win32.zip: Update to the latest 64-bit prebuilt "Portable" edition of
 
     The current revision is strawberry-perl-5.26.2.1-64bit-portable.zip.
 
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 Finally, update sde-linux64.tar.xz and sde-win32.tar.xz by downloading the
 latet release from Intel at
 https://software.intel.com/en-us/articles/intel-software-development-emulator,

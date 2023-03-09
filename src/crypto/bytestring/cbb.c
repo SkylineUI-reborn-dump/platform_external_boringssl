@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include <openssl/mem.h>
+#include <openssl/err.h>
 
 #include "../internal.h"
 
@@ -102,6 +103,7 @@ static int cbb_buffer_reserve(struct cbb_buffer_st *base, uint8_t **out,
   newlen = base->len + len;
   if (newlen < base->len) {
     // Overflow
+    OPENSSL_PUT_ERROR(CRYPTO, ERR_R_OVERFLOW);
     goto err;
   }
 
@@ -110,6 +112,7 @@ static int cbb_buffer_reserve(struct cbb_buffer_st *base, uint8_t **out,
     uint8_t *newbuf;
 
     if (!base->can_resize) {
+      OPENSSL_PUT_ERROR(CRYPTO, ERR_R_OVERFLOW);
       goto err;
     }
 
@@ -172,6 +175,7 @@ static int cbb_buffer_add_u(struct cbb_buffer_st *base, uint64_t v,
 
 int CBB_finish(CBB *cbb, uint8_t **out_data, size_t *out_len) {
   if (cbb->is_child) {
+    OPENSSL_PUT_ERROR(CRYPTO, ERR_R_SHOULD_NOT_HAVE_BEEN_CALLED);
     return 0;
   }
 
@@ -232,6 +236,7 @@ int CBB_flush(CBB *cbb) {
     assert (cbb->child->pending_len_len == 1);
 
     if (len > 0xfffffffe) {
+      OPENSSL_PUT_ERROR(CRYPTO, ERR_R_OVERFLOW);
       // Too large.
       goto err;
     } else if (len > 0xffffff) {
@@ -271,6 +276,7 @@ int CBB_flush(CBB *cbb) {
     len >>= 8;
   }
   if (len != 0) {
+    OPENSSL_PUT_ERROR(CRYPTO, ERR_R_OVERFLOW);
     goto err;
   }
 
@@ -592,30 +598,15 @@ int CBB_add_asn1_bool(CBB *cbb, int value) {
 // component and the dot, so |cbs| may be passed into the function again for the
 // next value.
 static int parse_dotted_decimal(CBS *cbs, uint64_t *out) {
-  *out = 0;
-  int seen_digit = 0;
-  for (;;) {
-    // Valid terminators for a component are the end of the string or a
-    // non-terminal dot. If the string ends with a dot, this is not a valid OID
-    // string.
-    uint8_t u;
-    if (!CBS_get_u8(cbs, &u) ||
-        (u == '.' && CBS_len(cbs) > 0)) {
-      break;
-    }
-    if (u < '0' || u > '9' ||
-        // Forbid stray leading zeros.
-        (seen_digit && *out == 0) ||
-        // Check for overflow.
-        *out > UINT64_MAX / 10 ||
-        *out * 10 > UINT64_MAX - (u - '0')) {
-      return 0;
-    }
-    *out = *out * 10 + (u - '0');
-    seen_digit = 1;
+  if (!CBS_get_u64_decimal(cbs, out)) {
+    return 0;
   }
-  // The empty string is not a legal OID component.
-  return seen_digit;
+
+  // The integer must have either ended at the end of the string, or a
+  // non-terminal dot, which should be consumed. If the string ends with a dot,
+  // this is not a valid OID string.
+  uint8_t dot;
+  return !CBS_get_u8(cbs, &dot) || (dot == '.' && CBS_len(cbs) > 0);
 }
 
 int CBB_add_asn1_oid_from_text(CBB *cbb, const char *text, size_t len) {
@@ -681,6 +672,7 @@ int CBB_flush_asn1_set_of(CBB *cbb) {
   CBS_init(&cbs, CBB_data(cbb), CBB_len(cbb));
   while (CBS_len(&cbs) != 0) {
     if (!CBS_get_any_asn1_element(&cbs, NULL, NULL, NULL)) {
+      OPENSSL_PUT_ERROR(CRYPTO, ERR_R_SHOULD_NOT_HAVE_BEEN_CALLED);
       return 0;
     }
     num_children++;

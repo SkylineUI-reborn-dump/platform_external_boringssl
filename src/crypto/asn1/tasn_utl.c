@@ -62,7 +62,11 @@
 #include <openssl/asn1t.h>
 #include <openssl/mem.h>
 #include <openssl/obj.h>
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 #include <openssl/err.h>
+=======
+#include <openssl/pool.h>
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 #include <openssl/thread.h>
 
 #include "../internal.h"
@@ -136,9 +140,13 @@ void asn1_enc_init(ASN1_VALUE **pval, const ASN1_ITEM *it) {
   if (enc) {
     enc->enc = NULL;
     enc->len = 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     enc->alias_only = 0;
     enc->alias_only_on_next_parse = 0;
     enc->modified = 1;
+=======
+    enc->buf = NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
   }
 }
 
@@ -157,14 +165,15 @@ void asn1_enc_free(ASN1_VALUE **pval, const ASN1_ITEM *it) {
   }
 }
 
-int asn1_enc_save(ASN1_VALUE **pval, const unsigned char *in, int inlen,
-                  const ASN1_ITEM *it) {
+int asn1_enc_save(ASN1_VALUE **pval, const uint8_t *in, size_t in_len,
+                  const ASN1_ITEM *it, CRYPTO_BUFFER *buf) {
   ASN1_ENCODING *enc;
   enc = asn1_get_enc_ptr(pval, it);
   if (!enc) {
     return 1;
   }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
   if (!enc->alias_only) {
     OPENSSL_free(enc->enc);
   }
@@ -174,18 +183,49 @@ int asn1_enc_save(ASN1_VALUE **pval, const unsigned char *in, int inlen,
 
   if (enc->alias_only) {
     enc->enc = (uint8_t *) in;
+=======
+  asn1_encoding_clear(enc);
+  if (buf != NULL) {
+    assert(CRYPTO_BUFFER_data(buf) <= in &&
+           in + in_len <= CRYPTO_BUFFER_data(buf) + CRYPTO_BUFFER_len(buf));
+    CRYPTO_BUFFER_up_ref(buf);
+    enc->buf = buf;
+    enc->enc = (uint8_t *)in;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
   } else {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     enc->enc = OPENSSL_malloc(inlen);
+=======
+    enc->enc = OPENSSL_memdup(in, in_len);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     if (!enc->enc) {
       return 0;
     }
     OPENSSL_memcpy(enc->enc, in, inlen);
   }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
   enc->len = inlen;
   enc->modified = 0;
-
+=======
+  enc->len = in_len;
   return 1;
+}
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
+
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+  return 1;
+=======
+void asn1_encoding_clear(ASN1_ENCODING *enc) {
+  if (enc->buf != NULL) {
+    CRYPTO_BUFFER_free(enc->buf);
+  } else {
+    OPENSSL_free(enc->enc);
+  }
+  enc->enc = NULL;
+  enc->len = 0;
+  enc->buf = NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int asn1_enc_restore(int *len, unsigned char **out, ASN1_VALUE **pval,
@@ -207,6 +247,7 @@ int asn1_enc_restore(int *len, unsigned char **out, ASN1_VALUE **pval,
 
 /* Given an ASN1_TEMPLATE get a pointer to a field */
 ASN1_VALUE **asn1_get_field_ptr(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt) {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
   ASN1_VALUE **pvaltmp;
   if (tt->flags & ASN1_TFLG_COMBINE) {
     return pval;
@@ -214,6 +255,11 @@ ASN1_VALUE **asn1_get_field_ptr(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt) {
   pvaltmp = offset2ptr(*pval, tt->offset);
   /* NOTE for BOOLEAN types the field is just a plain int so we can't return
    * int **, so settle for (int *). */
+=======
+  ASN1_VALUE **pvaltmp = offset2ptr(*pval, tt->offset);
+  // NOTE for BOOLEAN types the field is just a plain int so we can't return
+  // int **, so settle for (int *).
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
   return pvaltmp;
 }
 

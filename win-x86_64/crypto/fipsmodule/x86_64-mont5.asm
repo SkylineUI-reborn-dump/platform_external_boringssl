@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 ; This file is generated from a similarly-named Perl script in the BoringSSL
 ; source tree. Do not edit by hand.
 
@@ -3831,3 +3832,5 @@ DB	0x01,0x0b,0x03,0x0a
 DB	0x0b,0x01,0x21,0x00
 DB	0x04,0xa3,0x00,0x00
 ALIGN	8
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

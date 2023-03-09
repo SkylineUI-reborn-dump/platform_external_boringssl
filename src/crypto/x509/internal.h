@@ -70,7 +70,11 @@ extern "C" {
 #endif
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /* Internal structures. */
+=======
+// Internal structures.
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 typedef struct X509_val_st {
   ASN1_TIME *notBefore;
@@ -145,20 +149,17 @@ struct x509_st {
   CRYPTO_EX_DATA ex_data;
   // These contain copies of various extension values
   long ex_pathlen;
-  long ex_pcpathlen;
-  unsigned long ex_flags;
-  unsigned long ex_kusage;
-  unsigned long ex_xkusage;
-  unsigned long ex_nscert;
+  uint32_t ex_flags;
+  uint32_t ex_kusage;
+  uint32_t ex_xkusage;
+  uint32_t ex_nscert;
   ASN1_OCTET_STRING *skid;
   AUTHORITY_KEYID *akid;
-  X509_POLICY_CACHE *policy_cache;
   STACK_OF(DIST_POINT) *crldp;
   STACK_OF(GENERAL_NAME) *altname;
   NAME_CONSTRAINTS *nc;
   unsigned char cert_hash[SHA256_DIGEST_LENGTH];
   X509_CERT_AUX *aux;
-  CRYPTO_BUFFER *buf;
   CRYPTO_MUTEX lock;
 } /* X509 */;
 
@@ -225,7 +226,7 @@ struct X509_crl_st {
 
 struct X509_VERIFY_PARAM_st {
   char *name;
-  time_t check_time;                // Time to use
+  int64_t check_time;               // POSIX time to use
   unsigned long inh_flags;          // Inheritance flags
   unsigned long flags;              // Various verify flags
   int purpose;                      // purpose to check untrusted certificates
@@ -348,9 +349,6 @@ struct x509_store_ctx_st {
   int valid;               // if 0, rebuild chain
   int last_untrusted;      // index of last untrusted cert
   STACK_OF(X509) *chain;   // chain of X509s - built up and trusted
-  X509_POLICY_TREE *tree;  // Valid policy tree
-
-  int explicit_policy;  // Require explicit policy value
 
   // When something goes wrong, this is why
   int error_depth;
@@ -367,7 +365,7 @@ struct x509_store_ctx_st {
   CRYPTO_EX_DATA ex_data;
 } /* X509_STORE_CTX */;
 
-ASN1_TYPE *ASN1_generate_v3(const char *str, X509V3_CTX *cnf);
+ASN1_TYPE *ASN1_generate_v3(const char *str, const X509V3_CTX *cnf);
 
 int X509_CERT_AUX_print(BIO *bp, X509_CERT_AUX *x, int indent);
 
@@ -406,6 +404,19 @@ int x509_digest_sign_algorithm(EVP_MD_CTX *ctx, X509_ALGOR *algor);
  * zero on error. */
 int x509_digest_verify_init(EVP_MD_CTX *ctx, const X509_ALGOR *sigalg,
                             EVP_PKEY *pkey);
+
+
+// Path-building functions.
+
+// X509_policy_check checks certificate policies in |certs|. |user_policies| is
+// the user-initial-policy-set. |flags| is a set of |X509_V_FLAG_*| values to
+// apply. It returns |X509_V_OK| on success and |X509_V_ERR_*| on error. It
+// additionally sets |*out_current_cert| to the certificate where the error
+// occurred. If the function succeeded, or the error applies to the entire
+// chain, it sets |*out_current_cert| to NULL.
+int X509_policy_check(const STACK_OF(X509) *certs,
+                      const STACK_OF(ASN1_OBJECT) *user_policies,
+                      unsigned long flags, X509 **out_current_cert);
 
 
 #if defined(__cplusplus)

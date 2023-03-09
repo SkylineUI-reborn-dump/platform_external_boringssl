@@ -55,6 +55,13 @@
  * [including the GNU Public Licence.] */
 
 #include <openssl/asn1.h>
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+#include <openssl/bytestring.h>
+#include <openssl/err.h>
+#include <openssl/mem.h>
+#include <openssl/time.h>
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 #include <string.h>
 #include <time.h>
@@ -96,6 +103,7 @@ int asn1_generalizedtime_to_tm(struct tm *tm, const ASN1_GENERALIZEDTIME *d)
         if (++o > l)
             goto err;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if ((a[o] < '0') || (a[o] > '9'))
             goto err;
         n = (n * 10) + a[o] - '0';
@@ -203,15 +211,38 @@ int ASN1_GENERALIZEDTIME_set_string(ASN1_GENERALIZEDTIME *s, const char *str)
         return (1);
     } else
         return (0);
+=======
+int ASN1_GENERALIZEDTIME_set_string(ASN1_GENERALIZEDTIME *s, const char *str) {
+  size_t len = strlen(str);
+  CBS cbs;
+  CBS_init(&cbs, (const uint8_t *)str, len);
+  if (!CBS_parse_generalized_time(&cbs, /*out_tm=*/NULL,
+                                  /*allow_timezone_offset=*/0)) {
+    return 0;
+  }
+  if (s != NULL) {
+    if (!ASN1_STRING_set(s, str, len)) {
+      return 0;
+    }
+    s->type = V_ASN1_GENERALIZEDTIME;
+  }
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_GENERALIZEDTIME *ASN1_GENERALIZEDTIME_set(ASN1_GENERALIZEDTIME *s,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                                time_t t)
 {
     return ASN1_GENERALIZEDTIME_adj(s, t, 0, 0);
+=======
+                                               int64_t posix_time) {
+  return ASN1_GENERALIZEDTIME_adj(s, posix_time, 0, 0);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_GENERALIZEDTIME *ASN1_GENERALIZEDTIME_adj(ASN1_GENERALIZEDTIME *s,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                                time_t t, int offset_day,
                                                long offset_sec)
 {
@@ -220,6 +251,14 @@ ASN1_GENERALIZEDTIME *ASN1_GENERALIZEDTIME_adj(ASN1_GENERALIZEDTIME *s,
     struct tm data;
     size_t len = 20;
     ASN1_GENERALIZEDTIME *tmps = NULL;
+=======
+                                               int64_t posix_time, int offset_day,
+                                               long offset_sec) {
+  struct tm data;
+  if (!OPENSSL_posix_to_tm(posix_time, &data)) {
+    return NULL;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (s == NULL)
         tmps = ASN1_GENERALIZEDTIME_new();

@@ -65,11 +65,17 @@
 
 /* Free up an ASN1 structure */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void ASN1_item_free(ASN1_VALUE *val, const ASN1_ITEM *it)
 {
     asn1_item_combine_free(&val, it, 0);
+=======
+void ASN1_item_free(ASN1_VALUE *val, const ASN1_ITEM *it) {
+  ASN1_item_ex_free(&val, it);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void ASN1_item_ex_free(ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
     asn1_item_combine_free(pval, it, 0);
@@ -84,6 +90,18 @@ void asn1_item_combine_free(ASN1_VALUE **pval, const ASN1_ITEM *it, int combine)
         return;
     if ((it->itype != ASN1_ITYPE_PRIMITIVE) && !*pval)
         return;
+=======
+void ASN1_item_ex_free(ASN1_VALUE **pval, const ASN1_ITEM *it) {
+  const ASN1_TEMPLATE *tt = NULL, *seqtt;
+  const ASN1_EXTERN_FUNCS *ef;
+  int i;
+  if (!pval) {
+    return;
+  }
+  if ((it->itype != ASN1_ITYPE_PRIMITIVE) && !*pval) {
+    return;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     switch (it->itype) {
 
@@ -106,6 +124,7 @@ void asn1_item_combine_free(ASN1_VALUE **pval, const ASN1_ITEM *it, int combine)
             if (i == 2)
                 return;
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         i = asn1_get_choice_selector(pval, it);
         if ((i >= 0) && (i < it->tcount)) {
             ASN1_VALUE **pchval;
@@ -120,6 +139,22 @@ void asn1_item_combine_free(ASN1_VALUE **pval, const ASN1_ITEM *it, int combine)
             *pval = NULL;
         }
         break;
+=======
+      }
+      i = asn1_get_choice_selector(pval, it);
+      if ((i >= 0) && (i < it->tcount)) {
+        ASN1_VALUE **pchval;
+        tt = it->templates + i;
+        pchval = asn1_get_field_ptr(pval, tt);
+        ASN1_template_free(pchval, tt);
+      }
+      if (asn1_cb) {
+        asn1_cb(ASN1_OP_FREE_POST, pval, it, NULL);
+      }
+      OPENSSL_free(*pval);
+      *pval = NULL;
+      break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     case ASN1_ITYPE_EXTERN:
@@ -153,6 +188,7 @@ void asn1_item_combine_free(ASN1_VALUE **pval, const ASN1_ITEM *it, int combine)
             pseqval = asn1_get_field_ptr(pval, seqtt);
             ASN1_template_free(pseqval, seqtt);
         }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if (asn1_cb)
             asn1_cb(ASN1_OP_FREE_POST, pval, it, NULL);
         if (!combine) {
@@ -179,8 +215,22 @@ void ASN1_template_free(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt)
     } else
         asn1_item_combine_free(pval, ASN1_ITEM_ptr(tt->item),
                                tt->flags & ASN1_TFLG_COMBINE);
+=======
+        pseqval = asn1_get_field_ptr(pval, seqtt);
+        ASN1_template_free(pseqval, seqtt);
+      }
+      if (asn1_cb) {
+        asn1_cb(ASN1_OP_FREE_POST, pval, it, NULL);
+      }
+      OPENSSL_free(*pval);
+      *pval = NULL;
+      break;
+    }
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void ASN1_primitive_free(ASN1_VALUE **pval, const ASN1_ITEM *it)
 {
     int utype;
@@ -202,7 +252,26 @@ void ASN1_primitive_free(ASN1_VALUE **pval, const ASN1_ITEM *it)
         utype = it->utype;
         if ((utype != V_ASN1_BOOLEAN) && !*pval)
             return;
+=======
+void ASN1_template_free(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt) {
+  size_t i;
+  if (tt->flags & ASN1_TFLG_SK_MASK) {
+    STACK_OF(ASN1_VALUE) *sk = (STACK_OF(ASN1_VALUE) *)*pval;
+    for (i = 0; i < sk_ASN1_VALUE_num(sk); i++) {
+      ASN1_VALUE *vtmp;
+      vtmp = sk_ASN1_VALUE_value(sk, i);
+      ASN1_item_ex_free(&vtmp, ASN1_ITEM_ptr(tt->item));
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+    sk_ASN1_VALUE_free(sk);
+    *pval = NULL;
+  } else {
+    ASN1_item_ex_free(pval, ASN1_ITEM_ptr(tt->item));
+  }
+}
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     switch (utype) {
     case V_ASN1_OBJECT:
@@ -210,11 +279,20 @@ void ASN1_primitive_free(ASN1_VALUE **pval, const ASN1_ITEM *it)
         break;
 
     case V_ASN1_BOOLEAN:
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if (it)
             *(ASN1_BOOLEAN *)pval = it->size;
         else
             *(ASN1_BOOLEAN *)pval = -1;
         return;
+=======
+      if (it) {
+        *(ASN1_BOOLEAN *)pval = (ASN1_BOOLEAN)it->size;
+      } else {
+        *(ASN1_BOOLEAN *)pval = -1;
+      }
+      return;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     case V_ASN1_NULL:
         break;

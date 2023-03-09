@@ -56,6 +56,7 @@ set(
   crypto/fipsmodule/rand/ctrdrbg_vectors.txt
   crypto/hmac_extra/hmac_tests.txt
   crypto/hpke/hpke_test_vectors.txt
+  crypto/kyber/keccak_tests.txt
   crypto/pkcs8/test/empty_password.p12
   crypto/pkcs8/test/no_encryption.p12
   crypto/pkcs8/test/nss.p12
@@ -101,6 +102,50 @@ set(
   crypto/x509/test/many_names1.pem
   crypto/x509/test/many_names2.pem
   crypto/x509/test/many_names3.pem
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  crypto/x509/test/policy_intermediate_any.pem
+  crypto/x509/test/policy_intermediate_duplicate.pem
+  crypto/x509/test/policy_intermediate_invalid.pem
+  crypto/x509/test/policy_intermediate_mapped_any.pem
+  crypto/x509/test/policy_intermediate_mapped_oid3.pem
+  crypto/x509/test/policy_intermediate_mapped.pem
+  crypto/x509/test/policy_intermediate_require_duplicate.pem
+  crypto/x509/test/policy_intermediate_require_no_policies.pem
+  crypto/x509/test/policy_intermediate_require.pem
+  crypto/x509/test/policy_intermediate_require1.pem
+  crypto/x509/test/policy_intermediate_require2.pem
+  crypto/x509/test/policy_intermediate.pem
+  crypto/x509/test/policy_leaf_any.pem
+  crypto/x509/test/policy_leaf_duplicate.pem
+  crypto/x509/test/policy_leaf_invalid.pem
+  crypto/x509/test/policy_leaf_oid1.pem
+  crypto/x509/test/policy_leaf_oid2.pem
+  crypto/x509/test/policy_leaf_oid3.pem
+  crypto/x509/test/policy_leaf_oid4.pem
+  crypto/x509/test/policy_leaf_oid5.pem
+  crypto/x509/test/policy_leaf_require.pem
+  crypto/x509/test/policy_leaf_require1.pem
+  crypto/x509/test/policy_leaf.pem
+  crypto/x509/test/policy_root_cross_inhibit_mapping.pem
+  crypto/x509/test/policy_root.pem
+  crypto/x509/test/policy_root2.pem
+  crypto/x509/test/pss_sha1_explicit.pem
+  crypto/x509/test/pss_sha1_mgf1_syntax_error.pem
+  crypto/x509/test/pss_sha1.pem
+  crypto/x509/test/pss_sha224.pem
+  crypto/x509/test/pss_sha256_explicit_trailer.pem
+  crypto/x509/test/pss_sha256_mgf1_sha384.pem
+  crypto/x509/test/pss_sha256_mgf1_syntax_error.pem
+  crypto/x509/test/pss_sha256_omit_nulls.pem
+  crypto/x509/test/pss_sha256_salt_overflow.pem
+  crypto/x509/test/pss_sha256_salt31.pem
+  crypto/x509/test/pss_sha256_unknown_mgf.pem
+  crypto/x509/test/pss_sha256_wrong_trailer.pem
+  crypto/x509/test/pss_sha256.pem
+  crypto/x509/test/pss_sha384.pem
+  crypto/x509/test/pss_sha512.pem
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
   crypto/x509/test/some_names1.pem
   crypto/x509/test/some_names2.pem
   crypto/x509/test/some_names3.pem

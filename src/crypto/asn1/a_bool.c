@@ -68,6 +68,7 @@ int i2d_ASN1_BOOLEAN(ASN1_BOOLEAN a, unsigned char **pp)
     if (pp == NULL)
         return (r);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (*pp == NULL) {
         if ((p = allocated = OPENSSL_malloc(r)) == NULL) {
             OPENSSL_PUT_ERROR(ASN1, ERR_R_MALLOC_FAILURE);
@@ -75,10 +76,20 @@ int i2d_ASN1_BOOLEAN(ASN1_BOOLEAN a, unsigned char **pp)
         }
     } else {
         p = *pp;
+=======
+  if (*pp == NULL) {
+    if ((p = allocated = OPENSSL_malloc(r)) == NULL) {
+      return -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     ASN1_put_object(&p, 0, 1, V_ASN1_BOOLEAN, V_ASN1_UNIVERSAL);
     *p = a ? 0xff : 0x00;
+=======
+  ASN1_put_object(&p, 0, 1, V_ASN1_BOOLEAN, V_ASN1_UNIVERSAL);
+  *p = a ? ASN1_BOOLEAN_TRUE : ASN1_BOOLEAN_FALSE;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     /*
      * If a new buffer was allocated, just return it back.
@@ -90,6 +101,7 @@ int i2d_ASN1_BOOLEAN(ASN1_BOOLEAN a, unsigned char **pp)
 
 ASN1_BOOLEAN d2i_ASN1_BOOLEAN(ASN1_BOOLEAN *a, const unsigned char **pp,
                               long length) {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     const unsigned char *p = *pp;
     long len;
     int inf, tag, xclass;
@@ -98,17 +110,42 @@ ASN1_BOOLEAN d2i_ASN1_BOOLEAN(ASN1_BOOLEAN *a, const unsigned char **pp,
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_OBJECT_HEADER);
         return -1;
     }
+=======
+  const unsigned char *p = *pp;
+  long len;
+  int inf, tag, xclass;
+  inf = ASN1_get_object(&p, &len, &tag, &xclass, length);
+  if (inf & 0x80) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_BAD_OBJECT_HEADER);
+    return ASN1_BOOLEAN_NONE;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (inf & V_ASN1_CONSTRUCTED) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_TYPE_NOT_PRIMITIVE);
         return -1;
     }
+=======
+  if (inf & V_ASN1_CONSTRUCTED) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_TYPE_NOT_PRIMITIVE);
+    return ASN1_BOOLEAN_NONE;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (tag != V_ASN1_BOOLEAN || xclass != V_ASN1_UNIVERSAL) {
       OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPECTING_A_BOOLEAN);
       return -1;
     }
+=======
+  if (tag != V_ASN1_BOOLEAN || xclass != V_ASN1_UNIVERSAL) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_EXPECTING_A_BOOLEAN);
+    return ASN1_BOOLEAN_NONE;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (len != 1) {
         OPENSSL_PUT_ERROR(ASN1, ASN1_R_BOOLEAN_IS_WRONG_LENGTH);
         return -1;
@@ -119,4 +156,16 @@ ASN1_BOOLEAN d2i_ASN1_BOOLEAN(ASN1_BOOLEAN *a, const unsigned char **pp,
     }
     *pp = p;
     return ret;
+=======
+  if (len != 1) {
+    OPENSSL_PUT_ERROR(ASN1, ASN1_R_BOOLEAN_IS_WRONG_LENGTH);
+    return ASN1_BOOLEAN_NONE;
+  }
+  ASN1_BOOLEAN ret = (ASN1_BOOLEAN) * (p++);
+  if (a != NULL) {
+    (*a) = ret;
+  }
+  *pp = p;
+  return ret;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

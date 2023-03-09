@@ -123,6 +123,7 @@ int i2c_ASN1_INTEGER(const ASN1_INTEGER *in, unsigned char **outp)
         return 0;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     /* |ASN1_INTEGER|s should be represented minimally, but it is possible to
      * construct invalid ones. Skip leading zeros so this does not produce an
      * invalid encoding or break invariants. */
@@ -130,7 +131,18 @@ int i2c_ASN1_INTEGER(const ASN1_INTEGER *in, unsigned char **outp)
     while (start < in->length && in->data[start] == 0) {
         start++;
     }
+=======
+  // |ASN1_INTEGER|s should be represented minimally, but it is possible to
+  // construct invalid ones. Skip leading zeros so this does not produce an
+  // invalid encoding or break invariants.
+  CBS cbs;
+  CBS_init(&cbs, in->data, in->length);
+  while (CBS_len(&cbs) > 0 && CBS_data(&cbs)[0] == 0) {
+    CBS_skip(&cbs, 1);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     int is_negative = (in->type & V_ASN1_NEG) != 0;
     int pad;
     if (start >= in->length) {
@@ -150,7 +162,30 @@ int i2c_ASN1_INTEGER(const ASN1_INTEGER *in, unsigned char **outp)
          * byte to be positive. */
         pad = (in->data[start] & 0x80) != 0;
     }
+=======
+  int is_negative = (in->type & V_ASN1_NEG) != 0;
+  size_t pad;
+  CBS copy = cbs;
+  uint8_t msb;
+  if (!CBS_get_u8(&copy, &msb)) {
+    // Zero is represented as a single byte.
+    is_negative = 0;
+    pad = 1;
+  } else if (is_negative) {
+    // 0x80...01 through 0xff...ff have a two's complement of 0x7f...ff
+    // through 0x00...01 and need an extra byte to be negative.
+    // 0x01...00 through 0x80...00 have a two's complement of 0xfe...ff
+    // through 0x80...00 and can be negated as-is.
+    pad = msb > 0x80 ||
+          (msb == 0x80 && !is_all_zeros(CBS_data(&copy), CBS_len(&copy)));
+  } else {
+    // If the high bit is set, the signed representation needs an extra
+    // byte to be positive.
+    pad = (msb & 0x80) != 0;
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (in->length - start > INT_MAX - pad) {
         OPENSSL_PUT_ERROR(ASN1, ERR_R_OVERFLOW);
         return 0;
@@ -172,7 +207,33 @@ int i2c_ASN1_INTEGER(const ASN1_INTEGER *in, unsigned char **outp)
         assert((*outp)[0] < 0x80);
     }
     *outp += len;
+=======
+  if (CBS_len(&cbs) > INT_MAX - pad) {
+    OPENSSL_PUT_ERROR(ASN1, ERR_R_OVERFLOW);
+    return 0;
+  }
+  int len = (int)(pad + CBS_len(&cbs));
+  assert(len > 0);
+  if (outp == NULL) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     return len;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+
+  if (pad) {
+    (*outp)[0] = 0;
+  }
+  OPENSSL_memcpy(*outp + pad, CBS_data(&cbs), CBS_len(&cbs));
+  if (is_negative) {
+    negate_twos_complement(*outp, len);
+    assert((*outp)[0] >= 0x80);
+  } else {
+    assert((*outp)[0] < 0x80);
+  }
+  *outp += len;
+  return len;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_INTEGER *c2i_ASN1_INTEGER(ASN1_INTEGER **out, const unsigned char **inp,

@@ -10,7 +10,6 @@ PointerAlignment: Right
 IncludeBlocks: Preserve
 TypenameMacros: ['LHASH_OF', 'STACK_OF']
 StatementMacros:
-  - "ASN1_SEQUENCE_END"
   - "DECLARE_ASN1_ALLOC_FUNCTIONS"
   - "DECLARE_ASN1_ALLOC_FUNCTIONS_name"
   - "DECLARE_ASN1_ENCODE_FUNCTIONS"
@@ -65,3 +64,17 @@ StatementMacros:
   - "IMPLEMENT_PEM_write_const"
   - "IMPLEMENT_PEM_write_fp"
   - "IMPLEMENT_PEM_write_fp_const"
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  - "ASN1_ADB_END"
+  - "ASN1_CHOICE_END"
+  - "ASN1_CHOICE_END_cb"
+  - "ASN1_ITEM_TEMPLATE_END"
+  - "ASN1_SEQUENCE_END"
+  - "ASN1_SEQUENCE_END_cb"
+  - "ASN1_SEQUENCE_END_enc"
+  - "ASN1_SEQUENCE_END_ref"
+  # This isn't quite right, but it causes clang-format to do a slightly better
+  # job with this macro.
+  - "ASN1_EX_TEMPLATE_TYPE"
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)

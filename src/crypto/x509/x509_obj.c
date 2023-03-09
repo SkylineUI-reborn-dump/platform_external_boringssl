@@ -1,4 +1,3 @@
-/* crypto/x509/x509_obj.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -97,10 +96,54 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
     } else if (len <= 0) {
         return NULL;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (a == NULL) {
         if (b) {
             buf = b->data;
             OPENSSL_free(b);
+=======
+    if (!BUF_MEM_grow(b, 200)) {
+      goto err;
+    }
+    b->data[0] = '\0';
+    len = 200;
+  } else if (len <= 0) {
+    return NULL;
+  }
+  if (a == NULL) {
+    if (b) {
+      buf = b->data;
+      OPENSSL_free(b);
+    }
+    OPENSSL_strlcpy(buf, "NO X509_NAME", len);
+    return buf;
+  }
+
+  len--;  // space for '\0'
+  l = 0;
+  for (i = 0; i < sk_X509_NAME_ENTRY_num(a->entries); i++) {
+    ne = sk_X509_NAME_ENTRY_value(a->entries, i);
+    n = OBJ_obj2nid(ne->object);
+    if ((n == NID_undef) || ((s = OBJ_nid2sn(n)) == NULL)) {
+      i2t_ASN1_OBJECT(tmp_buf, sizeof(tmp_buf), ne->object);
+      s = tmp_buf;
+    }
+    l1 = strlen(s);
+
+    type = ne->value->type;
+    num = ne->value->length;
+    if (num > NAME_ONELINE_MAX) {
+      OPENSSL_PUT_ERROR(X509, X509_R_NAME_TOO_LONG);
+      goto err;
+    }
+    q = ne->value->data;
+
+    if ((type == V_ASN1_GENERALSTRING) && ((num % 4) == 0)) {
+      gs_doit[0] = gs_doit[1] = gs_doit[2] = gs_doit[3] = 0;
+      for (j = 0; j < num; j++) {
+        if (q[j] != 0) {
+          gs_doit[j & 3] = 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
         OPENSSL_strlcpy(buf, "NO X509_NAME", len);
         return buf;
@@ -117,6 +160,7 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
         }
         l1 = strlen(s);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         type = ne->value->type;
         num = ne->value->length;
         if (num > NAME_ONELINE_MAX) {
@@ -182,8 +226,16 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
                 *(p++) = n;
         }
         *p = '\0';
+=======
+    lold = l;
+    l += 1 + l1 + 1 + l2;
+    if (l > NAME_ONELINE_MAX) {
+      OPENSSL_PUT_ERROR(X509, X509_R_NAME_TOO_LONG);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     if (b != NULL) {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         p = b->data;
         OPENSSL_free(b);
     } else
@@ -196,4 +248,51 @@ char *X509_NAME_oneline(const X509_NAME *a, char *buf, int len)
  end:
     BUF_MEM_free(b);
     return (NULL);
+=======
+      if (!BUF_MEM_grow(b, l + 1)) {
+        goto err;
+      }
+      p = &(b->data[lold]);
+    } else if (l > len) {
+      break;
+    } else {
+      p = &(buf[lold]);
+    }
+    *(p++) = '/';
+    OPENSSL_memcpy(p, s, (unsigned int)l1);
+    p += l1;
+    *(p++) = '=';
+
+    q = ne->value->data;
+
+    for (j = 0; j < num; j++) {
+      if (!gs_doit[j & 3]) {
+        continue;
+      }
+      n = q[j];
+      if ((n < ' ') || (n > '~')) {
+        *(p++) = '\\';
+        *(p++) = 'x';
+        *(p++) = hex[(n >> 4) & 0x0f];
+        *(p++) = hex[n & 0x0f];
+      } else {
+        *(p++) = n;
+      }
+    }
+    *p = '\0';
+  }
+  if (b != NULL) {
+    p = b->data;
+    OPENSSL_free(b);
+  } else {
+    p = buf;
+  }
+  if (i == 0) {
+    *p = '\0';
+  }
+  return p;
+err:
+  BUF_MEM_free(b);
+  return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

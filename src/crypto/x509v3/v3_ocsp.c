@@ -20,10 +20,17 @@
 static int i2r_ocsp_acutoff(const X509V3_EXT_METHOD *method, void *nonce,
                             BIO *out, int indent);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int i2r_ocsp_nocheck(const X509V3_EXT_METHOD *method,
                             void *nocheck, BIO *out, int indent);
 static void *s2i_ocsp_nocheck(const X509V3_EXT_METHOD *method,
                               X509V3_CTX *ctx, const char *str);
+=======
+static int i2r_ocsp_nocheck(const X509V3_EXT_METHOD *method, void *nocheck,
+                            BIO *out, int indent);
+static void *s2i_ocsp_nocheck(const X509V3_EXT_METHOD *method,
+                              const X509V3_CTX *ctx, const char *str);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_crl_invdate = {
     NID_invalidity_date, 0, ASN1_ITEM_ref(ASN1_GENERALIZEDTIME),
@@ -62,7 +69,12 @@ static int i2r_ocsp_nocheck(const X509V3_EXT_METHOD *method, void *nocheck,
 }
 
 static void *s2i_ocsp_nocheck(const X509V3_EXT_METHOD *method,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                               X509V3_CTX *ctx, const char *str)
 {
     return ASN1_NULL_new();
+=======
+                              const X509V3_CTX *ctx, const char *str) {
+  return ASN1_NULL_new();
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

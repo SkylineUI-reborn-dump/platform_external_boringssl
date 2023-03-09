@@ -1,4 +1,3 @@
-/* v3_bcons.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -65,6 +64,7 @@
 #include <openssl/obj.h>
 #include <openssl/x509v3.h>
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static STACK_OF(CONF_VALUE) *i2v_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
                                                    BASIC_CONSTRAINTS *bcons,
                                                    STACK_OF(CONF_VALUE)
@@ -72,6 +72,16 @@ static STACK_OF(CONF_VALUE) *i2v_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
 static BASIC_CONSTRAINTS *v2i_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
                                                 X509V3_CTX *ctx,
                                                 STACK_OF(CONF_VALUE) *values);
+=======
+#include "internal.h"
+
+
+static STACK_OF(CONF_VALUE) *i2v_BASIC_CONSTRAINTS(
+    const X509V3_EXT_METHOD *method, void *ext, STACK_OF(CONF_VALUE) *extlist);
+static void *v2i_BASIC_CONSTRAINTS(const X509V3_EXT_METHOD *method,
+                                   const X509V3_CTX *ctx,
+                                   const STACK_OF(CONF_VALUE) *values);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 const X509V3_EXT_METHOD v3_bcons = {
     NID_basic_constraints, 0,
@@ -101,6 +111,7 @@ static STACK_OF(CONF_VALUE) *i2v_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
     return extlist;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static BASIC_CONSTRAINTS *v2i_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
                                                 X509V3_CTX *ctx,
                                                 STACK_OF(CONF_VALUE) *values)
@@ -111,6 +122,29 @@ static BASIC_CONSTRAINTS *v2i_BASIC_CONSTRAINTS(X509V3_EXT_METHOD *method,
     if (!(bcons = BASIC_CONSTRAINTS_new())) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
         return NULL;
+=======
+static void *v2i_BASIC_CONSTRAINTS(const X509V3_EXT_METHOD *method,
+                                   const X509V3_CTX *ctx,
+                                   const STACK_OF(CONF_VALUE) *values) {
+  BASIC_CONSTRAINTS *bcons = NULL;
+  if (!(bcons = BASIC_CONSTRAINTS_new())) {
+    return NULL;
+  }
+  for (size_t i = 0; i < sk_CONF_VALUE_num(values); i++) {
+    const CONF_VALUE *val = sk_CONF_VALUE_value(values, i);
+    if (!strcmp(val->name, "CA")) {
+      if (!X509V3_get_value_bool(val, &bcons->ca)) {
+        goto err;
+      }
+    } else if (!strcmp(val->name, "pathlen")) {
+      if (!X509V3_get_value_int(val, &bcons->pathlen)) {
+        goto err;
+      }
+    } else {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NAME);
+      X509V3_conf_err(val);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     for (i = 0; i < sk_CONF_VALUE_num(values); i++) {
         val = sk_CONF_VALUE_value(values, i);

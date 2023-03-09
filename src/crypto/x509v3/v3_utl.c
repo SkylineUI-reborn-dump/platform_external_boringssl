@@ -1,4 +1,3 @@
-/* v3_utl.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
@@ -91,6 +90,7 @@ static int ipv6_hex(unsigned char *out, const char *in, int inlen);
 
 static int x509V3_add_len_value(const char *name, const char *value,
                                 size_t value_len, int omit_value,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                 STACK_OF(CONF_VALUE) **extlist)
 {
     CONF_VALUE *vtmp = NULL;
@@ -108,7 +108,22 @@ static int x509V3_add_len_value(const char *name, const char *value,
         if (tvalue == NULL) {
             goto malloc_err;
         }
+=======
+                                STACK_OF(CONF_VALUE) **extlist) {
+  CONF_VALUE *vtmp = NULL;
+  char *tname = NULL, *tvalue = NULL;
+  int extlist_was_null = *extlist == NULL;
+  if (name && !(tname = OPENSSL_strdup(name))) {
+    goto err;
+  }
+  if (!omit_value) {
+    // |CONF_VALUE| cannot represent strings with NULs.
+    if (OPENSSL_memchr(value, 0, value_len)) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_VALUE);
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!(vtmp = CONF_VALUE_new()))
         goto malloc_err;
     if (!*extlist && !(*extlist = sk_CONF_VALUE_new_null()))
@@ -125,11 +140,42 @@ static int x509V3_add_len_value(const char *name, const char *value,
     if (extlist_was_null) {
         sk_CONF_VALUE_free(*extlist);
         *extlist = NULL;
+=======
+    tvalue = OPENSSL_strndup(value, value_len);
+    if (tvalue == NULL) {
+      goto err;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     OPENSSL_free(vtmp);
     OPENSSL_free(tname);
     OPENSSL_free(tvalue);
     return 0;
+=======
+  }
+  if (!(vtmp = CONF_VALUE_new())) {
+    goto err;
+  }
+  if (!*extlist && !(*extlist = sk_CONF_VALUE_new_null())) {
+    goto err;
+  }
+  vtmp->section = NULL;
+  vtmp->name = tname;
+  vtmp->value = tvalue;
+  if (!sk_CONF_VALUE_push(*extlist, vtmp)) {
+    goto err;
+  }
+  return 1;
+err:
+  if (extlist_was_null) {
+    sk_CONF_VALUE_free(*extlist);
+    *extlist = NULL;
+  }
+  OPENSSL_free(vtmp);
+  OPENSSL_free(tname);
+  OPENSSL_free(tvalue);
+  return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509V3_add_value(const char *name, const char *value,
@@ -139,12 +185,15 @@ int X509V3_add_value(const char *name, const char *value,
                                 /*omit_value=*/value == NULL, extlist);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int X509V3_add_value_uchar(const char *name, const unsigned char *value,
                            STACK_OF(CONF_VALUE) **extlist)
 {
     return X509V3_add_value(name, (const char *)value, extlist);
 }
 
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 int x509V3_add_value_asn1_string(const char *name, const ASN1_STRING *value,
                                  STACK_OF(CONF_VALUE) **extlist)
 {
@@ -175,6 +224,7 @@ int X509V3_add_value_bool(const char *name, int asn1_bool,
     return X509V3_add_value(name, "FALSE", extlist);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int X509V3_add_value_bool_nf(const char *name, int asn1_bool,
                              STACK_OF(CONF_VALUE) **extlist)
 {
@@ -187,6 +237,11 @@ static char *bignum_to_string(const BIGNUM *bn)
 {
     char *tmp, *ret;
     size_t len;
+=======
+static char *bignum_to_string(const BIGNUM *bn) {
+  char *tmp, *ret;
+  size_t len;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     /*
      * Display large numbers in hex and small numbers in decimal. Converting to
@@ -202,6 +257,7 @@ static char *bignum_to_string(const BIGNUM *bn)
         return NULL;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     len = strlen(tmp) + 3;
     ret = OPENSSL_malloc(len);
     if (ret == NULL) {
@@ -218,10 +274,16 @@ static char *bignum_to_string(const BIGNUM *bn)
         OPENSSL_strlcpy(ret, "0x", len);
         OPENSSL_strlcat(ret, tmp, len);
     }
+=======
+  len = strlen(tmp) + 3;
+  ret = OPENSSL_malloc(len);
+  if (ret == NULL) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     OPENSSL_free(tmp);
     return ret;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 char *i2s_ASN1_ENUMERATED(X509V3_EXT_METHOD *method, const ASN1_ENUMERATED *a)
 {
     BIGNUM *bntmp = NULL;
@@ -233,8 +295,23 @@ char *i2s_ASN1_ENUMERATED(X509V3_EXT_METHOD *method, const ASN1_ENUMERATED *a)
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
     BN_free(bntmp);
     return strtmp;
+=======
+char *i2s_ASN1_ENUMERATED(const X509V3_EXT_METHOD *method,
+                          const ASN1_ENUMERATED *a) {
+  BIGNUM *bntmp = NULL;
+  char *strtmp = NULL;
+  if (!a) {
+    return NULL;
+  }
+  if (!(bntmp = ASN1_ENUMERATED_to_BN(a, NULL)) ||
+      !(strtmp = bignum_to_string(bntmp))) {
+  }
+  BN_free(bntmp);
+  return strtmp;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 char *i2s_ASN1_INTEGER(X509V3_EXT_METHOD *method, const ASN1_INTEGER *a)
 {
     BIGNUM *bntmp = NULL;
@@ -246,6 +323,19 @@ char *i2s_ASN1_INTEGER(X509V3_EXT_METHOD *method, const ASN1_INTEGER *a)
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
     BN_free(bntmp);
     return strtmp;
+=======
+char *i2s_ASN1_INTEGER(const X509V3_EXT_METHOD *method, const ASN1_INTEGER *a) {
+  BIGNUM *bntmp = NULL;
+  char *strtmp = NULL;
+  if (!a) {
+    return NULL;
+  }
+  if (!(bntmp = ASN1_INTEGER_to_BN(a, NULL)) ||
+      !(strtmp = bignum_to_string(bntmp))) {
+  }
+  BN_free(bntmp);
+  return strtmp;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 ASN1_INTEGER *s2i_ASN1_INTEGER(X509V3_EXT_METHOD *method, const char *value)
@@ -271,10 +361,28 @@ ASN1_INTEGER *s2i_ASN1_INTEGER(X509V3_EXT_METHOD *method, const char *value)
     } else
         ishex = 0;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (ishex)
         ret = BN_hex2bn(&bn, value);
     else
         ret = BN_dec2bn(&bn, value);
+=======
+  if (ishex) {
+    ret = BN_hex2bn(&bn, value);
+  } else {
+    // Decoding from decimal scales quadratically in the input length. Bound the
+    // largest decimal input we accept in the config parser. 8,192 decimal
+    // digits allows values up to 27,213 bits. Ths exceeds the largest RSA, DSA,
+    // or DH modulus we support, and those are not usefully represented in
+    // decimal.
+    if (strlen(value) > 8192) {
+      BN_free(bn);
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NUMBER);
+      return 0;
+    }
+    ret = BN_dec2bn(&bn, value);
+  }
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
     if (!ret || value[ret]) {
         BN_free(bn);
@@ -310,6 +418,7 @@ int X509V3_add_value_int(const char *name, const ASN1_INTEGER *aint,
     return ret;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int X509V3_get_value_bool(const CONF_VALUE *value, int *asn1_bool)
 {
     char *btmp;
@@ -328,8 +437,51 @@ int X509V3_get_value_bool(const CONF_VALUE *value, int *asn1_bool)
     }
  err:
     OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_BOOLEAN_STRING);
+=======
+int X509V3_bool_from_string(const char *str, ASN1_BOOLEAN *out_bool) {
+  if (!strcmp(str, "TRUE") || !strcmp(str, "true") || !strcmp(str, "Y") ||
+      !strcmp(str, "y") || !strcmp(str, "YES") || !strcmp(str, "yes")) {
+    *out_bool = ASN1_BOOLEAN_TRUE;
+    return 1;
+  }
+  if (!strcmp(str, "FALSE") || !strcmp(str, "false") || !strcmp(str, "N") ||
+      !strcmp(str, "n") || !strcmp(str, "NO") || !strcmp(str, "no")) {
+    *out_bool = ASN1_BOOLEAN_FALSE;
+    return 1;
+  }
+  OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_BOOLEAN_STRING);
+  return 0;
+}
+
+int X509V3_get_value_bool(const CONF_VALUE *value, ASN1_BOOLEAN *out_bool) {
+  const char *btmp = value->value;
+  if (btmp == NULL) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_BOOLEAN_STRING);
+    goto err;
+  }
+  if (!X509V3_bool_from_string(btmp, out_bool)) {
+    goto err;
+  }
+  return 1;
+
+err:
+  X509V3_conf_err(value);
+  return 0;
+}
+
+int X509V3_get_value_int(const CONF_VALUE *value, ASN1_INTEGER **aint) {
+  ASN1_INTEGER *itmp;
+  if (!(itmp = s2i_ASN1_INTEGER(NULL, value->value))) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     X509V3_conf_err(value);
     return 0;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  ASN1_INTEGER_free(*aint);
+  *aint = itmp;
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 int X509V3_get_value_int(const CONF_VALUE *value, ASN1_INTEGER **aint)
@@ -346,6 +498,7 @@ int X509V3_get_value_int(const CONF_VALUE *value, ASN1_INTEGER **aint)
 #define HDR_NAME        1
 #define HDR_VALUE       2
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 /*
  * #define DEBUG
  */
@@ -384,6 +537,38 @@ STACK_OF(CONF_VALUE) *X509V3_parse_list(const char *line)
                 *p = 0;
                 ntmp = strip_spaces(q);
                 q = p + 1;
+=======
+STACK_OF(CONF_VALUE) *X509V3_parse_list(const char *line) {
+  char *p, *q, c;
+  char *ntmp, *vtmp;
+  STACK_OF(CONF_VALUE) *values = NULL;
+  char *linebuf;
+  int state;
+  // We are going to modify the line so copy it first
+  linebuf = OPENSSL_strdup(line);
+  if (linebuf == NULL) {
+    goto err;
+  }
+  state = HDR_NAME;
+  ntmp = NULL;
+  // Go through all characters
+  for (p = linebuf, q = linebuf; (c = *p) && (c != '\r') && (c != '\n'); p++) {
+    switch (state) {
+      case HDR_NAME:
+        if (c == ':') {
+          state = HDR_VALUE;
+          *p = 0;
+          ntmp = strip_spaces(q);
+          if (!ntmp) {
+            OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NULL_NAME);
+            goto err;
+          }
+          q = p + 1;
+        } else if (c == ',') {
+          *p = 0;
+          ntmp = strip_spaces(q);
+          q = p + 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 #if 0
                 printf("%s\n", ntmp);
 #endif
@@ -430,9 +615,163 @@ STACK_OF(CONF_VALUE) *X509V3_parse_list(const char *line)
 #if 0
         printf("%s\n", ntmp);
 #endif
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         if (!ntmp) {
             OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NULL_NAME);
             goto err;
+=======
+    if (!ntmp) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NULL_NAME);
+      goto err;
+    }
+    X509V3_add_value(ntmp, NULL, &values);
+  }
+  OPENSSL_free(linebuf);
+  return values;
+
+err:
+  OPENSSL_free(linebuf);
+  sk_CONF_VALUE_pop_free(values, X509V3_conf_free);
+  return NULL;
+}
+
+// Delete leading and trailing spaces from a string
+static char *strip_spaces(char *name) {
+  char *p, *q;
+  // Skip over leading spaces
+  p = name;
+  while (*p && OPENSSL_isspace((unsigned char)*p)) {
+    p++;
+  }
+  if (!*p) {
+    return NULL;
+  }
+  q = p + strlen(p) - 1;
+  while ((q != p) && OPENSSL_isspace((unsigned char)*q)) {
+    q--;
+  }
+  if (p != q) {
+    q[1] = 0;
+  }
+  if (!*p) {
+    return NULL;
+  }
+  return p;
+}
+
+// hex string utilities
+
+char *x509v3_bytes_to_hex(const uint8_t *in, size_t len) {
+  CBB cbb;
+  if (!CBB_init(&cbb, len * 3 + 1)) {
+    goto err;
+  }
+  for (size_t i = 0; i < len; i++) {
+    static const char hex[] = "0123456789ABCDEF";
+    if ((i > 0 && !CBB_add_u8(&cbb, ':')) ||
+        !CBB_add_u8(&cbb, hex[in[i] >> 4]) ||
+        !CBB_add_u8(&cbb, hex[in[i] & 0xf])) {
+      goto err;
+    }
+  }
+  uint8_t *ret;
+  size_t unused_len;
+  if (!CBB_add_u8(&cbb, 0) || !CBB_finish(&cbb, &ret, &unused_len)) {
+    goto err;
+  }
+
+  return (char *)ret;
+
+err:
+  CBB_cleanup(&cbb);
+  return NULL;
+}
+
+unsigned char *x509v3_hex_to_bytes(const char *str, long *len) {
+  unsigned char *hexbuf, *q;
+  unsigned char ch, cl, *p;
+  uint8_t high, low;
+  if (!str) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_INVALID_NULL_ARGUMENT);
+    return NULL;
+  }
+  if (!(hexbuf = OPENSSL_malloc(strlen(str) >> 1))) {
+    goto err;
+  }
+  for (p = (unsigned char *)str, q = hexbuf; *p;) {
+    ch = *p++;
+    if (ch == ':') {
+      continue;
+    }
+    cl = *p++;
+    if (!cl) {
+      OPENSSL_PUT_ERROR(X509V3, X509V3_R_ODD_NUMBER_OF_DIGITS);
+      OPENSSL_free(hexbuf);
+      return NULL;
+    }
+    if (!OPENSSL_fromxdigit(&high, ch)) {
+      goto badhex;
+    }
+    if (!OPENSSL_fromxdigit(&low, cl)) {
+      goto badhex;
+    }
+    *q++ = (high << 4) | low;
+  }
+
+  if (len) {
+    *len = q - hexbuf;
+  }
+
+  return hexbuf;
+
+err:
+  OPENSSL_free(hexbuf);
+  return NULL;
+
+badhex:
+  OPENSSL_free(hexbuf);
+  OPENSSL_PUT_ERROR(X509V3, X509V3_R_ILLEGAL_HEX_DIGIT);
+  return NULL;
+}
+
+int x509v3_conf_name_matches(const char *name, const char *cmp) {
+  // |name| must begin with |cmp|.
+  size_t len = strlen(cmp);
+  if (strncmp(name, cmp, len) != 0) {
+    return 0;
+  }
+  // |name| must either be equal to |cmp| or begin with |cmp|, followed by '.'.
+  return name[len] == '\0' || name[len] == '.';
+}
+
+static int sk_strcmp(const char **a, const char **b) { return strcmp(*a, *b); }
+
+STACK_OF(OPENSSL_STRING) *X509_get1_email(X509 *x) {
+  GENERAL_NAMES *gens;
+  STACK_OF(OPENSSL_STRING) *ret;
+
+  gens = X509_get_ext_d2i(x, NID_subject_alt_name, NULL, NULL);
+  ret = get_email(X509_get_subject_name(x), gens);
+  sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
+  return ret;
+}
+
+STACK_OF(OPENSSL_STRING) *X509_get1_ocsp(X509 *x) {
+  AUTHORITY_INFO_ACCESS *info;
+  STACK_OF(OPENSSL_STRING) *ret = NULL;
+  size_t i;
+
+  info = X509_get_ext_d2i(x, NID_info_access, NULL, NULL);
+  if (!info) {
+    return NULL;
+  }
+  for (i = 0; i < sk_ACCESS_DESCRIPTION_num(info); i++) {
+    ACCESS_DESCRIPTION *ad = sk_ACCESS_DESCRIPTION_value(info, i);
+    if (OBJ_obj2nid(ad->method) == NID_ad_OCSP) {
+      if (ad->location->type == GEN_URI) {
+        if (!append_ia5(&ret, ad->location->d.uniformResourceIdentifier)) {
+          break;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
         X509V3_add_value(ntmp, NULL, &values);
     }
@@ -712,9 +1051,25 @@ typedef int (*equal_fn) (const unsigned char *pattern, size_t pattern_len,
 /* Compare while ASCII ignoring case. */
 static int equal_nocase(const unsigned char *pattern, size_t pattern_len,
                         const unsigned char *subject, size_t subject_len,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                         unsigned int flags)
 {
     if (pattern_len != subject_len)
+=======
+                        unsigned int flags) {
+  if (pattern_len != subject_len) {
+    return 0;
+  }
+  while (pattern_len) {
+    unsigned char l = *pattern;
+    unsigned char r = *subject;
+    // The pattern must not contain NUL characters.
+    if (l == 0) {
+      return 0;
+    }
+    if (l != r) {
+      if (OPENSSL_tolower(l) != OPENSSL_tolower(r)) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         return 0;
     while (pattern_len) {
         unsigned char l = *pattern;
@@ -826,6 +1181,18 @@ static int wildcard_match(const unsigned char *prefix, size_t prefix_len,
               *p == '-'))
             return 0;
     return 1;
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
+=======
+  }
+  // Check that the part matched by the wildcard contains only
+  // permitted characters and only matches a single label.
+  for (p = wildcard_start; p != wildcard_end; ++p) {
+    if (!OPENSSL_isalnum(*p) && *p != '-') {
+      return 0;
+    }
+  }
+  return 1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 #define LABEL_START     (1 << 0)
@@ -834,6 +1201,7 @@ static int wildcard_match(const unsigned char *prefix, size_t prefix_len,
 #define LABEL_IDNA      (1 << 3)
 
 static const unsigned char *valid_star(const unsigned char *p, size_t len,
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
                                        unsigned int flags)
 {
     const unsigned char *star = 0;
@@ -880,6 +1248,51 @@ static const unsigned char *valid_star(const unsigned char *p, size_t len,
             state |= LABEL_HYPHEN;
         } else
             return NULL;
+=======
+                                       unsigned int flags) {
+  const unsigned char *star = 0;
+  size_t i;
+  int state = LABEL_START;
+  int dots = 0;
+  for (i = 0; i < len; ++i) {
+    // Locate first and only legal wildcard, either at the start
+    // or end of a non-IDNA first and not final label.
+    if (p[i] == '*') {
+      int atstart = (state & LABEL_START);
+      int atend = (i == len - 1 || p[i + 1] == '.');
+      // At most one wildcard per pattern.
+      // No wildcards in IDNA labels.
+      // No wildcards after the first label.
+      if (star != NULL || (state & LABEL_IDNA) != 0 || dots) {
+        return NULL;
+      }
+      // Only full-label '*.example.com' wildcards.
+      if (!atstart || !atend) {
+        return NULL;
+      }
+      star = &p[i];
+      state &= ~LABEL_START;
+    } else if (OPENSSL_isalnum(p[i])) {
+      if ((state & LABEL_START) != 0 && len - i >= 4 &&
+          OPENSSL_strncasecmp((char *)&p[i], "xn--", 4) == 0) {
+        state |= LABEL_IDNA;
+      }
+      state &= ~(LABEL_HYPHEN | LABEL_START);
+    } else if (p[i] == '.') {
+      if ((state & (LABEL_HYPHEN | LABEL_START)) != 0) {
+        return NULL;
+      }
+      state = LABEL_START;
+      ++dots;
+    } else if (p[i] == '-') {
+      // no domain/subdomain starts with '-'
+      if ((state & LABEL_START) != 0) {
+        return NULL;
+      }
+      state |= LABEL_HYPHEN;
+    } else {
+      return NULL;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     /*
@@ -919,8 +1332,33 @@ int x509v3_looks_like_dns_name(const unsigned char *in, size_t len) {
      * common name fallback, so it must be loose enough to accept hostname
      * common names, and tight enough to reject decorative common names. */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (len > 0 && in[len - 1] == '.') {
         len--;
+=======
+  if (len > 0 && in[len - 1] == '.') {
+    len--;
+  }
+
+  // Wildcards are allowed in front.
+  if (len >= 2 && in[0] == '*' && in[1] == '.') {
+    in += 2;
+    len -= 2;
+  }
+
+  if (len == 0) {
+    return 0;
+  }
+
+  size_t label_start = 0;
+  for (size_t i = 0; i < len; i++) {
+    unsigned char c = in[i];
+    if (OPENSSL_isalnum(c) || (c == '-' && i > label_start) ||
+        // These are not valid characters in hostnames, but commonly found
+        // in deployments outside the Web PKI.
+        c == '_' || c == ':') {
+      continue;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
 
     /* Wildcards are allowed in front. */
@@ -1248,6 +1686,7 @@ static int ipv6_from_asc(unsigned char v6[16], const char *in)
         if (v6stat.total != 16)
             return 0;
     } else {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
         /* If '::' must have less than 16 bytes */
         if (v6stat.total == 16)
             return 0;
@@ -1258,6 +1697,112 @@ static int ipv6_from_asc(unsigned char v6[16], const char *in)
         else if (v6stat.zero_cnt == 3) {
             if (v6stat.total > 0)
                 return 0;
+=======
+      // Can only have one zero if *not* start or end
+      if (v6stat.zero_pos == 0 || v6stat.zero_pos == v6stat.total) {
+        return 0;
+      }
+    }
+  }
+
+  // Format the result.
+  if (v6stat.zero_pos >= 0) {
+    // Copy initial part
+    OPENSSL_memcpy(v6, v6stat.tmp, v6stat.zero_pos);
+    // Zero middle
+    OPENSSL_memset(v6 + v6stat.zero_pos, 0, 16 - v6stat.total);
+    // Copy final part
+    if (v6stat.total != v6stat.zero_pos) {
+      OPENSSL_memcpy(v6 + v6stat.zero_pos + 16 - v6stat.total,
+                     v6stat.tmp + v6stat.zero_pos,
+                     v6stat.total - v6stat.zero_pos);
+    }
+  } else {
+    OPENSSL_memcpy(v6, v6stat.tmp, 16);
+  }
+
+  return 1;
+}
+
+static int ipv6_cb(const char *elem, size_t len, void *usr) {
+  IPV6_STAT *s = usr;
+  // Error if 16 bytes written
+  if (s->total == 16) {
+    return 0;
+  }
+  if (len == 0) {
+    // Zero length element, corresponds to '::'
+    if (s->zero_pos == -1) {
+      s->zero_pos = s->total;
+    } else if (s->zero_pos != s->total) {
+      // If we've already got a :: its an error
+      return 0;
+    }
+    if (s->zero_cnt >= 3) {
+      // More than three zeros is an error.
+      return 0;
+    }
+    s->zero_cnt++;
+  } else {
+    // If more than 4 characters could be final a.b.c.d form
+    if (len > 4) {
+      // Need at least 4 bytes left
+      if (s->total > 12) {
+        return 0;
+      }
+      // Must be end of string
+      if (elem[len]) {
+        return 0;
+      }
+      if (!ipv4_from_asc(s->tmp + s->total, elem)) {
+        return 0;
+      }
+      s->total += 4;
+    } else {
+      if (!ipv6_hex(s->tmp + s->total, elem, len)) {
+        return 0;
+      }
+      s->total += 2;
+    }
+  }
+  return 1;
+}
+
+// Convert a string of up to 4 hex digits into the corresponding IPv6 form.
+
+static int ipv6_hex(unsigned char *out, const char *in, size_t inlen) {
+  if (inlen > 4) {
+    return 0;
+  }
+  uint16_t num = 0;
+  while (inlen--) {
+    uint8_t val;
+    if (!OPENSSL_fromxdigit(&val, *in++)) {
+      return 0;
+    }
+    num = (num << 4) | val;
+  }
+  out[0] = num >> 8;
+  out[1] = num & 0xff;
+  return 1;
+}
+
+int X509V3_NAME_from_section(X509_NAME *nm, const STACK_OF(CONF_VALUE) *dn_sk,
+                             int chtype) {
+  if (!nm) {
+    return 0;
+  }
+
+  for (size_t i = 0; i < sk_CONF_VALUE_num(dn_sk); i++) {
+    const CONF_VALUE *v = sk_CONF_VALUE_value(dn_sk, i);
+    const char *type = v->name;
+    // Skip past any leading X. X: X, etc to allow for multiple instances
+    for (const char *p = type; *p; p++) {
+      if ((*p == ':') || (*p == ',') || (*p == '.')) {
+        p++;
+        if (*p) {
+          type = p;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
         }
         /* Can only have two zeroes if at start or end */
         else if (v6stat.zero_cnt == 2) {
@@ -1272,6 +1817,7 @@ static int ipv6_from_asc(unsigned char v6[16], const char *in)
                 return 0;
         }
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 
     /* Format result */
 
@@ -1305,6 +1851,12 @@ static int ipv6_cb(const char *elem, int len, void *usr)
         else if (s->zero_pos != s->total)
             return 0;
         s->zero_cnt++;
+=======
+    int mval;
+    if (*type == '+') {
+      mval = -1;
+      type++;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     } else {
         /* If more than 4 characters could be final a.b.c.d form */
         if (len > 4) {

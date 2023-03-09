@@ -1,4 +1,3 @@
-/* v3_lib.c */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL project
  * 1999.
@@ -79,12 +78,89 @@ static int ext_stack_cmp(const X509V3_EXT_METHOD **a,
     return ((*a)->ext_nid - (*b)->ext_nid);
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int X509V3_EXT_add(X509V3_EXT_METHOD *ext)
 {
     if (!ext_list && !(ext_list = sk_X509V3_EXT_METHOD_new(ext_stack_cmp))) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
         ext_list_free(ext);
         return 0;
+=======
+int X509V3_EXT_add(X509V3_EXT_METHOD *ext) {
+  if (!ext_list && !(ext_list = sk_X509V3_EXT_METHOD_new(ext_stack_cmp))) {
+    ext_list_free(ext);
+    return 0;
+  }
+  if (!sk_X509V3_EXT_METHOD_push(ext_list, ext)) {
+    ext_list_free(ext);
+    return 0;
+  }
+  return 1;
+}
+
+static int ext_cmp(const void *void_a, const void *void_b) {
+  const X509V3_EXT_METHOD **a = (const X509V3_EXT_METHOD **)void_a;
+  const X509V3_EXT_METHOD **b = (const X509V3_EXT_METHOD **)void_b;
+  return ext_stack_cmp(a, b);
+}
+
+const X509V3_EXT_METHOD *X509V3_EXT_get_nid(int nid) {
+  X509V3_EXT_METHOD tmp;
+  const X509V3_EXT_METHOD *t = &tmp, *const * ret;
+  size_t idx;
+
+  if (nid < 0) {
+    return NULL;
+  }
+  tmp.ext_nid = nid;
+  ret = bsearch(&t, standard_exts, STANDARD_EXTENSION_COUNT,
+                sizeof(X509V3_EXT_METHOD *), ext_cmp);
+  if (ret) {
+    return *ret;
+  }
+  if (!ext_list) {
+    return NULL;
+  }
+
+  sk_X509V3_EXT_METHOD_sort(ext_list);
+  if (!sk_X509V3_EXT_METHOD_find(ext_list, &idx, &tmp)) {
+    return NULL;
+  }
+  return sk_X509V3_EXT_METHOD_value(ext_list, idx);
+}
+
+const X509V3_EXT_METHOD *X509V3_EXT_get(const X509_EXTENSION *ext) {
+  int nid;
+  if ((nid = OBJ_obj2nid(ext->object)) == NID_undef) {
+    return NULL;
+  }
+  return X509V3_EXT_get_nid(nid);
+}
+
+int X509V3_EXT_free(int nid, void *ext_data) {
+  const X509V3_EXT_METHOD *ext_method = X509V3_EXT_get_nid(nid);
+  if (ext_method == NULL) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_CANNOT_FIND_FREE_FUNCTION);
+    return 0;
+  }
+
+  if (ext_method->it != NULL) {
+    ASN1_item_free(ext_data, ASN1_ITEM_ptr(ext_method->it));
+  } else if (ext_method->ext_free != NULL) {
+    ext_method->ext_free(ext_data);
+  } else {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_CANNOT_FIND_FREE_FUNCTION);
+    return 0;
+  }
+
+  return 1;
+}
+
+int X509V3_EXT_add_list(X509V3_EXT_METHOD *extlist) {
+  for (; extlist->ext_nid != -1; extlist++) {
+    if (!X509V3_EXT_add(extlist)) {
+      return 0;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     }
     if (!sk_X509V3_EXT_METHOD_push(ext_list, ext)) {
         OPENSSL_PUT_ERROR(X509V3, ERR_R_MALLOC_FAILURE);
@@ -94,11 +170,30 @@ int X509V3_EXT_add(X509V3_EXT_METHOD *ext)
     return 1;
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int ext_cmp(const void *void_a, const void *void_b)
 {
     const X509V3_EXT_METHOD **a = (const X509V3_EXT_METHOD **)void_a;
     const X509V3_EXT_METHOD **b = (const X509V3_EXT_METHOD **)void_b;
     return ext_stack_cmp(a, b);
+=======
+int X509V3_EXT_add_alias(int nid_to, int nid_from) {
+  const X509V3_EXT_METHOD *ext;
+  X509V3_EXT_METHOD *tmpext;
+
+  if (!(ext = X509V3_EXT_get_nid(nid_from))) {
+    OPENSSL_PUT_ERROR(X509V3, X509V3_R_EXTENSION_NOT_FOUND);
+    return 0;
+  }
+  if (!(tmpext =
+            (X509V3_EXT_METHOD *)OPENSSL_malloc(sizeof(X509V3_EXT_METHOD)))) {
+    return 0;
+  }
+  *tmpext = *ext;
+  tmpext->ext_nid = nid_to;
+  tmpext->ext_flags |= X509V3_EXT_DYNAMIC;
+  return X509V3_EXT_add(tmpext);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 const X509V3_EXT_METHOD *X509V3_EXT_get_nid(int nid)

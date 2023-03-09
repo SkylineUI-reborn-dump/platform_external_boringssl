@@ -59,6 +59,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <inttypes.h>
+#include <limits.h>
 #include <string.h>
 
 #include <openssl/bio.h>
@@ -110,6 +111,7 @@ static int do_esc_char(uint32_t c, unsigned char flags, char *do_quotes,
             return -1;
         return 10;
     }
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (c > 0xff) {
         BIO_snprintf(tmphex, sizeof tmphex, "\\U%04" PRIX32, c);
         if (!maybe_write(out, tmphex, 6))
@@ -154,6 +156,18 @@ static int do_esc_char(uint32_t c, unsigned char flags, char *do_quotes,
     if (!maybe_write(out, &chtmp, 1))
         return -1;
     return 1;
+=======
+  } else if ((flags & ESC_FLAGS) && c == '\\') {
+    // If any escape flags are set, also escape backslashes.
+    BIO_snprintf(buf, sizeof(buf), "\\%c", (int)c);
+  } else {
+    return maybe_write(out, &u8, 1) ? 1 : -1;
+  }
+
+  static_assert(sizeof(buf) < INT_MAX, "len may not fit in int");
+  int len = (int)strlen(buf);
+  return maybe_write(out, buf, len) ? len : -1;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
 /*

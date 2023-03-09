@@ -109,10 +109,10 @@ struct asn1_object_st {
 
 ASN1_OBJECT *ASN1_OBJECT_new(void);
 
-// ASN1_ENCODING structure: this is used to save the received
-// encoding of an ASN1 type. This is useful to get round
-// problems with invalid encodings which can break signatures.
+// ASN1_ENCODING is used to save the received encoding of an ASN.1 type. This
+// avoids problems with invalid encodings that break signatures.
 typedef struct ASN1_ENCODING_st {
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
   unsigned char *enc;  // DER encoding
   long len;            // Length of encoding
   int modified;        // set to 1 if 'enc' is invalid
@@ -124,24 +124,45 @@ typedef struct ASN1_ENCODING_st {
   // should avoid taking a copy of the input and rather set
   // |alias_only|.
   unsigned alias_only_on_next_parse : 1;
+=======
+  // enc is the saved DER encoding. Its ownership is determined by |buf|.
+  uint8_t *enc;
+  // len is the length of |enc|. If zero, there is no saved encoding.
+  size_t len;
+  // buf, if non-NULL, is the |CRYPTO_BUFFER| that |enc| points into. If NULL,
+  // |enc| must be released with |OPENSSL_free|.
+  CRYPTO_BUFFER *buf;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 } ASN1_ENCODING;
 
 int asn1_utctime_to_tm(struct tm *tm, const ASN1_UTCTIME *d);
 int asn1_generalizedtime_to_tm(struct tm *tm, const ASN1_GENERALIZEDTIME *d);
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 void asn1_item_combine_free(ASN1_VALUE **pval, const ASN1_ITEM *it,
                             int combine);
 
 int UTF8_getc(const unsigned char *str, int len, uint32_t *val);
 int UTF8_putc(unsigned char *str, int len, uint32_t value);
 
+=======
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 int ASN1_item_ex_new(ASN1_VALUE **pval, const ASN1_ITEM *it);
 void ASN1_item_ex_free(ASN1_VALUE **pval, const ASN1_ITEM *it);
 
 void ASN1_template_free(ASN1_VALUE **pval, const ASN1_TEMPLATE *tt);
+
+// ASN1_item_ex_d2i parses |len| bytes from |*in| as a structure of type |it|
+// and writes the result to |*pval|. If |tag| is non-negative, |it| is
+// implicitly tagged with the tag specified by |tag| and |aclass|. If |opt| is
+// non-zero, the value is optional. If |buf| is non-NULL, |*in| must point into
+// |buf|.
+//
+// This function returns one and advances |*in| if an object was successfully
+// parsed, -1 if an optional value was successfully skipped, and zero on error.
 int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
                      const ASN1_ITEM *it, int tag, int aclass, char opt,
-                     ASN1_TLC *ctx);
+                     CRYPTO_BUFFER *buf);
 
 /* ASN1_item_ex_i2d encodes |*pval| as a value of type |it| to |out| under the
  * i2d output convention. It returns a non-zero length on success and -1 on
@@ -183,8 +204,11 @@ void asn1_enc_free(ASN1_VALUE **pval, const ASN1_ITEM *it);
 int asn1_enc_restore(int *len, unsigned char **out, ASN1_VALUE **pval,
                      const ASN1_ITEM *it);
 
-int asn1_enc_save(ASN1_VALUE **pval, const unsigned char *in, int inlen,
-                  const ASN1_ITEM *it);
+// asn1_enc_save saves |inlen| bytes from |in| as |*pval|'s saved encoding. It
+// returns one on success and zero on error. If |buf| is non-NULL, |in| must
+// point into |buf|.
+int asn1_enc_save(ASN1_VALUE **pval, const uint8_t *in, size_t inlen,
+                  const ASN1_ITEM *it, CRYPTO_BUFFER *buf);
 
 /* asn1_type_value_as_pointer returns |a|'s value in pointer form. This is
  * usually the value object but, for BOOLEAN values, is 0 or 0xff cast to
@@ -215,6 +239,28 @@ typedef struct {
  * of built-in |ASN1_STRING_TABLE| values. It is exported for testing. */
 OPENSSL_EXPORT void asn1_get_string_table_for_testing(
     const ASN1_STRING_TABLE **out_ptr, size_t *out_len);
+
+typedef ASN1_VALUE *ASN1_new_func(void);
+typedef void ASN1_free_func(ASN1_VALUE *a);
+typedef ASN1_VALUE *ASN1_d2i_func(ASN1_VALUE **a, const unsigned char **in,
+                                  long length);
+typedef int ASN1_i2d_func(ASN1_VALUE *a, unsigned char **in);
+
+typedef int ASN1_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
+                        const ASN1_ITEM *it, int opt, ASN1_TLC *ctx);
+
+typedef int ASN1_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
+                        const ASN1_ITEM *it);
+typedef int ASN1_ex_new_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
+typedef void ASN1_ex_free_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
+
+typedef struct ASN1_EXTERN_FUNCS_st {
+  ASN1_ex_new_func *asn1_ex_new;
+  ASN1_ex_free_func *asn1_ex_free;
+  ASN1_ex_free_func *asn1_ex_clear;
+  ASN1_ex_d2i *asn1_ex_d2i;
+  ASN1_ex_i2d *asn1_ex_i2d;
+} ASN1_EXTERN_FUNCS;
 
 
 #if defined(__cplusplus)

@@ -231,9 +231,54 @@ int X509_NAME_add_entry(X509_NAME *name, X509_NAME_ENTRY *ne, int loc,
     int n, i, inc;
     STACK_OF(X509_NAME_ENTRY) *sk;
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (name == NULL)
         return (0);
     sk = name->entries;
+=======
+  if (name == NULL) {
+    return 0;
+  }
+  sk = name->entries;
+  n = sk_X509_NAME_ENTRY_num(sk);
+  if (loc > n) {
+    loc = n;
+  } else if (loc < 0) {
+    loc = n;
+  }
+
+  inc = (set == 0);
+  name->modified = 1;
+
+  if (set == -1) {
+    if (loc == 0) {
+      set = 0;
+      inc = 1;
+    } else {
+      set = sk_X509_NAME_ENTRY_value(sk, loc - 1)->set;
+    }
+  } else {  // if (set >= 0)
+
+    if (loc >= n) {
+      if (loc != 0) {
+        set = sk_X509_NAME_ENTRY_value(sk, loc - 1)->set + 1;
+      } else {
+        set = 0;
+      }
+    } else {
+      set = sk_X509_NAME_ENTRY_value(sk, loc)->set;
+    }
+  }
+
+  if ((new_name = X509_NAME_ENTRY_dup(entry)) == NULL) {
+    goto err;
+  }
+  new_name->set = set;
+  if (!sk_X509_NAME_ENTRY_insert(sk, new_name, loc)) {
+    goto err;
+  }
+  if (inc) {
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
     n = sk_X509_NAME_ENTRY_num(sk);
     if (loc > n)
         loc = n;

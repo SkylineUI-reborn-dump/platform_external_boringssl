@@ -64,12 +64,21 @@
 #include <openssl/rand.h>
 #include <openssl/x509.h>
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder,
                       int nid, const EVP_CIPHER *enc,
                       char *kstr, int klen, pem_password_cb *cb, void *u);
 static int do_pk8pkey_fp(FILE *bp, EVP_PKEY *x, int isder,
                          int nid, const EVP_CIPHER *enc,
                          char *kstr, int klen, pem_password_cb *cb, void *u);
+=======
+static int do_pk8pkey(BIO *bp, const EVP_PKEY *x, int isder, int nid,
+                      const EVP_CIPHER *enc, char *kstr, int klen,
+                      pem_password_cb *cb, void *u);
+static int do_pk8pkey_fp(FILE *bp, const EVP_PKEY *x, int isder, int nid,
+                         const EVP_CIPHER *enc, char *kstr, int klen,
+                         pem_password_cb *cb, void *u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 
 /*
  * These functions write a private key in PKCS#8 format: it is a "drop in"
@@ -78,35 +87,62 @@ static int do_pk8pkey_fp(FILE *bp, EVP_PKEY *x, int isder,
  * uses PKCS#5 v1.5 PBE algorithms whereas the others use PKCS#5 v2.0.
  */
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int PEM_write_bio_PKCS8PrivateKey_nid(BIO *bp, EVP_PKEY *x, int nid,
                                       char *kstr, int klen,
                                       pem_password_cb *cb, void *u)
 {
     return do_pk8pkey(bp, x, 0, nid, NULL, kstr, klen, cb, u);
+=======
+int PEM_write_bio_PKCS8PrivateKey_nid(BIO *bp, const EVP_PKEY *x, int nid,
+                                      char *kstr, int klen, pem_password_cb *cb,
+                                      void *u) {
+  return do_pk8pkey(bp, x, 0, nid, NULL, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int PEM_write_bio_PKCS8PrivateKey(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
                                   char *kstr, int klen,
                                   pem_password_cb *cb, void *u)
 {
     return do_pk8pkey(bp, x, 0, -1, enc, kstr, klen, cb, u);
+=======
+int PEM_write_bio_PKCS8PrivateKey(BIO *bp, const EVP_PKEY *x,
+                                  const EVP_CIPHER *enc, char *kstr, int klen,
+                                  pem_password_cb *cb, void *u) {
+  return do_pk8pkey(bp, x, 0, -1, enc, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int i2d_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY *x, const EVP_CIPHER *enc,
                             char *kstr, int klen,
                             pem_password_cb *cb, void *u)
 {
     return do_pk8pkey(bp, x, 1, -1, enc, kstr, klen, cb, u);
+=======
+int i2d_PKCS8PrivateKey_bio(BIO *bp, const EVP_PKEY *x, const EVP_CIPHER *enc,
+                            char *kstr, int klen, pem_password_cb *cb,
+                            void *u) {
+  return do_pk8pkey(bp, x, 1, -1, enc, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, EVP_PKEY *x, int nid,
                                 char *kstr, int klen,
                                 pem_password_cb *cb, void *u)
 {
     return do_pk8pkey(bp, x, 1, nid, NULL, kstr, klen, cb, u);
+=======
+int i2d_PKCS8PrivateKey_nid_bio(BIO *bp, const EVP_PKEY *x, int nid, char *kstr,
+                                int klen, pem_password_cb *cb, void *u) {
+  return do_pk8pkey(bp, x, 1, nid, NULL, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
-static int do_pk8pkey(BIO *bp, EVP_PKEY *x, int isder, int nid,
+static int do_pk8pkey(BIO *bp, const EVP_PKEY *x, int isder, int nid,
                       const EVP_CIPHER *enc, char *kstr, int klen,
                       pem_password_cb *cb, void *u)
 {
@@ -191,34 +227,60 @@ EVP_PKEY *d2i_PKCS8PrivateKey_bio(BIO *bp, EVP_PKEY **x, pem_password_cb *cb,
 }
 
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int i2d_PKCS8PrivateKey_fp(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
                            char *kstr, int klen, pem_password_cb *cb, void *u)
 {
     return do_pk8pkey_fp(fp, x, 1, -1, enc, kstr, klen, cb, u);
+=======
+int i2d_PKCS8PrivateKey_fp(FILE *fp, const EVP_PKEY *x, const EVP_CIPHER *enc,
+                           char *kstr, int klen, pem_password_cb *cb, void *u) {
+  return do_pk8pkey_fp(fp, x, 1, -1, enc, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int i2d_PKCS8PrivateKey_nid_fp(FILE *fp, EVP_PKEY *x, int nid,
                                char *kstr, int klen,
                                pem_password_cb *cb, void *u)
 {
     return do_pk8pkey_fp(fp, x, 1, nid, NULL, kstr, klen, cb, u);
+=======
+int i2d_PKCS8PrivateKey_nid_fp(FILE *fp, const EVP_PKEY *x, int nid, char *kstr,
+                               int klen, pem_password_cb *cb, void *u) {
+  return do_pk8pkey_fp(fp, x, 1, nid, NULL, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int PEM_write_PKCS8PrivateKey_nid(FILE *fp, EVP_PKEY *x, int nid,
                                   char *kstr, int klen,
                                   pem_password_cb *cb, void *u)
 {
     return do_pk8pkey_fp(fp, x, 0, nid, NULL, kstr, klen, cb, u);
+=======
+int PEM_write_PKCS8PrivateKey_nid(FILE *fp, const EVP_PKEY *x, int nid,
+                                  char *kstr, int klen, pem_password_cb *cb,
+                                  void *u) {
+  return do_pk8pkey_fp(fp, x, 0, nid, NULL, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
 int PEM_write_PKCS8PrivateKey(FILE *fp, EVP_PKEY *x, const EVP_CIPHER *enc,
                               char *kstr, int klen, pem_password_cb *cb,
                               void *u)
 {
     return do_pk8pkey_fp(fp, x, 0, -1, enc, kstr, klen, cb, u);
+=======
+int PEM_write_PKCS8PrivateKey(FILE *fp, const EVP_PKEY *x,
+                              const EVP_CIPHER *enc, char *kstr, int klen,
+                              pem_password_cb *cb, void *u) {
+  return do_pk8pkey_fp(fp, x, 0, -1, enc, kstr, klen, cb, u);
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }
 
-static int do_pk8pkey_fp(FILE *fp, EVP_PKEY *x, int isder, int nid,
+static int do_pk8pkey_fp(FILE *fp, const EVP_PKEY *x, int isder, int nid,
                          const EVP_CIPHER *enc, char *kstr, int klen,
                          pem_password_cb *cb, void *u)
 {

@@ -104,6 +104,7 @@ int ASN1_item_sign_ctx(const ASN1_ITEM *it,
         goto err;
     }
 
+<<<<<<< HEAD   (0a931c Snap for 8740412 from 2bbd592adbcc2fef5eb979af85d1e7b091f346)
     if (!EVP_DigestSign(ctx, buf_out, &outl, buf_in, inl)) {
         outl = 0;
         OPENSSL_PUT_ERROR(X509, ERR_R_EVP_LIB);
@@ -125,4 +126,28 @@ int ASN1_item_sign_ctx(const ASN1_ITEM *it,
     OPENSSL_free(buf_in);
     OPENSSL_free(buf_out);
     return (outl);
+=======
+  inl = ASN1_item_i2d(asn, &buf_in, it);
+  outl = EVP_PKEY_size(pkey);
+  buf_out = OPENSSL_malloc((unsigned int)outl);
+  if ((buf_in == NULL) || (buf_out == NULL)) {
+    outl = 0;
+    goto err;
+  }
+
+  if (!EVP_DigestSign(ctx, buf_out, &outl, buf_in, inl)) {
+    outl = 0;
+    OPENSSL_PUT_ERROR(X509, ERR_R_EVP_LIB);
+    goto err;
+  }
+  ASN1_STRING_set0(signature, buf_out, outl);
+  buf_out = NULL;
+  signature->flags &= ~(ASN1_STRING_FLAG_BITS_LEFT | 0x07);
+  signature->flags |= ASN1_STRING_FLAG_BITS_LEFT;
+err:
+  EVP_MD_CTX_cleanup(ctx);
+  OPENSSL_free(buf_in);
+  OPENSSL_free(buf_out);
+  return outl;
+>>>>>>> CHANGE (34340c external/boringssl: Sync to 8aa51ddfcf1fbf2e5f976762657e21c7)
 }

@@ -4,7 +4,6 @@
 // From that JSON (which is defined by the Config struct) it reads a list of
 // header file locations and generates HTML files for each in the current
 // directory.
-
 package main
 
 import (
