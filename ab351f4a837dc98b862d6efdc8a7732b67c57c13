@@ -16,6 +16,23 @@
       "message": "Local tests not yet run due to build slowness but not expecting any issues.",
       "revId": "ab351f4a837dc98b862d6efdc8a7732b67c57c13",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb08890_cac7ab73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-09T18:07:20Z",
+      "side": 1,
+      "message": "Tests pass....",
+      "revId": "ab351f4a837dc98b862d6efdc8a7732b67c57c13",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
