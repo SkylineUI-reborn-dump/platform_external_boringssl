@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f1083c_bb4b54f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-03-10T19:29:40Z",
+      "side": 1,
+      "message": "LGTM once the other stuff is clear",
+      "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "753c458a_5e3375df",
+        "filename": "UPDATING",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-03-10T19:29:40Z",
+      "side": 1,
+      "message": "We really should move these all to `generated/` or `asm/` or something.",
+      "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aab2863_b74312b4",
+        "filename": "src/rust/CMakeLists.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-03-10T19:29:40Z",
+      "side": 1,
+      "message": "Mind updating `libbssl_sys_raw_flags` in Android.bp to reflect this change? Should be the same either way, but it\u0027s a little tidier since it avoids re-binding all of libc.",
+      "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
