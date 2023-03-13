@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0057d50f_a3049517",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-13T17:57:13Z",
+      "side": 1,
+      "message": "Tests pass.  Additionally tested CtsNetSecConfigAttributeTestCases CtsNetSecConfigResourcesSrcTestCases CtsNetSecConfigNestedDomainConfigTestCases CtsNetSecConfigCleartextTrafficTestCases CtsNetSecConfigInvalidPinTestCases CtsNetSecConfigBasicDomainConfigTestCases CtsNetSecConfigDownloadManagerTestCases CtsNetSecConfigPrePCleartextTrafficTestCases CtsNetSecConfigBasicDebugEnabledTestCases CtsNetSecConfigBasicDebugDisabledTestCases.\n\nJust waiting for vendor fixes in internal to land before presubmitting again.",
+      "revId": "34340cdd5688dbcd8be3d5cefcfffe43d7f5b0fa",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
