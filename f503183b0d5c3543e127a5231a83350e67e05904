@@ -35,6 +35,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b19135_2a0f0a47",
+        "filename": "UPDATING",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-13T12:39:18Z",
+      "side": 1,
+      "message": "We should, but let\u0027s bundle it with the work to shift to `external_updater`.",
+      "parentUuid": "753c458a_5e3375df",
+      "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aab2863_b74312b4",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-10T19:29:40Z",
       "side": 1,
       "message": "Mind updating `libbssl_sys_raw_flags` in Android.bp to reflect this change? Should be the same either way, but it\u0027s a little tidier since it avoids re-binding all of libc.",
+      "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "583ee998_437bd18e",
+        "filename": "src/rust/CMakeLists.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-03-13T12:39:18Z",
+      "side": 1,
+      "message": "Done.\n\nFun fact: The Soong rule in question already escapes flags, so if you also try and escape them by hand in `Android.bp`, you\u0027re going to have a bad time. 😊",
+      "parentUuid": "2aab2863_b74312b4",
       "revId": "f503183b0d5c3543e127a5231a83350e67e05904",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
