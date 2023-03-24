@@ -16,6 +16,24 @@
       "message": "Needs a Merged-In tag",
       "revId": "4257b1eccd6bad36e15b708db09242e1db299d3a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e05098_4575b45f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1969909
+      },
+      "writtenOn": "2023-03-24T01:47:06Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "c048ada2_aac1cda3",
+      "revId": "4257b1eccd6bad36e15b708db09242e1db299d3a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
