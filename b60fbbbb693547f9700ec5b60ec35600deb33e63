@@ -16,6 +16,23 @@
       "message": "I don\u0027t work on Android and have no idea what I am looking at here. Hoping @prb@google.com will have more context on this.",
       "revId": "b60fbbbb693547f9700ec5b60ec35600deb33e63",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb7777f5_db501773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1809421
+      },
+      "writtenOn": "2023-03-30T04:14:21Z",
+      "side": 1,
+      "message": "Sorry, I should have provided more context. Boringssl is pinned in Trusty and I need an owner for this repo to +2 the update to roll forward to the latest version.",
+      "revId": "b60fbbbb693547f9700ec5b60ec35600deb33e63",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
