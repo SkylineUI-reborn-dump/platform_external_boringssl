@@ -409,7 +409,6 @@ cc_library_static {
         "-DOPENSSL_NO_OS",
         "-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED",
         "-DOPENSSL_SMALL",
-        "-DOPENSSL_STATIC_ARMCAP",
     ],
     visibility: [
         "//external/avb",
