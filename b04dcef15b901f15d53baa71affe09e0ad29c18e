@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd656d3_d500cfd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-04-04T14:02:27Z",
+      "side": 1,
+      "message": "After further testing, this revert doesn\u0027t seem to be required.",
+      "revId": "b04dcef15b901f15d53baa71affe09e0ad29c18e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
