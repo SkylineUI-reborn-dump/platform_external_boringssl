@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cca8a93_e8fd58b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-04-05T17:55:08Z",
+      "side": 1,
+      "message": "Upstream CL: https://boringssl-review.googlesource.com/c/boringssl/+/58586",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "5983eeb7120ff6555a3e8b7061ebbd7f2ce4bf49",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
