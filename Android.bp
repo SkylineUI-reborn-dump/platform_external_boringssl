@@ -406,9 +406,10 @@ cc_library_static {
     ],
     cflags: [
         "-DBORINGSSL_NO_STATIC_INITIALIZER",
+        "-DOPENSSL_NO_OS",
+        "-DOPENSSL_NO_THREADS_CORRUPT_MEMORY_AND_LEAK_SECRETS_IF_THREADED",
         "-DOPENSSL_SMALL",
         "-DOPENSSL_STATIC_ARMCAP",
-        "-D__TRUSTY__",
     ],
     visibility: [
         "//external/avb",
