@@ -78,6 +78,7 @@ set(crypto_sources
   ${BORINGSSL_ROOT}src/crypto/cipher_extra/e_tls.c
   ${BORINGSSL_ROOT}src/crypto/cipher_extra/tls_cbc.c
   ${BORINGSSL_ROOT}src/crypto/conf/conf.c
+  ${BORINGSSL_ROOT}src/crypto/cpu_aarch64.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_apple.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_freebsd.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_fuchsia.c

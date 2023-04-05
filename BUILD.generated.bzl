@@ -331,6 +331,7 @@ crypto_sources = [
     "src/crypto/cipher_extra/e_tls.c",
     "src/crypto/cipher_extra/tls_cbc.c",
     "src/crypto/conf/conf.c",
+    "src/crypto/cpu_aarch64.c",
     "src/crypto/cpu_aarch64_apple.c",
     "src/crypto/cpu_aarch64_freebsd.c",
     "src/crypto/cpu_aarch64_fuchsia.c",
