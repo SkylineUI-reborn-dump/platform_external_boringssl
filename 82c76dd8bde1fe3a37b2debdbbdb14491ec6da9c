@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5f3c3ad_83a7cdb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-04-05T15:52:07Z",
+      "side": 1,
+      "message": "This is an alternative to aosp/2522655, where instead of producing a static library with an unresolved symbol, this patch stack adds a baremetal implementation of `OPENSSL_cpuid_setup` to the library and lets the client make use of it through a new build flag (CPP macro).",
+      "revId": "82c76dd8bde1fe3a37b2debdbbdb14491ec6da9c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
