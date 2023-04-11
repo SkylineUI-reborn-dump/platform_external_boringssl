@@ -16,6 +16,23 @@
       "message": "Big topic - please help w/ review",
       "revId": "f8a8546ea3f98b99a5fcfc9abc62f9834b45b4f6",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b67cca9_222df9b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-04-11T17:55:34Z",
+      "side": 1,
+      "message": "NB this probably needs to go into `init.rc` too: https://cs.android.com/android/platform/superproject/+/master:system/core/rootdir/init.rc;l\u003d473-495\n\nBonus points if you get a chance to add an empty `capabilities` here before submission too! Otherwise I\u0027ll try and follow up.",
+      "revId": "f8a8546ea3f98b99a5fcfc9abc62f9834b45b4f6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
