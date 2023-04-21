@@ -52,6 +52,24 @@
       "parentUuid": "6fca3dc3_4de6e036",
       "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c468643_23544811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1991545
+      },
+      "writtenOn": "2023-04-21T15:26:54Z",
+      "side": 1,
+      "message": "Now rather than find and replace, you can just set the environment variable `BINDGEN_RS_FILE` in the build file and it will get picked up without modifying the source: see https://chromium-review.googlesource.com/c/chromium/src/+/4442732 for an example",
+      "parentUuid": "ced8b62e_1eddb870",
+      "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
