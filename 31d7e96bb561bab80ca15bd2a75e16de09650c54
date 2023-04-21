@@ -34,6 +34,24 @@
       "parentUuid": "4463303a_2e300055",
       "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced8b62e_1eddb870",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-04-21T14:49:16Z",
+      "side": 1,
+      "message": "Also once we fix https://crbug.com/boringssl/35 and https://crbug.com/boringssl/596, lib.rs will be entirely empty. Wonder if we\u0027ll still need lib.rs at that point...",
+      "parentUuid": "6fca3dc3_4de6e036",
+      "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
