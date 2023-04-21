@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4463303a_2e300055",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-04-21T12:21:24Z",
+      "side": 1,
+      "message": "Nabil,\n\nYour upstream change introducing the `BINDGEN_RS_FILE` environment variable says \"this plays nicer with other build systems like Soong and Gn\".  However I\u0027m not good with `rust_bindgen`, so it\u0027s not clear to me what Soong changes we need to accommodate it.  Any advice appreciated.",
+      "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
