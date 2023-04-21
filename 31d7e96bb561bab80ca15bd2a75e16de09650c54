@@ -70,6 +70,24 @@
       "parentUuid": "ced8b62e_1eddb870",
       "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f92e19f_55f49d1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-04-21T17:16:59Z",
+      "side": 1,
+      "message": "Yeah, that\u0027d be even tidier. Though I don\u0027t know off-hand if Soong\u0027s Rust setup can do that. :-) @mmaurer@google.com, thoughts?",
+      "parentUuid": "8c468643_23544811",
+      "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
