@@ -88,6 +88,24 @@
       "parentUuid": "8c468643_23544811",
       "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af21219_7400b447",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-04-24T14:28:11Z",
+      "side": 1,
+      "message": "I don\u0027t see an obvious way to set `BINDGEN_RS_FILE` either as a generic Soong feature or as part of a `rust_library` rule, and unfortunately I don\u0027t have more time to spare unravelling the Rust build system, so I have reverted back to the previous \"have a sed genrule populate the includes\" method for this CL.  Will raise a Rust team bug to improve on that so we don\u0027t have to deal with it every update.",
+      "parentUuid": "2f92e19f_55f49d1a",
+      "revId": "31d7e96bb561bab80ca15bd2a75e16de09650c54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
