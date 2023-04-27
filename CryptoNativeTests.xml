@@ -29,5 +29,7 @@
        <option name="module-name" value="boringssl_crypto_test" />
        <option name="runtime-hint" value="10m" />
        <option name="native-test-timeout" value="600000" />
+       <!-- BoringSSL expects the test data to be without a "src" prefix. -->
+       <option name="gtest-env" value="BORINGSSL_TEST_DATA_PREFIX=src/" />
    </test>
 </configuration>

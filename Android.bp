@@ -634,6 +634,7 @@ cc_test {
         },
     },
     defaults: [
+        "boringssl_crypto_test_data",
         "boringssl_crypto_test_sources",
         "boringssl_flags",
     ],

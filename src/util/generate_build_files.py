@@ -111,13 +111,14 @@ class Android(object):
       non_bcm_asm = self.FilterBcmAsm(asm_outputs, False)
       bcm_asm = self.FilterBcmAsm(asm_outputs, True)
 
-      self.PrintDefaults(blueprint, 'libcrypto_sources', non_bcm_c_files, non_bcm_asm)
-      self.PrintDefaults(blueprint, 'libcrypto_bcm_sources', bcm_c_files, bcm_asm)
-      self.PrintDefaults(blueprint, 'libssl_sources', files['ssl'])
-      self.PrintDefaults(blueprint, 'bssl_sources', files['tool'])
-      self.PrintDefaults(blueprint, 'boringssl_test_support_sources', files['test_support'])
-      self.PrintDefaults(blueprint, 'boringssl_crypto_test_sources', files['crypto_test'])
-      self.PrintDefaults(blueprint, 'boringssl_ssl_test_sources', files['ssl_test'])
+      self.PrintDefaults(blueprint, 'libcrypto_sources', srcs=non_bcm_c_files, asm_srcs=non_bcm_asm)
+      self.PrintDefaults(blueprint, 'libcrypto_bcm_sources', srcs=bcm_c_files, asm_srcs=bcm_asm)
+      self.PrintDefaults(blueprint, 'libssl_sources', srcs=files['ssl'])
+      self.PrintDefaults(blueprint, 'bssl_sources', srcs=files['tool'])
+      self.PrintDefaults(blueprint, 'boringssl_test_support_sources', srcs=files['test_support'])
+      self.PrintDefaults(blueprint, 'boringssl_crypto_test_data', data=files['crypto_test_data'])
+      self.PrintDefaults(blueprint, 'boringssl_crypto_test_sources', srcs=files['crypto_test'])
+      self.PrintDefaults(blueprint, 'boringssl_ssl_test_sources', srcs=files['ssl_test'])
 
     # Legacy Android.mk format, only used by Trusty in new branches
     with open('sources.mk', 'w+') as makefile:
@@ -131,19 +132,27 @@ class Android(object):
         self.PrintVariableSection(
             makefile, '%s_%s_sources' % (osname, arch), asm_files)
 
-  def PrintDefaults(self, blueprint, name, files, asm_outputs={}):
+  def PrintDefaults(self, blueprint, name, srcs=[], asm_srcs={}, data=[]):
     """Print a cc_defaults section from a list of C files and optionally assembly outputs"""
     blueprint.write('\n')
     blueprint.write('cc_defaults {\n')
     blueprint.write('    name: "%s",\n' % name)
-    blueprint.write('    srcs: [\n')
-    for f in sorted(files):
-      blueprint.write('        "%s",\n' % f)
-    blueprint.write('    ],\n')
 
-    if asm_outputs:
+    if srcs:
+      blueprint.write('    srcs: [\n')
+      for f in sorted(srcs):
+        blueprint.write('        "%s",\n' % f)
+      blueprint.write('    ],\n')
+
+    if data:
+      blueprint.write('    data: [\n')
+      for f in sorted(data):
+        blueprint.write('        "%s",\n' % f)
+      blueprint.write('    ],\n')
+
+    if asm_srcs:
       blueprint.write('    target: {\n')
-      for ((osname, arch), asm_files) in asm_outputs:
+      for ((osname, arch), asm_files) in asm_srcs:
         if osname != 'linux':
           continue
         if arch == 'aarch64':
