@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f40ad8a6_9c590ec9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-05-02T14:34:45Z",
+      "side": 1,
+      "message": "Rust openssl crate builds cleanly (still using the old `sed` rule for handling includes though)",
+      "revId": "e943a2289a1394dbe1dd5b49b8aac8757fafde54",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
