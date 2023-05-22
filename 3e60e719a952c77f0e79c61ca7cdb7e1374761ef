@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92203dfb_93ec0b48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-05-22T18:26:35Z",
+      "side": 1,
+      "message": "Removing myself from reviewer. This landed upstream a long time ago and can be closed.",
+      "revId": "3e60e719a952c77f0e79c61ca7cdb7e1374761ef",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
