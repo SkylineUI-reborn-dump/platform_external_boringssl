@@ -384,6 +384,7 @@ cc_library_static {
     apex_available: [
         "//apex_available:platform",
         "com.android.neuralnetworks",
+        "com.android.btservices",
     ],
     defaults: [
         "libcrypto_bcm_sources",
