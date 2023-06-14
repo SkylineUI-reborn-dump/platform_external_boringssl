@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81b4a423_ad0edef8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-06-14T10:42:33Z",
+      "side": 1,
+      "message": "Unfortunately bluetooth very much falls inside the platform security boundary, which means you will need to continue using the dynamic version of libcrypto for FIPS compliance.\n\nThe referenced bug seems to be a size regression, so be aware that libcrypto is meant to be moving to the DCLA, which would mean even less size overhead for you than statically linking it: b/250619543",
+      "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
