@@ -16,6 +16,24 @@
       "message": "Unfortunately bluetooth very much falls inside the platform security boundary, which means you will need to continue using the dynamic version of libcrypto for FIPS compliance.\n\nThe referenced bug seems to be a size regression, so be aware that libcrypto is meant to be moving to the DCLA, which would mean even less size overhead for you than statically linking it: b/250619543",
       "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cb4f362_db9a1ed5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1881539
+      },
+      "writtenOn": "2023-06-14T22:25:38Z",
+      "side": 1,
+      "message": "\u003e Unfortunately bluetooth very much falls inside the platform security boundary, which means you will need to continue using the dynamic version of libcrypto for FIPS compliance.\n\nInteresting, I\u0027m unaware of what this is do you have some documentation about that ?\n\nAlso does it stills applies in regards with Mainline as we are anyway not using the dynamic version of the system but the one bundled in our APEX ?\n\n\u003e The referenced bug seems to be a size regression, so be aware that libcrypto is meant to be moving to the DCLA\n\nAFAIK DCLA only applies to modules updated via Play Store not when the module is preloaded to the device, no ?\n\nAlso even if DCLA is here and would solve part of the issue, as train updates are atomic, libcrypto being linked statically vs dynamically wouldn\u0027t change much other than trading sharing the cost with other modules depending on libcrypto and whole program optimisations that can be done by the linker by linking statically, no ?",
+      "parentUuid": "81b4a423_ad0edef8",
+      "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
