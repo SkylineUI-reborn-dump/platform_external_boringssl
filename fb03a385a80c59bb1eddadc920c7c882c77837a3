@@ -52,6 +52,24 @@
       "parentUuid": "0cb4f362_db9a1ed5",
       "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e12421_cc0be79e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-06-15T09:35:30Z",
+      "side": 1,
+      "message": "\u003e Technically they could use libcrypto from the system partition\n\nActually no... In any scenario where the system libcrypto gets OTAed but the preload  modules aren\u0027t rebuilt against it, things will break.",
+      "parentUuid": "c94066c1_95c8fc6a",
+      "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
