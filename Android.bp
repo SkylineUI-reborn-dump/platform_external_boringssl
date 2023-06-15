@@ -123,6 +123,7 @@ cc_object {
         address: false,
         hwaddress: false,
         memtag_stack: false,
+        memtag_globals: false,
         fuzzer: false,
     },
     target: {
