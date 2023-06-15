@@ -34,6 +34,24 @@
       "parentUuid": "81b4a423_ad0edef8",
       "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c94066c1_95c8fc6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-06-15T09:22:02Z",
+      "side": 1,
+      "message": "\u003e Interesting, I\u0027m unaware of what this is do you have some documentation about that ?\n\nWe should probably do a FAQ on it, but it actually doesn\u0027t come up that often and the existing visibility rules and the comment above libcrypto_static in the blueprint are intended to guide people towards the dynamic library.  The intent is that FIPS compliance should \"just work\" with no developer effort required and if you stick to dynamic libcrypto then that is the case.\n\nThe evaluation for Android 13 is still in progress but you can see the details for Android 12 at https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4156 and in particular the security policy, https://csrc.nist.gov/CSRC/media/projects/cryptographic-module-validation-program/documents/security-policies/140sp4156.pdf which covers the crypto module boundary and the self tests run on module startup.  Note that this was for FIPS 140-2... Android 13 is certifying under FIPS 140-3 and as a result of required re-engineering the self tests are more efficient (but still necessary).\n\nAs section 3.1 notes, applications are out of scope for FIPS validation however enterprise/government use requires everything inside the platform security boundary (less well defined) to use FIPS validated algorithms.\n\nAnd FIPS validated algorithms have self testing requirements which we achieve on Android via a static constructor method in the dynamic version of libcrypto.  Note that BoringCrypto itself does have support for FIPS compliant static linking on x86 but that has never been ported to Android: https://boringssl.googlesource.com/boringssl/+/master/crypto/fipsmodule/FIPS.md and skim down to \"static build\".\n\n\u003e Also does it stills applies in regards with Mainline as we are anyway not using the dynamic version of the system but the one bundled in our APEX ?\n\nYup. Applies to all copies of libcrypto in the system, which we enforce:  All dynamic builds of libcrypto are built in FIPS mode and release branches only get code which has been through the FIPS CMVP process.\n\n\u003e AFAIK DCLA only applies to modules updated via Play Store not when the module is preloaded to the device, no ?\n\nI don\u0027t know, sorry.\n\nInteresting point about preloaded modules though... Technically they could use libcrypto from the system partition as it should have an identical ABI, but it might be a bit fugly to have one linker configuration for preloads and a different one for updates.\n\n\u003e Also even if DCLA is here and would solve part of the issue, as train updates are atomic, libcrypto being linked statically vs dynamically wouldn\u0027t change much other than trading sharing the cost with other modules depending on libcrypto and whole program optimisations that can be done by the linker by linking statically, no ?\n\nI don\u0027t know the exact numbers, but right now we ship around 12 copies of libcrypto in apexes, all built from the same source and so with the same ABI.  I think deduplicating that is likely to give us more \"bang\" than switching to static linking.  However as we have no FIPS compliant static build it\u0027s a moot point.",
+      "parentUuid": "0cb4f362_db9a1ed5",
+      "revId": "fb03a385a80c59bb1eddadc920c7c882c77837a3",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
