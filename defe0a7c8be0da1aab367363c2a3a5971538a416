@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16d5a0f1_fd5d2a52",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-06-15T10:23:55Z",
+      "side": 1,
+      "message": "Can you also add this to `bcm_object_for_testing` below for consistency, please, even though I don\u0027t think we ever run that configuration under HWASAN.\n\nI\u0027ll refactor all this out into a defaults for both of them in a separate CL.",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 30
+      },
+      "revId": "defe0a7c8be0da1aab367363c2a3a5971538a416",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
