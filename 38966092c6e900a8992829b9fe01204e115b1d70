@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cfdcc5a_dcf0d174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-06-16T14:48:17Z",
+      "side": 1,
+      "message": "As we discussed, don\u0027t forget to upstream this or it will get lost on the next BoringSSL update.\n\nhttps://boringssl.googlesource.com/boringssl.git/+/HEAD/CONTRIBUTING.md",
+      "revId": "38966092c6e900a8992829b9fe01204e115b1d70",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
