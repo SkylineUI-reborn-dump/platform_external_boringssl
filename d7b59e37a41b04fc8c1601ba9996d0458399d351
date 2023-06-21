@@ -51,6 +51,23 @@
       "parentUuid": "708b6533_ce8b9ca5",
       "revId": "d7b59e37a41b04fc8c1601ba9996d0458399d351",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c02ae3_bad30e0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569496
+      },
+      "writtenOn": "2023-06-21T22:03:00Z",
+      "side": 1,
+      "message": "Uploaded to https://boringssl-review.googlesource.com/c/boringssl/+/61005",
+      "revId": "d7b59e37a41b04fc8c1601ba9996d0458399d351",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
