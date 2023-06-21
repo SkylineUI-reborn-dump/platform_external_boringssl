@@ -33,6 +33,24 @@
       "message": "Changes like this need to be submitted upstream to BoringSSL first, or they will disappear on the next update.\n\nBut what is the context for this change? We do not currently maintain that CMake build to be used within Android like this. Android is expected to use Android.bp.",
       "revId": "d7b59e37a41b04fc8c1601ba9996d0458399d351",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29c8436a_87719d9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569496
+      },
+      "writtenOn": "2023-06-21T20:27:59Z",
+      "side": 1,
+      "message": "We are building libbinder out of the Android tree, since there are some use cases of using binder on Linux/Unix, and the user may have their own toolchain. So we have to use CMake instead of Android.bp\n\nPlease see https://issuetracker.google.com/issue?id\u003d285204695\u0026query\u003d285204695 and aosp/2629369.",
+      "parentUuid": "708b6533_ce8b9ca5",
+      "revId": "d7b59e37a41b04fc8c1601ba9996d0458399d351",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
