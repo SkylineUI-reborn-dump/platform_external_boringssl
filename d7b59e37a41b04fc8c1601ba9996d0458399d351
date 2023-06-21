@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b003c2e5_b00559a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569496
+      },
+      "writtenOn": "2023-06-21T20:17:49Z",
+      "side": 1,
+      "message": "Should I submit to boringssl gerrit and re-cherry-pick it back here?",
+      "revId": "d7b59e37a41b04fc8c1601ba9996d0458399d351",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
