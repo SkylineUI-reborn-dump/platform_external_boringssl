@@ -80,13 +80,16 @@ crypto_sources := \
   src/crypto/cpu_aarch64_freebsd.c\
   src/crypto/cpu_aarch64_fuchsia.c\
   src/crypto/cpu_aarch64_linux.c\
+  src/crypto/cpu_aarch64_openbsd.c\
   src/crypto/cpu_aarch64_win.c\
   src/crypto/cpu_arm.c\
   src/crypto/cpu_arm_freebsd.c\
   src/crypto/cpu_arm_linux.c\
+  src/crypto/cpu_arm_openbsd.c\
   src/crypto/cpu_intel.c\
   src/crypto/crypto.c\
   src/crypto/curve25519/curve25519.c\
+  src/crypto/curve25519/curve25519_64_adx.c\
   src/crypto/curve25519/spake25519.c\
   src/crypto/des/des.c\
   src/crypto/dh_extra/dh_asn1.c\
@@ -153,8 +156,7 @@ crypto_sources := \
   src/crypto/rand_extra/rand_extra.c\
   src/crypto/rand_extra/windows.c\
   src/crypto/rc4/rc4.c\
-  src/crypto/refcount_c11.c\
-  src/crypto/refcount_lock.c\
+  src/crypto/refcount.c\
   src/crypto/rsa_extra/rsa_asn1.c\
   src/crypto/rsa_extra/rsa_crypt.c\
   src/crypto/rsa_extra/rsa_print.c\
@@ -366,4 +368,6 @@ linux_x86_64_sources := \
   linux-x86_64/crypto/fipsmodule/x86_64-mont5-linux.S\
   linux-x86_64/crypto/test/trampoline-x86_64-linux.S\
   src/crypto/hrss/asm/poly_rq_mul.S\
+  src/third_party/fiat/asm/fiat_curve25519_adx_mul.S\
+  src/third_party/fiat/asm/fiat_curve25519_adx_square.S\
 
