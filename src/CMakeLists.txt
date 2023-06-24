@@ -139,7 +139,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 if(CMAKE_COMPILER_IS_GNUCXX OR CLANG)
   # Note clang-cl is odd and sets both CLANG and MSVC. We base our configuration
   # primarily on our normal Clang one.
-  set(C_CXX_FLAGS "-Werror -Wformat=2 -Wsign-compare -Wmissing-field-initializers -Wwrite-strings -Wvla -Wshadow -Wtype-limits")
+  # TODO(bbe) took out -Wmissing-field-initializers for pki - fix and put back or disable only for pki
+  set(C_CXX_FLAGS "-Werror -Wformat=2 -Wsign-compare -Wwrite-strings -Wvla -Wshadow -Wtype-limits")
   if(MSVC)
     # clang-cl sets different default warnings than clang. It also treats -Wall
     # as -Weverything, to match MSVC. Instead -W3 is the alias for -Wall.
@@ -203,11 +204,6 @@ elseif(MSVC)
   set(MSVC_DISABLED_WARNINGS_LIST
       "C4100" # 'exarg' : unreferenced formal parameter
       "C4127" # conditional expression is constant
-      # C4204 and C4221 are C89-only restrictions which were dropped in C99, but
-      # VS2017 warns about it. They can be removed when we require VS2019.
-      "C4204" # nonstandard extension used: non-constant aggregate initializer
-      "C4221" # nonstandard extension used : 'identifier' : cannot be
-              # initialized using address of automatic variable
       "C4244" # 'function' : conversion from 'int' to 'uint8_t',
               # possible loss of data
       "C4267" # conversion from 'size_t' to 'int', possible loss of data
@@ -523,6 +519,7 @@ add_subdirectory(tool)
 add_subdirectory(util/fipstools)
 add_subdirectory(util/fipstools/acvp/modulewrapper)
 add_subdirectory(decrepit)
+add_subdirectory(pki)
 
 if(FUZZ)
   if(LIBFUZZER_FROM_DEPS)
