@@ -82,13 +82,16 @@ set(crypto_sources
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_freebsd.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_fuchsia.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_linux.c
+  ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_openbsd.c
   ${BORINGSSL_ROOT}src/crypto/cpu_aarch64_win.c
   ${BORINGSSL_ROOT}src/crypto/cpu_arm.c
   ${BORINGSSL_ROOT}src/crypto/cpu_arm_freebsd.c
   ${BORINGSSL_ROOT}src/crypto/cpu_arm_linux.c
+  ${BORINGSSL_ROOT}src/crypto/cpu_arm_openbsd.c
   ${BORINGSSL_ROOT}src/crypto/cpu_intel.c
   ${BORINGSSL_ROOT}src/crypto/crypto.c
   ${BORINGSSL_ROOT}src/crypto/curve25519/curve25519.c
+  ${BORINGSSL_ROOT}src/crypto/curve25519/curve25519_64_adx.c
   ${BORINGSSL_ROOT}src/crypto/curve25519/spake25519.c
   ${BORINGSSL_ROOT}src/crypto/des/des.c
   ${BORINGSSL_ROOT}src/crypto/dh_extra/dh_asn1.c
@@ -150,13 +153,14 @@ set(crypto_sources
   ${BORINGSSL_ROOT}src/crypto/pool/pool.c
   ${BORINGSSL_ROOT}src/crypto/rand_extra/deterministic.c
   ${BORINGSSL_ROOT}src/crypto/rand_extra/forkunsafe.c
-  ${BORINGSSL_ROOT}src/crypto/rand_extra/fuchsia.c
+  ${BORINGSSL_ROOT}src/crypto/rand_extra/getentropy.c
+  ${BORINGSSL_ROOT}src/crypto/rand_extra/ios.c
   ${BORINGSSL_ROOT}src/crypto/rand_extra/passive.c
   ${BORINGSSL_ROOT}src/crypto/rand_extra/rand_extra.c
+  ${BORINGSSL_ROOT}src/crypto/rand_extra/trusty.c
   ${BORINGSSL_ROOT}src/crypto/rand_extra/windows.c
   ${BORINGSSL_ROOT}src/crypto/rc4/rc4.c
-  ${BORINGSSL_ROOT}src/crypto/refcount_c11.c
-  ${BORINGSSL_ROOT}src/crypto/refcount_lock.c
+  ${BORINGSSL_ROOT}src/crypto/refcount.c
   ${BORINGSSL_ROOT}src/crypto/rsa_extra/rsa_asn1.c
   ${BORINGSSL_ROOT}src/crypto/rsa_extra/rsa_crypt.c
   ${BORINGSSL_ROOT}src/crypto/rsa_extra/rsa_print.c
@@ -301,6 +305,7 @@ set(tool_sources
   ${BORINGSSL_ROOT}src/tool/transport_common.cc
 )
 set(test_support_sources
+  ${BORINGSSL_ROOT}src/crypto/test/abi_test.cc
   ${BORINGSSL_ROOT}src/crypto/test/file_test.cc
   ${BORINGSSL_ROOT}src/crypto/test/test_util.cc
   ${BORINGSSL_ROOT}src/crypto/test/wycheproof_util.cc
@@ -366,7 +371,6 @@ set(crypto_test_sources
   ${BORINGSSL_ROOT}src/crypto/self_test.cc
   ${BORINGSSL_ROOT}src/crypto/siphash/siphash_test.cc
   ${BORINGSSL_ROOT}src/crypto/stack/stack_test.cc
-  ${BORINGSSL_ROOT}src/crypto/test/abi_test.cc
   ${BORINGSSL_ROOT}src/crypto/test/file_test_gtest.cc
   ${BORINGSSL_ROOT}src/crypto/test/gtest_main.cc
   ${BORINGSSL_ROOT}src/crypto/thread_test.cc
@@ -376,7 +380,6 @@ set(crypto_test_sources
   ${BORINGSSL_ROOT}src/crypto/x509v3/tab_test.cc
 )
 set(ssl_test_sources
-  ${BORINGSSL_ROOT}src/crypto/test/abi_test.cc
   ${BORINGSSL_ROOT}src/crypto/test/gtest_main.cc
   ${BORINGSSL_ROOT}src/ssl/span_test.cc
   ${BORINGSSL_ROOT}src/ssl/ssl_c_test.c
@@ -447,6 +450,8 @@ set(crypto_sources_apple_x86_64
   ${BORINGSSL_ROOT}apple-x86_64/crypto/fipsmodule/x86_64-mont-apple.S
   ${BORINGSSL_ROOT}apple-x86_64/crypto/fipsmodule/x86_64-mont5-apple.S
   ${BORINGSSL_ROOT}apple-x86_64/crypto/test/trampoline-x86_64-apple.S
+  ${BORINGSSL_ROOT}src/third_party/fiat/asm/fiat_curve25519_adx_mul.S
+  ${BORINGSSL_ROOT}src/third_party/fiat/asm/fiat_curve25519_adx_square.S
 )
 set(crypto_sources_linux_aarch64
   ${BORINGSSL_ROOT}linux-aarch64/crypto/chacha/chacha-armv8-linux.S
@@ -516,6 +521,8 @@ set(crypto_sources_linux_x86_64
   ${BORINGSSL_ROOT}linux-x86_64/crypto/fipsmodule/x86_64-mont5-linux.S
   ${BORINGSSL_ROOT}linux-x86_64/crypto/test/trampoline-x86_64-linux.S
   ${BORINGSSL_ROOT}src/crypto/hrss/asm/poly_rq_mul.S
+  ${BORINGSSL_ROOT}src/third_party/fiat/asm/fiat_curve25519_adx_mul.S
+  ${BORINGSSL_ROOT}src/third_party/fiat/asm/fiat_curve25519_adx_square.S
 )
 set(crypto_sources_win_aarch64
   ${BORINGSSL_ROOT}win-aarch64/crypto/chacha/chacha-armv8-win.S

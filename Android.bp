@@ -410,6 +410,7 @@ cc_library_static {
         "-DBORINGSSL_NO_STATIC_INITIALIZER",
         "-DOPENSSL_SMALL",
         "-DOPENSSL_STATIC_ARMCAP",
+        "-DANDROID_BAREMETAL",
         "-D__TRUSTY__",
     ],
     visibility: [
@@ -607,7 +608,7 @@ cc_library_static {
 }
 
 // Test support library
-cc_library_static {
+cc_test_library {
     name: "boringssl_test_support",
     host_supported: true,
     defaults: [
