@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e2e4042_6995586e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-06-25T00:00:12Z",
+      "side": 1,
+      "message": "(I\u0027m expecting presubmits to fail on Rust. rust-openssl was ported to BoringSSL incorrectly.)",
+      "revId": "364a5c132fa7c02ac1fdfb0ed5f916c24ca8e2e2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
