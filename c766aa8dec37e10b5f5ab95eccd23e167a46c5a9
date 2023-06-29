@@ -16,6 +16,24 @@
       "message": "This is not sufficient and will break as soon as we update again. Please update the `UPDATING` script. Please also ensure that you run exactly the command in the `UPDATING` script, to ensure the file doesn\u0027t change later.",
       "revId": "c766aa8dec37e10b5f5ab95eccd23e167a46c5a9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3c37047_0df783b5",
+        "filename": "CMakeLists.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-06-29T19:43:07Z",
+      "side": 1,
+      "message": "\u003e Please also ensure that you run exactly the command in the UPDATING script\n\nTo that end, the CL description should be updated when you do, to reflect what you actually did.",
+      "parentUuid": "dcb767e0_cb3a1624",
+      "revId": "c766aa8dec37e10b5f5ab95eccd23e167a46c5a9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
