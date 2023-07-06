@@ -641,11 +641,7 @@ cc_test {
     // Statically link the library to test to ensure we always pick up the
     // correct version regardless of device linker configuration.
     static_libs: ["libcrypto_static"],
-    target: {
-        android: {
-            test_suites: ["mts-conscrypt"],
-        },
-    },
+    test_suites: ["mts-conscrypt"],
 }
 
 cc_test {
@@ -673,11 +669,7 @@ cc_test {
         "libcrypto_static",
         "libssl",
     ],
-    target: {
-        android: {
-            test_suites: ["mts-conscrypt"],
-        },
-    },
+    test_suites: ["mts-conscrypt"],
 }
 
 // Utility binary for CMVP on-site testing.
