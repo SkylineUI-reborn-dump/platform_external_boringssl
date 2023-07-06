@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9ca3b1_ea3cfd38",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-06T18:07:05Z",
+      "side": 0,
+      "message": "Not sure why it was upset, but speculatively making `test_suites` unconditional to see if that helps.",
+      "revId": "3ad00f144992f7a3dfdaa8d08725a1f3975d60e6",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
