@@ -834,6 +834,7 @@ rust_library_rlib {
     crate_name: "bssl_ffi",
     visibility: [
         "//packages/modules/Virtualization/pvmfw",
+        "//packages/modules/Virtualization/vmbase",
     ],
     srcs: [":libbssl_sys_src_nostd"],
     rlibs: ["libbssl_sys_raw_nostd"],
