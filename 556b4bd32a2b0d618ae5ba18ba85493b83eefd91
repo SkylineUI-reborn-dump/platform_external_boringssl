@@ -50,6 +50,23 @@
       "message": "Your lack of +2 may be related to master-to-main migration. Let\u0027s try tomorrow or later this week?",
       "revId": "556b4bd32a2b0d618ae5ba18ba85493b83eefd91",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef189fe_a2c8c8db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569496
+      },
+      "writtenOn": "2023-07-13T21:15:35Z",
+      "side": 1,
+      "message": "Friendly ping. But I still did not see the +2 button. Anything special happening on this repo?",
+      "revId": "556b4bd32a2b0d618ae5ba18ba85493b83eefd91",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
