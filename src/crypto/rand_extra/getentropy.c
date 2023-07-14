@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#if defined(OPENSSL_MACOS) || defined(OPENSSL_FUCHSIA)
+#if defined(OPENSSL_MACOS) || defined(OPENSSL_FUCHSIA) || defined(ANDROID_BAREMETAL)
 #include <sys/random.h>
 #endif
 

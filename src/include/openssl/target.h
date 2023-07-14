@@ -73,7 +73,7 @@
 // Trusty isn't Linux but currently defines __linux__. As a workaround, we
 // exclude it here.
 // TODO(b/169780122): Remove this workaround once Trusty no longer defines it.
-#if defined(__linux__) && !defined(__TRUSTY__)
+#if defined(__linux__) && !(defined(__TRUSTY__) || defined(ANDROID_BAREMETAL))
 #define OPENSSL_LINUX
 #endif
 
