@@ -52,6 +52,24 @@
       "parentUuid": "f9342c68_954571c3",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b95f45cc_33686eed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-07-17T16:33:03Z",
+      "side": 1,
+      "message": "Thanks.\n\nJust FYI: `boringssl_self_test` and the test suites `boringssl_crypto_test` and `boringssl_ssl_test` are unrelated.\n\n`boringssl_self_test` is a runtime check that the hardware and software are working as expected.  It runs a number of FIPS-mandated self tests but not a complete suite of unit tests (which would be prohibitively expensive), i.e. it ensures that the software we ship is working as expected.\n\n`SSLTest` is part of `boringssl_ssl_test` which is a full suite of unit tests which are intended to be run *before* the software ships to ensure there are no bugs.\n\nBut yes, we should fix it... It\u0027s already fixed in Android 14 by the CLs I mentioned above.",
+      "parentUuid": "d3206292_cd11fe33",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
