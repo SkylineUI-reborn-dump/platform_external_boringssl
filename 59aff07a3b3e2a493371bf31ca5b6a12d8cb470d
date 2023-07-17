@@ -88,6 +88,24 @@
       "parentUuid": "b95f45cc_33686eed",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73097c8b_46924335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-07-17T18:17:36Z",
+      "side": 1,
+      "message": "As I mentioned above, this code does not run as part of boringssl_self_test, so there are no problems with Android 13 booting.",
+      "parentUuid": "8334219c_ba9e19b4",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
