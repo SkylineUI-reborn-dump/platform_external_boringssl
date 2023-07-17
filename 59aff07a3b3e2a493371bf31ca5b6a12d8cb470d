@@ -70,6 +70,24 @@
       "parentUuid": "d3206292_cd11fe33",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8334219c_ba9e19b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2020650
+      },
+      "writtenOn": "2023-07-17T17:34:15Z",
+      "side": 1,
+      "message": "But this issue is not be fixed in Android 13. Now most new devices is running Android 13. in the source code of init, you can see boringssl_self_test is running as a service in boot stage. I think this problem should be used to fix it on Android 13 devices. The valid time is until 2025, so that we have enough time to update system to Android 14.",
+      "parentUuid": "b95f45cc_33686eed",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
