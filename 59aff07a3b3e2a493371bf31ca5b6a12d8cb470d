@@ -16,6 +16,24 @@
       "message": "Thanks for this!  The \"official\" fix for this issue was https://r.android.com/2333382 plus https://r.android.com/2333383 which probably should have been cherry-picked to older branches, but got overlooked.\n\nIt hasn\u0027t come up until now though, so I don\u0027t think anyone is running these native tests on older branches... They do get run as part of MTS on current branches though.\n\nWould you mind raising a bug on the Android issue tracker noting why you need these tests and I can use that to get the official fix cherry-picked.",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9342c68_954571c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2020650
+      },
+      "writtenOn": "2023-07-17T16:08:23Z",
+      "side": 1,
+      "message": "This issue is important. The init rc script will execute the boringssl_self_test64(32) binary to test boringssl functions in boot stage. This issue will cause test failures for boringssl, this is fatal error, and will result in reboot with reason \"boringssl-self-check-failed\". The official fixes for this issue have not been merged into the android-13.0.0_r61 branch, so this is a solution to this issue.",
+      "parentUuid": "def92f03_68e3d532",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
