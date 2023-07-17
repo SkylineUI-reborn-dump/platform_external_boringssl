@@ -34,6 +34,24 @@
       "parentUuid": "def92f03_68e3d532",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3206292_cd11fe33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2020650
+      },
+      "writtenOn": "2023-07-17T16:14:16Z",
+      "side": 1,
+      "message": "Also help developers to fix this issue temporarily, this issue maybe fixed in future, like Android 14.",
+      "parentUuid": "f9342c68_954571c3",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
