@@ -142,6 +142,24 @@
       "parentUuid": "7415597a_d64db074",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3344e70_72e61dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2020650
+      },
+      "writtenOn": "2023-07-18T11:26:56Z",
+      "side": 1,
+      "message": "Oh... I\u0027m sorry. I made a mistake. You are right, the test `SSLTest#HostMatching` have not anythings is related to boringssl_self_test.\nBut this submit still will solve the problem about VTS test failed for boringssl.\nI think the official solution should be merged into old versions in backports. If it can not be merged, this submit of mine is a valid one.",
+      "parentUuid": "438200dd_e2868220",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
