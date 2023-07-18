@@ -124,6 +124,24 @@
       "parentUuid": "73097c8b_46924335",
       "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "438200dd_e2868220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-07-18T10:54:49Z",
+      "side": 1,
+      "message": "That is not the case 😊\n\n`selftest/boringssl_self_test.cpp` does indeed call `BORINGSSL_self_test()`.  However `BORINGSSL_self_test()`only calls [4 internal functions](https://cs.android.com/android/platform/superproject/+/android13-dev:external/boringssl/src/crypto/fipsmodule/self_check/self_check.c;l\u003d953-963;drc\u003d235ceebabf4757382045f9420b1dd7b339973877) in `self_check.cc`.  That function is unchanged between Android 13 and the present and certainly doesn\u0027t run any unit tests (such as `SSLTest`) as that would cause significant performance issues.\n\nIf your checked out android13-dev source is calling `SSLTest` on that code path then it\u0027s likely that you have some local modifications.",
+      "parentUuid": "7415597a_d64db074",
+      "revId": "59aff07a3b3e2a493371bf31ca5b6a12d8cb470d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
