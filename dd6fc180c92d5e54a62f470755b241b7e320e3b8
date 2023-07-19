@@ -16,6 +16,24 @@
       "message": "Looks like this broke Trusty builds due to RSA being private.",
       "revId": "dd6fc180c92d5e54a62f470755b241b7e320e3b8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f04acb29_66914dfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-19T21:20:03Z",
+      "side": 1,
+      "message": "Can you please link to the build error? RSA has been documented as private for a long time, so if Trusty is reaching into it, you all have been doing something *extremely* unsupported.",
+      "parentUuid": "f6405da3_f5db3a19",
+      "revId": "dd6fc180c92d5e54a62f470755b241b7e320e3b8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ],
   "submitRequirementResults": [
