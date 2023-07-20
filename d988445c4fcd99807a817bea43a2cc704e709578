@@ -46,6 +46,30 @@
       },
       "revId": "d988445c4fcd99807a817bea43a2cc704e709578",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e354f6b3_7e9e1110",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-20T19:28:42Z",
+      "side": 1,
+      "message": "Okay, I see a few files that just say \"tests.security\". Maybe it\u0027s aware of the structure here?? I guess I\u0027ll try that and we\u0027ll see what happens.",
+      "parentUuid": "54256179_005f4194",
+      "range": {
+        "startLine": 13,
+        "startChar": 29,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "d988445c4fcd99807a817bea43a2cc704e709578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
