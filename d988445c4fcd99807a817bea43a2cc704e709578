@@ -22,6 +22,30 @@
       },
       "revId": "d988445c4fcd99807a817bea43a2cc704e709578",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54256179_005f4194",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-20T16:40:38Z",
+      "side": 1,
+      "message": "Very unclear to me how one does this. This project used a wildcard:\nhttps://cs.android.com/android/platform/superproject/main/+/main:external/perfetto/TEST_MAPPING;drc\u003d725d5edd302b461d804b4ed57e8b4b3979d70c2b;l\u003d17\n\nBut this says it\u0027s a regex.\nhttps://cs.android.com/android/platform/superproject/+/master:tools/tradefederation/core/src/com/android/tradefed/util/testmapping/TEST_MAPPING.config.json;drc\u003d3b76a39b436f7c6948656c789bfd4bd992ccde4c;l\u003d29",
+      "parentUuid": "bf538299_2ccb79ec",
+      "range": {
+        "startLine": 13,
+        "startChar": 29,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "d988445c4fcd99807a817bea43a2cc704e709578",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
