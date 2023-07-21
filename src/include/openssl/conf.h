@@ -77,7 +77,10 @@ extern "C" {
 //   [section_name]
 //   key2=value2
 //
-// Config files are represented by a |CONF|.
+// Config files are represented by a |CONF|. Use of this module is strongly
+// discouraged. It is a remnant of the OpenSSL command-line tool. Parsing an
+// untrusted input as a config file risks string injection and denial of service
+// vulnerabilities.
 
 struct conf_value_st {
   char *section;
@@ -96,12 +99,14 @@ OPENSSL_EXPORT CONF *NCONF_new(void *method);
 // NCONF_free frees all the data owned by |conf| and then |conf| itself.
 OPENSSL_EXPORT void NCONF_free(CONF *conf);
 
+#if !defined(OPENSSL_NO_FILESYSTEM)
 // NCONF_load parses the file named |filename| and adds the values found to
 // |conf|. It returns one on success and zero on error. In the event of an
 // error, if |out_error_line| is not NULL, |*out_error_line| is set to the
 // number of the line that contained the error.
 OPENSSL_EXPORT int NCONF_load(CONF *conf, const char *filename,
                               long *out_error_line);
+#endif
 
 // NCONF_load_bio acts like |NCONF_load| but reads from |bio| rather than from
 // a named file.
@@ -166,5 +171,6 @@ BSSL_NAMESPACE_END
 #define CONF_R_UNABLE_TO_CREATE_NEW_SECTION 104
 #define CONF_R_VARIABLE_HAS_NO_VALUE 105
 #define CONF_R_VARIABLE_EXPANSION_TOO_LONG 106
+#define CONF_R_VARIABLE_EXPANSION_NOT_SUPPORTED 107
 
 #endif  // OPENSSL_HEADER_THREAD_H
