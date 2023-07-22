@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5c1c0b_1b401856",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-22T04:59:23Z",
+      "side": 1,
+      "message": "This commit should sit on top of https://android-review.git.corp.google.com/c/platform/external/boringssl/+/2671599, but I ran into a bug in Android\u0027s treehugger machinery when I did that, so they\u0027re uploaded as unrelated separate commits. This infra is so bad.",
+      "revId": "45842c1ef379a7654ec6c9d5ef6dcea4025107ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
