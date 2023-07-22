@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca3f9ef1_95445516",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-22T04:55:54Z",
+      "side": 1,
+      "message": "OMG Android, why is your infra so terrible...",
+      "revId": "0e9901125082793d84a4693283546a9c6dabc245",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
