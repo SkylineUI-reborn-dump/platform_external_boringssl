@@ -64,8 +64,6 @@
 #include <openssl/thread.h>
 #include <openssl/x509.h>
 
-#if !defined(OPENSSL_TRUSTY)
-
 #include "../internal.h"
 #include "internal.h"
 
@@ -320,18 +318,6 @@ static int get_cert_by_subject(X509_LOOKUP *xl, int type, X509_NAME *name,
       for (;;) {
         BIO_snprintf(b->data, b->max, "%s/%08lx.%s%d", ent->dir, h, postfix,
                      k);
-#ifndef OPENSSL_NO_POSIX_IO
-#if defined(_WIN32) && !defined(stat)
-#define stat _stat
-#endif
-        {
-          struct stat st;
-          if (stat(b->data, &st) < 0) {
-            break;
-          }
-        }
-#endif
-        // found one.
         if (type == X509_LU_X509) {
           if ((X509_load_cert_file(xl, b->data, ent->dir_type)) == 0) {
             break;
@@ -409,5 +395,3 @@ finish:
   BUF_MEM_free(b);
   return ok;
 }
-
-#endif  // OPENSSL_TRUSTY
