@@ -81,15 +81,10 @@ cc_defaults {
     ramdisk_available: true,
     vendor_ramdisk_available: true,
 
-    // Windows and Macs both have problems with assembly files
     target: {
         windows: {
             enabled: true,
-            cflags: ["-DOPENSSL_NO_ASM"],
             host_ldlibs: ["-lws2_32"],
-        },
-        darwin: {
-            cflags: ["-DOPENSSL_NO_ASM"],
         },
         host: {
             host_ldlibs: ["-lpthread"],
