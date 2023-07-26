@@ -48,6 +48,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed9f4f71_51809d7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-26T17:47:29Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "995bd2c7_3fdee81f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 31
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef34584c_7770eef4",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-07-26T11:29:40Z",
       "side": 1,
       "message": "go/Android.bp documents `host_supported` as:\n```\nIf set to true, build a variant of the module for the host. \n```\nso, instead of building the library _if_ a client of the library targets the host, having this property set makes Soong build a host variant unconditionally...? This isn\u0027t the behaviour I would expect from a build system. If that\u0027s not the case, do you know which client was targeting the host?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 45
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1187a299_cfc4dfa9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-26T17:47:29Z",
+      "side": 1,
+      "message": "If `host_supported` is true, then it is built for the host when you run `mm` in the directory.\n\nAs baremetal is not the host, setting that to true is clearly a mistake in the pvmfw build. This CL fixes it. It was building on accident before, but was an ABI error. It was unused (which is why it was okay to remove it).\n\nThese are all just symptoms of the hacky way that this build is defined. It should have been its own platform.",
+      "parentUuid": "ef34584c_7770eef4",
       "range": {
         "startLine": 15,
         "startChar": 2,
@@ -165,6 +213,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56147a8e_c56a99b1",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-26T17:47:29Z",
+      "side": 1,
+      "message": "They are, unfortunately, used, in several open-dice build files that you all have lying around. I could believe they should be removed, but given how many problems BoringSSL team is having to unravel already from pvmfw\u0027s build, I\u0027ll leave them in for now, leave a TODO pointing to b/293260907, and I\u0027ll reassign the bug afterwards to you all to finish clearing out",
+      "parentUuid": "4f49d28e_d7fd078b",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 28
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7648a7c_89a47213",
@@ -188,6 +260,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8c9936_601603ed",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-26T17:47:29Z",
+      "side": 1,
+      "message": "Ah, meant to remove that from the other one. You all are not the Android system library and should not be defining it.",
+      "parentUuid": "c7648a7c_89a47213",
+      "range": {
+        "startLine": 84,
+        "startChar": 15,
+        "endLine": 84,
+        "endChar": 40
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3a0083e_d8065319",
@@ -201,6 +297,30 @@
       "writtenOn": "2023-07-26T11:29:40Z",
       "side": 1,
       "message": "Shouldn\u0027t `libcrypto_baremetal` also have this?",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 16
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f10bf9db_1af6b4f5",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-26T17:47:29Z",
+      "side": 1,
+      "message": "Talking to Pete, it sounds like this was connected to some weird issue on the host, and it\u0027s unclear if it\u0027s even necessary. We may well add a C++ dependency to libcrypto in the future, so I think it\u0027s best to avoid adding new accidental dependencies on this line.\n\nKeep in mind that `libssl` and `libssl_baremetal` already require an STL.",
+      "parentUuid": "f3a0083e_d8065319",
       "range": {
         "startLine": 133,
         "startChar": 4,
