@@ -72,6 +72,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c21688bd_0a80f5de",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:34:45Z",
+      "side": 1,
+      "message": "I don\u0027t think we need that for the `_baremetal` targets.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 28
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7648a7c_89a47213",
         "filename": "Android.bp",
         "patchSetId": 5
