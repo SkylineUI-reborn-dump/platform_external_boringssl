@@ -70,6 +70,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c26a3ba_c14052ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:42:09Z",
+      "side": 1,
+      "message": "Answered in b/290898063#comment12",
+      "parentUuid": "e8be12c6_aa87a54c",
+      "range": {
+        "startLine": 19,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c21688bd_0a80f5de",
@@ -83,6 +107,30 @@
       "writtenOn": "2023-07-26T11:34:45Z",
       "side": 1,
       "message": "I don\u0027t think we need that for the `_baremetal` targets.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 28
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f49d28e_d7fd078b",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:42:09Z",
+      "side": 1,
+      "message": "(see b/290898063#comment12, which shows those variants being considered, even though they should not be used, AFAIK)",
+      "parentUuid": "c21688bd_0a80f5de",
       "range": {
         "startLine": 49,
         "startChar": 0,
