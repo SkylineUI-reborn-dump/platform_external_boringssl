@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0399f509_7dc8c2b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 1,
+      "message": "Would you mind moving this (back) into its own one-liner commit on top of the refactor this CL has turned into? I think that you might have unraveled some unexpected Soong behavior with this change, which doesn\u0027t seem (to me, see b/290898063#comment11) to be coming from pvmfw, and which should be clarified and addressed on its own, IMO.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 31
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef34584c_7770eef4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 1,
+      "message": "go/Android.bp documents `host_supported` as:\n```\nIf set to true, build a variant of the module for the host. \n```\nso, instead of building the library _if_ a client of the library targets the host, having this property set makes Soong build a host variant unconditionally...? This isn\u0027t the behaviour I would expect from a build system. If that\u0027s not the case, do you know which client was targeting the host?",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 45
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8be12c6_aa87a54c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 1,
+      "message": "But _why_ was there an SDK build of the library in the first place, given that pvmfw/vmbase doesn\u0027t use it?",
+      "range": {
+        "startLine": 19,
+        "startChar": 57,
+        "endLine": 20,
+        "endChar": 7
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7648a7c_89a47213",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 1,
+      "message": "Duplicate of `boringssl_flags_common` (line 55)?",
+      "range": {
+        "startLine": 84,
+        "startChar": 15,
+        "endLine": 84,
+        "endChar": 40
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a0083e_d8065319",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t `libcrypto_baremetal` also have this?",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 16
+      },
+      "revId": "8b4c9d2cc10a66b2a012ef1a6ce75f762fbed17d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ae11139_17cca219",
+        "filename": "Android.bp",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-26T11:29:40Z",
+      "side": 0,
+      "message": "So this was already redundant, as it also came from `boringssl_flags`.",
+      "range": {
+        "startLine": 410,
+        "startChar": 10,
+        "endLine": 410,
+        "endChar": 24
+      },
+      "revId": "421251324e765b9d2d75e79cd702beadb7bb8e0e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
