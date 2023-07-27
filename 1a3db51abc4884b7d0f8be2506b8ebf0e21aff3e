@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7f19fae8_250a404f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-27T16:54:13Z",
+      "side": 1,
+      "message": "That would work, but it seemed a little weird for `boringssl_flags_baremetal` to specify it on the baremetal build, but for the `libcrypto_defaults` to specify it on the normal build.\n\nWe could have a `libcrypto_defaults_baremetal`, but none of the options in there actually needed to be inherited, it seemed we didn\u0027t need to bother. Also because `libcrypto_defaults` seems to exist because there are many flavors and subparts of normal libcrypto, but baremetal libcrypto is a single target.\n\nAlso because `host_supported: false` seems to be default if we don\u0027t accidentally inherit something, so it works out to leave it alone. :-)\n\nAdjusted the comment accordingly.\n\n(Whether `host_supported: true` should be moved into `boringssl_flags`... possibly? :-) I think what happened was this file used to believe `host_supported: true` was individually set on each target, and then `libcrypto` got split into multiple targets, with the common stuff moved to `libcrypto_defaults`.)",
+      "parentUuid": "bfcd15a9_e19c2d25",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b7a78656_0a5e4af5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -64,6 +88,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b01a6d39_2a31c940",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-27T16:54:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c251e415_5b3825a2",
+      "range": {
+        "startLine": 51,
+        "startChar": 44,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4f992ce_44cd3619",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-07-27T16:22:54Z",
       "side": 1,
       "message": "It would make sense to have\n```\nenabled: false,\ntarget: {\n    android_arm64: {\n        enabled: true,\n    },\n},\n```\nin particular once b/291106677 gets addressed.",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 6
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa67cc67_f6f33a19",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-07-27T16:54:13Z",
+      "side": 1,
+      "message": "Ah, good call! Although I worry that too will cause some downstream churn, so I\u0027ve left a comment on the bug so we don\u0027t forget. :-)\n\nThough we could also just make BoringSSL know that ANDROID_BAREMETAL + 32-bit Arm \u003d\u003e implicitly static armcap. That\u0027s what we do on Apple platforms. (Apple broadly believed in static armcaps and multi-arch binaries, since everything went through the app store, up until they started having aarch64 Macs, at which point they started having some runtime detection APIs.)",
+      "parentUuid": "c4f992ce_44cd3619",
       "range": {
         "startLine": 99,
         "startChar": 4,
