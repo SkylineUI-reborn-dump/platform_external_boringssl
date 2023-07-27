@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfcd15a9_e19c2d25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-27T16:22:54Z",
+      "side": 1,
+      "message": "`host_supported: false` in `boringssl_flags_baremetal`, then?",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a78656_0a5e4af5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-27T16:22:54Z",
+      "side": 1,
+      "message": "Restarting the presubmit run as the previous one failed because it ran before aosp/2675980 had reached internal branches.",
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c251e415_5b3825a2",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-27T16:22:54Z",
+      "side": 1,
+      "message": "Did you mean \"... to boringssl_flags\"?",
+      "range": {
+        "startLine": 51,
+        "startChar": 44,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f992ce_44cd3619",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-27T16:22:54Z",
+      "side": 1,
+      "message": "It would make sense to have\n```\nenabled: false,\ntarget: {\n    android_arm64: {\n        enabled: true,\n    },\n},\n```\nin particular once b/291106677 gets addressed.",
+      "range": {
+        "startLine": 99,
+        "startChar": 4,
+        "endLine": 99,
+        "endChar": 6
+      },
+      "revId": "1a3db51abc4884b7d0f8be2506b8ebf0e21aff3e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
