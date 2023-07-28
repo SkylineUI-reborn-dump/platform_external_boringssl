@@ -95,6 +95,16 @@ cc_defaults {
         "-DANDROID_BAREMETAL",
     ],
     defaults: ["boringssl_flags_common"],
+    enabled: false,
+    target: {
+        android_arm64: {
+            enabled: true,
+        },
+        // TODO(b/293260907): Remove this unused target.
+        android_arm: {
+            enabled: true,
+        },
+    },
 }
 
 // Used by libcrypto + libssl
