@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74489bd0_d95848c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1882526
+      },
+      "writtenOn": "2023-07-28T12:57:22Z",
+      "side": 1,
+      "message": "I\u0027ll have to wait until aosp/2679298 makes its way to our internal branches before marking this as Presubmit-Ready",
+      "revId": "7d064618537ccbabb85b84d93e93d9312b0f394b",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
