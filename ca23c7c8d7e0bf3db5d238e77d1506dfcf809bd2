@@ -34,6 +34,24 @@
       "parentUuid": "52b3cef8_ac7cee16",
       "revId": "ca23c7c8d7e0bf3db5d238e77d1506dfcf809bd2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e09a24_322071e8",
+        "filename": "sources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-08-02T17:19:31Z",
+      "side": 0,
+      "message": "aosp/2690486, but feel free to time out on that at any point.",
+      "parentUuid": "38d3cf77_a36335ad",
+      "revId": "ca23c7c8d7e0bf3db5d238e77d1506dfcf809bd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
