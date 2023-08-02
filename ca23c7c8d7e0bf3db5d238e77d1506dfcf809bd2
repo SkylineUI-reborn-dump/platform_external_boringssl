@@ -16,6 +16,24 @@
       "message": "I\u0027m guessing these removals are the reason for the build error.\nhttps://boringssl.googlesource.com/boringssl/+/8dec463a609706480a6ae9057702ec662843acc2%5E%21/#F0\n\nBut I\u0027m a little confused because I thought aosp/2673984 took care of that...",
       "revId": "ca23c7c8d7e0bf3db5d238e77d1506dfcf809bd2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38d3cf77_a36335ad",
+        "filename": "sources.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2023-08-02T16:56:06Z",
+      "side": 0,
+      "message": "Aha. I\u0027ll go fix that...\nhttps://source.corp.google.com/h/android/trusty/lib/+/main:host/boringssl/rules.mk",
+      "parentUuid": "52b3cef8_ac7cee16",
+      "revId": "ca23c7c8d7e0bf3db5d238e77d1506dfcf809bd2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
