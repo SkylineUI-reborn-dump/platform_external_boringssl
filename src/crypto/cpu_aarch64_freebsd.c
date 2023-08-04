@@ -1,5 +1,4 @@
-/* Copyright (c) 2018, Google Inc.
- * Copyright (c) 2020, Arm Ltd.
+/* Copyright (c) 2022, Google Inc.
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -15,27 +14,49 @@
 
 #include "internal.h"
 
-#if defined(OPENSSL_AARCH64) && defined(OPENSSL_WINDOWS) && \
+#if defined(OPENSSL_AARCH64) && defined(OPENSSL_FREEBSD) && \
     !defined(OPENSSL_STATIC_ARMCAP)
 
-#include <windows.h>
+#include <machine/armreg.h>
+#include <sys/types.h>
 
 #include <openssl/arm_arch.h>
 
 extern uint32_t OPENSSL_armcap_P;
+
+// ID_AA64ISAR0_*_VAL are defined starting FreeBSD 13.0. When FreeBSD
+// 12.x is out of support, these compatibility macros can be removed.
+
+#ifndef ID_AA64ISAR0_AES_VAL
+#define ID_AA64ISAR0_AES_VAL ID_AA64ISAR0_AES
+#endif
+#ifndef ID_AA64ISAR0_SHA1_VAL
+#define ID_AA64ISAR0_SHA1_VAL ID_AA64ISAR0_SHA1
+#endif
+#ifndef ID_AA64ISAR0_SHA2_VAL
+#define ID_AA64ISAR0_SHA2_VAL ID_AA64ISAR0_SHA2
+#endif
+
 void OPENSSL_cpuid_setup(void) {
-  // We do not need to check for the presence of NEON, as Armv8-A always has it
+  uint64_t id_aa64isar0 = READ_SPECIALREG(id_aa64isar0_el1);
+
   OPENSSL_armcap_P |= ARMV7_NEON;
 
-  if (IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE)) {
-    // These are all covered by one call in Windows
+  if (ID_AA64ISAR0_AES_VAL(id_aa64isar0) >= ID_AA64ISAR0_AES_BASE) {
     OPENSSL_armcap_P |= ARMV8_AES;
+  }
+  if (ID_AA64ISAR0_AES_VAL(id_aa64isar0) >= ID_AA64ISAR0_AES_PMULL) {
     OPENSSL_armcap_P |= ARMV8_PMULL;
+  }
+  if (ID_AA64ISAR0_SHA1_VAL(id_aa64isar0) >= ID_AA64ISAR0_SHA1_BASE) {
     OPENSSL_armcap_P |= ARMV8_SHA1;
+  }
+  if (ID_AA64ISAR0_SHA2_VAL(id_aa64isar0) >= ID_AA64ISAR0_SHA2_BASE) {
     OPENSSL_armcap_P |= ARMV8_SHA256;
   }
-  // As of writing, Windows does not have a |PF_*| value for ARMv8.2 SHA-512
-  // extensions. When it does, add it here.
+  if (ID_AA64ISAR0_SHA2_VAL(id_aa64isar0) >= ID_AA64ISAR0_SHA2_512) {
+    OPENSSL_armcap_P |= ARMV8_SHA512;
+  }
 }
 
-#endif  // OPENSSL_AARCH64 && OPENSSL_WINDOWS && !OPENSSL_STATIC_ARMCAP
+#endif  // OPENSSL_AARCH64 && OPENSSL_FREEBSD && !OPENSSL_STATIC_ARMCAP
