@@ -123,8 +123,10 @@ cc_defaults {
 
 // Boring Crypto Module object file.
 // Any changes here must also be reflected in bcm_object_for_testing below.
+// TODO(davidben): Move these into a common bcm_object_defaults.
 cc_object {
     name: "bcm_object",
+    host_supported: false,
     device_supported: true,
     recovery_available: true,
     native_bridge_supported: true,
@@ -189,6 +191,7 @@ cc_object {
     visibility: [
         "//external/boringssl",
     ],
+    host_supported: false,
     device_supported: true,
     defaults: [
         "libcrypto_bcm_sources",
@@ -229,6 +232,21 @@ cc_object {
         },
     },
     min_sdk_version: "29",
+}
+
+// bcm_object, but built as a static library. ld -r does not work on darwin (see
+// b/294399371), so we limit the cc_object-based build to Android.
+cc_library_static {
+    name: "libbcm_static",
+    visibility: [
+        "//external/boringssl",
+    ],
+    defaults: [
+        "libcrypto_bcm_sources",
+        "libcrypto_defaults",
+        "boringssl_defaults",
+        "boringssl_flags",
+    ],
 }
 
 bootstrap_go_package {
@@ -281,9 +299,6 @@ cc_library {
         "boringssl_flags",
     ],
     unique_host_soname: true,
-    srcs: [
-        ":bcm_object",
-    ],
     target: {
         android: {
             cflags: [
@@ -296,6 +311,9 @@ cc_library {
                 address: false,
             },
             inject_bssl_hash: true,
+            srcs: [
+                ":bcm_object",
+            ],
             static: {
                 // Disable the static version of libcrypto, as it causes
                 // problems for FIPS certification.  Use libcrypto_static for
@@ -303,6 +321,11 @@ cc_library {
                 // testing, or use dynamic libcrypto.
                 enabled: false,
             },
+        },
+        host: {
+            srcs: [
+                ":libbcm_static",
+            ],
         },
     },
     apex_available: [
@@ -328,6 +351,7 @@ cc_library {
     visibility: [
         "//external/boringssl",
     ],
+    host_supported: false,
     defaults: [
         "libcrypto_sources",
         "libcrypto_defaults",
