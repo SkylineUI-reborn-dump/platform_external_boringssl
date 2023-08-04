@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7c0c07d_708e0a90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2023-08-04T16:01:41Z",
+      "side": 1,
+      "message": "Fix forward in https://r.android.com/2694846 will land faster.",
+      "revId": "25b99a7bb89b51399e0fde300e4c34c21be1e920",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
