@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b26d80c_5f5bcb7e",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2023-08-17T21:59:09Z",
+      "side": 1,
+      "message": "Can you make this host only? We don\u0027t want this to exist on the device (both for FIPS and memory usage reasons).",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b05791_6e70428d",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2023-08-17T21:59:09Z",
+      "side": 1,
+      "message": "Same here - host only?",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9529206b_05bfca50",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2023-08-17T21:59:09Z",
+      "side": 1,
+      "message": "Host only again.",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
