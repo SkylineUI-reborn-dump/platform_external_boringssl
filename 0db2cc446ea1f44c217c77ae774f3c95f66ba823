@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb73d51a_bb6c00d1",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1833664
+      },
+      "writtenOn": "2023-08-18T21:58:09Z",
+      "side": 1,
+      "message": "The remote key provisioning tools are not run as part of any user workflow, so I don\u0027t think they need FIPS self-tests.\n\nThese tools are only run in the factory to extract device keys during manufacturing. The keys are later uploaded to Google and used to authenticate devices.",
+      "range": {
+        "startLine": 398,
+        "startChar": 7,
+        "endLine": 398,
+        "endChar": 40
+      },
+      "revId": "0db2cc446ea1f44c217c77ae774f3c95f66ba823",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
