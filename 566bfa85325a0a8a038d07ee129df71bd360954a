@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84113872_13ff6ba5",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1833664
+      },
+      "writtenOn": "2023-08-18T21:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b26d80c_5f5bcb7e",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5b05791_6e70428d",
@@ -35,6 +53,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c08103ce_b99ed31b",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1833664
+      },
+      "writtenOn": "2023-08-18T21:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b05791_6e70428d",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9529206b_05bfca50",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-08-17T21:59:09Z",
       "side": 1,
       "message": "Host only again.",
+      "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c954c854_b2b2c0ce",
+        "filename": "Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1833664
+      },
+      "writtenOn": "2023-08-18T21:48:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9529206b_05bfca50",
       "revId": "566bfa85325a0a8a038d07ee129df71bd360954a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
