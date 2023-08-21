@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2f5ab928_c7109002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2023-08-21T14:43:51Z",
+      "side": 1,
+      "message": "Seems fine to me since it\u0027s restricted to host. If that\u0027s not enough for prb@ we could consider vis restricting it.",
+      "revId": "0db2cc446ea1f44c217c77ae774f3c95f66ba823",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bb73d51a_bb6c00d1",
         "filename": "Android.bp",
         "patchSetId": 2
