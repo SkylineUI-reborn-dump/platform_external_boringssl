@@ -394,6 +394,7 @@ cc_library_static {
     visibility: [
         "//external/avb",
         "//external/open-dice",
+        "//packages/modules/Virtualization/rialto",
         "//system/security/diced/open_dice",
     ],
 }
@@ -844,6 +845,7 @@ rust_library_rlib {
     crate_name: "bssl_ffi",
     visibility: [
         "//packages/modules/Virtualization/pvmfw",
+        "//packages/modules/Virtualization/rialto",
     ],
     srcs: [":libbssl_sys_src_nostd"],
     rlibs: ["libbssl_sys_raw_nostd"],
