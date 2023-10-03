@@ -633,7 +633,10 @@ cc_test {
     whole_static_libs: ["boringssl_test_support"],
     // Statically link the library to test to ensure we always pick up the
     // correct version regardless of device linker configuration.
-    static_libs: ["libcrypto_static"],
+    static_libs: [
+        "libcrypto_static",
+        "libgmock",
+    ],
     target: {
         android: {
             test_suites: ["mts-conscrypt"],
@@ -664,6 +667,7 @@ cc_test {
     // correct version regardless of device linker configuration.
     static_libs: [
         "libcrypto_static",
+        "libgmock",
         "libssl",
     ],
     target: {
