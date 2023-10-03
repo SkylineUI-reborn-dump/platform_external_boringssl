@@ -636,7 +636,11 @@ cc_test {
     static_libs: ["libcrypto_static"],
     target: {
         android: {
+            static_libs: ["libgmock_ndk"],
             test_suites: ["mts-conscrypt"],
+        },
+        host: {
+            static_libs: ["libgmock"],
         },
     },
 }
@@ -668,7 +672,11 @@ cc_test {
     ],
     target: {
         android: {
+            static_libs: ["libgmock_ndk"],
             test_suites: ["mts-conscrypt"],
+        },
+        host: {
+            static_libs: ["libgmock"],
         },
     },
 }
