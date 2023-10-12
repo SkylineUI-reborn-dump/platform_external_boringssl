@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c9a00a_07d1a653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1078119
+      },
+      "writtenOn": "2023-10-12T22:25:10Z",
+      "side": 1,
+      "message": "Hi Victor, just wanted to check is the automatic reviewer assignment accurate or should I find someone else to review?\n\nThanks!",
+      "revId": "ea12129fd2c2d6b76c0cf36023ab2badbe939b2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
