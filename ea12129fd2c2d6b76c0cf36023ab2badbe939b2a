@@ -16,6 +16,24 @@
       "message": "Hi Victor, just wanted to check is the automatic reviewer assignment accurate or should I find someone else to review?\n\nThanks!",
       "revId": "ea12129fd2c2d6b76c0cf36023ab2badbe939b2a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3acc564a_0c8aee0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1047684
+      },
+      "writtenOn": "2023-10-13T09:00:11Z",
+      "side": 1,
+      "message": "I think prb@ is a better reviews for most boringSSL changes, but this looks good to me.",
+      "parentUuid": "85c9a00a_07d1a653",
+      "revId": "ea12129fd2c2d6b76c0cf36023ab2badbe939b2a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
