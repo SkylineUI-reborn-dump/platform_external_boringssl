@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure what AutoFDO is. Is there a bug number, or some background document for this?",
       "revId": "e9b209d7fd3512daf04d6e9ca1da2c5077027b85",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8781917_f88d0b2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087625
+      },
+      "writtenOn": "2023-11-30T15:59:35Z",
+      "side": 1,
+      "message": "go/afdo explains the technique and go/android-afdo is for the android implementation.",
+      "parentUuid": "a09cbc3a_6ee17c13",
+      "revId": "e9b209d7fd3512daf04d6e9ca1da2c5077027b85",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
