@@ -891,3 +891,27 @@ rust_library_rlib {
         "libbssl_rust_support_baremetal",
     ],
 }
+
+// High-level Rust crate `bssl-crypto`
+
+rust_defaults {
+    name: "libbssl_crypto_defaults",
+    host_supported: true,
+    crate_name: "bssl_crypto",
+    visibility: [
+        "//external/rust/beto-rust/nearby",
+    ],
+    srcs: ["src/rust/bssl-crypto/src/lib.rs"],
+    vendor_available: true,
+    product_available: true,
+    rustlibs: ["libbssl_sys"],
+}
+
+rust_library {
+    name: "libbssl_crypto",
+    defaults: ["libbssl_crypto_defaults"],
+    apex_available: [
+        "//apex_available:platform",
+        "com.android.virt",
+    ],
+}
