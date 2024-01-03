@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1978f3e_52c9b9af",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-01-03T20:25:47Z",
+      "side": 1,
+      "message": "Do we need to split it this way? Wasn\u0027t sure if this was mimicking the existing build (which has defaults because there are piles and piles of variants of libcrypto for some reason), or because there\u0027s some Android-level convention to split things this way.\n\n(I could imagine wanting to split it later, for the baremetal people. But then they\u0027d probably have different opinions on `visibility`, `host_supported`, `vendor_available`, and `product_available` anyway.)",
+      "revId": "4f7d062550ee02d5a00543e05684a23503d17b3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
