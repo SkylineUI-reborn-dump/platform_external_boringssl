@@ -16,6 +16,24 @@
       "message": "Do we need to split it this way? Wasn\u0027t sure if this was mimicking the existing build (which has defaults because there are piles and piles of variants of libcrypto for some reason), or because there\u0027s some Android-level convention to split things this way.\n\n(I could imagine wanting to split it later, for the baremetal people. But then they\u0027d probably have different opinions on `visibility`, `host_supported`, `vendor_available`, and `product_available` anyway.)",
       "revId": "4f7d062550ee02d5a00543e05684a23503d17b3c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b096ee2d_a1f0d5e8",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1053528
+      },
+      "writtenOn": "2024-01-03T21:43:07Z",
+      "side": 1,
+      "message": "I was just anticipating some duplication for either host-specific, no-std-specific, or [rust_test configurations](https://source.android.com/docs/setup/build/rust/building-rust-modules/test-modules#avoiding-duplication), but happy to defer that until we actually have a need.",
+      "parentUuid": "f1978f3e_52c9b9af",
+      "revId": "4f7d062550ee02d5a00543e05684a23503d17b3c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
