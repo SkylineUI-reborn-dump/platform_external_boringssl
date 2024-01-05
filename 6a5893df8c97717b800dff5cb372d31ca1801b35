@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679fdcfb_faabf3f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-01-05T00:03:11Z",
+      "side": 1,
+      "message": "(Apparently I don\u0027t have CR+2...)",
+      "revId": "6a5893df8c97717b800dff5cb372d31ca1801b35",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
