@@ -198,11 +198,16 @@ OPENSSL_EXPORT X509_NAME *X509_get_subject_name(const X509 *x509);
 // object.
 OPENSSL_EXPORT X509_PUBKEY *X509_get_X509_PUBKEY(const X509 *x509);
 
-// X509_get_pubkey returns |x509|'s public key as an |EVP_PKEY|, or NULL if the
-// public key was unsupported or could not be decoded. This function returns a
-// reference to the |EVP_PKEY|. The caller must release the result with
-// |EVP_PKEY_free| when done.
-OPENSSL_EXPORT EVP_PKEY *X509_get_pubkey(X509 *x509);
+// X509_get0_pubkey returns |x509|'s public key as an |EVP_PKEY|, or NULL if the
+// public key was unsupported or could not be decoded. The |EVP_PKEY| is cached
+// in |x509|, so callers must not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_get0_pubkey(const X509 *x509);
+
+// X509_get_pubkey behaves like |X509_get0_pubkey| but increments the reference
+// count on the |EVP_PKEY|. The caller must release the result with
+// |EVP_PKEY_free| when done. The |EVP_PKEY| is cached in |x509|, so callers
+// must not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_get_pubkey(const X509 *x509);
 
 // X509_get0_pubkey_bitstr returns the BIT STRING portion of |x509|'s public
 // key. Note this does not contain the AlgorithmIdentifier portion.
@@ -214,7 +219,8 @@ OPENSSL_EXPORT ASN1_BIT_STRING *X509_get0_pubkey_bitstr(const X509 *x509);
 
 // X509_check_private_key returns one if |x509|'s public key matches |pkey| and
 // zero otherwise.
-OPENSSL_EXPORT int X509_check_private_key(X509 *x509, const EVP_PKEY *pkey);
+OPENSSL_EXPORT int X509_check_private_key(const X509 *x509,
+                                          const EVP_PKEY *pkey);
 
 // X509_get0_uids sets |*out_issuer_uid| to a non-owning pointer to the
 // issuerUID field of |x509|, or NULL if |x509| has no issuerUID. It similarly
@@ -271,7 +277,7 @@ OPENSSL_EXPORT uint32_t X509_get_extension_flags(X509 *x509);
 //
 // TODO(crbug.com/boringssl/381): Decoding an |X509| object will not check for
 // invalid extensions. To detect the error case, call
-// |X509_get_extensions_flags| and check the |EXFLAG_INVALID| bit.
+// |X509_get_extension_flags| and check the |EXFLAG_INVALID| bit.
 OPENSSL_EXPORT long X509_get_pathlen(X509 *x509);
 
 // X509v3_KU_* are key usage bits returned from |X509_get_key_usage|.
@@ -330,7 +336,7 @@ OPENSSL_EXPORT uint32_t X509_get_extended_key_usage(X509 *x509);
 //
 // TODO(crbug.com/boringssl/381): Decoding an |X509| object will not check for
 // invalid extensions. To detect the error case, call
-// |X509_get_extensions_flags| and check the |EXFLAG_INVALID| bit.
+// |X509_get_extension_flags| and check the |EXFLAG_INVALID| bit.
 OPENSSL_EXPORT const ASN1_OCTET_STRING *X509_get0_subject_key_id(X509 *x509);
 
 // X509_get0_authority_key_id returns keyIdentifier of |x509|'s authority key
@@ -341,7 +347,7 @@ OPENSSL_EXPORT const ASN1_OCTET_STRING *X509_get0_subject_key_id(X509 *x509);
 //
 // TODO(crbug.com/boringssl/381): Decoding an |X509| object will not check for
 // invalid extensions. To detect the error case, call
-// |X509_get_extensions_flags| and check the |EXFLAG_INVALID| bit.
+// |X509_get_extension_flags| and check the |EXFLAG_INVALID| bit.
 OPENSSL_EXPORT const ASN1_OCTET_STRING *X509_get0_authority_key_id(X509 *x509);
 
 DEFINE_STACK_OF(GENERAL_NAME)
@@ -355,7 +361,7 @@ typedef STACK_OF(GENERAL_NAME) GENERAL_NAMES;
 //
 // TODO(crbug.com/boringssl/381): Decoding an |X509| object will not check for
 // invalid extensions. To detect the error case, call
-// |X509_get_extensions_flags| and check the |EXFLAG_INVALID| bit.
+// |X509_get_extension_flags| and check the |EXFLAG_INVALID| bit.
 OPENSSL_EXPORT const GENERAL_NAMES *X509_get0_authority_issuer(X509 *x509);
 
 // X509_get0_authority_serial returns the authorityCertSerialNumber of |x509|'s
@@ -366,7 +372,7 @@ OPENSSL_EXPORT const GENERAL_NAMES *X509_get0_authority_issuer(X509 *x509);
 //
 // TODO(crbug.com/boringssl/381): Decoding an |X509| object will not check for
 // invalid extensions. To detect the error case, call
-// |X509_get_extensions_flags| and check the |EXFLAG_INVALID| bit.
+// |X509_get_extension_flags| and check the |EXFLAG_INVALID| bit.
 OPENSSL_EXPORT const ASN1_INTEGER *X509_get0_authority_serial(X509 *x509);
 
 // X509_get0_extensions returns |x509|'s extension list, or NULL if |x509| omits
@@ -597,7 +603,9 @@ OPENSSL_EXPORT int X509_set1_signature_value(X509 *x509, const uint8_t *sig,
 // Unlike similarly-named functions, this function does not output a single
 // ASN.1 element. Directly embedding the output in a larger ASN.1 structure will
 // not behave correctly.
-OPENSSL_EXPORT int i2d_X509_AUX(X509 *x509, unsigned char **outp);
+//
+// TODO(crbug.com/boringssl/407): |x509| should be const.
+OPENSSL_EXPORT int i2d_X509_AUX(X509 *x509, uint8_t **outp);
 
 // d2i_X509_AUX parses up to |length| bytes from |*inp| as a DER-encoded X.509
 // Certificate (RFC 5280), followed optionally by a separate, OpenSSL-specific
@@ -609,19 +617,19 @@ OPENSSL_EXPORT int i2d_X509_AUX(X509 *x509, unsigned char **outp);
 // Unlike similarly-named functions, this function does not parse a single
 // ASN.1 element. Trying to parse data directly embedded in a larger ASN.1
 // structure will not behave correctly.
-OPENSSL_EXPORT X509 *d2i_X509_AUX(X509 **x509, const unsigned char **inp,
+OPENSSL_EXPORT X509 *d2i_X509_AUX(X509 **x509, const uint8_t **inp,
                                   long length);
 
 // X509_alias_set1 sets |x509|'s alias to |len| bytes from |name|. If |name| is
 // NULL, the alias is cleared instead. Aliases are not part of the certificate
 // itself and will not be serialized by |i2d_X509|.
-OPENSSL_EXPORT int X509_alias_set1(X509 *x509, const unsigned char *name,
+OPENSSL_EXPORT int X509_alias_set1(X509 *x509, const uint8_t *name,
                                    ossl_ssize_t len);
 
 // X509_keyid_set1 sets |x509|'s key ID to |len| bytes from |id|. If |id| is
 // NULL, the key ID is cleared instead. Key IDs are not part of the certificate
 // itself and will not be serialized by |i2d_X509|.
-OPENSSL_EXPORT int X509_keyid_set1(X509 *x509, const unsigned char *id,
+OPENSSL_EXPORT int X509_keyid_set1(X509 *x509, const uint8_t *id,
                                    ossl_ssize_t len);
 
 // X509_alias_get0 looks up |x509|'s alias. If found, it sets |*out_len| to the
@@ -636,7 +644,7 @@ OPENSSL_EXPORT int X509_keyid_set1(X509 *x509, const unsigned char *id,
 // WARNING: In OpenSSL, this function did not set |*out_len| when the alias was
 // missing. Callers that target both OpenSSL and BoringSSL should set the value
 // to zero before calling this function.
-OPENSSL_EXPORT unsigned char *X509_alias_get0(X509 *x509, int *out_len);
+OPENSSL_EXPORT const uint8_t *X509_alias_get0(const X509 *x509, int *out_len);
 
 // X509_keyid_get0 looks up |x509|'s key ID. If found, it sets |*out_len| to the
 // key ID's length and returns a pointer to a buffer containing the contents. If
@@ -646,7 +654,7 @@ OPENSSL_EXPORT unsigned char *X509_alias_get0(X509 *x509, int *out_len);
 // WARNING: In OpenSSL, this function did not set |*out_len| when the alias was
 // missing. Callers that target both OpenSSL and BoringSSL should set the value
 // to zero before calling this function.
-OPENSSL_EXPORT unsigned char *X509_keyid_get0(X509 *x509, int *out_len);
+OPENSSL_EXPORT const uint8_t *X509_keyid_get0(const X509 *x509, int *out_len);
 
 // X509_add1_trust_object configures |x509| as a valid trust anchor for |obj|.
 // It returns one on success and zero on error. |obj| should be a certificate
@@ -1110,15 +1118,20 @@ OPENSSL_EXPORT long X509_REQ_get_version(const X509_REQ *req);
 // not const-correct for legacy reasons.
 OPENSSL_EXPORT X509_NAME *X509_REQ_get_subject_name(const X509_REQ *req);
 
-// X509_REQ_get_pubkey returns |req|'s public key as an |EVP_PKEY|, or NULL if
-// the public key was unsupported or could not be decoded. This function returns
-// a reference to the |EVP_PKEY|. The caller must release the result with
-// |EVP_PKEY_free| when done.
-OPENSSL_EXPORT EVP_PKEY *X509_REQ_get_pubkey(X509_REQ *req);
+// X509_REQ_get0_pubkey returns |req|'s public key as an |EVP_PKEY|, or NULL if
+// the public key was unsupported or could not be decoded. The |EVP_PKEY| is
+// cached in |req|, so callers must not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_REQ_get0_pubkey(const X509_REQ *req);
+
+// X509_REQ_get_pubkey behaves like |X509_REQ_get0_pubkey| but increments the
+// reference count on the |EVP_PKEY|. The caller must release the result with
+// |EVP_PKEY_free| when done. The |EVP_PKEY| is cached in |req|, so callers must
+// not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_REQ_get_pubkey(const X509_REQ *req);
 
 // X509_REQ_check_private_key returns one if |req|'s public key matches |pkey|
 // and zero otherwise.
-OPENSSL_EXPORT int X509_REQ_check_private_key(X509_REQ *req,
+OPENSSL_EXPORT int X509_REQ_check_private_key(const X509_REQ *req,
                                               const EVP_PKEY *pkey);
 
 // X509_REQ_get_attr_count returns the number of attributes in |req|.
@@ -1379,12 +1392,17 @@ OPENSSL_EXPORT X509_NAME *X509_NAME_dup(X509_NAME *name);
 // Although even the library itself passes this to a sorting function.
 OPENSSL_EXPORT int X509_NAME_cmp(const X509_NAME *a, const X509_NAME *b);
 
-// X509_NAME_get0_der sets |*out_der| and |*out_der_len|
+// X509_NAME_get0_der marshals |name| as a DER-encoded X.509 Name (RFC 5280). On
+// success, it returns one and sets |*out_der| and |*out_der_len| to a buffer
+// containing the result. Otherwise, it returns zero. |*out_der| is owned by
+// |name| and must not be freed by the caller. It is invalidated after |name| is
+// mutated or freed.
 //
 // Avoid this function and prefer |i2d_X509_NAME|. It is one of the reasons
-// these functions are not consistently thread-safe or const-correct. Depending
-// on the resolution of https://crbug.com/boringssl/407, this function may be
-// removed or cause poor performance.
+// |X509_NAME| functions, including this one, are not consistently thread-safe
+// or const-correct. Depending on the resolution of
+// https://crbug.com/boringssl/407, this function may be removed or cause poor
+// performance.
 OPENSSL_EXPORT int X509_NAME_get0_der(X509_NAME *name, const uint8_t **out_der,
                                       size_t *out_der_len);
 
@@ -1578,11 +1596,16 @@ OPENSSL_EXPORT int i2d_X509_PUBKEY(const X509_PUBKEY *key, uint8_t **outp);
 // object, and returns one. Otherwise, it returns zero.
 OPENSSL_EXPORT int X509_PUBKEY_set(X509_PUBKEY **x, EVP_PKEY *pkey);
 
-// X509_PUBKEY_get decodes the public key in |key| and returns an |EVP_PKEY| on
-// success, or NULL on error or unrecognized algorithm. The caller must release
-// the result with |EVP_PKEY_free| when done. The |EVP_PKEY| is cached in |key|,
-// so callers must not mutate the result.
-OPENSSL_EXPORT EVP_PKEY *X509_PUBKEY_get(X509_PUBKEY *key);
+// X509_PUBKEY_get0 returns |key| as an |EVP_PKEY|, or NULL if |key| either
+// could not be parsed or is an unrecognized algorithm. The |EVP_PKEY| is cached
+// in |key|, so callers must not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_PUBKEY_get0(const X509_PUBKEY *key);
+
+// X509_PUBKEY_get behaves like |X509_PUBKEY_get0| but increments the reference
+// count on the |EVP_PKEY|. The caller must release the result with
+// |EVP_PKEY_free| when done. The |EVP_PKEY| is cached in |key|, so callers must
+// not mutate the result.
+OPENSSL_EXPORT EVP_PKEY *X509_PUBKEY_get(const X509_PUBKEY *key);
 
 // X509_PUBKEY_set0_param sets |pub| to a key with AlgorithmIdentifier
 // determined by |obj|, |param_type|, and |param_value|, and an encoded
@@ -2218,7 +2241,7 @@ OPENSSL_EXPORT char *NETSCAPE_SPKI_b64_encode(NETSCAPE_SPKI *spki);
 // NETSCAPE_SPKI_get_pubkey decodes and returns the public key in |spki| as an
 // |EVP_PKEY|, or NULL on error. The caller takes ownership of the resulting
 // pointer and must call |EVP_PKEY_free| when done.
-OPENSSL_EXPORT EVP_PKEY *NETSCAPE_SPKI_get_pubkey(NETSCAPE_SPKI *spki);
+OPENSSL_EXPORT EVP_PKEY *NETSCAPE_SPKI_get_pubkey(const NETSCAPE_SPKI *spki);
 
 // NETSCAPE_SPKI_set_pubkey sets |spki|'s public key to |pkey|. It returns one
 // on success or zero on error. This function does not take ownership of |pkey|,
@@ -3055,6 +3078,19 @@ OPENSSL_EXPORT int X509_check_ip(const X509 *x509, const uint8_t *chk,
 OPENSSL_EXPORT int X509_check_ip_asc(const X509 *x509, const char *ipasc,
                                      unsigned int flags);
 
+// X509_STORE_CTX_get1_issuer looks up a candidate trusted issuer for |x509| out
+// of |ctx|'s |X509_STORE|, based on the criteria in |X509_check_issued|. If one
+// was found, it returns one and sets |*out_issuer| to the issuer. The caller
+// must release |*out_issuer| with |X509_free| when done. If none was found, it
+// returns zero and leaves |*out_issuer| unchanged.
+//
+// This function only searches for trusted issuers. It does not consider
+// untrusted intermediates passed in to |X509_STORE_CTX_init|.
+//
+// TODO(crbug.com/boringssl/407): |x509| should be const.
+OPENSSL_EXPORT int X509_STORE_CTX_get1_issuer(X509 **out_issuer,
+                                              X509_STORE_CTX *ctx, X509 *x509);
+
 
 // X.509 information.
 //
@@ -3365,7 +3401,7 @@ OPENSSL_EXPORT int X509_NAME_get_text_by_NID(const X509_NAME *name, int nid,
 
 // X509_STORE_CTX_get0_parent_ctx returns NULL.
 OPENSSL_EXPORT X509_STORE_CTX *X509_STORE_CTX_get0_parent_ctx(
-    X509_STORE_CTX *ctx);
+    const X509_STORE_CTX *ctx);
 
 // X509_OBJECT_free_contents sets |obj| to the empty object, freeing any values
 // that were previously there.
@@ -3397,6 +3433,89 @@ OPENSSL_EXPORT int X509V3_add_standard_extensions(void);
 #define X509_STORE_get_by_subject X509_STORE_CTX_get_by_subject
 #define X509_STORE_get1_certs X509_STORE_CTX_get1_certs
 #define X509_STORE_get1_crls X509_STORE_CTX_get1_crls
+
+// X509_STORE_CTX_get_chain is a legacy alias for |X509_STORE_CTX_get0_chain|.
+OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get_chain(
+    const X509_STORE_CTX *ctx);
+
+// X509_STORE_CTX_trusted_stack is a deprecated alias for
+// |X509_STORE_CTX_set0_trusted_stack|.
+OPENSSL_EXPORT void X509_STORE_CTX_trusted_stack(X509_STORE_CTX *ctx,
+                                                 STACK_OF(X509) *sk);
+
+typedef int (*X509_STORE_CTX_verify_cb)(int, X509_STORE_CTX *);
+
+// X509_STORE_CTX_set_verify_cb configures a callback function for |ctx| that is
+// called multiple times during |X509_verify_cert|. The callback returns zero to
+// fail verification and one to proceed. Typically, it will return |ok|, which
+// preserves the default behavior. Returning one when |ok| is zero will proceed
+// past some error. The callback may inspect |ctx| and the error queue to
+// attempt to determine the current stage of certificate verification, but this
+// is often unreliable. When synthesizing an error, callbacks should use
+// |X509_STORE_CTX_set_error| to set a corresponding error.
+//
+// WARNING: Do not use this function. It is extremely fragile and unpredictable.
+// This callback exposes implementation details of certificate verification,
+// which change as the library evolves. Attempting to use it for security checks
+// can introduce vulnerabilities if making incorrect assumptions about when the
+// callback is called. Some errors, when suppressed, may implicitly suppress
+// other errors due to internal implementation details. Additionally, overriding
+// |ok| may leave |ctx| in an inconsistent state and break invariants.
+//
+// Instead, customize certificate verification by configuring options on the
+// |X509_STORE_CTX| before verification, or applying additional checks after
+// |X509_verify_cert| completes successfully.
+OPENSSL_EXPORT void X509_STORE_CTX_set_verify_cb(
+    X509_STORE_CTX *ctx, int (*verify_cb)(int ok, X509_STORE_CTX *ctx));
+
+// X509_STORE_set_verify_cb acts like |X509_STORE_CTX_set_verify_cb| but sets
+// the verify callback for any |X509_STORE_CTX| created from this |X509_STORE|
+//
+// Do not use this function. See |X509_STORE_CTX_set_verify_cb| for details.
+OPENSSL_EXPORT void X509_STORE_set_verify_cb(
+    X509_STORE *store, X509_STORE_CTX_verify_cb verify_cb);
+
+// X509_STORE_set_verify_cb_func is a deprecated alias for
+// |X509_STORE_set_verify_cb|.
+#define X509_STORE_set_verify_cb_func(store, func) \
+  X509_STORE_set_verify_cb((store), (func))
+
+typedef int (*X509_STORE_CTX_get_crl_fn)(X509_STORE_CTX *ctx, X509_CRL **crl,
+                                         X509 *x);
+typedef int (*X509_STORE_CTX_check_crl_fn)(X509_STORE_CTX *ctx, X509_CRL *crl);
+
+// X509_STORE_set_get_crl override's |store|'s logic for looking up CRLs.
+//
+// Do not use this function. It is temporarily retained to support one caller
+// and will be removed after that caller is fixed. It is not possible for
+// external callers to correctly implement this callback. The real
+// implementation sets some inaccessible internal state on |X509_STORE_CTX|.
+OPENSSL_EXPORT void X509_STORE_set_get_crl(X509_STORE *store,
+                                           X509_STORE_CTX_get_crl_fn get_crl);
+
+// X509_STORE_set_check_crl override's |store|'s logic for checking CRL
+// validity.
+//
+// Do not use this function. It is temporarily retained to support one caller
+// and will be removed after that caller is fixed. It is not possible for
+// external callers to correctly implement this callback. The real
+// implementation relies some inaccessible internal state on |X509_STORE_CTX|.
+OPENSSL_EXPORT void X509_STORE_set_check_crl(
+    X509_STORE *store, X509_STORE_CTX_check_crl_fn check_crl);
+
+// X509_STORE_CTX_set_chain configures |ctx| to use |sk| for untrusted
+// intermediate certificates to use in verification. This function is redundant
+// with the |chain| parameter of |X509_STORE_CTX_init|. Use the parameter
+// instead.
+//
+// WARNING: Despite the similar name, this function is unrelated to
+// |X509_STORE_CTX_get0_chain|.
+//
+// WARNING: This function saves a pointer to |sk| without copying or
+// incrementing reference counts. |sk| must outlive |ctx| and may not be mutated
+// for the duration of the certificate verification.
+OPENSSL_EXPORT void X509_STORE_CTX_set_chain(X509_STORE_CTX *ctx,
+                                             STACK_OF(X509) *sk);
 
 
 // Private structures.
@@ -3438,13 +3557,7 @@ DEFINE_STACK_OF(X509_TRUST)
 #define X509_TRUST_SSL_SERVER 3
 #define X509_TRUST_EMAIL 4
 #define X509_TRUST_OBJECT_SIGN 5
-#define X509_TRUST_OCSP_SIGN 6
-#define X509_TRUST_OCSP_REQUEST 7
 #define X509_TRUST_TSA 8
-
-// Keep these up to date!
-#define X509_TRUST_MIN 1
-#define X509_TRUST_MAX 8
 
 // check_trust return codes
 
@@ -3488,6 +3601,12 @@ OPENSSL_EXPORT uint32_t X509_NAME_hash_old(X509_NAME *name);
 
 OPENSSL_EXPORT int X509_CRL_match(const X509_CRL *a, const X509_CRL *b);
 
+// X509_verify_cert performs certifice verification with |ctx|, which must have
+// been initialized with |X509_STORE_CTX_init|. It returns one on success and
+// zero on error. On success, |X509_STORE_CTX_get0_chain| or
+// |X509_STORE_CTX_get1_chain| may be used to return the verified certificate
+// chain. On error, |X509_STORE_CTX_get_error| may be used to return additional
+// error information.
 OPENSSL_EXPORT int X509_verify_cert(X509_STORE_CTX *ctx);
 
 OPENSSL_EXPORT int X509_check_trust(X509 *x, int id, int flags);
@@ -3523,12 +3642,6 @@ certificate chain.
 
 DEFINE_STACK_OF(X509_OBJECT)
 
-typedef int (*X509_STORE_CTX_verify_cb)(int, X509_STORE_CTX *);
-typedef int (*X509_STORE_CTX_get_issuer_fn)(X509 **issuer, X509_STORE_CTX *ctx,
-                                            X509 *x);
-typedef int (*X509_STORE_CTX_get_crl_fn)(X509_STORE_CTX *ctx, X509_CRL **crl,
-                                         X509 *x);
-typedef int (*X509_STORE_CTX_check_crl_fn)(X509_STORE_CTX *ctx, X509_CRL *crl);
 
 // X509_STORE_set_depth configures |store| to, by default, limit certificate
 // chains to |depth| intermediate certificates. This count excludes both the
@@ -3667,7 +3780,7 @@ OPENSSL_EXPORT int X509_LOOKUP_add_dir(X509_LOOKUP *lookup, const char *path,
 #define X509_V_FLAG_INHIBIT_ANY 0x200
 // Policy variable inhibit-policy-mapping
 #define X509_V_FLAG_INHIBIT_MAP 0x400
-// Notify callback that policy is OK
+// Does nothing
 #define X509_V_FLAG_NOTIFY_POLICY 0x800
 // Causes all verifications to fail. Extended CRL features have been removed.
 #define X509_V_FLAG_EXTENDED_CRL_SUPPORT 0x1000
@@ -3721,7 +3834,7 @@ OPENSSL_EXPORT STACK_OF(X509_CRL) *X509_STORE_CTX_get1_crls(X509_STORE_CTX *st,
                                                             X509_NAME *nm);
 
 // X509_STORE_set_flags enables all values in |flags| in |store|'s verification
-// flags.
+// flags. |flags| should be a combination of |X509_V_FLAG_*| constants.
 //
 // WARNING: These flags will be combined with default flags when copied to an
 // |X509_STORE_CTX|. This means it is impossible to unset those defaults from
@@ -3756,35 +3869,9 @@ OPENSSL_EXPORT int X509_STORE_set1_param(X509_STORE *store,
 // |X509_V_FLAG_TRUSTED_FIRST| is mostly a workaround for poor path-building.
 OPENSSL_EXPORT X509_VERIFY_PARAM *X509_STORE_get0_param(X509_STORE *store);
 
-// X509_STORE_set_verify_cb acts like |X509_STORE_CTX_set_verify_cb| but sets
-// the verify callback for any |X509_STORE_CTX| created from this |X509_STORE|
-//
-// Do not use this funciton. see |X509_STORE_CTX_set_verify_cb|.
-OPENSSL_EXPORT void X509_STORE_set_verify_cb(
-    X509_STORE *ctx, X509_STORE_CTX_verify_cb verify_cb);
-#define X509_STORE_set_verify_cb_func(ctx, func) \
-  X509_STORE_set_verify_cb((ctx), (func))
-OPENSSL_EXPORT X509_STORE_CTX_verify_cb
-X509_STORE_get_verify_cb(X509_STORE *ctx);
-OPENSSL_EXPORT void X509_STORE_set_get_issuer(
-    X509_STORE *ctx, X509_STORE_CTX_get_issuer_fn get_issuer);
-OPENSSL_EXPORT X509_STORE_CTX_get_issuer_fn
-X509_STORE_get_get_issuer(X509_STORE *ctx);
-OPENSSL_EXPORT void X509_STORE_set_get_crl(X509_STORE *ctx,
-                                           X509_STORE_CTX_get_crl_fn get_crl);
-OPENSSL_EXPORT X509_STORE_CTX_get_crl_fn
-X509_STORE_get_get_crl(X509_STORE *ctx);
-OPENSSL_EXPORT void X509_STORE_set_check_crl(
-    X509_STORE *ctx, X509_STORE_CTX_check_crl_fn check_crl);
-OPENSSL_EXPORT X509_STORE_CTX_check_crl_fn
-X509_STORE_get_check_crl(X509_STORE *ctx);
-
 // X509_STORE_CTX_new returns a newly-allocated, empty |X509_STORE_CTX|, or NULL
 // on error.
 OPENSSL_EXPORT X509_STORE_CTX *X509_STORE_CTX_new(void);
-
-OPENSSL_EXPORT int X509_STORE_CTX_get1_issuer(X509 **issuer,
-                                              X509_STORE_CTX *ctx, X509 *x);
 
 // X509_STORE_CTX_free releases memory associated with |ctx|.
 OPENSSL_EXPORT void X509_STORE_CTX_free(X509_STORE_CTX *ctx);
@@ -3801,7 +3888,9 @@ OPENSSL_EXPORT int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store,
                                        X509 *x509, STACK_OF(X509) *chain);
 
 // X509_STORE_CTX_set0_trusted_stack configures |ctx| to trust the certificates
-// in |sk|. |sk| must remain valid for the duration of |ctx|.
+// in |sk|. |sk| must remain valid for the duration of |ctx|. Calling this
+// function causes |ctx| to ignore any certificates configured in the
+// |X509_STORE|.
 //
 // WARNING: This function differs from most |set0| functions in that it does not
 // take ownership of its input. The caller is required to ensure the lifetimes
@@ -3809,17 +3898,12 @@ OPENSSL_EXPORT int X509_STORE_CTX_init(X509_STORE_CTX *ctx, X509_STORE *store,
 OPENSSL_EXPORT void X509_STORE_CTX_set0_trusted_stack(X509_STORE_CTX *ctx,
                                                       STACK_OF(X509) *sk);
 
-// X509_STORE_CTX_trusted_stack is a deprecated alias for
-// |X509_STORE_CTX_set0_trusted_stack|.
-OPENSSL_EXPORT void X509_STORE_CTX_trusted_stack(X509_STORE_CTX *ctx,
-                                                 STACK_OF(X509) *sk);
-
 // X509_STORE_CTX_get0_store returns the |X509_STORE| that |ctx| uses.
-OPENSSL_EXPORT X509_STORE *X509_STORE_CTX_get0_store(X509_STORE_CTX *ctx);
+OPENSSL_EXPORT X509_STORE *X509_STORE_CTX_get0_store(const X509_STORE_CTX *ctx);
 
 // X509_STORE_CTX_get0_cert returns the leaf certificate that |ctx| is
 // verifying.
-OPENSSL_EXPORT X509 *X509_STORE_CTX_get0_cert(X509_STORE_CTX *ctx);
+OPENSSL_EXPORT X509 *X509_STORE_CTX_get0_cert(const X509_STORE_CTX *ctx);
 
 OPENSSL_EXPORT X509_LOOKUP *X509_STORE_add_lookup(X509_STORE *v,
                                                   const X509_LOOKUP_METHOD *m);
@@ -3847,20 +3931,54 @@ OPENSSL_EXPORT int X509_load_cert_crl_file(X509_LOOKUP *ctx, const char *file,
 OPENSSL_EXPORT int X509_STORE_load_locations(X509_STORE *ctx, const char *file,
                                              const char *dir);
 OPENSSL_EXPORT int X509_STORE_set_default_paths(X509_STORE *ctx);
-OPENSSL_EXPORT int X509_STORE_CTX_get_error(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT void X509_STORE_CTX_set_error(X509_STORE_CTX *ctx, int s);
-OPENSSL_EXPORT int X509_STORE_CTX_get_error_depth(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT X509 *X509_STORE_CTX_get_current_cert(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT X509 *X509_STORE_CTX_get0_current_issuer(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT X509_CRL *X509_STORE_CTX_get0_current_crl(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get_chain(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get0_chain(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get1_chain(X509_STORE_CTX *ctx);
-OPENSSL_EXPORT void X509_STORE_CTX_set_cert(X509_STORE_CTX *c, X509 *x);
-OPENSSL_EXPORT void X509_STORE_CTX_set_chain(X509_STORE_CTX *c,
-                                             STACK_OF(X509) *sk);
+
+// X509_STORE_CTX_get_error, after |X509_verify_cert| returns, returns
+// |X509_V_OK| if verification succeeded or an |X509_V_ERR_*| describing why
+// verification failed. This will be consistent with |X509_verify_cert|'s return
+// value, unless the caller used the deprecated verification callback (see
+// |X509_STORE_CTX_set_verify_cb|) in a way that breaks |ctx|'s invariants.
+//
+// If called during the deprecated verification callback when |ok| is zero, it
+// returns the current error under consideration.
+OPENSSL_EXPORT int X509_STORE_CTX_get_error(const X509_STORE_CTX *ctx);
+
+// X509_STORE_CTX_set_error sets |ctx|'s error to |err|, which should be
+// |X509_V_OK| or an |X509_V_ERR_*| constant. It is not expected to be called in
+// typical |X509_STORE_CTX| usage, but may be used in callback APIs where
+// applications synthesize |X509_STORE_CTX| error conditions. See also
+// |X509_STORE_CTX_set_verify_cb| and |SSL_CTX_set_cert_verify_callback|.
+OPENSSL_EXPORT void X509_STORE_CTX_set_error(X509_STORE_CTX *ctx, int err);
+
+// X509_STORE_CTX_get_error_depth returns the depth at which the error returned
+// by |X509_STORE_CTX_get_error| occured. This is zero-indexed integer into the
+// certificate chain. Zero indicates the target certificate, one its issuer, and
+// so on.
+OPENSSL_EXPORT int X509_STORE_CTX_get_error_depth(const X509_STORE_CTX *ctx);
+
+OPENSSL_EXPORT X509 *X509_STORE_CTX_get_current_cert(const X509_STORE_CTX *ctx);
+OPENSSL_EXPORT X509_CRL *X509_STORE_CTX_get0_current_crl(
+    const X509_STORE_CTX *ctx);
+
+// X509_STORE_CTX_get0_chain, after a successful |X509_verify_cert| call,
+// returns the verified certificate chain. The chain begins with the leaf and
+// ends with trust anchor.
+//
+// At other points, such as after a failed verification or during the deprecated
+// verification callback, it returns the partial chain built so far. Callers
+// should avoid relying on this as this exposes unstable library implementation
+// details.
+OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get0_chain(
+    const X509_STORE_CTX *ctx);
+
+// X509_STORE_CTX_get1_chain behaves like |X509_STORE_CTX_get0_chain| but
+// returns a newly-allocated |STACK_OF(X509)| containing the completed chain,
+// with each certificate's reference count incremented. Callers must free the
+// result with |sk_X509_pop_free| and |X509_free| when done.
+OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get1_chain(
+    const X509_STORE_CTX *ctx);
+
 OPENSSL_EXPORT STACK_OF(X509) *X509_STORE_CTX_get0_untrusted(
-    X509_STORE_CTX *ctx);
+    const X509_STORE_CTX *ctx);
 OPENSSL_EXPORT void X509_STORE_CTX_set0_crls(X509_STORE_CTX *c,
                                              STACK_OF(X509_CRL) *sk);
 OPENSSL_EXPORT int X509_STORE_CTX_set_purpose(X509_STORE_CTX *ctx, int purpose);
@@ -3870,7 +3988,8 @@ OPENSSL_EXPORT int X509_STORE_CTX_purpose_inherit(X509_STORE_CTX *ctx,
                                                   int trust);
 
 // X509_STORE_CTX_set_flags enables all values in |flags| in |ctx|'s
-// verification flags.
+// verification flags. |flags| should be a combination of |X509_V_FLAG_*|
+// constants.
 OPENSSL_EXPORT void X509_STORE_CTX_set_flags(X509_STORE_CTX *ctx,
                                              unsigned long flags);
 
@@ -3885,27 +4004,6 @@ OPENSSL_EXPORT void X509_STORE_CTX_set_time(X509_STORE_CTX *ctx,
 OPENSSL_EXPORT void X509_STORE_CTX_set_time_posix(X509_STORE_CTX *ctx,
                                                   unsigned long flags,
                                                   int64_t t);
-
-// X509_STORE_CTX_set_verify_cb configures a callback function for |ctx| that is
-// called multiple times during |X509_verify_cert|. The callback returns zero to
-// fail verification and non-zero to proceed. Typically, it will return |ok|,
-// which preserves the default behavior. Returning one when |ok| is zero will
-// proceed past some error. The callback may inspect |ctx| and the error queue
-// to attempt to determine the current stage of certificate verification, but
-// this is often unreliable.
-//
-// WARNING: Do not use this function. It is extremely fragile and unpredictable.
-// This callback exposes implementation details of certificate verification,
-// which change as the library evolves. Attempting to use it for security checks
-// can introduce vulnerabilities if making incorrect assumptions about when the
-// callback is called. Additionally, overriding |ok| may leave |ctx| in an
-// inconsistent state and break invariants.
-//
-// Instead, customize certificate verification by configuring options on the
-// |X509_STORE_CTX| before verification, or applying additional checks after
-// |X509_verify_cert| completes successfully.
-OPENSSL_EXPORT void X509_STORE_CTX_set_verify_cb(
-    X509_STORE_CTX *ctx, int (*verify_cb)(int ok, X509_STORE_CTX *ctx));
 
 // X509_STORE_CTX_get0_param returns |ctx|'s verification parameters. This
 // object is mutable and may be modified by the caller.
@@ -4147,18 +4245,6 @@ typedef struct DIST_POINT_NAME_st {
 // All existing reasons
 #define CRLDP_ALL_REASONS 0x807f
 
-#define CRL_REASON_NONE (-1)
-#define CRL_REASON_UNSPECIFIED 0
-#define CRL_REASON_KEY_COMPROMISE 1
-#define CRL_REASON_CA_COMPROMISE 2
-#define CRL_REASON_AFFILIATION_CHANGED 3
-#define CRL_REASON_SUPERSEDED 4
-#define CRL_REASON_CESSATION_OF_OPERATION 5
-#define CRL_REASON_CERTIFICATE_HOLD 6
-#define CRL_REASON_REMOVE_FROM_CRL 8
-#define CRL_REASON_PRIVILEGE_WITHDRAWN 9
-#define CRL_REASON_AA_COMPROMISE 10
-
 struct DIST_POINT_st {
   DIST_POINT_NAME *distpoint;
   ASN1_BIT_STRING *reasons;
@@ -4271,9 +4357,6 @@ typedef struct x509_purpose_st {
 #define X509_PURPOSE_ANY 7
 #define X509_PURPOSE_OCSP_HELPER 8
 #define X509_PURPOSE_TIMESTAMP_SIGN 9
-
-#define X509_PURPOSE_MIN 1
-#define X509_PURPOSE_MAX 9
 
 DEFINE_STACK_OF(X509_PURPOSE)
 
