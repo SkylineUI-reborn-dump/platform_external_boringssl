@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ea50c3_f369287b",
+        "filename": "selftest/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1535516
+      },
+      "writtenOn": "2024-03-12T17:15:16Z",
+      "side": 1,
+      "message": "Isn\u0027t this one public already?",
+      "revId": "86a704fa229f592690d6946314f912b071b3458a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
