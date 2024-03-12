@@ -47,6 +47,7 @@ cc_binary {
         "//art/build/sdk",
         "//external/conscrypt/apex",
         "//external/conscrypt/apex/testing",
+        "//visibility:any_partition",
     ],
     defaults: ["boringssl_self_test_defaults"],
     apex_available: [
@@ -66,6 +67,7 @@ cc_binary {
         "boringssl_self_test.zygote64.rc",
         "boringssl_self_test.zygote64_32.rc",
     ],
+    visibility: ["//visibility:any_partition"],
 }
 
 prebuilt_etc {
