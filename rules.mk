@@ -41,6 +41,9 @@ include $(LOCAL_DIR)/crypto-sources.mk
 # atomics.
 MODULE_CFLAGS += -D__STDC_NO_ATOMICS__
 
+# Optimize for smaller binary (which skips a large precomputed P-256 table).
+MODULE_CFLAGS += -DOPENSSL_SMALL=1 -Oz
+
 # Define static armcap based on lk build variables
 MODULE_STATIC_ARMCAP := -DOPENSSL_STATIC_ARMCAP
 toarmcap = $(if $(filter-out 0 false,$(2)),-DOPENSSL_STATIC_ARMCAP_$(1),)
