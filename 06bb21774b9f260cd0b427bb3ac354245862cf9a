@@ -34,6 +34,24 @@
       "parentUuid": "2e03b01d_fc97f05f",
       "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0038d598_0f5583f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-03-19T09:49:55Z",
+      "side": 1,
+      "message": "Hmm, aosp/2221083 was about `prng_seeder` which is also present base_system.mk, so that\u0027s pretty redundant and has no circular dependency, as you say.\n\nWhen we first added `boringssl_self_test` that definitely caused a Soong error due to circular deps (`boringssl_self_test` links `libcrypto`, so adding the self test binary as a `required` on `libcrypto` threw an error).\n\nAnyway, I\u0027d suggest you finish your cleanup as-is and I\u0027ll raise a followup bug to sort these.",
+      "parentUuid": "2a3313b8_5b01a135",
+      "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
