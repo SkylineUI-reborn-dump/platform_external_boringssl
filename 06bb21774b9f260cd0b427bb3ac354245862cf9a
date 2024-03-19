@@ -16,6 +16,24 @@
       "message": "Might also be worth revisiting this... The requirement was originally \"If libcrypto is installed on the device then boringssl_self_test needs to be too\" but that caused a circular dependency. In practice that means every device needs this so maybe we should just add it to one of the board.mk files?",
       "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a3313b8_5b01a135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2024-03-19T09:34:27Z",
+      "side": 1,
+      "message": "I see aosp/2221083, but don\u0027t understand the comment there. The `required` property wasn\u0027t tracked by Soong and therefore circular dependency was not an issue. (my upcoming Soong change will catch that, though)\n\nAnyway, explicitly specifying board.mk is also a good option.",
+      "parentUuid": "2e03b01d_fc97f05f",
+      "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
