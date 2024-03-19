@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e03b01d_fc97f05f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-03-19T08:17:44Z",
+      "side": 1,
+      "message": "Might also be worth revisiting this... The requirement was originally \"If libcrypto is installed on the device then boringssl_self_test needs to be too\" but that caused a circular dependency. In practice that means every device needs this so maybe we should just add it to one of the board.mk files?",
+      "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
