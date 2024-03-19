@@ -52,6 +52,24 @@
       "parentUuid": "2a3313b8_5b01a135",
       "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d10777_1c9e6786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-03-19T09:56:26Z",
+      "side": 1,
+      "message": "Oh! The `boringssl_self_test` rule here is to ensure it ends up in the Conscrypt apex. It\u0027s also in `base_system.mk` to get it into the system image.",
+      "parentUuid": "0038d598_0f5583f4",
+      "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
