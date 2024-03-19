@@ -70,6 +70,24 @@
       "parentUuid": "0038d598_0f5583f4",
       "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "572057df_5f838a53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132673
+      },
+      "writtenOn": "2024-03-19T10:04:59Z",
+      "side": 1,
+      "message": "It\u0027s interesting to know that Soong complained about such a dependency circle even back then.\n\nPerhaps a better approach is to explicitly add boringssl_self_test to the `deps` property of the APEX as well, just like it was done in base_system.mk. \n\nLet\u0027s do that in a separate CL if we think is needed.",
+      "parentUuid": "0038d598_0f5583f4",
+      "revId": "06bb21774b9f260cd0b427bb3ac354245862cf9a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
