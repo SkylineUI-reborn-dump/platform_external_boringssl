@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78815d2_f759f145",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1836235
+      },
+      "writtenOn": "2024-03-20T07:38:11Z",
+      "side": 1,
+      "message": "This looks like it would give a big improvement in binary size across the Trusty TAs.  I\u0027m guessing it might also reduce performance a bit, but I\u0027m also guessing that the size improvement would out-weigh that.\n\nHowever, so far I\u0027ve only built with this, not tested in any way.   Is your team able to look into that?  (For example, this could potentially affect WV performance, which I know nothing about...)",
+      "revId": "1271e2eca93b96e019ce7a07b846757d8dfb3a6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
