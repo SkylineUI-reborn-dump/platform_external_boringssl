@@ -16,6 +16,24 @@
       "message": "Isn\u0027t this one public already?",
       "revId": "86a704fa229f592690d6946314f912b071b3458a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3768ce34_fb9d2056",
+        "filename": "selftest/Android.bp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1386891
+      },
+      "writtenOn": "2024-03-23T03:20:13Z",
+      "side": 1,
+      "message": "https://cs.android.com/android/platform/superproject/main/+/main:external/boringssl/Android.bp\nit looks like its default_visibility is \"//visibility:private\".",
+      "parentUuid": "d7ea50c3_f369287b",
+      "revId": "86a704fa229f592690d6946314f912b071b3458a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
