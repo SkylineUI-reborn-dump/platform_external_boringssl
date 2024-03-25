@@ -70,6 +70,23 @@
       "parentUuid": "de599f51_2a1e7e2d",
       "revId": "1271e2eca93b96e019ce7a07b846757d8dfb3a6d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccf301b8_e461b355",
+        "filename": "rules.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1952791
+      },
+      "writtenOn": "2024-03-25T00:31:38Z",
+      "side": 1,
+      "message": "This maybe a little too simple.  Checking the build commands, this does get propagated, but the module is also build with `-O2`.  I think because `-Oz` happens to come later on the command line, it takes precedence, but I\u0027m not sure that is by design or just luck!",
+      "revId": "1271e2eca93b96e019ce7a07b846757d8dfb3a6d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
