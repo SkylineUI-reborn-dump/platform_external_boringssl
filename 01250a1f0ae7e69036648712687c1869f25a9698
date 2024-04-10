@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0375b68_2f7d2766",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-04-10T08:51:21Z",
+      "side": 1,
+      "message": "Seems harmless although how do we prevent non-test uses in dex2oat?\n\nAlso it seems a bit concerning that we can get version skew between these tests and libcrypto.",
+      "revId": "01250a1f0ae7e69036648712687c1869f25a9698",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
