@@ -16,6 +16,24 @@
       "message": "Seems harmless although how do we prevent non-test uses in dex2oat?\n\nAlso it seems a bit concerning that we can get version skew between these tests and libcrypto.",
       "revId": "01250a1f0ae7e69036648712687c1869f25a9698",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc29350d_189cab58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2024-04-10T13:06:19Z",
+      "side": 1,
+      "message": "\u003e Seems harmless although how do we prevent non-test uses in dex2oat?\n\nI think the fact that ART isn\u0027t in `apex_available` effectively stops that. At least on device, and that\u0027s what matters. Clarified the comment.\n\n\u003e Also it seems a bit concerning that we can get version skew between these tests and libcrypto.\n\nI believe the only use is for SHA1 to [compute build IDs](https://cs.android.com/android/platform/superproject/main/+/main:art/dex2oat/linker/elf_writer_quick.cc;l\u003d306-318;drc\u003ddfc85005d93db3e7fe8daf4a45319dd727fb3c83), and it\u0027s somewhat unlikely the SHA1 algorithm will change.\n\nActually, I\u0027m hoping to do away with libcrypto.so entirely in the ART module just by linking SHA1 - and nothing else - statically. Beside the point here, but would that be a problem from a FIPS perspective?",
+      "parentUuid": "c0375b68_2f7d2766",
+      "revId": "01250a1f0ae7e69036648712687c1869f25a9698",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
