@@ -8,12 +8,12 @@ use core::ffi::c_ulong;
 // as needed.
 mod bindgen {
     #[cfg(not(soong))]
-    include!(env!("BINDGEN_RS_FILE"));
+    pub use bssl_sys_raw::*;
     // Soong, Android's build tool, does not support configuring environment
     // variables like other Rust build systems too. However, it does support
     // some hardcoded behavior with the OUT_DIR variable.
     #[cfg(soong)]
-    include!(concat!(env!("OUT_DIR"), "/bssl_sys_bindings.rs"));
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 }
 pub use bindgen::*;
 
@@ -63,6 +63,18 @@ pub fn ERR_GET_REASON(packed_error: u32) -> i32 {
 pub fn ERR_GET_FUNC(packed_error: u32) -> i32 {
     // Safety: This is safe for all inputs. bindgen conservatively marks everything unsafe.
     unsafe { ERR_GET_FUNC_RUST(packed_error) }
+}
+
+// CBS_init(CBS *cbs, const uint8_t *data, size_t len)
+// #[cfg(unsupported_inline_wrappers)]
+pub fn CBS_init(cbs: *mut CBS, data_ffi_ptr: *const u8, data_len: usize) {
+    // Safety: This is safe for all inputs. bindgen conservatively marks everything unsafe.
+    unsafe { CBS_init(cbs, data_ffi_ptr, data_len) }
+}
+
+#[cfg(unsupported_inline_wrappers)]
+pub fn CBS_len(cbs: *const CBS) -> usize {
+    unsafe { CBS_len(cbs) }
 }
 
 pub fn init() {
