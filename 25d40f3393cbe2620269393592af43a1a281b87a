@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6589bc0_6cf58bde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Makes sense, thank you!",
+      "parentUuid": "a355ac77_cc53de0b",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecb52ddf_b67caf56",
@@ -35,6 +53,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c986779e_37fb7066",
+        "filename": "Android.bp",
+        "patchSetId": 4
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s my understanding as well!",
+      "parentUuid": "ecb52ddf_b67caf56",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af55d35b_83ff6bf3",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-05-08T21:45:18Z",
       "side": 1,
       "message": "Edits like this need to go upstream, not here",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c503eec0_2a5d9241",
+        "filename": "src/rust/bssl-sys/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af55d35b_83ff6bf3",
       "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -87,6 +141,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad0c0ae_a53422f7",
+        "filename": "src/rust/bssl-sys/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Ah, you are probably right -- I realize the `Cargo.toml` changes didn\u0027t get tested when running the AOSP build. I\u0027ll remove these in my CL to upstream boringssl.",
+      "parentUuid": "cd3e5da0_f65f3695",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be933aaa_bbdd3e66",
@@ -100,6 +172,24 @@
       "writtenOn": "2024-05-08T21:45:18Z",
       "side": 1,
       "message": "As above, needs to go upstream",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "898da144_c4705e5d",
+        "filename": "src/rust/bssl-sys/rust_wrapper.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be933aaa_bbdd3e66",
       "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -139,6 +229,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86da382e_2d2c4f4d",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70946d32_e3c49c03",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "717a8cc1_80ffeb12",
@@ -152,6 +260,30 @@
       "writtenOn": "2024-05-08T22:08:22Z",
       "side": 1,
       "message": "As this is intended for Soong anyway, I don\u0027t feel that strongly, but I opted for a bssl-sys-specific name in case other folks needed this and there were multiple things to jam in there.\n\nI thought there was some way to customize this name in the build.",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c245fe7_bcc1797f",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Good question -- I just renamed it to `bindings.rs` because that was the name of the file being generated, but I\u0027m not sure if you can customize that. Maybe @ivanlozano@google.com would know?",
+      "parentUuid": "717a8cc1_80ffeb12",
       "range": {
         "startLine": 16,
         "startChar": 40,
@@ -211,6 +343,24 @@
       "side": 1,
       "message": "It should be. I mean, these are just identical versions of the original ones, just working around bindgen not processing them correctly. 😊",
       "parentUuid": "00f87a84_2057826e",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda76e06_26c2e12d",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:02:02Z",
+      "side": 1,
+      "message": "Makes sense! I\u0027m marking it as unsafe.\n\nAlso that\u0027s a good idea, I\u0027ll do that. I\u0027m leaving the other functions as wrappers though, since I think they should not be exported as `unsafe`.",
+      "parentUuid": "d613794a_5465976c",
       "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
