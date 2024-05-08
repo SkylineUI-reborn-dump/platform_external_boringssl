@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecb52ddf_b67caf56",
+        "filename": "Android.bp",
+        "patchSetId": 4
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-08T22:08:22Z",
+      "side": 1,
+      "message": "Ideally we\u0027d use the new automatic thing, but I\u0027m guessing the idea is what we first get it working this way and then migrate? (That works for me, just double-checking.)",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af55d35b_83ff6bf3",
         "filename": "src/rust/bssl-sys/Cargo.toml",
         "patchSetId": 4
@@ -31,6 +48,23 @@
       "writtenOn": "2024-05-08T21:45:18Z",
       "side": 1,
       "message": "Edits like this need to go upstream, not here",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b486d1e_c781d3a0",
+        "filename": "src/rust/bssl-sys/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-08T22:08:22Z",
+      "side": 1,
+      "message": "For my understanding, what\u0027s the difference between a feature and a cfg here? I thought a cfg was sufficient, given cfg(soong), but I\u0027m probably confused.",
       "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
@@ -65,6 +99,64 @@
       "writtenOn": "2024-05-08T21:45:18Z",
       "side": 1,
       "message": "Upstream",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70946d32_e3c49c03",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-08T22:08:22Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d52fcd2b_42f50f06",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717a8cc1_80ffeb12",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-08T22:08:22Z",
+      "side": 1,
+      "message": "As this is intended for Soong anyway, I don\u0027t feel that strongly, but I opted for a bssl-sys-specific name in case other folks needed this and there were multiple things to jam in there.\n\nI thought there was some way to customize this name in the build.",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d613794a_5465976c",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-08T22:08:22Z",
+      "side": 1,
+      "message": "This isn\u0027t actually true. :-) I think we actually need to mark this function as unsafe and all.\n\n...actually, a thought: is it possible to just do these as `use CBS_init_RUST as CBS_init` or whatever the spelling is.",
       "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
