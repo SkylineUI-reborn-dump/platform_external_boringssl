@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd3e5da0_f65f3695",
+        "filename": "src/rust/bssl-sys/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2024-05-08T22:11:40Z",
+      "side": 1,
+      "message": "I don\u0027t think this should be needed either - specifying this would match `cfg(features \u003d \"unsupported_inline_wrappers\")`, which isn\u0027t used in the code. I was figuring we\u0027d review this more closely after we separated the portion bound for the boringssl gerrit.",
+      "parentUuid": "2b486d1e_c781d3a0",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be933aaa_bbdd3e66",
         "filename": "src/rust/bssl-sys/rust_wrapper.h",
         "patchSetId": 4
