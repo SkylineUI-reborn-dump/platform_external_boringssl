@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2363be63_b41b39d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-08T23:04:57Z",
+      "side": 1,
+      "message": "I\u0027ve pushed the changes to everything except Android.bp to the boringssl upstream: https://boringssl-review.googlesource.com/c/boringssl/+/68327\n\nNow we just need this ^ to land, and then rerun `UPDATING` for boringssl on AOSP, before we can land these changes.",
+      "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
