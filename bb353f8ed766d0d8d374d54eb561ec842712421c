@@ -41,6 +41,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b51c12_86bd1900",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-09T16:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60de0a2a_0bd90a71",
+      "range": {
+        "startLine": 737,
+        "startChar": 18,
+        "endLine": 737,
+        "endChar": 26
+      },
+      "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aad635b_bb0ec009",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-05-09T01:30:26Z",
       "side": 1,
       "message": "bssl_sys_bindings",
+      "range": {
+        "startLine": 756,
+        "startChar": 18,
+        "endLine": 756,
+        "endChar": 26
+      },
+      "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "071a7b77_8cc45c37",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-09T16:55:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aad635b_bb0ec009",
       "range": {
         "startLine": 756,
         "startChar": 18,
