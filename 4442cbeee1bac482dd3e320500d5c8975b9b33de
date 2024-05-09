@@ -52,6 +52,24 @@
       "parentUuid": "3ca65ee6_ef232add",
       "revId": "4442cbeee1bac482dd3e320500d5c8975b9b33de",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3803da2_3542a30b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-09T20:44:17Z",
+      "side": 1,
+      "message": "For a variety of messy reasons, this repository\u0027s structure is not quite the same as the upstream BoringSSL so, no, this should not be a merge commit.\n\nWe are most of the way through some changes in upstream OpenSSL that will make changing this viable, but it will also move a bunch of file paths and cause a bit of churn. Might be nice for this to happen someday, especially if it allows for more automated BoringSSL updates. but future work at best.",
+      "parentUuid": "2c14fefc_87e650fa",
+      "revId": "4442cbeee1bac482dd3e320500d5c8975b9b33de",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
