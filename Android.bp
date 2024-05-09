@@ -92,6 +92,8 @@ cc_defaults {
     local_include_dirs: ["src/include"],
     export_include_dirs: ["src/include"],
     cflags: ["-DBORINGSSL_IMPLEMENTATION"],
+
+    cmake_snapshot_supported: true,
 }
 
 //// libcrypto, but not libcrypto_baremetal. libcrypto_baremetal is a single
