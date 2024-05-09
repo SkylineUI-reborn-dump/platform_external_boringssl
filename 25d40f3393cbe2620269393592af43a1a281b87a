@@ -296,6 +296,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0df1ff3_54cff2eb",
+        "filename": "src/rust/bssl-sys/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115178
+      },
+      "writtenOn": "2024-05-09T01:30:26Z",
+      "side": 1,
+      "message": "These are the libbssl_sys_raw bindings? The output filename is controlled by the `source_stem` property in the corresponding `rust_bindgen` module, so you probably want to change them to the following:\n\n```\nrust_bindgen {\n    name: \"libbssl_sys_raw_nostd\",\n    source_stem: \"bssl_sys_bindings\",\n    //...\n}\n\nrust_bindgen {\n    name: \"libbssl_sys_raw_nostd\",\n    source_stem: \"bssl_sys_bindings\",\n    //...\n}\n```\n\n(See other comment)",
+      "parentUuid": "6c245fe7_bcc1797f",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d613794a_5465976c",
         "filename": "src/rust/bssl-sys/src/lib.rs",
         "patchSetId": 4

@@ -16,6 +16,52 @@
       "message": "I\u0027ve pushed the changes to everything except Android.bp to the boringssl upstream: https://boringssl-review.googlesource.com/c/boringssl/+/68327\n\nNow we just need this ^ to land, and then rerun `UPDATING` for boringssl on AOSP, before we can land these changes.",
       "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60de0a2a_0bd90a71",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1115178
+      },
+      "writtenOn": "2024-05-09T01:30:26Z",
+      "side": 1,
+      "message": "bssl_sys_bindings",
+      "range": {
+        "startLine": 737,
+        "startChar": 18,
+        "endLine": 737,
+        "endChar": 26
+      },
+      "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aad635b_bb0ec009",
+        "filename": "Android.bp",
+        "patchSetId": 6
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1115178
+      },
+      "writtenOn": "2024-05-09T01:30:26Z",
+      "side": 1,
+      "message": "bssl_sys_bindings",
+      "range": {
+        "startLine": 756,
+        "startChar": 18,
+        "endLine": 756,
+        "endChar": 26
+      },
+      "revId": "bb353f8ed766d0d8d374d54eb561ec842712421c",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
