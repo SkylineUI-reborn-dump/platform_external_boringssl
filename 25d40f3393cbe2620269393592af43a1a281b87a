@@ -177,6 +177,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21dd1f14_4e0229a5",
+        "filename": "src/rust/bssl-sys/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-10T14:03:45Z",
+      "side": 1,
+      "message": "Yeah, we just want a `cfg` then. This is not \"unsupported because it\u0027s a new preview feature\". This is \"unsupported because it is a legacy mode that only exists because Android Rust didn\u0027t add the build system features that BoringSSL requires\". 😊\n\n(The build system features have since been added for one of your two build systems, so hopefully this can go away later.)",
+      "parentUuid": "0f135831_9f09bbbf",
+      "revId": "25d40f3393cbe2620269393592af43a1a281b87a",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be933aaa_bbdd3e66",
