@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3995c7fd_41a0e14e",
+        "filename": "sources.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-11T15:48:23Z",
+      "side": 0,
+      "message": "This is a one-time thing (we switched from generating this with the script to just keeping it in tree), but you can delete err_data.c from the root now.",
+      "revId": "41be05a790e708f9b1f7841f791b3bb73b434136",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e1229b_c29e4efd",
+        "filename": "sources.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-11T15:48:23Z",
+      "side": 0,
+      "message": "Likewise, you can delete crypto_test_data.cc from the repository root now. (One time thing, so no need to update the UPDATING script.)",
+      "revId": "41be05a790e708f9b1f7841f791b3bb73b434136",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
