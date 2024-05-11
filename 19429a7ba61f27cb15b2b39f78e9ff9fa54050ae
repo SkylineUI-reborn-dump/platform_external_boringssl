@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8385de9d_21a4e6e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-11T15:28:08Z",
+      "side": 1,
+      "message": "(I only have CR+1 bits apparently. Might need to find an actual Android person for CR+2.)",
+      "revId": "19429a7ba61f27cb15b2b39f78e9ff9fa54050ae",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
