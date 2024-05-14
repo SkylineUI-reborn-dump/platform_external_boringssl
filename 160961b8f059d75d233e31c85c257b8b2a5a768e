@@ -16,6 +16,52 @@
       "message": "Tests run and pass locally; squashed in the fix, and explanation is in the comment thread. Not resolving the comment thread yet, in case the solution should be improved.",
       "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da7cc7ef_bcfde306",
+        "filename": "CryptoNativeTests.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-14T12:08:10Z",
+      "side": 1,
+      "message": "Per offline discussion, please don\u0027t forget `SslNativeTests.xml` too.",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6f57fd4_712ad4ca",
+        "filename": "CryptoNativeTests.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-14T12:08:10Z",
+      "side": 1,
+      "message": "nit: you could save a few cycles by creating a symbolic link instead of moving the files.",
+      "range": {
+        "startLine": 32,
+        "startChar": 40,
+        "endLine": 32,
+        "endChar": 42
+      },
+      "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
