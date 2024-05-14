@@ -18,6 +18,23 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8175845b_5728e8aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-14T17:51:45Z",
+      "side": 1,
+      "message": "Thanks! Updated the SslNativeTests.xml file similarly and ran them locally with `atest` , those tests pass too.",
+      "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da7cc7ef_bcfde306",
@@ -41,6 +58,30 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eda78d5_5cb2d91c",
+        "filename": "CryptoNativeTests.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-14T17:51:45Z",
+      "side": 1,
+      "message": "Thanks -- done! They all pass too, 365/365",
+      "parentUuid": "da7cc7ef_bcfde306",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6f57fd4_712ad4ca",
@@ -54,6 +95,30 @@
       "writtenOn": "2024-05-14T12:08:10Z",
       "side": 1,
       "message": "nit: you could save a few cycles by creating a symbolic link instead of moving the files.",
+      "range": {
+        "startLine": 32,
+        "startChar": 40,
+        "endLine": 32,
+        "endChar": 42
+      },
+      "revId": "160961b8f059d75d233e31c85c257b8b2a5a768e",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc05d59_8876fe08",
+        "filename": "CryptoNativeTests.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-14T17:51:45Z",
+      "side": 1,
+      "message": "Good point!",
+      "parentUuid": "f6f57fd4_712ad4ca",
       "range": {
         "startLine": 32,
         "startChar": 40,

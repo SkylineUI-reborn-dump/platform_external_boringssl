@@ -68,6 +68,24 @@
       "parentUuid": "f4adfb30_1fb29cdc",
       "revId": "e85142237457445faae047e9579d9882cb7c9ba2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21466c67_364df8db",
+        "filename": "sources.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-14T17:51:45Z",
+      "side": 1,
+      "message": "Update: re: offline discussion, this is the solution we\u0027re going with. Same solution applied to the `SslNativeTests.xml` config file results in all passing tests too, 365/365",
+      "parentUuid": "05bfa5f7_c2e5fa3b",
+      "revId": "e85142237457445faae047e9579d9882cb7c9ba2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
