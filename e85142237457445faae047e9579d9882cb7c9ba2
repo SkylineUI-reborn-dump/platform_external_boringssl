@@ -50,6 +50,24 @@
       "message": "Okay, I\u0027m really confused how this is passing treehugger. Do you know which result would contain the run of `CryptoNativeTests.xml`?\n\nSo the story here is that, originally, Android did not have this `cc_test.data` thing, so we handled test data by just generating a giant C++ file with all the test data in it.\n\nOver time, that giant C++ file started causing more and more problems as it got bigger. Fortunately, `cc_test.data` now exists in Android. So, as part of the big build cleanup (a lot of generated files disappeared and moved in tree), the new test data story is that we\u0027ll just use the downstream embedder\u0027s equivalent of this and folks need to either provide or swap out this function:\nhttps://boringssl.googlesource.com/boringssl/+/refs/heads/master/crypto/test/test_data.h#20\n\nBefore I did this, I did a trial run on Android to make sure it would work. It was ages ago, but IIRC it was fine except for the silly `src` prefix (long story), which isn\u0027t in the upstream repo.\n\nThat means that the file paths aren\u0027t quite where BoringSSL expects. Thus we have this environment variable you can set in the XML file:\nhttps://android-review.git.corp.google.com/c/platform/external/boringssl/+/2574250\n\n(We ended up calling the variable `BORINGSSL_TEST_DATA_ROOT` instead of `BORINGSSL_TEST_DATA_PREFIX`. That CL was the trial run.)\n\nBut it doesn\u0027t look like you needed to set it here, so... now I\u0027m very confused how the tests are passing.",
       "revId": "e85142237457445faae047e9579d9882cb7c9ba2",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05bfa5f7_c2e5fa3b",
+        "filename": "sources.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-05-14T00:13:22Z",
+      "side": 1,
+      "message": "Update: we found out that treehugger is explicitly excluding the boringssl tests from running. So instead, I ran the tests locally with `atest boringssl_crypto_test`. In order to get the tests to run, I had to reconfigure `CryptoNativeTests.xml` to resolve the following issues:\n1) none of the data was getting copied onto the device: this was solved by changing the `FilePusher` to a `PushFilePreparer` .\n2) as you mention in your comment, the data was in a subdirectory `src` ; unfortunately, the tests were running 2 directories above `src`, in `/data/local/tmp/boringssl_crypto_test/arm64` -- this `arm64` is presumably some architecture-specific path. I couldn\u0027t figure out how to stop this directory from being generated, so I used a `run-command` to just move `src` one directory up (with a wildcard for the architecture). This solution has precedent: https://source.corp.google.com/h/googleplex-android/platform/superproject/+/master-daydream-dev:vendor/google/airbrush/floral/state_manager/AndroidTest.xml\n3) Indeed, I still had to set `BORINGSSL_TEST_DATA_ROOT` as you said, because of the `src` directory\n\nI don\u0027t like this solution, but it does mean I was able to run the tests and they all passed, 1341/1341",
+      "parentUuid": "f4adfb30_1fb29cdc",
+      "revId": "e85142237457445faae047e9579d9882cb7c9ba2",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
