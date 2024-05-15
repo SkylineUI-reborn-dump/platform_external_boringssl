@@ -165,6 +165,7 @@ int EVP_CipherInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher,
         ctx->cipher = NULL;
         return 0;
       }
+      memset(ctx->cipher_data, 0, ctx->cipher->ctx_size);
     } else {
       ctx->cipher_data = NULL;
     }
