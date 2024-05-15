@@ -178,9 +178,6 @@ cc_object {
         "//apex_available:platform",
         "com.android.adbd",
         "com.android.adservices",
-        "com.android.art",
-        "com.android.art.debug",
-        "com.android.art.testing",
         "com.android.btservices",
         "com.android.compos",
         "com.android.conscrypt",
@@ -283,9 +280,6 @@ cc_library {
         "//apex_available:platform",
         "com.android.adbd",
         "com.android.adservices",
-        "com.android.art",
-        "com.android.art.debug",
-        "com.android.art.testing",
         "com.android.btservices",
         "com.android.compos",
         "com.android.conscrypt",
@@ -348,8 +342,6 @@ cc_library {
 cc_library_static {
     name: "libcrypto_static",
     visibility: [
-        "//art/build/sdk",
-        "//art/dex2oat", // Only for test use (note this module isn't in apex_available).
         "//bootable/recovery/updater",
         "//bootable/deprecated-ota/updater",
         "//external/conscrypt",
@@ -410,6 +402,78 @@ cc_library_static {
         "//packages/modules/Virtualization:__subpackages__",
         "//system/security/diced/open_dice",
     ],
+}
+
+// For static linking into the ART module to provide limited functionality:
+// bignums and SHA1 for ELF checksums.
+cc_library_static {
+    name: "libcrypto_for_art",
+    defaults: [
+        "libcrypto_defaults",
+        "boringssl_defaults",
+    ],
+    srcs: [
+        "src/crypto/cpu_aarch64_linux.c",
+        "src/crypto/cpu_arm_linux.c",
+        "src/crypto/cpu_intel.c",
+        "src/crypto/crypto.c",
+        "src/crypto/err/err.c",
+        "src/crypto/fipsmodule/bn/add.c",
+        "src/crypto/fipsmodule/bn/asm/x86_64-gcc.c",
+        "src/crypto/fipsmodule/bn/bn.c",
+        "src/crypto/fipsmodule/bn/bytes.c",
+        "src/crypto/fipsmodule/bn/cmp.c",
+        "src/crypto/fipsmodule/bn/ctx.c",
+        "src/crypto/fipsmodule/bn/div.c",
+        // "src/crypto/fipsmodule/bn/div_extra.c",
+        "src/crypto/fipsmodule/bn/exponentiation.c",
+        // "src/crypto/fipsmodule/bn/gcd.c",
+        // "src/crypto/fipsmodule/bn/gcd_extra.c",
+        "src/crypto/fipsmodule/bn/generic.c",
+        // "src/crypto/fipsmodule/bn/jacobi.c",
+        "src/crypto/fipsmodule/bn/montgomery.c",
+        "src/crypto/fipsmodule/bn/montgomery_inv.c",
+        "src/crypto/fipsmodule/bn/mul.c",
+        // "src/crypto/fipsmodule/bn/prime.c",
+        // "src/crypto/fipsmodule/bn/rsaz_exp.c",
+        "src/crypto/fipsmodule/bn/shift.c",
+        // "src/crypto/fipsmodule/bn/sqrt.c",
+        "src/crypto/fipsmodule/rand/fork_detect.c",
+        "src/crypto/fipsmodule/rand/urandom.c",
+        "src/crypto/fipsmodule/sha/sha1.c",
+        "src/crypto/mem.c",
+        "src/crypto/stack/stack.c",
+        "src/crypto/thread_pthread.c",
+        "src/gen/crypto/err_data.c",
+    ],
+    target: {
+        linux: {
+            srcs: [
+                "src/gen/bcm/armv4-mont-linux.S",
+                "src/gen/bcm/armv8-mont-linux.S",
+                "src/gen/bcm/bn-586-linux.S",
+                "src/gen/bcm/bn-armv8-linux.S",
+                "src/gen/bcm/co-586-linux.S",
+                "src/gen/bcm/sha1-586-linux.S",
+                "src/gen/bcm/sha1-armv4-large-linux.S",
+                "src/gen/bcm/sha1-armv8-linux.S",
+                "src/gen/bcm/sha1-x86_64-linux.S",
+                "src/gen/bcm/x86-mont-linux.S",
+                "src/gen/bcm/x86_64-mont-linux.S",
+                "src/gen/bcm/x86_64-mont5-linux.S",
+            ],
+        },
+    },
+    visibility: [
+        "//art:__subpackages__",
+        "//libcore:__subpackages__",
+    ],
+    apex_available: [
+        "com.android.art",
+        "com.android.art.debug",
+        "com.android.art.testing",
+    ],
+    min_sdk_version: "29",
 }
 
 // Common defaults for lib*_fuzz_unsafe. These are unsafe and deterministic
