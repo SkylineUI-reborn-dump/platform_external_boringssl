@@ -909,6 +909,7 @@ rust_library {
     ],
     visibility: [
         "//external/rust/beto-rust/nearby",
+        "//system/security/mls/mls-rs-crypto-boringssl",
     ],
     vendor_available: true,
     product_available: true,
