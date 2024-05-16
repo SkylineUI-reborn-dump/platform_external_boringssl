@@ -18,6 +18,15 @@
       "name": "CtsLibcoreOkHttpTestCases"
     },
     {
+      "name": "boringssl_crypto_test"
+    },
+    {
+      "name": "boringssl_ssl_test"
+    },
+    {
+      "name": "libbssl_crypto_test"
+    },
+    {
       "name": "libbssl_sys_raw_test"
     }
   ]
