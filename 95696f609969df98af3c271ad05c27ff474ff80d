@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68675caf_8bb4f719",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-17T09:48:53Z",
+      "side": 1,
+      "message": "There\u0027s some weirdness around libcrypto on host builds, so this should probably go in the target:android:test_suites clause below.\n\nShould probably also include \"cts\" and \"automotive-general-tests\" in the list too (my bad, sorry!)\n\nSame for boringssl_ssl_test below.",
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f3cc82f_90b61a1f",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-17T09:48:53Z",
+      "side": 1,
+      "message": "Do we need to update this too?\n\nUnsure about mts, but it should probably at least go into cts",
+      "range": {
+        "startLine": 923,
+        "startChar": 4,
+        "endLine": 923,
+        "endChar": 15
+      },
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258462f8_758bf422",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-17T09:48:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the right place for this...I think we should be adding these tests to an existing test config that already gets run in post-submit, but I\u0027ll do some research.",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
