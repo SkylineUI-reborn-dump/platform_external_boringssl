@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12fae139_10ed0fa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2024-05-17T15:29:11Z",
+      "side": 1,
+      "message": "PS4 has the minimum set of files to make linking work in all builds. PS5 simplifies the source lists to make maintenance a bit easier.",
+      "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
