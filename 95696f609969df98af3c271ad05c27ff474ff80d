@@ -62,6 +62,30 @@
       },
       "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ebfee0f_af262c59",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-18T15:48:17Z",
+      "side": 1,
+      "message": "Hehe, I have no idea how any of this works. Would you have the cycles to pick this up?\n\nThe last BoringSSL updated ended up taking a very long time because, a while back when I went to test Android\u0027s ability to handle test data, I thought I\u0027d tested things, but actually the tests weren\u0027t running at all. The goal is to get these tests running in *pre*submits for *this* repository. However, because of the broken SLO tooling in Android, they have to be added to a postsubmit first, otherwise the system doesn\u0027t even know the tests pass. (This is absurd, but OK.)",
+      "parentUuid": "258462f8_758bf422",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
