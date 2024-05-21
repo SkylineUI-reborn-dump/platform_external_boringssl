@@ -50,6 +50,24 @@
       "message": "There\u0027s a good chance that this will break over time as functionality is moved around. The Android maintainers of the BoringSSL import (i.e. mostyl prb I think) would have to be ok with that.\n\nWe generally expect people to enable -ffunction-sections and -fdata-sections and then have the linker discard unused functionality. Does that not work here?",
       "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a7e585_a915cb72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2024-05-21T19:08:13Z",
+      "side": 1,
+      "message": "Agreed, that\u0027s an issue. Just linking the whole thing statically and let the linker remove dead code is simple (I think it does that by default in Soong), but my worry is that we then may accidentally depend on some crypto algorithm that creates an issue with FIPS compliance.\n\nAnother approach is to use version scripts with an allow list:\n\n```\nLIBCRYPTO_FOR_ART_1 {\n  global:\n    SHA1_Init;\n    SHA1_Update;\n    ...\n  local:\n    *;\n}\n```\n\nThe downside with that is that we still get a separate .so file with its associated overhead (a few more dirty pages etc), whereas I was hoping to use static linking. But if this static lib feels like a yak shave maintenance-wise I can go with that instead.\n\n@prb, I guess it\u0027s your call. WDYT?",
+      "parentUuid": "403983e2_ecc670f7",
+      "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
