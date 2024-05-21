@@ -33,6 +33,23 @@
       "message": "Is this a viable approach? Cf. http://b/340868296#comment13",
       "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403983e2_ecc670f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019036
+      },
+      "writtenOn": "2024-05-21T17:35:03Z",
+      "side": 1,
+      "message": "There\u0027s a good chance that this will break over time as functionality is moved around. The Android maintainers of the BoringSSL import (i.e. mostyl prb I think) would have to be ok with that.\n\nWe generally expect people to enable -ffunction-sections and -fdata-sections and then have the linker discard unused functionality. Does that not work here?",
+      "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
