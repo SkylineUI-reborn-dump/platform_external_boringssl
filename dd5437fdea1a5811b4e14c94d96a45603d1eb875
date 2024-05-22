@@ -86,6 +86,24 @@
       "parentUuid": "96a7e585_a915cb72",
       "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca8b74d_a193e625",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1373864
+      },
+      "writtenOn": "2024-05-22T16:15:30Z",
+      "side": 1,
+      "message": "Thanks Pete, then I\u0027ll stick with this. If it turns out to be a burden we can still switch to a slimmed down .so file without regressing too much.",
+      "parentUuid": "42bd1952_dff24aa5",
+      "revId": "dd5437fdea1a5811b4e14c94d96a45603d1eb875",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
