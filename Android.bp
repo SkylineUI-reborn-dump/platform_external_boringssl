@@ -909,6 +909,7 @@ rust_library {
     ],
     visibility: [
         "//external/rust/beto-rust/nearby",
+        "//packages/modules/Virtualization/libs/apkverify",
     ],
     vendor_available: true,
     product_available: true,
