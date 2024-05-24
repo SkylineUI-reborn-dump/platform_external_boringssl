@@ -907,9 +907,6 @@ rust_library {
         "//apex_available:platform",
         "com.android.virt",
     ],
-    visibility: [
-        "//external/rust/beto-rust/nearby",
-    ],
     vendor_available: true,
     product_available: true,
 }
