@@ -826,6 +826,7 @@ rust_defaults {
         "//external/rust/crates/openssl",
         "//system/keymint/boringssl",
         "//system/security/prng_seeder",
+        "//packages/modules/Virtualization/libs/apkverify",
     ],
     srcs: ["src/rust/bssl-sys/src/lib.rs", ":libbssl_sys_raw"],
     shared_libs: [
@@ -903,6 +904,7 @@ rust_library {
     ],
     visibility: [
         "//external/rust/beto-rust/nearby",
+        "//packages/modules/Virtualization/libs/apkverify",
     ],
     vendor_available: true,
     product_available: true,
