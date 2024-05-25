@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8371cb9_0ad93158",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-25T15:47:41Z",
+      "side": 1,
+      "message": "Can you provide a pointer to what this means, and what the support implications for this repository would be? We\u0027re having a very difficult time as it is with Android keeping BoringSSL up to date. Adding yet another build system sounds extremely expensive.",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
