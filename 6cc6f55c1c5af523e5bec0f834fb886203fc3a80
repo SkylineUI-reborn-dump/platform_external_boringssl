@@ -52,6 +52,24 @@
       "parentUuid": "08ea96ad_5585e4e9",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdc86945_5d16806b",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1135107
+      },
+      "writtenOn": "2024-05-28T17:15:06Z",
+      "side": 1,
+      "message": "We\u0027re using this file [http://shortn/_RDMTbVUEGG] Hao added in aosp/2640811 after you used the exact same argument a year ago :).\n\nThis CMake build works as follows:\n1. cc_cmake_snapshot generates CMakeLists.txt for libbinder and binder dependencies\n2. except for boringssl which already has it generated and ready to use\n3. then, cc_cmake_snapshot makes a zip archive containing libbinder and all its dependencies (including boringssl)\n4. the archive can be taken to be built on non-Android Linux, without Android build tree - only with CMake (and not Soong)\n\nSo effectively from boringssl perspective, we\u0027re just taking your repo as-is and using the CMake build you already have as-is.\n\nTesting: as part of binder_sdk test build (aosp/3081709). In your case there\u0027s no need to test build of boringssl individually, because for boringssl cmake_snapshot_supported says \"I allow this target to be bundled with other CMake-based release archives\".\n\nThis flag doesn\u0027t say CMake would be used in Android build.\n\nbinder_sdk: it\u0027s a release of Binder to be used on non-Android Linux and built outside of Android build tree (with CMake). It\u0027s a name of soong target that creates a zip-ball to distribute.\n\nBoringSSL would not be a part of SDK surface - it\u0027s only here as internal dependency for Binder.",
+      "parentUuid": "c8aff493_7a780560",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
