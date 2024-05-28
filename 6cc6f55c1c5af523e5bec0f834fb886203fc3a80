@@ -16,6 +16,24 @@
       "message": "Can you provide a pointer to what this means, and what the support implications for this repository would be? We\u0027re having a very difficult time as it is with Android keeping BoringSSL up to date. Adding yet another build system sounds extremely expensive.",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ea96ad_5585e4e9",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1135107
+      },
+      "writtenOn": "2024-05-28T16:43:56Z",
+      "side": 1,
+      "message": "It means it can be pulled as a dependency into `cc_cmake_snapshot` package (currently only aosp/3068487). Since you already support CMake (and cc_cmake_snapshot uses your pre-generated CMakeLists.txt), the only implication for you is that BoringSSL would end up packaged into binder_sdk tarball (or, zip-ball).",
+      "parentUuid": "e8371cb9_0ad93158",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
