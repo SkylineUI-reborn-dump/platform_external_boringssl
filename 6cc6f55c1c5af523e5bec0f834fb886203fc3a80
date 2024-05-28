@@ -34,6 +34,24 @@
       "parentUuid": "e8371cb9_0ad93158",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8aff493_7a780560",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-28T16:49:51Z",
+      "side": 1,
+      "message": "We have three different CMake builds already and need to reduce them, so just saying we \"already support CMake\" is pretty complex. How exactly would this CMake build work? Where will it be tested? Will issues be caught by presubmits? It seems bizarre to me that a setting on a Soong target would cause a CMake file to be used.\n\nWhat is binder_sdk? BoringSSL does not provide stability guarantees, so being part of an SDK also sounds problematic.",
+      "parentUuid": "08ea96ad_5585e4e9",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
