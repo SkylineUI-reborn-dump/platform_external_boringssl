@@ -141,6 +141,24 @@
       "parentUuid": "380d1768_bbab1cbd",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "761be372_58e96b9a",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-28T17:59:39Z",
+      "side": 1,
+      "message": "I was worried that something going *into* the platform might accidentaly use cmake, but it sounds like we\u0027re good.",
+      "parentUuid": "4e3c3c1b_c096d9ac",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
