@@ -123,6 +123,24 @@
       "parentUuid": "d720b9d6_dba013b2",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e3c3c1b_c096d9ac",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1135107
+      },
+      "writtenOn": "2024-05-28T17:56:27Z",
+      "side": 1,
+      "message": "I may not completely follow your question. Are you worried that some other project could use this flag to build something else outside of Android (*platform*)?\n\nBecause nothing that goes *into the platform* uses CMake.",
+      "parentUuid": "380d1768_bbab1cbd",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
