@@ -105,6 +105,24 @@
       "parentUuid": "bdc86945_5d16806b",
       "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380d1768_bbab1cbd",
+        "filename": "Android.bp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-05-28T17:50:50Z",
+      "side": 1,
+      "message": "Do we need to do anything more to ensure that the cmake build can *only* be used for the binder_sdk build?\n\nBecause anything that needs to go into the platform needs to be built with Soong to get the correct FIPS bits.",
+      "parentUuid": "d720b9d6_dba013b2",
+      "revId": "6cc6f55c1c5af523e5bec0f834fb886203fc3a80",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
