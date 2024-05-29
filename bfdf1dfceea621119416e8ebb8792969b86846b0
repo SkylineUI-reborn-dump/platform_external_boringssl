@@ -16,6 +16,23 @@
       "message": "Adding @davidben as a code owner to review",
       "revId": "bfdf1dfceea621119416e8ebb8792969b86846b0",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a10fc7e_e16b06a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-05-29T14:50:13Z",
+      "side": 1,
+      "message": "This is probably fine. bssl-crypto is a little new, but I\u0027m OK giving this a try. Though if it starts to be another way that Rust impedes BoringSSL updates, we\u0027ll need to restrict this and force Rust projects in Android to be allowlisted.",
+      "revId": "bfdf1dfceea621119416e8ebb8792969b86846b0",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
