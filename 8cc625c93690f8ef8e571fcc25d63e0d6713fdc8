@@ -16,6 +16,23 @@
       "message": "LGTM though I don\u0027t have CR+2 bits, so adding prb",
       "revId": "8cc625c93690f8ef8e571fcc25d63e0d6713fdc8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f81cf16_f5b135df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1416371
+      },
+      "writtenOn": "2024-05-29T00:55:11Z",
+      "side": 1,
+      "message": "Ellen has another change at aosp/3101712 that should be preferred over this one - it removes the visibility restriction on `bssl-crypto` entirely, as it should be the preferred interface.",
+      "revId": "8cc625c93690f8ef8e571fcc25d63e0d6713fdc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
