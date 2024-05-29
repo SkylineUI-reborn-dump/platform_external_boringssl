@@ -51,6 +51,24 @@
       "parentUuid": "0f81cf16_f5b135df",
       "revId": "8cc625c93690f8ef8e571fcc25d63e0d6713fdc8",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea13e67b_fd28f95e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1943701
+      },
+      "writtenOn": "2024-05-29T17:01:00Z",
+      "side": 1,
+      "message": "@cinlin@google.com, the other CL was submitted so we can abandon this now. I removed the topic from it already to decouple things.",
+      "parentUuid": "31726ca3_50e22c6a",
+      "revId": "8cc625c93690f8ef8e571fcc25d63e0d6713fdc8",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
