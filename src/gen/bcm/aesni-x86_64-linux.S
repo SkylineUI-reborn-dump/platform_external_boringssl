@@ -1913,9 +1913,12 @@ _CET_ENDBR
 .align	16
 aes_hw_set_decrypt_key:
 .cfi_startproc	
+
 _CET_ENDBR
-.byte	0x48,0x83,0xEC,0x08
+	subq	$8,%rsp
 .cfi_adjust_cfa_offset	8
+
+
 	call	__aesni_set_encrypt_key
 	shll	$4,%esi
 	testl	%eax,%eax
@@ -1951,7 +1954,7 @@ _CET_ENDBR
 .cfi_adjust_cfa_offset	-8
 	ret
 .cfi_endproc	
-.LSEH_end_set_decrypt_key:
+
 .size	aes_hw_set_decrypt_key,.-aes_hw_set_decrypt_key
 .globl	aes_hw_set_encrypt_key
 .hidden aes_hw_set_encrypt_key
@@ -1960,17 +1963,14 @@ _CET_ENDBR
 aes_hw_set_encrypt_key:
 __aesni_set_encrypt_key:
 .cfi_startproc	
+
 _CET_ENDBR
 #ifdef BORINGSSL_DISPATCH_TEST
 	movb	$1,BORINGSSL_function_hit+3(%rip)
 #endif
-.byte	0x48,0x83,0xEC,0x08
+	subq	$8,%rsp
 .cfi_adjust_cfa_offset	8
-	movq	$-1,%rax
-	testq	%rdi,%rdi
-	jz	.Lenc_key_ret
-	testq	%rdx,%rdx
-	jz	.Lenc_key_ret
+
 
 	movups	(%rdi),%xmm0
 	xorps	%xmm4,%xmm4
@@ -2262,7 +2262,7 @@ _CET_ENDBR
 .cfi_adjust_cfa_offset	-8
 	ret
 .cfi_endproc	
-.LSEH_end_set_encrypt_key:
+
 
 .align	16
 .Lkey_expansion_128:

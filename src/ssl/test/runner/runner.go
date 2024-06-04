@@ -12060,8 +12060,7 @@ func addCurveTests() {
 		flags: []string{
 			"-curves", strconv.Itoa(int(CurveX25519Kyber768)),
 			"-curves", strconv.Itoa(int(CurveX25519)),
-			// Cannot expect Kyber until we have a Go implementation of it.
-			// "-expect-curve-id", strconv.Itoa(int(CurveX25519Kyber768)),
+			"-expect-curve-id", strconv.Itoa(int(CurveX25519Kyber768)),
 		},
 	})
 
@@ -17786,6 +17785,7 @@ write hs 4
 					AlwaysSendECHHelloRetryRequest: true,
 					ExpectMissingKeyShare:          true, // Check we triggered HRR.
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18343,6 +18343,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18363,6 +18364,7 @@ write hs 4
 					ExpectServerName:      "public.example",
 					ExpectMissingKeyShare: true, // Check we triggered HRR.
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18381,6 +18383,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					ExpectServerName: "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18400,6 +18403,7 @@ write hs 4
 					Bugs: ProtocolBugs{
 						ExpectServerName: "public.example",
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18425,6 +18429,7 @@ write hs 4
 						ExpectFalseStart:          true,
 						AlertBeforeFalseStartTest: alertAccessDenied,
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18461,6 +18466,7 @@ write hs 4
 					SendECHRetryConfigs: retryConfigs,
 					ExpectServerName:    "public.example",
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-ech-config-list", base64FlagValue(CreateECHConfigList(echConfig.ECHConfig.Raw)),
@@ -18709,6 +18715,7 @@ write hs 4
 					MinVersion: VersionTLS13,
 					MaxVersion: VersionTLS13,
 					ClientAuth: RequireAnyClientCert,
+					Credential: &echPublicCertificate,
 				},
 				shimCertificate: &rsaCertificate,
 				flags: append([]string{
@@ -18726,6 +18733,7 @@ write hs 4
 						MinVersion: VersionTLS12,
 						MaxVersion: VersionTLS12,
 						ClientAuth: RequireAnyClientCert,
+						Credential: &echPublicCertificate,
 					},
 					shimCertificate: &rsaCertificate,
 					flags: append([]string{
@@ -18769,6 +18777,7 @@ write hs 4
 				Bugs: ProtocolBugs{
 					AlwaysNegotiateChannelID: true,
 				},
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-send-channel-id", channelIDKeyPath,
@@ -18789,6 +18798,7 @@ write hs 4
 					Bugs: ProtocolBugs{
 						AlwaysNegotiateChannelID: true,
 					},
+					Credential: &echPublicCertificate,
 				},
 				flags: []string{
 					"-send-channel-id", channelIDKeyPath,
@@ -18860,6 +18870,7 @@ write hs 4
 			config: Config{
 				MinVersion: VersionTLS13,
 				MaxVersion: VersionTLS13,
+				Credential: &echPublicCertificate,
 			},
 			flags: []string{
 				"-verify-peer",
@@ -18899,8 +18910,11 @@ write hs 4
 			name:     prefix + "ECH-Client-Reject-EarlyDataRejected-OverrideNameOnRetry",
 			config: Config{
 				ServerECHConfigs: []ServerECHConfig{echConfig},
+				Credential:       &echPublicCertificate,
 			},
-			resumeConfig: &Config{},
+			resumeConfig: &Config{
+				Credential: &echPublicCertificate,
+			},
 			flags: []string{
 				"-verify-peer",
 				"-use-custom-verify-callback",
@@ -20365,19 +20379,19 @@ func statusPrinter(doneChan chan *testresult.Results, statusChan chan statusMsg,
 					if *allowUnimplemented {
 						testOutput.AddSkip(msg.test.name)
 					} else {
-						testOutput.AddResult(msg.test.name, "SKIP")
+						testOutput.AddResult(msg.test.name, "SKIP", nil)
 					}
 				} else {
 					fmt.Printf("FAILED (%s)\n%s\n", msg.test.name, msg.err)
 					failed++
-					testOutput.AddResult(msg.test.name, "FAIL")
+					testOutput.AddResult(msg.test.name, "FAIL", msg.err)
 				}
 			} else {
 				if *pipe {
 					// Print each test instead of a status line.
 					fmt.Printf("PASSED (%s)\n", msg.test.name)
 				}
-				testOutput.AddResult(msg.test.name, "PASS")
+				testOutput.AddResult(msg.test.name, "PASS", nil)
 			}
 		}
 
