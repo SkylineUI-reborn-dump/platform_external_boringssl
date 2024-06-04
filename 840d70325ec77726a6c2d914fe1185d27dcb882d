@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adb6e20f_35b16278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-06-04T23:14:39Z",
+      "side": 1,
+      "message": "Updating boringssl in AOSP to pull in the API changes I made (and, including all the other changes since the last sync :) )\n\nNote: this is in a topic because it will also need a small change to `beto-rust` (for the boringssl use in `beto-rust` to still work). The `beto-rust` people are landing this change in their repo now and will launch an AOSP sync once it\u0027s merged, and add it to this topic.",
+      "revId": "840d70325ec77726a6c2d914fe1185d27dcb882d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
