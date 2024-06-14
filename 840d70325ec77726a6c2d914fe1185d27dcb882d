@@ -16,6 +16,23 @@
       "message": "Updating boringssl in AOSP to pull in the API changes I made (and, including all the other changes since the last sync :) )\n\nNote: this is in a topic because it will also need a small change to `beto-rust` (for the boringssl use in `beto-rust` to still work). The `beto-rust` people are landing this change in their repo now and will launch an AOSP sync once it\u0027s merged, and add it to this topic.",
       "revId": "840d70325ec77726a6c2d914fe1185d27dcb882d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d69c164_350e4376",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-06-14T16:56:31Z",
+      "side": 1,
+      "message": "Ah hrmf. The gRPC issue is that gRPC needs an update. They had made a mess out of their CRL support and we got them to fix it.",
+      "revId": "840d70325ec77726a6c2d914fe1185d27dcb882d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
