@@ -33,6 +33,24 @@
       "message": "Ah hrmf. The gRPC issue is that gRPC needs an update. They had made a mess out of their CRL support and we got them to fix it.",
       "revId": "840d70325ec77726a6c2d914fe1185d27dcb882d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df46343a_32339bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1954616
+      },
+      "writtenOn": "2024-06-14T17:14:45Z",
+      "side": 1,
+      "message": "Yeah I know :( \nI\u0027ve been fighting with getting that upgrade working for a couple days, but luckily now I have someone who did the last gRPC upgrade helping me out, so hopefully it should be working soon",
+      "parentUuid": "5d69c164_350e4376",
+      "revId": "840d70325ec77726a6c2d914fe1185d27dcb882d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
