@@ -177,6 +177,7 @@ cc_object {
         "bcm_object_defaults",
     ],
     apex_available: [
+        "//apex_available:anyapex",
         "//apex_available:platform",
         "com.android.adbd",
         "com.android.adservices",
@@ -289,6 +290,7 @@ cc_library {
         "com.android.resolv",
         "com.android.ondevicepersonalization",
         "com.android.virt",
+        "//apex_available:anyapex",
     ],
     min_sdk_version: "29",
     afdo: true,
@@ -510,6 +512,7 @@ cc_library {
         "com.android.conscrypt",
         "com.android.resolv",
         "com.android.virt",
+        "//apex_available:anyapex",
     ],
     min_sdk_version: "29",
 }
@@ -780,6 +783,7 @@ rust_bindgen {
         "libssl",
     ],
     apex_available: [
+        "//apex_available:anyapex",
         "//apex_available:platform",
         "com.android.virt",
     ],
@@ -827,6 +831,7 @@ cc_library_static {
         "libssl",
     ],
     apex_available: [
+        "//apex_available:anyapex",
         "//apex_available:platform",
         "com.android.virt",
     ],
@@ -892,6 +897,7 @@ rust_library {
         "libbssl_rust_support",
     ],
     apex_available: [
+        "//apex_available:anyapex",
         "//apex_available:platform",
         "com.android.virt",
     ],
