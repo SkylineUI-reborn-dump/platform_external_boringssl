@@ -18,6 +18,24 @@
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8e3d568_0359a06f",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-07-25T14:30:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68675caf_8bb4f719",
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f3cc82f_90b61a1f",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-05-17T09:48:53Z",
       "side": 1,
       "message": "Do we need to update this too?\n\nUnsure about mts, but it should probably at least go into cts",
+      "range": {
+        "startLine": 923,
+        "startChar": 4,
+        "endLine": 923,
+        "endChar": 15
+      },
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8f02e8f_6bb773f0",
+        "filename": "Android.bp",
+        "patchSetId": 3
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-07-25T14:30:10Z",
+      "side": 1,
+      "message": "Probably not needed.",
+      "parentUuid": "0f3cc82f_90b61a1f",
       "range": {
         "startLine": 923,
         "startChar": 4,
