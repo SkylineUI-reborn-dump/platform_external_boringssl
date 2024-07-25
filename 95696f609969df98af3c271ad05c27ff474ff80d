@@ -86,6 +86,30 @@
       },
       "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83ad1e04_96eef235",
+        "filename": "TEST_MAPPING",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-07-25T13:31:10Z",
+      "side": 1,
+      "message": "Yeah, looks like they do indeed need to go into postsubmit until that dashboard is happy with them... 😐  Let\u0027s see what happens if we land this after I make the other changes ion Android.bp",
+      "parentUuid": "2ebfee0f_af262c59",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "95696f609969df98af3c271ad05c27ff474ff80d",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
