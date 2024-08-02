@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2085f45f_8909bd35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1334152
+      },
+      "writtenOn": "2024-08-02T11:11:30Z",
+      "side": 1,
+      "message": "I don\u0027t think this is the right approach.\n\n1) The visibility list is there for a reason - in case we need to make engineering changes FIPS certifications, we need to be able to check which modules are affected, and ensure they are updated correctly.  This is less of an issue now that the FIPS engineering is stabilized but\n2) There are already way too many copies of libcrypto in a Mainline train and it\u0027s not a small library.  Because of our update cadence, they are generally identical.  For this, and for your own library it would be better to get them moved to the DCLA.  Perhaps you could take on and drive b/250619543",
+      "revId": "58658c79266b8b537343a558d44476cc6931a9ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
