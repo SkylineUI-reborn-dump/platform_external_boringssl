@@ -52,6 +52,24 @@
       "parentUuid": "97f809b1_26764c4e",
       "revId": "58658c79266b8b537343a558d44476cc6931a9ff",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3919ecc9_76c4bbd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003224
+      },
+      "writtenOn": "2024-08-02T12:15:52Z",
+      "side": 1,
+      "message": "eh, i know why you liked the idea in theory (who _doesn\u0027t_ like reducing \"duplication\"), but the specific implementation was a bad idea --- you can\u0027t [well, \"shouldn\u0027t\"] have dependencies between libraries without also recording [and honoring] the _versions_. so you know it\u0027s _actual_ duplication rather than \"sort of similar-ish --- what could possibly go wrong?\".",
+      "parentUuid": "363f2e8e_39e6648f",
+      "revId": "58658c79266b8b537343a558d44476cc6931a9ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
