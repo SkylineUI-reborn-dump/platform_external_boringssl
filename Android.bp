@@ -178,15 +178,7 @@ cc_object {
     ],
     apex_available: [
         "//apex_available:platform",
-        "com.android.adbd",
-        "com.android.adservices",
-        "com.android.btservices",
-        "com.android.compos",
-        "com.android.conscrypt",
-        "com.android.extservices",
-        "com.android.ondevicepersonalization",
-        "com.android.resolv",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
 }
 
@@ -280,15 +272,7 @@ cc_library {
     },
     apex_available: [
         "//apex_available:platform",
-        "com.android.adbd",
-        "com.android.adservices",
-        "com.android.btservices",
-        "com.android.compos",
-        "com.android.conscrypt",
-        "com.android.extservices",
-        "com.android.resolv",
-        "com.android.ondevicepersonalization",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
     min_sdk_version: "29",
     afdo: true,
@@ -511,11 +495,7 @@ cc_library {
 
     apex_available: [
         "//apex_available:platform",
-        "com.android.btservices",
-        "com.android.adbd",
-        "com.android.conscrypt",
-        "com.android.resolv",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
     min_sdk_version: "29",
 }
@@ -789,7 +769,7 @@ rust_bindgen {
     ],
     apex_available: [
         "//apex_available:platform",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
 }
 
@@ -836,7 +816,7 @@ cc_library_static {
     ],
     apex_available: [
         "//apex_available:platform",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
 
     // b/336916369: This library gets linked into a rust rlib.  Disable LTO
@@ -901,7 +881,7 @@ rust_library {
     ],
     apex_available: [
         "//apex_available:platform",
-        "com.android.virt",
+        "//apex_available:anyapex",
     ],
     cfgs: ["unsupported_inline_wrappers"],
 }
