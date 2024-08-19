@@ -88,6 +88,24 @@
       "parentUuid": "3919ecc9_76c4bbd9",
       "revId": "58658c79266b8b537343a558d44476cc6931a9ff",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbf450d8_0baba40c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3096390
+      },
+      "writtenOn": "2024-08-19T02:38:28Z",
+      "side": 1,
+      "message": "Thanks for the discussion. We probably will go with the solution of `apex_available: certern.namespace.*` as summarized in https://android-review.git.corp.google.com/c/platform/build/soong/+/3213255/comments/1bdb7d5f_c54367c2.\n\nAbandoning this CL because we are under a big refactoring and decided to do nothing to the old APIs (and their dependent libraries).",
+      "parentUuid": "2e1d9af2_4502d736",
+      "revId": "58658c79266b8b537343a558d44476cc6931a9ff",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
