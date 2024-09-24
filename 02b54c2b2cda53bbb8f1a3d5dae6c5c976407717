@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc8bc272_08b90d9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-09-24T19:07:57Z",
+      "side": 1,
+      "message": "I neither have CR+2 bits, nor context for this part of the build, so over to Pete.",
+      "revId": "02b54c2b2cda53bbb8f1a3d5dae6c5c976407717",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
