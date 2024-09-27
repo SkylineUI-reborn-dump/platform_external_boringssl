@@ -449,7 +449,6 @@ cc_library_static {
     apex_available: [
         "com.android.art",
         "com.android.art.debug",
-        "com.android.art.testing",
     ],
     min_sdk_version: "29",
 }
