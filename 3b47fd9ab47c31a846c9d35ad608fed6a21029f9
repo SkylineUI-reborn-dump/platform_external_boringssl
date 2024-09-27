@@ -16,6 +16,23 @@
       "message": "Was added for consistency checking in https://boringssl-review.googlesource.com/c/boringssl/+/69647 but otherwise BORINGSSL_FIPS has no effect on the test code.\n\nAre you aware of any other places where we might need BORINGSSL_FIPS defined in test utils rather than just in the library and unit tests?",
       "revId": "3b47fd9ab47c31a846c9d35ad608fed6a21029f9",
       "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "040858c2_e9898cbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1031048
+      },
+      "writtenOn": "2024-09-27T15:40:06Z",
+      "side": 1,
+      "message": "(I don\u0027t have CR+2 bits.)",
+      "revId": "3b47fd9ab47c31a846c9d35ad608fed6a21029f9",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
     }
   ]
 }
