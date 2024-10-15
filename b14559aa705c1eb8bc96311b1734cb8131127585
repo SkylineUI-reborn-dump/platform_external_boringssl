@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09a80fe5_1d185013",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1052644
+      },
+      "writtenOn": "2024-10-15T19:15:28Z",
+      "side": 1,
+      "message": "Same comment as in https://android-review.git.corp.google.com/c/platform/art/+/3283202/comment/0fd3a51d_0a8cc3f6/.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 35
+      },
+      "revId": "b14559aa705c1eb8bc96311b1734cb8131127585",
+      "serverId": "85c56323-6fa9-3386-8a01-6480fb634889"
+    }
+  ]
+}
