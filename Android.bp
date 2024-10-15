@@ -350,7 +350,7 @@ cc_library_static {
         "//bootable/deprecated-ota/updater",
         "//external/conscrypt",
         "//external/python/cpython2",
-        "//external/rust/crates/quiche",
+        "//external/rust/android-crates-io/crates/quiche",
         // Strictly, only the *static* toybox for legacy devices should have
         // access to libcrypto_static, but we can't express that.
         "//external/toybox",
@@ -883,7 +883,7 @@ rust_defaults {
     host_supported: true,
     crate_name: "bssl_sys",
     visibility: [
-        "//external/rust/crates/openssl",
+        "//external/rust/android-crates-io/crates/openssl",
         "//system/keymint/boringssl",
         "//system/security/prng_seeder",
     ],
