@@ -1,0 +1,10 @@
+EXTRA {
+global:
+ERR_GET_LIB_RUST;
+ERR_GET_REASON_RUST;
+ERR_GET_FUNC_RUST;
+CBS_init_RUST;
+CBS_len_RUST;
+local:
+*;
+};

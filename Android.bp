@@ -843,6 +843,7 @@ cc_library_static {
     name: "libbssl_rust_support",
     host_supported: true,
     defaults: ["boringssl_flags"],
+    cflags: ["-fvisibility=default"],
     srcs: ["src/rust/bssl-sys/rust_wrapper.c"],
     shared_libs: [
         "libcrypto",
@@ -916,6 +917,8 @@ rust_library {
     whole_static_libs: [
         "libbssl_rust_support",
     ],
+    // Please don't do this without signoff from the Rust team.
+    flags: ["-C  link-args=\"-Wl,--version-script=external/boringssl/extra_rust_funcs.map\""],
     min_sdk_version: "29",
     apex_available: [
         "//apex_available:platform",
