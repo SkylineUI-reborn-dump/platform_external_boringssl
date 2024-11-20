@@ -62,6 +62,8 @@ cc_defaults {
 
     // Build BoringSSL and its tests against the same STL.
     stl: "libc++_static",
+
+    c_std: "gnu17",
 }
 
 cc_defaults {
@@ -124,6 +126,8 @@ cc_defaults {
     },
 
     stl: "none",
+
+    c_std: "gnu17",
 }
 
 // Boring Crypto Module object file.
